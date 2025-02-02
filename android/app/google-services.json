@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "113924620966",
+    "project_id": "babyvax-2562f",
+    "storage_bucket": "babyvax-2562f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:113924620966:android:951e4d0d287f3f1e0f2a67",
+        "android_client_info": {
+          "package_name": "com.example.baby_vax"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDuF7XzfdOALU_Gzb0sAKU_aIAceGcpbk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
