@@ -12,18 +12,33 @@ class UpcomingVaxCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String date = DateFormat.yMd().format(model?.date as DateTime);
-    return Card(
-      child: Column(
-        children: [
-          CustomBoldText(
-              title: model?.name ?? '', size: 24, background: myBlackColor),
-          const SizedBox(
-            height: 10,
+    String date = DateFormat.yMd().format(model?.date ?? DateTime.now());
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Card(
+        elevation: 3,
+        shape: RoundedRectangleBorder(
+            side: const BorderSide(
+              width: .5,
+              color: primaryColor,
+            ),
+            borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          child: Column(
+            children: [
+              CustomBoldText(
+                  title: model?.name ?? '', size: 24, background: myBlackColor),
+              const SizedBox(
+                height: 10,
+              ),
+              CustomBoldText(
+                  title: '${date} : تاريخ المستحق ',
+                  size: 20,
+                  background: Colors.grey)
+            ],
           ),
-          CustomBoldText(
-              title: '${date} : تاريخ المستحق ', size: 20, background: Colors.grey)
-        ],
+        ),
       ),
     );
   }

@@ -1,6 +1,6 @@
 class UpcomingVaxModel {
   String? name;
-  String? date;
+  DateTime? date;
 
   UpcomingVaxModel({this.name, this.date});
 

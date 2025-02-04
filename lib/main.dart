@@ -1,6 +1,6 @@
 import 'package:baby_vax/data/local/CashHelper.dart';
 import 'package:baby_vax/provider/ProviderObserver.dart';
-import 'package:baby_vax/view/onboarding_screen/OnboardingScreen.dart';
+import 'package:baby_vax/view/main_screen/MainHomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
-      home: OnboardingScreen(),
+      home: MainHomeScreen(),
     );
   }
 }
