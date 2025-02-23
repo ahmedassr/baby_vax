@@ -1,3 +1,4 @@
+import 'package:baby_vax/data/local/CashHelper.dart';
 import 'package:baby_vax/shared/style/Colors.dart';
 import 'package:baby_vax/view/layout/Home.dart';
 import 'package:baby_vax/view/login_screen/LoginScreen.dart';
@@ -32,6 +33,7 @@ class OnboardingScreen extends ConsumerWidget {
             child: TextButton(
                 onPressed: () {
                   myNavigator(context,  LoginScreen());
+                  CashHelper.putValue(key: 'isNewUser', value: false);
                 },
                 child: CustomBoldText(
                     title: 'تخطي', size: 24, background: primaryColor)),
@@ -81,6 +83,7 @@ class OnboardingScreen extends ConsumerWidget {
                           curve: Curves.bounceInOut);
                     } else {
                       myNavigator(context, LoginScreen());
+                      CashHelper.putValue(key: 'isNewUser', value: false);
                     }
                   },
                   backgroundColor: primaryColor,

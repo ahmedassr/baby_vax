@@ -23,19 +23,12 @@ class SignupNotifier extends StateNotifier<SignupStates> {
     state = state.copyWith(isVisible: isVisible);
   }
 
-  bool isNext = false;
-
-  void toggleNextAddPassword() {
-    isNext = !isNext;
-    state = state.copyWith(isNext: isNext);
-  }
-
   String? selectedDateText;
 
-  void datePicker(context) {
+  void datePicker(context) async {
     DateTime today = DateTime.now();
     DateTime selectedDate;
-    showDatePicker(
+    await showDatePicker(
             context: context,
             initialDate: DateTime.now(),
             firstDate: DateTime(today.year - 15, today.month, today.day),
@@ -44,6 +37,7 @@ class SignupNotifier extends StateNotifier<SignupStates> {
       if (value != null) {
         selectedDate = value;
         selectedDateText = DateFormat.yMd().format(selectedDate);
+        print('@@@@@@@@@@@@@@${selectedDateText}');
         state = state.copyWith(dataIsSelected: true);
       }
     });
@@ -74,9 +68,6 @@ class SignupNotifier extends StateNotifier<SignupStates> {
             height: height);
         state = state.copyWith(success: true, isLoading: false);
       });
-    } on FirebaseException catch (e) {
-      state =
-          state.copyWith(error: e.toString(), success: false, isLoading: false);
     } catch (e) {
       state =
           state.copyWith(error: e.toString(), success: false, isLoading: false);
@@ -106,8 +97,6 @@ class SignupNotifier extends StateNotifier<SignupStates> {
           .collection('users')
           .doc(uId)
           .set(userModel.toMap());
-    } on FirebaseException catch (e) {
-      state.copyWith(error: e.toString(), success: false, isLoading: false);
     } catch (e) {
       state.copyWith(error: e.toString(), success: false, isLoading: false);
     }
