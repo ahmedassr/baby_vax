@@ -5,6 +5,8 @@ import 'package:baby_vax/view/login_screen/LoginScreen.dart';
 import 'package:baby_vax/view/onboarding_screen/model/OnboardingModel.dart';
 import 'package:flutter/material.dart';
 
+import '../data/local/CashHelper.dart';
+
 class BuildOnboardingItem extends StatelessWidget {
   final OnboardingModel model;
   final int index; // Declare as final since it's immutable
@@ -56,6 +58,7 @@ class BuildOnboardingItem extends StatelessWidget {
               radius: 25,
               onPressed: () {
                 myNavigator(context,  LoginScreen());
+                CashHelper.putValue(key: 'isNewUser', value: false);
               },
               child: CustomBoldText(
                   title: 'ابدء الان', size: 24, background: Colors.white))
