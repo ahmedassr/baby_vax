@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'app/core/imports/import_manger.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
