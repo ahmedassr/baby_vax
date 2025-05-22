@@ -1,25 +1,28 @@
+import 'package:baby_vax/app/core/routes/app_pages.dart';
+import 'package:baby_vax/app/core/routes/app_routes.dart';
+
 import 'app/core/imports/import_manger.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final Widget? startWidget;
+  const MyApp({super.key});
 
-  const MyApp({super.key, this.startWidget});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'BabyVax',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
-      ),
-      home: startWidget ?? const SizedBox(),
+    return ScreenUtilInit(
+      builder: (context, _) {
+        return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: "Baby Vax",
+          initialRoute: AppRoutes.login,
+          getPages: AppPages.routes,
+        );
+      },
     );
   }
 }
