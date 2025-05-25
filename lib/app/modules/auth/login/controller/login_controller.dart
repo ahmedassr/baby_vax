@@ -1,3 +1,5 @@
+import 'package:baby_vax/app/config/constant/app_constant.dart';
+import 'package:baby_vax/app/core/utils/app_alert/app_alert_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../core/imports/import_manger.dart';
@@ -40,11 +42,16 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
           email: email, password: password);
       if (result.user != null) {
         setSuccess();
+        AppConstant.alertService.showAlert(AlertModel.success(
+            message: "User login successfully", yesAction: () => Get.back()));
       } else {
-        setError("Failed to login.");
+        AppConstant.alertService.showError(
+            message: "Failed to login.", yesAction: () => Get.back());
       }
     } on FirebaseAuthException catch (error) {
-      setError(error.toString());
+      AppConstant.alertService.showError(
+          message: error.toString() ?? "Failed to login.",
+          yesAction: () => Get.back());
       print(error.toString());
       return;
     }
