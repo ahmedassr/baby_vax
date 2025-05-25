@@ -45,13 +45,16 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
         AppConstant.alertService.showAlert(AlertModel.success(
             message: "User login successfully", yesAction: () => Get.back()));
       } else {
+        setError();
         AppConstant.alertService.showError(
-            message: "Failed to login.", yesAction: () => Get.back());
+          message: "Failed to login.",
+        );
       }
     } on FirebaseAuthException catch (error) {
+      setError();
       AppConstant.alertService.showError(
-          message: error.toString() ?? "Failed to login.",
-          yesAction: () => Get.back());
+        message: error.toString() ?? "Failed to login.",
+      );
       print(error.toString());
       return;
     }

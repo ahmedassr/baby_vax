@@ -10,7 +10,7 @@ class AlertService extends GetxService {
     return Get.dialog(AlertWidget(alert: alert), barrierDismissible: true);
   }
 
-  void showError({String message, VoidCallback? yesAction}) {
+  void showError({required String message, VoidCallback? yesAction}) {
     showAlert(AlertModel.error(message: message, yesAction: yesAction));
   }
 }

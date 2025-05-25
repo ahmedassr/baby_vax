@@ -57,20 +57,29 @@ class AlertWidget extends StatelessWidget {
     return [
       AppButton(
         text: alert.yesButtonText ?? 'OK',
-        onPressed: () => alert.yesAction?.call(),
+        onPressed: () {
+          alert.yesAction?.call();
+          Get.back();
+        },
       ),
       if (alert.additionalAction != null) ...[
         16.sbh,
         AppButton(
-          text: alert.additionalButtonText ?? '',
-          onPressed: () => alert.additionalAction?.call(),
+          text: alert.additionalButtonText ?? 'Cancel',
+          onPressed: () {
+            alert.additionalAction?.call();
+            Get.back();
+          },
         ),
       ],
       if (alert.noAction != null) ...[
         16.sbh,
         AppButton(
           text: alert.noButtonText ?? 'Cancel',
-          onPressed: () => alert.noAction?.call(),
+          onPressed: () {
+            alert.noAction?.call();
+            Get.back();
+          },
         ),
       ],
     ];
