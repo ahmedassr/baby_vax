@@ -6,16 +6,18 @@ class LabeledTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool readOnly;
   final Function(String)? onChanged;
+  final VoidCallback? onTap;
   final String? errorText;
 
-   const LabeledTextField({
+  const LabeledTextField({
     super.key,
     required this.label,
     required this.controller,
     this.keyboardType,
     this.readOnly = false,
-     this.onChanged,
-     this.errorText,
+    this.onChanged,
+    this.onTap,
+    this.errorText,
   });
 
   @override
@@ -27,6 +29,7 @@ class LabeledTextField extends StatelessWidget {
         AppText(
           text: label.tr,
           style: AppTextStyles.bodyLarge,
+          maxLines: 2,
         ),
         8.sbh,
         AppTextField(
@@ -35,6 +38,7 @@ class LabeledTextField extends StatelessWidget {
           fillColor: context.theme.scaffoldBackgroundColor,
           readOnly: readOnly,
           onChanged: (value) => onChanged?.call(value),
+          onTap: onTap,
           errorText: errorText,
         ),
         8.sbh,

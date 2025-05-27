@@ -1,7 +1,4 @@
-import 'package:baby_vax/app/core/imports/import_library.dart';
-import 'package:baby_vax/app/core/routes/app_routes.dart';
-import 'package:baby_vax/app/modules/auth/login/binding/login_binding.dart';
-import 'package:baby_vax/app/modules/auth/login/view/login_view.dart';
+import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class AppPages {
   static const String initial = AppRoutes.login;
@@ -18,5 +15,9 @@ class AppPages {
         route: AppRoutes.login,
         page: () => const LoginView(),
         binding: LoginBinding()),
+    build(
+        route: AppRoutes.signup,
+        page: () => const SignupView(),
+        binding: SignupBinding())
   ];
 }

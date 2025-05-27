@@ -1,4 +1,3 @@
-import 'package:baby_vax/app/config/constant/app_constant.dart';
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -10,7 +9,7 @@ class LoginView extends GetView<LoginController> {
     // TODO: implement build
     return Scaffold(
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: AppConstant.buttonPadding,
         child:
             AppButton(onPressed: () => controller.userLogin(), text: "Login"),
       ),
@@ -19,8 +18,7 @@ class LoginView extends GetView<LoginController> {
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  padding: AppConstant.columnPadding,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -55,13 +53,16 @@ class LoginView extends GetView<LoginController> {
                                     : null,
                           )),
                       20.sbh,
-                      AppText(
-                        text: "Create New Account",
-                        style: AppTextStyles.headLineSmall.copyWith(
-                            fontSize: 16,
-                            color: context.isDarkMode
-                                ? AppColors.backgroundLight
-                                : AppColors.backgroundDark),
+                      InkWell(
+                        onTap: () => Get.toNamed(AppRoutes.signup),
+                        child: AppText(
+                          text: "Create New Account",
+                          style: AppTextStyles.headLineSmall.copyWith(
+                              fontSize: 20,
+                              color: context.isDarkMode
+                                  ? AppColors.backgroundLight
+                                  : AppColors.primary),
+                        ),
                       ),
                     ],
                   ),
