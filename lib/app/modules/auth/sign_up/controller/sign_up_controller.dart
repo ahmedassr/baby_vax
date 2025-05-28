@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:intl/intl.dart';
-
 import '../../../../core/imports/import_manger.dart';
 
 class SignupController extends GetxController
@@ -88,5 +85,56 @@ class SignupController extends GetxController
       valid = false;
     }
     return valid;
+  }
+
+  Future<void> userSignup() async {
+    if (!isValidate()) {
+      return;
+    }
+    UserModel user = UserModel(
+        uid: "",
+        email: signupControllers["emailController"]?.text.trim() ?? "",
+        birthday: signupControllers["birthdayController"]?.text.trim() ?? "",
+        name: signupControllers["nameController"]?.text.trim() ?? "",
+        height: signupControllers["heightController"]?.text.trim() ?? "",
+        weight: signupControllers["weightController"]?.text.trim() ?? "",
+        headSize: signupControllers["headSizeController"]?.text.trim() ?? "",
+        bloodPercentage:
+            signupControllers["bloodPercentageController"]?.text.trim() ?? "");
+
+    setLoading();
+    try {
+      final result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: signupControllers["emailController"]?.text.trim() ?? "",
+          password: signupControllers["passwordController"]?.text.trim() ?? "");
+      if (result.user != null) {
+        user.uid = result.user?.uid ?? "";
+        createUser(user);
+      }
+    } on FirebaseException catch (e) {
+      setError(getFriendlyErrorMessage(e.toString()));
+    }
+  }
+
+  Future createUser(UserModel user) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.uid)
+          .set(user.toMap());
+      final snapShot = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.uid)
+          .get();
+      if (snapShot.exists) {
+        setSuccess();
+        AppConstant.alertService.showAlert(
+            AlertModel.success(message: "User created successfully."));
+      } else {
+        setError("Failed to create user.");
+      }
+    } on FirebaseException catch (e) {
+      setError(getFriendlyErrorMessage(e.toString()));
+    }
   }
 }

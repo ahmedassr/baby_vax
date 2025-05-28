@@ -41,6 +41,7 @@ class AppTextField extends StatelessWidget {
       keyboardType: keyboardType,
       decoration: InputDecoration(
         errorText: errorText,
+        errorMaxLines: 2,
         hintText: hintText,
         hintStyle: AppTextStyles.bodySmall.copyWith(
             color:

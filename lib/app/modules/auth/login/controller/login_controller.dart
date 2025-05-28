@@ -1,7 +1,4 @@
-import 'package:baby_vax/app/config/constant/app_constant.dart';
 import 'package:baby_vax/app/core/utils/app_alert/app_alert_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../../../core/imports/import_manger.dart';
 
 class LoginController extends GetxController with StateMixin, StateMixinHelper {
