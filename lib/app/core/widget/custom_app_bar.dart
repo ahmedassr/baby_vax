@@ -1,7 +1,8 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/widget/back_icon.dart';
+import 'package:flutter/services.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget  {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final bool showBackButton;
   final List<Widget>? action;
@@ -19,7 +20,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget  {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      systemOverlayStyle:  context.theme.brightness ? : ,
+      systemOverlayStyle: context.theme.brightness == Brightness.dark
+          ? SystemUiOverlayStyle.light
+          : SystemUiOverlayStyle.dark,
+      surfaceTintColor: context.theme.scaffoldBackgroundColor,
+      elevation: 0,
       title: title != null
           ? AppText(
               text: title ?? "",
@@ -28,6 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget  {
           : null,
       centerTitle: true,
       automaticallyImplyLeading: showBackButton,
+      backgroundColor: Colors.transparent,
       leadingWidth: 48.w,
       leading: _buildLeadingWidget(
           size: 24.0,
@@ -56,7 +62,6 @@ Widget _buildLeadingWidget(
             : null),
   );
 }
-
 
 Widget _buildDefaultBackButton(VoidCallback? onBackPressed,
     {required double size}) {
