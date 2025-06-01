@@ -1,6 +1,3 @@
-import 'package:baby_vax/app/core/routes/app_pages.dart';
-import 'package:baby_vax/app/core/routes/app_routes.dart';
-
 import 'app/core/imports/import_manger.dart';
 
 void main() async {

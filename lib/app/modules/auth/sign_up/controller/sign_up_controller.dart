@@ -128,8 +128,9 @@ class SignupController extends GetxController
           .get();
       if (snapShot.exists) {
         setSuccess();
-        AppConstant.alertService.showAlert(
-            AlertModel.success(message: "User created successfully."));
+        AppConstant.alertService.showAlert(AlertModel.success(
+            message: "User created successfully.",
+            yesAction: () => Get.toNamed(AppRoutes.mainMenu)));
       } else {
         setError("Failed to create user.");
       }

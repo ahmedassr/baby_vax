@@ -1,5 +1,4 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
-import 'package:baby_vax/app/core/utils/app_alert/app_alert_model.dart';
 
 class AlertWidget extends StatelessWidget {
   final AlertModel alert;
@@ -58,8 +57,8 @@ class AlertWidget extends StatelessWidget {
       AppButton(
         text: alert.yesButtonText ?? 'OK',
         onPressed: () {
-          alert.yesAction?.call();
           Get.back();
+          alert.yesAction?.call();
         },
       ),
       if (alert.additionalAction != null) ...[
@@ -67,8 +66,8 @@ class AlertWidget extends StatelessWidget {
         AppButton(
           text: alert.additionalButtonText ?? 'Cancel',
           onPressed: () {
-            alert.additionalAction?.call();
             Get.back();
+            alert.additionalAction?.call();
           },
         ),
       ],
@@ -77,8 +76,8 @@ class AlertWidget extends StatelessWidget {
         AppButton(
           text: alert.noButtonText ?? 'Cancel',
           onPressed: () {
-            alert.noAction?.call();
             Get.back();
+            alert.noAction?.call();
           },
         ),
       ],

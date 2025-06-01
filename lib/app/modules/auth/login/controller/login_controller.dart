@@ -40,7 +40,9 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
       if (result.user != null) {
         setSuccess();
         AppConstant.alertService.showAlert(AlertModel.success(
-            message: "User login successfully", yesAction: () => Get.back()));
+          message: "User login successfully",
+          yesAction: () => Get.toNamed(AppRoutes.mainMenu),
+        ));
       } else {
         setError("Failed to login.");
       }

@@ -18,6 +18,10 @@ class AppPages {
     build(
         route: AppRoutes.signup,
         page: () => const SignupView(),
-        binding: SignupBinding())
+        binding: SignupBinding()),
+    build(
+        route: AppRoutes.mainMenu,
+        page: () => const MainMenuView(),
+        binding: MainMenuBinding()),
   ];
 }

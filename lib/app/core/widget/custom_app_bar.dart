@@ -8,6 +8,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? action;
   final Widget? customLeading;
   final VoidCallback? onBackPressed;
+  final double elevation;
 
   const CustomAppBar(
       {super.key,
@@ -15,7 +16,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.showBackButton = true,
       this.action,
       this.customLeading,
-      this.onBackPressed});
+      this.onBackPressed,
+      this.elevation = 0});
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +26,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? SystemUiOverlayStyle.light
           : SystemUiOverlayStyle.dark,
       surfaceTintColor: context.theme.scaffoldBackgroundColor,
-      elevation: 0,
+      elevation: elevation,
       title: title != null
           ? AppText(
               text: title ?? "",
-              style: AppTextStyles.bodyLarge,
+              style: AppTextStyles.headLineSmall.copyWith(fontSize: 22),
             )
           : null,
       centerTitle: true,
