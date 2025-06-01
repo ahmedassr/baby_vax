@@ -1,4 +1,5 @@
-import 'package:baby_vax/app/core/utils/app_alert/app_alert_model.dart';
+import 'package:baby_vax/app/core/service/get_storage_service.dart';
+
 import '../../../../core/imports/import_manger.dart';
 
 class LoginController extends GetxController with StateMixin, StateMixinHelper {
@@ -9,6 +10,7 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final emailErrorText = "".obs;
   final passwordErrorText = "".obs;
+  final getStorage = Get.find<GetStorageService>();
 
   @override
   void onInit() {
@@ -39,6 +41,8 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
           email: email, password: password);
       if (result.user != null) {
         setSuccess();
+        getStorage.write("isLogin", true);
+        getStorage.write("uid", result.user?.uid);
         AppConstant.alertService.showAlert(AlertModel.success(
           message: "User login successfully",
           yesAction: () => Get.toNamed(AppRoutes.mainMenu),

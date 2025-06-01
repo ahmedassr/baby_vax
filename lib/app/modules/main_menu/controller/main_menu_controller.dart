@@ -3,7 +3,7 @@ import 'package:baby_vax/app/core/imports/import_manger.dart';
 class MainMenuController extends GetxController {
   final currentIndex = 0.obs;
   final List<BottomNavBarModel> item = [
-    BottomNavBarModel(title: "Main", view: Center(), icon: Icons.home_filled),
+    BottomNavBarModel(title: "Main", view: const MainView(), icon: Icons.home_filled),
     BottomNavBarModel(
         title: "Medical Dates",
         view: Center(),

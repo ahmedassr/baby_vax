@@ -29,4 +29,9 @@ class AppTextStyles {
   static final textMedium = style(20, FontWeight.normal);
   static final textSmall = style(18, FontWeight.normal);
   static final textExtraSmall = style(16, FontWeight.normal);
+
+  static final boldSmall = style(15, FontWeight.w700);
+  static final boldMedium = style(16, FontWeight.w700);
+  static final boldLarge = style(19, FontWeight.w700);
+
 }

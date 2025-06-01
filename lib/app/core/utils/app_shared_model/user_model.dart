@@ -1,3 +1,5 @@
+import 'package:baby_vax/app/core/imports/import_library.dart';
+
 class UserModel {
   String uid;
   final String email;
@@ -25,10 +27,24 @@ class UserModel {
       email: json?["email"] ?? "",
       birthday: json?["birthday"] ?? "",
       name: json?["name"],
-      weight: json?["weight"] ?? 0,
-      height: json?["height"] ?? 0,
-      bloodPercentage: json?["bloodPercentage"] ?? 0,
-      headSize: json?["headSize"] ?? 0,
+      weight: json?["weight"] ?? "",
+      height: json?["height"] ?? "",
+      bloodPercentage: json?["bloodPercentage"] ?? "",
+      headSize: json?["headSize"] ?? "",
+    );
+  }
+
+  factory UserModel.fromDocument(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    return UserModel(
+      uid: doc.id,
+      email: data["email"] ?? "",
+      birthday: data["birthday"] ?? "",
+      name: data["name"],
+      weight: data["weight"] ?? "",
+      height: data["height"] ?? "",
+      bloodPercentage: data["bloodPercentage"] ?? "",
+      headSize: data["headSize"] ?? "",
     );
   }
 
