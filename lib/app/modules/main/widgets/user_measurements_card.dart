@@ -38,11 +38,13 @@ class UserMeasurementCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                       const Icon(Icons.monitor_weight, color: AppColors.primary),
                         AppText(
                           text: "Weight\n$weight",
                           style: AppTextStyles.boldLarge,
                         ),
                         30.sbh,
+                        const Icon(Icons.bloodtype, color: AppColors.primary),
                         AppText(
                             text: "Blood Percentage\n$bloodPercentage",
                             maxLines: 2,
@@ -54,10 +56,13 @@ class UserMeasurementCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const Icon(Icons.height, color: AppColors.primary),
                         AppText(
                             text: "Height\n$height",
                             style: AppTextStyles.boldLarge),
                         30.sbh,
+                        const Icon(Icons.account_circle_rounded,
+                            color: AppColors.primary),
                         AppText(
                             text: "Head Size\n$headSize",
                             style: AppTextStyles.boldLarge),
