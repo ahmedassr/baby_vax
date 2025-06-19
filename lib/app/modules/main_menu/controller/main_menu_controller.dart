@@ -1,4 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
+import 'package:baby_vax/app/modules/setting/view/setting_view.dart';
 
 class MainMenuController extends GetxController {
   final currentIndex = 0.obs;
@@ -10,7 +11,8 @@ class MainMenuController extends GetxController {
         icon: Icons.calendar_month_rounded),
     BottomNavBarModel(
         title: "Tips and Advice", view: Center(), icon: Icons.privacy_tip),
-    BottomNavBarModel(title: "Settings", view: Center(), icon: Icons.settings),
+    BottomNavBarModel(
+        title: "Settings", view: const SettingsView(), icon: Icons.settings),
   ];
 
   @override

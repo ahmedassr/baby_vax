@@ -1,5 +1,7 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/modules/medical_dates/binding/medical_dates_binding.dart';
+import 'package:baby_vax/app/modules/setting/binding/setting_binding.dart';
+import 'package:baby_vax/app/modules/setting/view/setting_view.dart';
 
 class AppPages {
   static const String initial = AppRoutes.login;
@@ -28,5 +30,9 @@ class AppPages {
         route: AppRoutes.medicalDates,
         page: () => const MedicalDatesView(),
         binding: MedicalDatesBinding()),
+    build(
+        route: AppRoutes.setting,
+        page: () => const SettingsView(),
+        binding: SettingsBinding()),
   ];
 }
