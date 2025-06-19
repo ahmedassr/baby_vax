@@ -25,6 +25,16 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
         },
         itemCount: dates?.length ?? 0,
       ),
+      onLoading: const Center(
+        child: AppShimmerLoading(),
+      ),
+      onError: (error) => AppEmptyState(
+        message: error,
+        animationPath: AppAnimations.noRecords,
+      ),
+      onEmpty: const AppEmptyState(
+        animationPath: AppAnimations.noRecords,
+      ),
     );
   }
 }
