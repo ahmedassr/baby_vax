@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: "Baby Vax",
-          initialRoute: AppRoutes.login,
+          initialRoute: AppRoutes.mainMenu,
           getPages: AppPages.routes,
         );
       },
