@@ -7,6 +7,7 @@ class TipsView extends GetView<TipsController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut<TipsController>(() => TipsController());
     return controller.obx(
       (tips) {
         if (tips != null && tips.isNotEmpty) {

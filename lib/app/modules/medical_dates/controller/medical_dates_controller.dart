@@ -5,6 +5,7 @@ import 'package:baby_vax/app/modules/medical_dates/model/medical_dates_model.dar
 class MedicalDatesController extends GetxController
     with StateMixin<List<MedicalDatesModel>>, StateMixinHelper {
   List<MedicalDatesModel> dates = <MedicalDatesModel>[].obs;
+  final searchController = TextEditingController();
 
   @override
   void onInit() {

@@ -3,12 +3,10 @@ import 'package:baby_vax/app/core/values/app_image.dart';
 
 class MedicalDatesView extends GetView<MedicalDatesController> {
   const MedicalDatesView({super.key});
-// @override
-//   Widget build(BuildContext context) {
-//     return Center();
-//   }
+
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut<MedicalDatesController>(() => MedicalDatesController());
     return controller.obx(
       (dates) => RefreshableListBuilder(
         itemBuilder: (context, index) {

@@ -9,9 +9,13 @@ class MainMenuController extends GetxController {
     BottomNavBarModel(
         title: "Medical Dates",
         view: const MedicalDatesView(),
-        icon: Icons.calendar_month_rounded),
+        icon: Icons.calendar_month_rounded,
+        showSearch: true),
     BottomNavBarModel(
-        title: "Tips", view: const TipsView(), icon: Icons.privacy_tip),
+        title: "Tips",
+        view: const TipsView(),
+        icon: Icons.privacy_tip,
+        showSearch: true),
     BottomNavBarModel(
         title: "Settings", view: const SettingsView(), icon: Icons.settings),
   ];
@@ -25,4 +29,8 @@ class MainMenuController extends GetxController {
   void changeValue(index) {
     currentIndex(index);
   }
+
+  void onSearchPressed() {}
+
+  void onAddPressed() {}
 }

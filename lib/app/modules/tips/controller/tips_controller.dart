@@ -5,6 +5,7 @@ import 'package:baby_vax/app/modules/tips/model/tips_model.dart';
 class TipsController extends GetxController
     with StateMixin<List<TipsModel>>, StateMixinHelper {
   List<TipsModel> tips = <TipsModel>[].obs;
+  final searchController = TextEditingController();
 
   @override
   void onInit() {

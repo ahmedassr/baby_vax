@@ -7,22 +7,26 @@ class SettingsView extends GetView<SettingsController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut<SettingsController>(() => SettingsController());
     return Padding(
       padding: AppConstant.columnPadding,
       child: ListView(
         physics: const BouncingScrollPhysics(),
         children: [
           AppSettingDarkModeSwitch(controller: controller),
+          20.sbh,
           AppListTitleItem(
             title: "Terms And Conditions",
             icon: Icons.article_outlined,
             onTap: () {},
           ),
+          20.sbh,
           AppListTitleItem(
             title: "About US",
             icon: Icons.info_outline,
             onTap: () {},
           ),
+          20.sbh,
           AppListTitleItem(
             title: "Log Out",
             icon: Icons.logout,

@@ -36,9 +36,14 @@ class AppListItem extends StatelessWidget {
                 : Colors.white,
             contentPadding: AppConstant.listItemPadding,
             leading: CircleAvatar(
-              backgroundColor: AppColors.primary,
+              backgroundColor: AppColors.primary.withValues(alpha: 0.5),
               radius: 24,
-              child: hideLeadingIcon ? null : Icon(leadingIcon),
+              child: hideLeadingIcon
+                  ? null
+                  : Icon(
+                      leadingIcon,
+                      color: Colors.white,
+                    ),
             ),
             title: title,
             subtitle: subTitle,
