@@ -1,4 +1,6 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
+import 'package:baby_vax/app/modules/setting/view/setting_view.dart';
+import 'package:baby_vax/app/modules/tips/view/tips_view.dart';
 
 class MainMenuController extends GetxController {
   final currentIndex = 0.obs;
@@ -6,11 +8,16 @@ class MainMenuController extends GetxController {
     BottomNavBarModel(title: "Main", view: const MainView(), icon: Icons.home_filled),
     BottomNavBarModel(
         title: "Medical Dates",
-        view: Center(),
-        icon: Icons.calendar_month_rounded),
+        view: const MedicalDatesView(),
+        icon: Icons.calendar_month_rounded,
+        showSearch: true),
     BottomNavBarModel(
-        title: "Tips and Advice", view: Center(), icon: Icons.privacy_tip),
-    BottomNavBarModel(title: "Settings", view: Center(), icon: Icons.settings),
+        title: "Tips",
+        view: const TipsView(),
+        icon: Icons.privacy_tip,
+        showSearch: true),
+    BottomNavBarModel(
+        title: "Settings", view: const SettingsView(), icon: Icons.settings),
   ];
 
   @override
@@ -22,4 +29,8 @@ class MainMenuController extends GetxController {
   void changeValue(index) {
     currentIndex(index);
   }
+
+  void onSearchPressed() {}
+
+  void onAddPressed() {}
 }

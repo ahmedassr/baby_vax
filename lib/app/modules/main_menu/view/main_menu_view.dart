@@ -13,6 +13,7 @@ class MainMenuView extends GetView<MainMenuController> {
           appBar: CustomAppBar(
             title: controller.item[controller.currentIndex.value].title,
             showBackButton: false,
+            action: getAppBarAction(),
             elevation: 8,
           ),
           bottomNavigationBar: AppBottomNavigationBar(
@@ -29,5 +30,19 @@ class MainMenuView extends GetView<MainMenuController> {
               onTap: (value) => controller.changeValue(value)),
           body: controller.item[controller.currentIndex.value].view,
         ));
+  }
+
+  List<Widget> getAppBarAction() {
+    final List<Widget> action = [];
+    if (controller.item[controller.currentIndex.value].showSearch) {
+      action.add(IconButton(
+          onPressed: controller.onSearchPressed,
+          icon: const Icon(Icons.search)));
+    }
+    if (controller.item[controller.currentIndex.value].showAdd) {
+      action.add(IconButton(
+          onPressed: controller.onAddPressed, icon: const Icon(Icons.add)));
+    }
+    return action;
   }
 }

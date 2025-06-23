@@ -1,7 +1,6 @@
 import 'dart:ui';
 
-class AppColors{
-
+class AppColors {
   static const Color primary = Color(0xFF42A332);
   static const Color white = Color(0xFFFFFFFF);
   static const Color textHint = Color(0xFF999999);
@@ -12,7 +11,11 @@ class AppColors{
   static const Color greyMedium = Color(0xFFB0B0B0);
   static const Color greyDark = Color(0xFF707070);
   static const Color greyLight = Color(0xFFE0E0E0);
+  static const Color accent = Color(0xFFFFC107);
+
+  // Status Colors
   static const Color error = Color(0xFFE10000);
-
-
+  static const Color warning = accent; // uses accent color
+  static const Color success = Color(0xFF28A745);
+  static const Color info = Color(0xFF17A2B8);
 }
