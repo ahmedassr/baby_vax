@@ -3,20 +3,20 @@ import 'package:baby_vax/app/modules/medical_dates/model/medical_dates_model.dar
 import 'package:baby_vax/app/modules/tips/model/tips_model.dart';
 
 class InternalScreenArgs {
-  MedicalDatesModel? _medicalDates;
-  TipsModel? _tips;
+  MedicalDatesModel? _medicalDate;
+  TipsModel? _tip;
 
-  InternalScreenArgs({MedicalDatesModel? medicalDate, TipsModel? tips})
-      : _medicalDates = medicalDate,
-        _tips = tips;
+  InternalScreenArgs({MedicalDatesModel? medicalDate, TipsModel? tip})
+      : _medicalDate = medicalDate,
+        _tip = tip;
 
-  MedicalDatesModel? get medicalDates => _medicalDates;
+  MedicalDatesModel? get medicalDate => _medicalDate;
 
-  TipsModel? get tips => _tips;
+  TipsModel? get tip => _tip;
 
-  set medicalDates(MedicalDatesModel? value) => _medicalDates = value;
+  set medicalDate(MedicalDatesModel? value) => _medicalDate = value;
 
-  set tips(TipsModel? value) => _tips = value;
+  set tip(TipsModel? value) => _tip = value;
 
   static InternalScreenArgs get fromArgs {
     return AppConstant.argumentService.getArguments<InternalScreenArgs>();

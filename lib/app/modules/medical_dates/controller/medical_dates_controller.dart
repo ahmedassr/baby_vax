@@ -23,8 +23,8 @@ class MedicalDatesController extends GetxController
     setSuccess(dates);
   }
 
-  void onMedicalDateTap(MedicalDatesModel medicalDate) {
-    Get.toNamed(AppRoutes.medicalDatesDetails);
+  void onMedicalDatePressed(MedicalDatesModel medicalDate) {
+    Get.toNamed(AppRoutes.medicalDateDetails);
     AppConstant.argumentService
         .setArgument(InternalScreenArgs(medicalDate: medicalDate));
   }

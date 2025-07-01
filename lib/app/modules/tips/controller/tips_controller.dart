@@ -1,3 +1,4 @@
+import 'package:baby_vax/app/config/constant/app_constant.dart';
 import 'package:baby_vax/app/core/imports/import_core.dart';
 import 'package:baby_vax/app/core/imports/import_library.dart';
 import 'package:baby_vax/app/modules/tips/model/tips_model.dart';
@@ -22,5 +23,10 @@ class TipsController extends GetxController
       TipsModel(title: "title 3 ", description: "description 3")
     ]);
     setSuccess(tips);
+  }
+
+  void onTipPressed(TipsModel tip){
+    Get.toNamed(AppRoutes.tipDetails);
+    AppConstant.argumentService.setArgument(InternalScreenArgs(tip: tip));
   }
 }

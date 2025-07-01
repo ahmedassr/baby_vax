@@ -23,7 +23,7 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
             leadingIcon: Icons.calendar_month_rounded,
             hideTrailingIcon: true,
             disableDismiss: true,
-            onTap: () => controller.onMedicalDateTap(dates[index]),
+            onTap: () => controller.onMedicalDatePressed(dates[index]),
           );
         },
         itemCount: dates?.length ?? 0,

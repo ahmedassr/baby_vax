@@ -4,7 +4,7 @@ import '../../../core/imports/import_manger.dart';
 class MedicalDateDetailsController extends GetxController
     with StateMixin, StateMixinHelper {
   MedicalDatesModel? medicalDate;
-  final args = InternalScreenArgs.fromArgs.medicalDates;
+  final args = InternalScreenArgs.fromArgs.medicalDate;
 
   @override
   void onInit() {

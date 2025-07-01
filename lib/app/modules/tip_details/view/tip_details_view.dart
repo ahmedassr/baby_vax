@@ -9,23 +9,26 @@ class TipDetailsView extends GetView<TipDetailsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: "Tip number 1",
+      appBar: CustomAppBar(
+        title: controller.tip?.title ?? "",
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: AppConstant.columnPadding,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              KeyValueRichText(label: "Name", value: "tip number 1"),
               20.sbh,
-              KeyValueRichText(label: "Description", value: "there is no ..."),
-
+              KeyValueRichText(
+                  label: "Name", value: controller.tip?.title ?? ""),
+              20.sbh,
+              KeyValueRichText(
+                  label: "Description",
+                  value: controller.tip?.description ?? ""),
             ],
           ),
         ),
       ),
     );
-
   }
 }

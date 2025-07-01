@@ -21,7 +21,7 @@ class TipsView extends GetView<TipsController> {
                   leadingIcon: Icons.privacy_tip_sharp,
                   disableDismiss: true,
                   hideTrailingIcon: true,
-                  onTap: () {},
+                  onTap: () => controller.onTipPressed(tips[index]),
                 );
               },
               itemCount: tips.length);
