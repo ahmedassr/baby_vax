@@ -10,7 +10,7 @@ class MainController extends GetxController with StateMixin, StateMixinHelper {
   }
 
   Future fetchUserData() async {
-    var uid = AppConstant.uid;
+    var uid = AppConstant.uId;
     if (uid.isEmpty) {
       setError("The user ID is missing.");
       return;

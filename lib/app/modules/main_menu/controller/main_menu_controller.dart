@@ -2,6 +2,8 @@ import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/modules/setting/view/setting_view.dart';
 import 'package:baby_vax/app/modules/tips/view/tips_view.dart';
 
+import '../../main/view/main_view.dart';
+
 class MainMenuController extends GetxController {
   final currentIndex = 0.obs;
   final List<BottomNavBarModel> item = [

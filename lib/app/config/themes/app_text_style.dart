@@ -34,4 +34,9 @@ class AppTextStyles {
   static final captionLarge = style(14, FontWeight.normal);
   static final captionMedium = style(13, FontWeight.normal);
   static final captionSmall = style(12, FontWeight.normal);
+
+  // bold
+  static final boldLarge = style(17, FontWeight.bold);
+  static final boldMedium = style(16, FontWeight.bold);
+  static final boldSmall = style(15, FontWeight.bold);
 }
