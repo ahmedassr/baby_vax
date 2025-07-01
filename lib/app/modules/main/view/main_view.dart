@@ -17,8 +17,8 @@ class MainView extends GetView<MainController> {
         child: Column(
           children: [
             UserCard(
-                name: controller.user.value?.name ?? "",
-                email: controller.user.value?.email ?? ""),
+                name: controller.user.value?.name ?? "Ahmed Al-Assar",
+                email: controller.user.value?.email ?? "ahmedassr360@gmail.com"),
             50.sbh,
             UserMeasurementCard(
                 weight: controller.user.value?.weight ?? "",

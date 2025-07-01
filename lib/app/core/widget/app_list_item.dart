@@ -29,29 +29,32 @@ class AppListItem extends StatelessWidget {
       padding: padding ?? AppConstant.listItemPadding,
       child: InkWell(
         onTap: onTap,
-        child: Container(
-          child: ListTile(
-            tileColor: context.isDarkMode
-                ? Colors.black.withValues(alpha: 0.2)
-                : Colors.white,
-            contentPadding: AppConstant.listItemPadding,
-            leading: CircleAvatar(
-              backgroundColor: AppColors.primary.withValues(alpha: 0.5),
-              radius: 24,
-              child: hideLeadingIcon
-                  ? null
-                  : Icon(
-                      leadingIcon,
-                      color: Colors.white,
-                    ),
-            ),
-            title: title,
-            subtitle: subTitle,
-            trailing: hideTrailingIcon
+        child: ListTile(
+          shape: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(
+                  color: Colors.transparent,
+                  width: 0)),
+          tileColor: context.isDarkMode
+              ? Colors.black.withValues(alpha: 0.2)
+              : Colors.white,
+          contentPadding: AppConstant.listItemPadding,
+          leading: CircleAvatar(
+            backgroundColor: AppColors.primary.withValues(alpha: 0.9),
+            radius: 24,
+            child: hideLeadingIcon
                 ? null
-                : GestureDetector(
-                    onTap: onTrailingTap, child: Icon(trailingIcon)),
+                : Icon(
+                    leadingIcon,
+                    color: Colors.white,
+                  ),
           ),
+          title: title,
+          subtitle: subTitle,
+          trailing: hideTrailingIcon
+              ? null
+              : GestureDetector(
+                  onTap: onTrailingTap, child: Icon(trailingIcon)),
         ),
       ),
     );
