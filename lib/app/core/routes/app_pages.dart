@@ -1,4 +1,6 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
+import 'package:baby_vax/app/modules/medical_date_details/binding/medical_date_details_binding.dart';
+import 'package:baby_vax/app/modules/medical_date_details/view/medical_date_details_view.dart';
 import 'package:baby_vax/app/modules/medical_dates/binding/medical_dates_binding.dart';
 import 'package:baby_vax/app/modules/setting/binding/setting_binding.dart';
 import 'package:baby_vax/app/modules/setting/view/setting_view.dart';
@@ -40,5 +42,9 @@ class AppPages {
         route: AppRoutes.tips,
         page: () => const TipsView(),
         binding: TipsBinding()),
+    build(
+        route: AppRoutes.medicalDatesDetails,
+        page: () => const MedicalDateDetailsView(),
+        binding: MedicalDateDetailsBinding()),
   ];
 }

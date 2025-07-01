@@ -1,5 +1,4 @@
-import 'package:baby_vax/app/core/imports/import_core.dart';
-import 'package:baby_vax/app/core/imports/import_library.dart';
+import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/modules/medical_dates/model/medical_dates_model.dart';
 
 class MedicalDatesController extends GetxController
@@ -17,10 +16,16 @@ class MedicalDatesController extends GetxController
     setLoading();
     await Future.delayed(const Duration(seconds: 2));
     dates.assignAll([
-      MedicalDatesModel(date: "18-8-2025", name: "date number 1"),
-      MedicalDatesModel(date: "20-9-2025", name: "date number 2"),
-      MedicalDatesModel(date: "29-9-2025", name: "date number 3"),
+      MedicalDatesModel(date: "18-1-2025", name: "date number 1", state: "Completed"),
+      MedicalDatesModel(date: "20-2-2025", name: "date number 2",state: "Missed"),
+      MedicalDatesModel(date: "29-9-2025", name: "date number 3",state: "Coming up"),
     ]);
     setSuccess(dates);
+  }
+
+  void onMedicalDateTap(MedicalDatesModel medicalDate) {
+    Get.toNamed(AppRoutes.medicalDatesDetails);
+    AppConstant.argumentService
+        .setArgument(InternalScreenArgs(medicalDate: medicalDate));
   }
 }
