@@ -5,6 +5,6 @@ import 'package:baby_vax/app/core/utils/app_alert/alert_service.dart';
 
 Future<void> initAppService() async {
   await GetStorage.init();
-  Get.put(GetStorageService());
-  Get.put(AlertService());
+  Get.lazyPut<GetStorageService>(() => GetStorageService());
+  Get.lazyPut<AlertService>(() => AlertService());
 }
