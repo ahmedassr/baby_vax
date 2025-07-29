@@ -8,6 +8,7 @@ class LabeledTextField extends StatelessWidget {
   final Function(String)? onChanged;
   final VoidCallback? onTap;
   final String? errorText;
+  final double? fontSize;
 
   const LabeledTextField({
     super.key,
@@ -18,6 +19,7 @@ class LabeledTextField extends StatelessWidget {
     this.onChanged,
     this.onTap,
     this.errorText,
+    this.fontSize,
   });
 
   @override
@@ -28,8 +30,8 @@ class LabeledTextField extends StatelessWidget {
       children: [
         AppText(
           text: label.tr,
-          style: AppTextStyles.bodyLarge,
-          maxLines: 2,
+          style: AppTextStyles.bodyMedium.copyWith(fontSize: fontSize),
+          maxLines: 3,
         ),
         8.sbh,
         AppTextField(

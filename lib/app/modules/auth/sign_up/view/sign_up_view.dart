@@ -105,93 +105,102 @@ class SignupView extends GetView<SignupController> {
                                 : AppColors.primary),
                       ),
                       20.sbh,
-                      Wrap(
-                        spacing: 12,
-                        runSpacing: 12,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          Obx(() => SizedBox(
-                                width: 110,
-                                child: LabeledTextField(
-                                  label: "Weight",
-                                  keyboardType: TextInputType.number,
-                                  controller: controller.signupControllers[
-                                          "weightController"] ??
-                                      TextEditingController(),
-                                  errorText: (controller
-                                              .signupErrorText[
-                                                  "weightErrorText"]
+                      Center(
+                        child: IntrinsicHeight(
+                          child: Wrap(
+                            spacing: 0.2.sw,
+                            runSpacing: 30,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Obx(() => SizedBox(
+                                    width: 110,
+                                    child: LabeledTextField(
+                                      label: "Weight(kg)",
+                                      fontSize: 12,
+                                      keyboardType: TextInputType.number,
+                                      controller: controller.signupControllers[
+                                              "weightController"] ??
+                                          TextEditingController(),
+                                      errorText: (controller
+                                                  .signupErrorText[
+                                                      "weightErrorText"]
+                                                  ?.value
+                                                  .isNotEmpty ??
+                                              false)
+                                          ? controller
+                                              .signupErrorText["weightErrorText"]
                                               ?.value
-                                              .isNotEmpty ??
-                                          false)
-                                      ? controller
-                                          .signupErrorText["weightErrorText"]
-                                          ?.value
-                                      : null,
-                                ),
-                              )),
-                          Obx(() => SizedBox(
-                                width: 110,
-                                child: LabeledTextField(
-                                  label: "Height",
-                                  keyboardType: TextInputType.number,
-                                  controller: controller.signupControllers[
-                                          "heightController"] ??
-                                      TextEditingController(),
-                                  errorText: (controller
-                                              .signupErrorText[
-                                                  "heightErrorText"]
+                                          : null,
+                                    ),
+                                  )),
+                              Obx(() => SizedBox(
+                                    width: 110,
+                                    child: LabeledTextField(
+                                      label: "Height(cm)",
+                                      keyboardType: TextInputType.number,
+                                      fontSize: 12,
+                                      controller: controller.signupControllers[
+                                              "heightController"] ??
+                                          TextEditingController(),
+                                      errorText: (controller
+                                                  .signupErrorText[
+                                                      "heightErrorText"]
+                                                  ?.value
+                                                  .isNotEmpty ??
+                                              false)
+                                          ? controller
+                                              .signupErrorText["heightErrorText"]
                                               ?.value
-                                              .isNotEmpty ??
-                                          false)
-                                      ? controller
-                                          .signupErrorText["heightErrorText"]
-                                          ?.value
-                                      : null,
-                                ),
-                              )),
-                          Obx(() => SizedBox(
-                                width: 110,
-                                child: LabeledTextField(
-                                  label: "Head Size",
-                                  keyboardType: TextInputType.number,
-                                  controller: controller.signupControllers[
-                                          "headSizeController"] ??
-                                      TextEditingController(),
-                                  errorText: (controller
+                                          : null,
+                                    ),
+                                  )),
+                              Obx(() => SizedBox(
+                                    width: 110,
+                                    child: LabeledTextField(
+                                      label: "Head Size(cm)",
+                                      keyboardType: TextInputType.number,
+                                      fontSize: 12,
+                                      controller: controller.signupControllers[
+                                              "headSizeController"] ??
+                                          TextEditingController(),
+                                      errorText: (controller
+                                                  .signupErrorText[
+                                                      "headSizeErrorText"]
+                                                  ?.value
+                                                  .isNotEmpty ??
+                                              false)
+                                          ? controller
                                               .signupErrorText[
                                                   "headSizeErrorText"]
                                               ?.value
-                                              .isNotEmpty ??
-                                          false)
-                                      ? controller
-                                          .signupErrorText["headSizeErrorText"]
-                                          ?.value
-                                      : null,
-                                ),
-                              )),
-                          Obx(() => SizedBox(
-                                width: 110,
-                                child: LabeledTextField(
-                                  label: "Blood Percentage",
-                                  keyboardType: TextInputType.number,
-                                  controller: controller.signupControllers[
-                                          "bloodPercentageController"] ??
-                                      TextEditingController(),
-                                  errorText: (controller
+                                          : null,
+                                    ),
+                                  )),
+                              Obx(() => SizedBox(
+                                    width: 110,
+                                    child: LabeledTextField(
+                                      label: "Blood Percentage(g/dl)",
+                                      fontSize: 12,
+                                      keyboardType: TextInputType.number,
+                                      controller: controller.signupControllers[
+                                              "bloodPercentageController"] ??
+                                          TextEditingController(),
+                                      errorText: (controller
+                                                  .signupErrorText[
+                                                      "bloodPercentageErrorText"]
+                                                  ?.value
+                                                  .isNotEmpty ??
+                                              false)
+                                          ? controller
                                               .signupErrorText[
                                                   "bloodPercentageErrorText"]
                                               ?.value
-                                              .isNotEmpty ??
-                                          false)
-                                      ? controller
-                                          .signupErrorText[
-                                              "bloodPercentageErrorText"]
-                                          ?.value
-                                      : null,
-                                ),
-                              )),
-                        ],
+                                          : null,
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        ),
                       )
                     ],
                   ),

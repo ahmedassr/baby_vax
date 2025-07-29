@@ -3,7 +3,6 @@ import 'app/core/service/init_app_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   await initAppService();
   runApp(const MyApp());
 }
@@ -13,15 +12,31 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      builder: (context, _) {
-        return GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: "Baby Vax",
-          initialRoute: AppRoutes.login,
-          getPages: AppPages.routes,
-        );
-      },
-    );
+    return FutureBuilder<bool>(
+        future: _checkLoginState(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          final bool isLoggedIn = snapshot.data ?? false;
+          return ScreenUtilInit(
+            designSize: const Size(414, 896),
+            builder: (context, _) {
+              return GetMaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: "Baby Vax",
+                initialRoute: isLoggedIn ? AppRoutes.mainMenu : AppRoutes.login,
+                getPages: AppPages.routes,
+              );
+            },
+          );
+        });
+  }
+
+  Future<bool> _checkLoginState() {
+    return Future.value(
+        AppConstant.getStorage.read(AppConstant.isLoginKey) ?? false);
   }
 }

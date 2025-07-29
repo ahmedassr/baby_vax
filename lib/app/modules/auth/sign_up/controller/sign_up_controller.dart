@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import '../../../../core/imports/import_manger.dart';
+import '../../../../core/service/get_storage_service.dart';
 
 class SignupController extends GetxController
     with StateMixin, StateMixinHelper {
@@ -50,6 +51,7 @@ class SignupController extends GetxController
 
   bool isValidate() {
     bool valid = true;
+    signupErrorText.values.forEach((text) => text.value = "");
     if (signupControllers["emailController"]?.text.isEmpty ?? true) {
       signupErrorText["emailErrorText"]?.value = "Email can't be empty.";
       valid = false;
@@ -112,6 +114,7 @@ class SignupController extends GetxController
         createUser(user);
       }
     } on FirebaseException catch (e) {
+      print("########### $e");
       setError(getFriendlyErrorMessage(e.toString()));
     }
   }
@@ -127,10 +130,12 @@ class SignupController extends GetxController
           .doc(user.uid)
           .get();
       if (snapShot.exists) {
-        setSuccess();
+        AppConstant.getStorage.write(AppConstant.isLoginKey, true);
+        AppConstant.getStorage.write("uid", user.uid);
         AppConstant.alertService.showAlert(AlertModel.success(
             message: "User created successfully.",
             yesAction: () => Get.toNamed(AppRoutes.mainMenu)));
+        setSuccess();
       } else {
         setError("Failed to create user.");
       }

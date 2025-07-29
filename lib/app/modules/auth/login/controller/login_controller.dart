@@ -10,7 +10,6 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final emailErrorText = "".obs;
   final passwordErrorText = "".obs;
-  final getStorage = Get.find<GetStorageService>();
 
   @override
   void onInit() {
@@ -40,13 +39,10 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
       final result = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       if (result.user != null) {
+        AppConstant.getStorage.write(AppConstant.isLoginKey, true);
+        AppConstant.getStorage.write("uid", result.user?.uid);
+        Get.toNamed(AppRoutes.mainMenu);
         setSuccess();
-        getStorage.write("isLogin", true);
-        getStorage.write("uid", result.user?.uid);
-        AppConstant.alertService.showAlert(AlertModel.success(
-          message: "User login successfully",
-          yesAction: () => Get.toNamed(AppRoutes.mainMenu),
-        ));
       } else {
         setError("Failed to login.");
       }

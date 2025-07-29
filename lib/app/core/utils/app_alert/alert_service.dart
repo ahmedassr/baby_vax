@@ -1,6 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/utils/app_alert/alert_widget.dart';
-import 'package:baby_vax/app/core/utils/app_alert/app_alert_model.dart';
 
 class AlertService extends GetxService {
   Future<bool?> showAlert(AlertModel alert) {
