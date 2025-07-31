@@ -40,7 +40,7 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
           email: email, password: password);
       if (result.user != null) {
         AppConstant.getStorage.write(AppConstant.isLoginKey, true);
-        AppConstant.getStorage.write("uid", result.user?.uid);
+        AppConstant.getStorage.write(AppConstant.uidKey, result.user?.uid);
         Get.toNamed(AppRoutes.mainMenu);
         setSuccess();
       } else {

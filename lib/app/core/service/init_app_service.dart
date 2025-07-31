@@ -6,4 +6,5 @@ Future<void> initAppService() async {
   await Firebase.initializeApp();
   await GetStorage.init();
   Get.lazyPut<GetStorageService>(() => GetStorageService());
+  AppConstant.uId = AppConstant.getStorage.read(AppConstant.uidKey);
 }

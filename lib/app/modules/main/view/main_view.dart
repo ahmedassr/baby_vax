@@ -12,20 +12,36 @@ class MainView extends GetView<MainController> {
     Get.lazyPut<MainController>(() => MainController());
     // TODO: implement build
     return SingleChildScrollView(
-      child: Padding(
-        padding: AppConstant.columnPadding,
-        child: Column(
-          children: [
-            UserCard(
-                name: controller.user.value?.name ?? "Ahmed Al-Assar",
-                email: controller.user.value?.email ?? "ahmedassr360@gmail.com"),
-            50.sbh,
-            UserMeasurementCard(
-                weight: controller.user.value?.weight ?? "",
-                height: controller.user.value?.height ?? "",
-                bloodPercentage: controller.user.value?.bloodPercentage ?? "",
-                headSize: controller.user.value?.headSize ?? ""),
-          ],
+      child: controller.obx(
+        (state) => RefreshableListBuilder(
+          itemCount: 1,
+          onRefresh: () => controller.fetchUserData(),
+          itemBuilder: (_, index) {
+            return Column(
+              children: [
+                UserCard(
+                    name: controller.userDetails.value?.name ?? "y/n",
+                    email: controller.userDetails.value?.email ?? "y/n"),
+                50.sbh,
+                UserMeasurementCard(
+                    weight: controller.userDetails.value?.weight ?? "_",
+                    height: controller.userDetails.value?.height ?? "_",
+                    bloodPercentage:
+                        controller.userDetails.value?.bloodPercentage ?? "_",
+                    headSize: controller.userDetails.value?.headSize ?? "_"),
+              ],
+            );
+          },
+        ),
+        onLoading: const Center(
+          child: AppShimmerLoading(),
+        ),
+        onError: (error) => AppEmptyState(
+          message: error,
+          animationPath: AppAnimations.noRecords,
+        ),
+        onEmpty: const AppEmptyState(
+          animationPath: AppAnimations.noRecords,
         ),
       ),
     );

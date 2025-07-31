@@ -38,19 +38,33 @@ class UserMeasurementCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                       const Icon(Icons.monitor_weight, color: AppColors.primary,size: 35,),
+                        const Icon(
+                          Icons.monitor_weight,
+                          color: AppColors.primary,
+                          size: 35,
+                        ),
                         10.sbh,
-                        AppText(
-                          text: "Weight\n$weight",
-                          style: AppTextStyles.boldLarge,
+                        KeyValueRichText(
+                          label: "Weight\n",
+                          value: " $weight",
+                          labelTextStyle: AppTextStyles.boldLarge,
+                          valueTextStyle: AppTextStyles.boldLarge
+                              .copyWith(color: AppColors.primary),
                         ),
                         30.sbh,
-                        const Icon(Icons.bloodtype, color: AppColors.primary,size: 35,),
+                        const Icon(
+                          Icons.bloodtype,
+                          color: AppColors.primary,
+                          size: 35,
+                        ),
                         10.sbh,
-                        AppText(
-                            text: "Blood Percentage\n$bloodPercentage",
-                            maxLines: 2,
-                            style: AppTextStyles.boldLarge),
+                        KeyValueRichText(
+                          label: "Blood Percentage\n",
+                          value: " $bloodPercentage",
+                          labelTextStyle: AppTextStyles.boldLarge,
+                          valueTextStyle: AppTextStyles.boldLarge
+                              .copyWith(color: AppColors.primary),
+                        ),
                       ],
                     ),
                     40.sbw,
@@ -58,18 +72,34 @@ class UserMeasurementCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.height, color: AppColors.primary,size: 35,),
+                        const Icon(
+                          Icons.height,
+                          color: AppColors.primary,
+                          size: 35,
+                        ),
                         10.sbh,
-                        AppText(
-                            text: "Height\n$height",
-                            style: AppTextStyles.boldLarge),
+                        KeyValueRichText(
+                          label: "Height\n",
+                          value: " $height",
+                          labelTextStyle: AppTextStyles.boldLarge,
+                          valueTextStyle: AppTextStyles.boldLarge
+                              .copyWith(color: AppColors.primary),
+                        ),
                         30.sbh,
-                        const Icon(Icons.account_circle_rounded,
-                            color: AppColors.primary,size: 35,),
+                        const Icon(
+                          Icons.account_circle_rounded,
+                          color: AppColors.primary,
+                          size: 35,
+                        ),
                         10.sbh,
-                        AppText(
-                            text: "Head Size\n$headSize",
-                            style: AppTextStyles.boldLarge),
+                        KeyValueRichText(
+                          label: "Head Size\n",
+                          value: " $headSize",
+                          labelTextStyle: AppTextStyles.boldLarge,
+                          valueTextStyle: AppTextStyles.boldLarge
+                              .copyWith(color: AppColors.primary),
+                        ),
+
                       ],
                     )
                   ],

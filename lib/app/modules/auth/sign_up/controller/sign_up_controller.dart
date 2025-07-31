@@ -131,7 +131,7 @@ class SignupController extends GetxController
           .get();
       if (snapShot.exists) {
         AppConstant.getStorage.write(AppConstant.isLoginKey, true);
-        AppConstant.getStorage.write("uid", user.uid);
+        AppConstant.getStorage.write(AppConstant.uidKey, user.uid);
         AppConstant.alertService.showAlert(AlertModel.success(
             message: "User created successfully.",
             yesAction: () => Get.toNamed(AppRoutes.mainMenu)));

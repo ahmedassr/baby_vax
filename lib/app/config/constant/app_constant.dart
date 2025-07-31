@@ -7,6 +7,7 @@ import '../../core/service/get_storage_service.dart';
 class AppConstant {
   static String uId = "";
   static const String isLoginKey = "isLogin";
+  static const String uidKey = "uid";
   static final AlertService alertService = AlertService();
   static const EdgeInsets buttonPadding = EdgeInsets.symmetric(horizontal: 20, vertical: 30);
   static const EdgeInsets columnPadding = EdgeInsets.symmetric(horizontal: 15, vertical: 10);

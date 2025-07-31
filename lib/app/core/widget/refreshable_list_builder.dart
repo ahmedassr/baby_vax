@@ -26,8 +26,10 @@ class RefreshableListBuilder extends StatelessWidget {
       physics: physics,
       shrinkWrap: shrinkWrap,
       slivers: [
-        if (defaultTargetPlatform == TargetPlatform.iOS && onRefresh != null)
-          CupertinoSliverRefreshControl(onRefresh: onRefresh!),
+        if (defaultTargetPlatform == TargetPlatform.iOS &&
+            onRefresh != null) ...[
+          CupertinoSliverRefreshControl(onRefresh: onRefresh!)
+        ],
         SliverPadding(
           padding: padding ?? AppConstant.columnPadding,
           sliver: SliverList(

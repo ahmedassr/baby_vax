@@ -1,7 +1,7 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class MainController extends GetxController with StateMixin, StateMixinHelper {
-  final Rxn<UserModel> user = Rxn<UserModel>();
+  final Rxn<UserModel> userDetails = Rxn<UserModel>();
 
   @override
   void onInit() {
@@ -18,10 +18,12 @@ class MainController extends GetxController with StateMixin, StateMixinHelper {
     setLoading();
     try {
       DocumentSnapshot doc =
-          await FirebaseFirestore.instance.collection("user").doc(uid).get();
+          await FirebaseFirestore.instance.collection("users").doc(uid).get();
       if (doc.exists) {
-        user.value = UserModel.fromDocument(doc);
+        userDetails.value = UserModel.fromDocument(doc);
         setSuccess();
+      }else{
+        setError("User date not found.");
       }
     } on FirebaseException catch (e) {
       setError(getFriendlyErrorMessage(e.toString()));

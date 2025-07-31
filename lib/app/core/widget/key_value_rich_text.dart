@@ -4,6 +4,8 @@ import 'package:baby_vax/app/core/imports/import_library.dart';
 
 class KeyValueRichText extends StatelessWidget {
   final Color? textColor;
+  final TextStyle? labelTextStyle;
+  final TextStyle? valueTextStyle;
   final String label;
   final String value;
   final double? labelFontSize;
@@ -15,7 +17,9 @@ class KeyValueRichText extends StatelessWidget {
       required this.label,
       required this.value,
       this.textColor,
+      this.labelTextStyle,
       this.labelFontSize,
+      this.valueTextStyle,
       this.valueFontSize,
       this.textAlign});
 
@@ -26,11 +30,11 @@ class KeyValueRichText extends StatelessWidget {
         children: [
           TextSpan(
               text: "$label:",
-              style: AppTextStyles.bodyMedium
+              style: labelTextStyle ?? AppTextStyles.bodyMedium
                   .copyWith(fontSize: labelFontSize, color: textColor)),
           TextSpan(
               text: value,
-              style: AppTextStyles.captionLarge
+              style: valueTextStyle ?? AppTextStyles.captionLarge
                   .copyWith(fontSize: labelFontSize, color: textColor))
         ],
       ),
