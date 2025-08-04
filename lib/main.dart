@@ -1,3 +1,5 @@
+import 'package:baby_vax/app/core/binding/app_binding.dart';
+
 import 'app/core/imports/import_manger.dart';
 import 'app/core/service/init_app_service.dart';
 
@@ -26,6 +28,7 @@ class MyApp extends StatelessWidget {
             builder: (context, _) {
               return GetMaterialApp(
                 debugShowCheckedModeBanner: false,
+                initialBinding: AppBinding(),
                 title: "Baby Vax",
                 initialRoute: isLoggedIn ? AppRoutes.mainMenu : AppRoutes.login,
                 getPages: AppPages.routes,

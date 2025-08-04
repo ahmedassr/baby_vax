@@ -1,5 +1,7 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 
+import '../../../config/session/session_manager.dart';
+
 class MainController extends GetxController with StateMixin, StateMixinHelper {
   final Rxn<UserModel> userDetails = Rxn<UserModel>();
 
@@ -10,7 +12,7 @@ class MainController extends GetxController with StateMixin, StateMixinHelper {
   }
 
   Future fetchUserData() async {
-    var uid = AppConstant.uId;
+    var uid = SessionManager.uId;
     if (uid.isEmpty) {
       setError("The user ID is missing.");
       return;

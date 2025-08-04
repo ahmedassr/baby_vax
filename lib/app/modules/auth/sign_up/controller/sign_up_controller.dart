@@ -1,6 +1,8 @@
+import 'package:baby_vax/app/config/session/session_manager.dart';
+import 'package:baby_vax/app/core/shared_model/medical_dates_model.dart';
+import 'package:baby_vax/app/core/utils/medical_dates_generator.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/imports/import_manger.dart';
-import '../../../../core/service/get_storage_service.dart';
 
 class SignupController extends GetxController
     with StateMixin, StateMixinHelper {
@@ -34,6 +36,13 @@ class SignupController extends GetxController
         DateFormat("yyyy-MM-dd").format(selectedBirthday.value);
   }
 
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    signupControllers.forEach((_,c) => c.dispose());
+  }
+
   Future<void> selectBirthday() async {
     final pickedDate = await Get.dialog(DatePickerDialog(
         initialDate: selectedBirthday.value,
@@ -51,7 +60,9 @@ class SignupController extends GetxController
 
   bool isValidate() {
     bool valid = true;
-    signupErrorText.values.forEach((text) => text.value = "");
+    for (var text in signupErrorText.values) {
+      text.value = "";
+    }
     if (signupControllers["emailController"]?.text.isEmpty ?? true) {
       signupErrorText["emailErrorText"]?.value = "Email can't be empty.";
       valid = false;
@@ -106,20 +117,27 @@ class SignupController extends GetxController
 
     setLoading();
     try {
-      final result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: signupControllers["emailController"]?.text.trim() ?? "",
-          password: signupControllers["passwordController"]?.text.trim() ?? "");
-      if (result.user != null) {
-        user.uid = result.user?.uid ?? "";
-        createUser(user);
+      final authResult = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: signupControllers["emailController"]?.text.trim() ?? "",
+              password:
+                  signupControllers["passwordController"]?.text.trim() ?? "");
+      if (authResult.user != null) {
+        user.uid = authResult.user?.uid ?? "";
+        final isUserCreated = await createUser(user);
+        if (!isUserCreated) {
+          await authResult.user?.delete();
+          AppConstant.alertService.showError(
+              message: "Failed to create user profile. Please try again.");
+          return;
+        }
       }
     } on FirebaseException catch (e) {
-      print("########### $e");
       setError(getFriendlyErrorMessage(e.toString()));
     }
   }
 
-  Future createUser(UserModel user) async {
+  Future<bool> createUser(UserModel user) async {
     try {
       await FirebaseFirestore.instance
           .collection("users")
@@ -129,18 +147,39 @@ class SignupController extends GetxController
           .collection("users")
           .doc(user.uid)
           .get();
-      if (snapShot.exists) {
-        AppConstant.getStorage.write(AppConstant.isLoginKey, true);
-        AppConstant.getStorage.write(AppConstant.uidKey, user.uid);
-        AppConstant.alertService.showAlert(AlertModel.success(
-            message: "User created successfully.",
-            yesAction: () => Get.toNamed(AppRoutes.mainMenu)));
-        setSuccess();
-      } else {
+      if (!snapShot.exists) {
         setError("Failed to create user.");
+        return false;
       }
+      final isMedicalDatesCreate = await createUserMedicalDates(user);
+      if (!isMedicalDatesCreate) {
+        return false;
+      }
+      AppConstant.getStorage.write(AppConstant.isLoginKey, true);
+      AppConstant.getStorage.write(AppConstant.uidKey, user.uid);
+      SessionManager.uId = user.uid;
+      AppConstant.alertService.showAlert(AlertModel.success(
+          message: "User created successfully.",
+          yesAction: () => Get.toNamed(AppRoutes.mainMenu)));
+      setSuccess();
+      return true;
     } on FirebaseException catch (e) {
       setError(getFriendlyErrorMessage(e.toString()));
+      return false;
+    }
+  }
+
+  Future<bool> createUserMedicalDates(UserModel user) async {
+    try {
+      await AppConstant.fireStoreHelper.createSubCollection<MedicalDatesModel>(
+          parentCollection: "users",
+          subCollection: "medical_dates",
+          uid: user.uid,
+          data: MedicalDatesGenerator.generator(user.birthday),
+          toMap: (e) => e.toMap());
+      return true;
+    } catch (_) {
+      return false;
     }
   }
 }

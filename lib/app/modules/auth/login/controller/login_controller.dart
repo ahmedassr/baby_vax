@@ -1,3 +1,4 @@
+import 'package:baby_vax/app/config/session/session_manager.dart';
 import 'package:baby_vax/app/core/service/get_storage_service.dart';
 
 import '../../../../core/imports/import_manger.dart';
@@ -13,14 +14,16 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
 
   @override
   void onInit() {
-    setSuccess();
     super.onInit();
+    setSuccess();
   }
 
   @override
   void onClose() {
-    loginController.forEach((key, controller) => controller.dispose());
     super.onClose();
+    for (var controller in loginController.values) {
+      controller.dispose();
+    }
   }
 
   Future userLogin() async {
@@ -36,11 +39,12 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
     }
     setLoading();
     try {
-      final result = await auth.signInWithEmailAndPassword(
+      final authResult = await auth.signInWithEmailAndPassword(
           email: email, password: password);
-      if (result.user != null) {
+      if (authResult.user != null) {
         AppConstant.getStorage.write(AppConstant.isLoginKey, true);
-        AppConstant.getStorage.write(AppConstant.uidKey, result.user?.uid);
+        AppConstant.getStorage.write(AppConstant.uidKey, authResult.user?.uid);
+        SessionManager.uId = authResult.user?.uid ?? "";
         Get.toNamed(AppRoutes.mainMenu);
         setSuccess();
       } else {

@@ -1,4 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
+import 'package:baby_vax/app/modules/main/controller/main_controller.dart';
 import 'package:baby_vax/app/modules/setting/view/setting_view.dart';
 import 'package:baby_vax/app/modules/tips/view/tips_view.dart';
 
@@ -22,14 +23,15 @@ class MainMenuController extends GetxController {
         title: "Settings", view: const SettingsView(), icon: Icons.settings),
   ];
 
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-  }
+
 
   void changeValue(index) {
     currentIndex(index);
+    switch(index){
+      case 0:
+        Get.find<MainController>().fetchUserData();
+        break;
+    }
   }
 
   void onSearchPressed() {}

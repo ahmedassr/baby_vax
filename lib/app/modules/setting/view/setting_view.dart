@@ -30,15 +30,7 @@ class SettingsView extends GetView<SettingsController> {
           AppListTitleItem(
             title: "Log Out",
             icon: Icons.logout,
-            onTap: () {
-              AppConstant.alertService.showAlert(AlertModel.attention(
-                  message: "Are you sure you want to log out?",
-                  yesAction: () {
-                    AppConstant.getStorage.write(AppConstant.isLoginKey, false);
-                    Get.toNamed(AppRoutes.login);
-                  },
-                  noAction: () => Get.back()));
-            },
+            onTap: controller.onLogout,
           )
         ],
       ),

@@ -10,7 +10,6 @@ class MainView extends GetView<MainController> {
   @override
   Widget build(BuildContext context) {
     Get.lazyPut<MainController>(() => MainController());
-    // TODO: implement build
     return SingleChildScrollView(
       child: controller.obx(
         (state) => RefreshableListBuilder(
