@@ -11,21 +11,32 @@ class SearchOnMedicalDates extends GetView<MedicalDatesController> {
       appBar: const CustomAppBar(title: "Search Medical Dates"),
       body: Padding(
         padding: AppConstant.columnPadding,
-        child: Column(
-          children: [
-            LabeledTextField(
-              label: "Which medical dates are you looking for?",
-              controller: controller.searchController,
-              onChanged: (value) => controller.dates.filterBy(
-                  value.toLowerCase(),
-                  predicate: (dates, query) =>
-                      dates.name.toLowerCase().contains(query.toLowerCase()),
-              onSuccess: (filtered) =>controller.setSuccess(filtered),
-                onEmpty: () => controller.setEmpty()
+        child: controller.obx(
+          (state) => Column(
+            children: [
+              LabeledTextField(
+                label: "Which medical dates are you looking for?",
+                controller: controller.searchController,
+                onChanged: (value) => state?.filterBy(
+                    value.toLowerCase(),
+                    predicate: (dates, query) =>
+                        dates.name.toLowerCase().contains(query.toLowerCase()),
+                    onSuccess: (filtered) => controller.setSuccess(filtered),
+                    onEmpty: () => controller.setEmpty()),
               ),
-            ),
-            const Flexible(child: MedicalDatesView()),
-          ],
+              const Flexible(child: MedicalDatesView()),
+            ],
+          ),
+          onLoading: const Center(
+            child: AppShimmerLoading(),
+          ),
+          onEmpty: const AppEmptyState(
+            animationPath: AppAnimations.noRecords,
+          ),
+          onError: (error) => AppEmptyState(
+            message: error,
+            animationPath: AppAnimations.noRecords,
+          ),
         ),
       ),
     );

@@ -1,5 +1,5 @@
 import 'package:baby_vax/app/config/session/session_manager.dart';
-import 'package:baby_vax/app/core/shared_model/medical_dates_model.dart';
+import 'package:baby_vax/app/modules/medical_dates/model/medical_dates_model.dart';
 import 'package:baby_vax/app/core/utils/medical_dates_generator.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/imports/import_manger.dart';
@@ -40,7 +40,7 @@ class SignupController extends GetxController
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-    signupControllers.forEach((_,c) => c.dispose());
+    signupControllers.forEach((_, c) => c.dispose());
   }
 
   Future<void> selectBirthday() async {
@@ -171,10 +171,8 @@ class SignupController extends GetxController
 
   Future<bool> createUserMedicalDates(UserModel user) async {
     try {
-      await AppConstant.fireStoreHelper.createSubCollection<MedicalDatesModel>(
-          parentCollection: "users",
-          subCollection: "medical_dates",
-          uid: user.uid,
+      await AppConstant.fireStoreHelper.createDynamicPath<MedicalDatesModel>(
+          path: ["users", user.uid, "medical_dates"],
           data: MedicalDatesGenerator.generator(user.birthday),
           toMap: (e) => e.toMap());
       return true;

@@ -19,16 +19,16 @@ class MainController extends GetxController with StateMixin, StateMixinHelper {
     }
     setLoading();
     try {
-      DocumentSnapshot doc =
-          await FirebaseFirestore.instance.collection("users").doc(uid).get();
-      if (doc.exists) {
-        userDetails.value = UserModel.fromDocument(doc);
+      final data = await AppConstant.fireStoreHelper
+          .getUser(uid: uid, fromMap: (e) => UserModel.fromJson(e));
+      if (data == null) {
+        setEmpty();
+      } else {
+        userDetails.value = data;
         setSuccess();
-      }else{
-        setError("User date not found.");
       }
-    } on FirebaseException catch (e) {
-      setError(getFriendlyErrorMessage(e.toString()));
+    } catch (_) {
+      setError("An unexpected error occurred.");
     }
   }
 }

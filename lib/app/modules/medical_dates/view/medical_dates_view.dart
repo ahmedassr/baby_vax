@@ -1,4 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
+import 'package:baby_vax/app/core/values/app_enum/medical_date_state_enum.dart';
 import 'package:baby_vax/app/core/values/app_image.dart';
 import 'package:baby_vax/app/modules/medical_dates/model/medical_dates_model.dart';
 
@@ -17,7 +18,8 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 KeyValueRichText(label: "Date:", value: dates[index].date),
-                KeyValueRichText(label: "State", value: dates[index].state ?? ""),
+                KeyValueRichText(
+                    label: "State", value: dates[index].state.label),
               ],
             ),
             leadingIcon: Icons.calendar_month_rounded,

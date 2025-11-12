@@ -28,7 +28,7 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
                   value: controller.medicalDate?.date ?? "00-00-0000"),
               20.sbh,
               KeyValueRichText(
-                  label: "State", value: controller.medicalDate?.state ?? ""),
+                  label: "State", value:  ""),
               70.sbh,
               if ("01-7-2025" == today)
                 Center(child: AppButton(onPressed: () {}, text: "Completed"))

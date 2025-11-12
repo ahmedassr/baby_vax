@@ -6,9 +6,9 @@ import '../../tips/controller/tips_controller.dart';
 class MainTabsBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(() => MainController(), permanent: true);
-    Get.put(() => MedicalDatesController(), permanent: true);
-    Get.put(() => TipsController(), permanent: true);
-    Get.put(() => SettingsController(), permanent: true);
+    Get.put(MainController(), permanent: true);
+    Get.put(MedicalDatesController(), permanent: true);
+    Get.put(TipsController(), permanent: true);
+    Get.put(SettingsController(), permanent: true);
   }
 }

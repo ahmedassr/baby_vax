@@ -31,6 +31,8 @@ class MainMenuController extends GetxController {
       case 0:
         Get.find<MainController>().fetchUserData();
         break;
+      case 1:
+        Get.find<MedicalDatesController>().fetchMedicalDates();
     }
   }
 
