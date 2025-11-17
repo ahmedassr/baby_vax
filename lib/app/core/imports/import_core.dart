@@ -10,6 +10,7 @@ export 'package:baby_vax/app/core/routes/app_routes.dart';
 
 //values
 export 'package:baby_vax/app/core/values/app_image.dart';
+export 'package:baby_vax/app/core/values/app_enum/medical_date_state_enum.dart';
 
 //shared model
 export 'package:baby_vax/app/core/shared_model/internal_screen_args.dart';

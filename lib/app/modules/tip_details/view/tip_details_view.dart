@@ -1,7 +1,4 @@
-import 'package:baby_vax/app/modules/tip_details/controller/tip_details_controller.dart';
-
 import '../../../core/imports/import_manger.dart';
-import '../../../core/widget/custom_app_bar.dart';
 
 class TipDetailsView extends GetView<TipDetailsController> {
   const TipDetailsView({super.key});
@@ -11,6 +8,7 @@ class TipDetailsView extends GetView<TipDetailsController> {
     return Scaffold(
       appBar: CustomAppBar(
         title: controller.tip?.title ?? "",
+        fontSize: 12,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -20,11 +18,38 @@ class TipDetailsView extends GetView<TipDetailsController> {
             children: [
               20.sbh,
               KeyValueRichText(
-                  label: "Name", value: controller.tip?.title ?? ""),
+                label: controller.tip?.title ?? "",
+                textAlign: TextAlign.right,
+              ),
               20.sbh,
-              KeyValueRichText(
-                  label: "Description",
-                  value: controller.tip?.description ?? ""),
+              if (controller.tip?.image?.isNotEmpty ?? false)
+                Image.network(
+                  controller.tip?.image ?? "",
+                  loadingBuilder: (context, image, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return image;
+                    }
+                    return const Center(child: CircularProgressIndicator());
+                  },
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    width: double.infinity,
+                    height: 150,
+                    decoration:  const BoxDecoration(
+                      color: AppColors.greyLight,
+                      borderRadius:  BorderRadius.all(Radius.circular(8))
+                    ),
+                    child: const Icon(Icons.broken_image,
+                        size: 120, color: Colors.white),
+                  ),
+                ),
+              20.sbh,
+              AppText(
+                text: controller.tip?.description ?? "",
+                style: AppTextStyles.captionLarge
+                    .copyWith(fontSize: 15, wordSpacing: 4),
+                textAlign: TextAlign.right,
+                maxLines: 50,
+              ),
             ],
           ),
         ),

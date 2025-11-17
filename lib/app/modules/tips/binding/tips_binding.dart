@@ -4,6 +4,6 @@ import 'package:baby_vax/app/modules/tips/controller/tips_controller.dart';
 class TipsBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(() => TipsController());
+    Get.put(TipsController());
   }
 }

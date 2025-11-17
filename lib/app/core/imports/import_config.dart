@@ -4,3 +4,5 @@ export 'package:baby_vax/app/config/themes/app_text_style.dart';
 //constant
 export 'package:baby_vax/app/config/constant/app_constant.dart';
 export 'package:baby_vax/app/config/constant/app_colors.dart';
+
+export 'package:baby_vax/app/config/session/session_manager.dart';

@@ -11,15 +11,17 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
     Get.lazyPut<MedicalDatesController>(() => MedicalDatesController());
     return controller.obx(
       (dates) => RefreshableListBuilder(
+        itemCount: dates?.length ?? 1,
+        onRefresh: () => controller.fetchMedicalDates(),
         itemBuilder: (context, index) {
           return AppDismissibleListItem(
-            title: KeyValueRichText(label: "Name:", value: dates![index].name),
+            title: KeyValueRichText(label: "Name: ", value: dates![index].name),
             subTitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                KeyValueRichText(label: "Date:", value: dates[index].date),
+                KeyValueRichText(label: "Date: ", value: dates[index].date),
                 KeyValueRichText(
-                    label: "State", value: dates[index].state.label),
+                    label: "State: ", value: dates[index].state.label),
               ],
             ),
             leadingIcon: Icons.calendar_month_rounded,
@@ -28,7 +30,6 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
             onTap: () => controller.onMedicalDatePressed(dates[index]),
           );
         },
-        itemCount: dates?.length ?? 0,
       ),
       onLoading: const Center(
         child: AppShimmerLoading(),

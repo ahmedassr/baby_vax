@@ -6,16 +6,16 @@ class KeyValueRichText extends StatelessWidget {
   final Color? textColor;
   final TextStyle? labelTextStyle;
   final TextStyle? valueTextStyle;
-  final String label;
-  final String value;
+  final String? label;
+  final String? value;
   final double? labelFontSize;
   final double? valueFontSize;
   final TextAlign? textAlign;
 
   const KeyValueRichText(
       {super.key,
-      required this.label,
-      required this.value,
+       this.label,
+      this.value,
       this.textColor,
       this.labelTextStyle,
       this.labelFontSize,
@@ -28,10 +28,12 @@ class KeyValueRichText extends StatelessWidget {
     return AutoSizeText.rich(
       TextSpan(
         children: [
+          if(label != null)
           TextSpan(
-              text: "$label:",
+              text: label,
               style: labelTextStyle ?? AppTextStyles.bodyMedium
-                  .copyWith(fontSize: labelFontSize, color: textColor)),
+                  .copyWith(fontSize: labelFontSize, color: textColor,)),
+          if(value != null)
           TextSpan(
               text: value,
               style: valueTextStyle ?? AppTextStyles.captionLarge
@@ -40,7 +42,7 @@ class KeyValueRichText extends StatelessWidget {
       ),
       textAlign: textAlign,
       overflow: TextOverflow.ellipsis,
-      maxLines: 5,
+      maxLines: 3,
     );
   }
 }

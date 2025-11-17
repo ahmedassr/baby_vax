@@ -9,3 +9,4 @@ export 'package:baby_vax/app/core/widget/app_empty_state.dart';
 export 'package:baby_vax/app/core/widget/app_dismissible_list_item.dart';
 export 'package:baby_vax/app/core/widget/app_box_decoration.dart';
 export 'package:baby_vax/app/core/widget/app_list_title_item.dart';
+export 'package:baby_vax/app/core/widget/custom_app_bar.dart';

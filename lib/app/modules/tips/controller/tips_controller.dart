@@ -1,7 +1,4 @@
-import 'package:baby_vax/app/config/constant/app_constant.dart';
-import 'package:baby_vax/app/core/imports/import_core.dart';
-import 'package:baby_vax/app/core/imports/import_library.dart';
-import 'package:baby_vax/app/modules/tips/model/tips_model.dart';
+import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class TipsController extends GetxController
     with StateMixin<List<TipsModel>>, StateMixinHelper {
@@ -16,16 +13,20 @@ class TipsController extends GetxController
 
   Future<void> fetchTips() async {
     setLoading();
-    await Future.delayed(const Duration(seconds: 2));
-    tips.assignAll([
-      TipsModel(title: "title 1 ", description: "description 1"),
-      TipsModel(title: "title 2 ", description: "description 2"),
-      TipsModel(title: "title 3 ", description: "description 3")
-    ]);
-    setSuccess(tips);
+    try {
+      final tips = await AppConstant.fireStoreHelper
+          .fetchData(path: ["tips"], fromMap: (e) => TipsModel.fromJson(e));
+      if (tips?.isEmpty ?? true) {
+        setEmpty();
+      } else {
+        setSuccess(tips);
+      }
+    } catch (_) {
+      setError("Failed to fetch Tips.");
+    }
   }
 
-  void onTipPressed(TipsModel tip){
+  void onTipPressed(TipsModel tip) {
     Get.toNamed(AppRoutes.tipDetails);
     AppConstant.argumentService.setArgument(InternalScreenArgs(tip: tip));
   }

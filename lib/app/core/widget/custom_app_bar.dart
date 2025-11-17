@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
+  final double fontSize;
   final bool showBackButton;
   final List<Widget>? action;
   final Widget? customLeading;
@@ -17,7 +18,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.action,
       this.customLeading,
       this.onBackPressed,
-      this.elevation = 0});
+      this.elevation = 0,
+      this.fontSize = 22});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: title != null
           ? AppText(
               text: title ?? "",
-              style: AppTextStyles.headLineSmall.copyWith(fontSize: 22),
+              style: AppTextStyles.headLineSmall.copyWith(fontSize: fontSize),
+              maxLines: 3,
             )
           : null,
       centerTitle: true,

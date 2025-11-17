@@ -1,6 +1,4 @@
-import 'package:baby_vax/app/core/imports/import_core.dart';
-import 'package:baby_vax/app/core/imports/import_library.dart';
-import 'package:baby_vax/app/modules/tips/model/tips_model.dart';
+import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class TipDetailsController extends GetxController with StateMixin , StateMixinHelper{
   final args = InternalScreenArgs.fromArgs.tip;
@@ -20,4 +18,5 @@ class TipDetailsController extends GetxController with StateMixin , StateMixinHe
       setError("The current tip is missing");
     }
   }
+
 }

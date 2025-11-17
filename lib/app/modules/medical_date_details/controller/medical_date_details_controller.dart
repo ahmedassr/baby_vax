@@ -6,11 +6,25 @@ class MedicalDateDetailsController extends GetxController
   MedicalDatesModel? medicalDate;
   final args = InternalScreenArgs.fromArgs.medicalDate;
 
+  bool get isActive {
+    final state = medicalDate?.state;
+    final dateStr = medicalDate?.date;
+
+    if (state != MedicalDateStateEnum.pending ||
+        dateStr == null ||
+        dateStr.isEmpty) {
+      return false;
+    }
+    final date = DateTime.tryParse(dateStr);
+    if(date == null) return false;
+    return date.isBefore(DateTime.now());
+  }
+
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     initializeMedicalDateArgument();
+    setSuccess();
   }
 
   void initializeMedicalDateArgument() {
@@ -18,6 +32,44 @@ class MedicalDateDetailsController extends GetxController
       medicalDate = args;
     } else {
       setError("The current medical dates is missing");
+    }
+  }
+
+  Future updateState() async {
+    setLoading();
+    try {
+      var data = medicalDate!.copyWith(
+        state: MedicalDateStateEnum.completed,
+      );
+      await AppConstant.fireStoreHelper.updateData(path: [
+        "users",
+        SessionManager.uId,
+        "medical_dates",
+        medicalDate?.uid ?? ""
+      ], date: data.toMap());
+      await fetchDate();
+    } catch (_) {
+      setError("Failed to update the date state");
+    }
+  }
+
+  Future fetchDate() async {
+    setLoading();
+    try {
+      final date = await AppConstant.fireStoreHelper.fetchData(path: [
+        "users",
+        SessionManager.uId,
+        "medical_dates",
+        medicalDate?.uid ?? ""
+      ], fromMap: (e) => MedicalDatesModel.fromJson(e));
+      if (date?.isEmpty ?? true) {
+        setEmpty();
+      } else {
+        medicalDate = date?.first;
+        setSuccess();
+      }
+    } catch (_) {
+      setError("Failed to fetch medical date details");
     }
   }
 }
