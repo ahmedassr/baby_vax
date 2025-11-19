@@ -4,6 +4,7 @@ export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:lottie/lottie.dart';
 export 'package:logger/logger.dart';
 export 'package:flutter/cupertino.dart';
+export 'package:googleapis_auth/auth_io.dart';
 
 //Firebase
 export 'package:firebase_core/firebase_core.dart';
