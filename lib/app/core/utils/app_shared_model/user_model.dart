@@ -3,7 +3,7 @@ import 'package:baby_vax/app/core/imports/import_library.dart';
 class UserModel {
   String uid;
   final String email;
-  final String birthday;
+  final String? birthday;
   final String? name;
   final String? height;
   final String? weight;
@@ -13,7 +13,7 @@ class UserModel {
   UserModel({
     required this.uid,
     required this.email,
-    required this.birthday,
+    this.birthday,
     this.name,
     this.height,
     this.weight,

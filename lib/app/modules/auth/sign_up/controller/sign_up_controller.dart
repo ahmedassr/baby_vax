@@ -173,7 +173,7 @@ class SignupController extends GetxController
     try {
       await AppConstant.fireStoreHelper.createDynamicPath<MedicalDatesModel>(
           path: ["users", user.uid, "medical_dates"],
-          data: MedicalDatesGenerator.generator(user.birthday),
+          data: MedicalDatesGenerator.generator(user.birthday ?? ""),
           toMap: (e) => e.toMap());
       return true;
     } catch (_) {

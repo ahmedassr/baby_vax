@@ -56,6 +56,10 @@ class AppPages {
     build(
         route: AppRoutes.tipDetails,
         page: () => const TipDetailsView(),
-        binding: TipDetailsBinding())
+        binding: TipDetailsBinding()),
+    build(
+        route: AppRoutes.editUser,
+        page: () => const EditUserView(),
+        binding: EditUserBinding()),
   ];
 }

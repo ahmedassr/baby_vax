@@ -1,7 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 
-import '../../../config/session/session_manager.dart';
-
 class MainController extends GetxController with StateMixin, StateMixinHelper {
   final Rxn<UserModel> userDetails = Rxn<UserModel>();
 

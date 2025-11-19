@@ -8,7 +8,11 @@ import '../../main/view/main_view.dart';
 class MainMenuController extends GetxController {
   final currentIndex = 0.obs;
   final List<BottomNavBarModel> item = [
-    BottomNavBarModel(title: "Main", view: const MainView(), icon: Icons.home_filled),
+    BottomNavBarModel(
+        title: "Main",
+        view: const MainView(),
+        icon: Icons.home_filled,
+        showEdit: true),
     BottomNavBarModel(
         title: "Medical Dates",
         view: const MedicalDatesView(),
@@ -23,11 +27,9 @@ class MainMenuController extends GetxController {
         title: "Settings", view: const SettingsView(), icon: Icons.settings),
   ];
 
-
-
   void changeValue(index) {
     currentIndex(index);
-    switch(index){
+    switch (index) {
       case 0:
         Get.find<MainController>().fetchUserData();
         break;
@@ -39,4 +41,10 @@ class MainMenuController extends GetxController {
   void onSearchPressed() {}
 
   void onAddPressed() {}
+
+  void onEditPressed() {
+    AppConstant.argumentService.setArgument(
+        InternalScreenArgs(user: Get.find<MainController>().userDetails.value));
+    Get.toNamed(AppRoutes.editUser);
+  }
 }

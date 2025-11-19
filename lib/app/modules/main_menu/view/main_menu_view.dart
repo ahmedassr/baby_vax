@@ -1,6 +1,4 @@
 import 'package:baby_vax/app/core/widget/app_bottom_navigation_bar.dart';
-import 'package:baby_vax/app/core/widget/custom_app_bar.dart';
-
 import '../../../core/imports/import_manger.dart';
 
 class MainMenuView extends GetView<MainMenuController> {
@@ -34,6 +32,11 @@ class MainMenuView extends GetView<MainMenuController> {
 
   List<Widget> getAppBarAction() {
     final List<Widget> action = [];
+    if(controller.item[controller.currentIndex.value].showEdit){
+      action.add(IconButton(
+          onPressed: controller.onEditPressed,
+          icon: const Icon(Icons.mode_edit_outlined)));
+    }
     if (controller.item[controller.currentIndex.value].showSearch) {
       action.add(IconButton(
           onPressed: controller.onSearchPressed,
