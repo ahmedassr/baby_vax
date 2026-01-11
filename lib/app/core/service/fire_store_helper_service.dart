@@ -1,7 +1,5 @@
-import 'package:baby_vax/app/core/imports/import_library.dart';
 import 'package:baby_vax/app/core/values/app_enum/path_validation_type.dart';
-
-import '../../config/constant/app_constant.dart';
+import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class FireStoreHelperService extends GetxService {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
@@ -78,7 +76,7 @@ class FireStoreHelperService extends GetxService {
             }
             final data =
                 snap.docs.map((doc) => fromMap(_docToMap(doc))).toList();
-            _logger.i("✅ Fetched ${data.length} items successfully");
+            _logger.i("✅ Fetched ${data.length} items from → ${path.join('/')} successfully");
             return data;
           }
           if (path.length.isEven && ref is DocumentReference) {
@@ -110,6 +108,20 @@ class FireStoreHelperService extends GetxService {
           await docRef.update(date);
           _logger.i("✅ Document updated successfully");
         });
+  }
+
+  Future<void> updateFcmToken({String? token}) async {
+    String? fcmToken = await FirebaseMessaging.instance.getToken();
+    if (fcmToken == null) {
+      _logger.e("❌ Failed to get FCM Token");
+      return;
+    }
+    await AppConstant.fireStoreHelper.updateData(
+        path: ["users", SessionManager.uId],
+        date: {'fcmToken': token ?? fcmToken});
+
+    _logger
+        .i("✅ FCM Token updated successfully: ${fcmToken.substring(0, 20)}...");
   }
 
   Future<void> deleteUser(String uid) async {
@@ -160,7 +172,9 @@ class FireStoreHelperService extends GetxService {
       } else {
         ref = ref.collection(path[i]);
       }
+
     }
+    _logger.i("✅ Path resolved successfully");
     return ref;
   }
 

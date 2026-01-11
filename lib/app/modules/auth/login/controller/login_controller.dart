@@ -1,6 +1,4 @@
-import 'package:baby_vax/app/config/session/session_manager.dart';
-import 'package:baby_vax/app/core/service/get_storage_service.dart';
-
+import 'package:baby_vax/app/core/notification/application/notification_coordinator.dart';
 import '../../../../core/imports/import_manger.dart';
 
 class LoginController extends GetxController with StateMixin, StateMixinHelper {
@@ -45,6 +43,10 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
         AppConstant.getStorage.write(AppConstant.isLoginKey, true);
         AppConstant.getStorage.write(AppConstant.uidKey, authResult.user?.uid);
         SessionManager.uId = authResult.user?.uid ?? "";
+        await AppConstant.fireStoreHelper.updateFcmToken();
+        await Get.find<NotificationCoordinator>().rescheduleAllVaccines(
+            userId: SessionManager.uId,
+            userName: authResult.user?.displayName ?? "Your baby");
         Get.toNamed(AppRoutes.mainMenu);
         setSuccess();
       } else {

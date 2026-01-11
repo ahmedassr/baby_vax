@@ -45,7 +45,7 @@ class MedicalDateDetailsController extends GetxController
         "users",
         SessionManager.uId,
         "medical_dates",
-        medicalDate?.uid ?? ""
+        medicalDate?.id ?? ""
       ], date: data.toMap());
       await fetchDate();
     } catch (_) {
@@ -60,7 +60,7 @@ class MedicalDateDetailsController extends GetxController
         "users",
         SessionManager.uId,
         "medical_dates",
-        medicalDate?.uid ?? ""
+        medicalDate?.id ?? ""
       ], fromMap: (e) => MedicalDatesModel.fromJson(e));
       if (date?.isEmpty ?? true) {
         setEmpty();

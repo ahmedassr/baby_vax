@@ -1,5 +1,4 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
-import 'package:flutter/cupertino.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});

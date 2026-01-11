@@ -3,6 +3,8 @@ import 'package:baby_vax/app/core/binding/app_binding.dart';
 import 'app/core/imports/import_manger.dart';
 import 'app/core/service/init_app_service.dart';
 
+final Logger logger = Logger();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initAppService();

@@ -2,7 +2,9 @@ import 'package:baby_vax/app/config/session/session_manager.dart';
 import 'package:baby_vax/app/modules/medical_dates/model/medical_dates_model.dart';
 import 'package:baby_vax/app/core/utils/medical_dates_generator.dart';
 import 'package:intl/intl.dart';
+import '../../../../../main.dart';
 import '../../../../core/imports/import_manger.dart';
+import '../../../../core/notification/application/notification_coordinator.dart';
 
 class SignupController extends GetxController
     with StateMixin, StateMixinHelper {
@@ -124,7 +126,7 @@ class SignupController extends GetxController
                   signupControllers["passwordController"]?.text.trim() ?? "");
       if (authResult.user != null) {
         user.uid = authResult.user?.uid ?? "";
-        final isUserCreated = await createUser(user);
+        final isUserCreated = await _createUserProfile(user);
         if (!isUserCreated) {
           await authResult.user?.delete();
           AppConstant.alertService.showError(
@@ -137,47 +139,52 @@ class SignupController extends GetxController
     }
   }
 
-  Future<bool> createUser(UserModel user) async {
+  Future<bool> _createUserProfile(UserModel user) async {
     try {
-      await FirebaseFirestore.instance
-          .collection("users")
-          .doc(user.uid)
-          .set(user.toMap());
-      final snapShot = await FirebaseFirestore.instance
-          .collection("users")
-          .doc(user.uid)
-          .get();
-      if (!snapShot.exists) {
-        setError("Failed to create user.");
-        return false;
+      // إنشاء المستخدم في Firestore
+      await AppConstant.fireStoreHelper.createUser(uid: user.uid, userDate: user.toMap());
+
+      // إنشاء Medical Dates
+      final vaccines = MedicalDatesGenerator.generator(user.birthday ?? '');
+      await AppConstant.fireStoreHelper.createDynamicPath<MedicalDatesModel>(
+        path: ["users", user.uid, "medical_dates"],
+        data: vaccines,
+        toMap: (e) => e.toMap(),
+      );
+
+      // جدولة الإشعارات
+      final coordinator = Get.find<NotificationCoordinator>();
+      for (var vaccine in vaccines) {
+        final date = DateTime.parse(vaccine.date);
+        if (date.isAfter(DateTime.now())) {
+          await coordinator.scheduleVaccine(
+            vaccineId: vaccine.id ?? "",
+            userName: user.name ?? "Your baby",
+            vaccineName: vaccine.name,
+            date: date,
+          );
+        }
       }
-      final isMedicalDatesCreate = await createUserMedicalDates(user);
-      if (!isMedicalDatesCreate) {
-        return false;
-      }
+      AppConstant.fireStoreHelper.updateFcmToken();
+      // تخزين الجلسة
+      SessionManager.uId = user.uid;
       AppConstant.getStorage.write(AppConstant.isLoginKey, true);
       AppConstant.getStorage.write(AppConstant.uidKey, user.uid);
-      SessionManager.uId = user.uid;
-      AppConstant.alertService.showAlert(AlertModel.success(
+
+      AppConstant.alertService.showAlert(
+        AlertModel.success(
           message: "User created successfully.",
-          yesAction: () => Get.toNamed(AppRoutes.mainMenu)));
+          yesAction: () => Get.toNamed(AppRoutes.mainMenu),
+        ),
+      );
+
       setSuccess();
       return true;
-    } on FirebaseException catch (e) {
-      setError(getFriendlyErrorMessage(e.toString()));
+    } catch (e) {
+      logger.e("❌ Error creating user profile: $e");
+      setError("Failed to create user profile. Please try again.");
       return false;
     }
   }
 
-  Future<bool> createUserMedicalDates(UserModel user) async {
-    try {
-      await AppConstant.fireStoreHelper.createDynamicPath<MedicalDatesModel>(
-          path: ["users", user.uid, "medical_dates"],
-          data: MedicalDatesGenerator.generator(user.birthday ?? ""),
-          toMap: (e) => e.toMap());
-      return true;
-    } catch (_) {
-      return false;
-    }
-  }
 }

@@ -6,28 +6,28 @@ class MedicalDatesModel {
   final String description;
   final String date;
   final MedicalDateStateEnum state;
-  final String? uid;
+  final String? id;
 
   MedicalDatesModel(
       {required this.name,
       required this.description,
       required this.date,
       required this.state,
-      this.uid});
+      this.id});
 
   MedicalDatesModel copyWith({
     String? name,
     String? description,
     String? date,
     MedicalDateStateEnum? state,
-    String? uid,
+    String? id,
   }) {
     return MedicalDatesModel(
       name: name ?? this.name,
       description: description ?? this.description,
       date: date ?? this.date,
       state: state ?? this.state,
-      uid: uid ?? this.uid,
+      id: id ?? this.id,
     );
   }
 
@@ -37,7 +37,7 @@ class MedicalDatesModel {
         description: json?["description"],
         date: json?["date"] ?? "",
         state: MedicalDateStateEnum.values.byName(json?["state"] ?? ""),
-        uid: json?["_id"] ?? "");
+        id: "${json?["name"]}_${json?["date"]}");
   }
 
   factory MedicalDatesModel.fromDocument(DocumentSnapshot doc) {
@@ -47,7 +47,7 @@ class MedicalDatesModel {
         description: data["description"],
         date: data["date"],
         state: MedicalDateStateEnum.values.byName(data["state"]),
-        uid: data["_id"]);
+        id: "${data["name"]}_${data["date"]}");
   }
 
   Map<String, dynamic> toMap() {
@@ -56,7 +56,7 @@ class MedicalDatesModel {
       "description": description,
       "date": date,
       "state": state.name,
-      "_id": uid
+      "id": "${name}_$date",
     };
   }
 }

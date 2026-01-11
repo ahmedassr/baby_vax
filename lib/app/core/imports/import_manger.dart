@@ -1,3 +1,4 @@
+export 'package:baby_vax/main.dart';
 export 'package:baby_vax/app/core/imports/import_library.dart';
 export 'package:baby_vax/app/core/imports/import_views.dart';
 export 'package:baby_vax/app/core/imports/import_controllers.dart';
