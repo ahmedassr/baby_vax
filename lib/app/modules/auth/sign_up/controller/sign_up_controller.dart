@@ -152,12 +152,11 @@ class SignupController extends GetxController
         toMap: (e) => e.toMap(),
       );
 
-      // جدولة الإشعارات
-      final coordinator = Get.find<NotificationCoordinator>();
+      // Notification Schedule
       for (var vaccine in vaccines) {
         final date = DateTime.parse(vaccine.date);
         if (date.isAfter(DateTime.now())) {
-          await coordinator.scheduleVaccine(
+          await Get.find<NotificationCoordinator>().scheduleVaccine(
             vaccineId: vaccine.id ?? "",
             userName: user.name ?? "Your baby",
             vaccineName: vaccine.name,
@@ -166,7 +165,6 @@ class SignupController extends GetxController
         }
       }
       AppConstant.fireStoreHelper.updateFcmToken();
-      // تخزين الجلسة
       SessionManager.uId = user.uid;
       AppConstant.getStorage.write(AppConstant.isLoginKey, true);
       AppConstant.getStorage.write(AppConstant.uidKey, user.uid);
