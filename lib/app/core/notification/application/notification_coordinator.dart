@@ -1,8 +1,21 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class NotificationCoordinator extends GetxService {
-  final NotificationService _notificationService =
+   NotificationService _notificationService =
       Get.find<NotificationService>();
+
+   NotificationCoordinator({NotificationService? service})
+       : _notificationService = service ?? Get.find<NotificationService>();
+
+   // طريقة للاختبار لتغيير الخدمة
+   void overrideNotificationService(NotificationService service) {
+     _notificationService = service;
+   }
+
+   /// For Test 
+   Future<void> cancelAll() async {
+     await _notificationService.cancelAll();
+   }
 
   Future<void> scheduleVaccine({
     required String vaccineId,
