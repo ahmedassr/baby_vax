@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import '../../../../main.dart';
 
 class FcmNotificationProvider {
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
@@ -8,17 +9,17 @@ class FcmNotificationProvider {
   Future<void> initialize({
     required void Function(RemoteMessage) onForeground,
     required void Function(RemoteMessage) onOpened,
-  }) async{
-    await _messaging.requestPermission();
-
+  }) async {
+    logger.i('🔔 Initializing FCM');
+    final settings = await _messaging.requestPermission();
+    logger.i('🔐 FCM permission status: ${settings.authorizationStatus.name}');
     FirebaseMessaging.onMessage.listen(onForeground);
     FirebaseMessaging.onMessageOpenedApp.listen(onOpened);
 
     final initialMessage = await _messaging.getInitialMessage();
-    if(initialMessage != null){
+    if (initialMessage != null) {
+      logger.i('🚀 App opened from terminated by FCM');
       onOpened(initialMessage);
     }
   }
-
-
 }

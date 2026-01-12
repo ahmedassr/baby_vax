@@ -9,7 +9,7 @@ class MedicalDatesGenerator {
       MedicalDatesModel(
           name: "BCG and Hepatitis B (1st dose)",
           description: "Protects against tuberculosis and hepatitis B. Given at birth.",
-          date: birthDate.add(const Duration(hours: 5)).toIso8601String(),
+          date: birthDate.add(const Duration(minutes: 5)).toIso8601String(),
           state: pendingState),
       MedicalDatesModel(
           name: "First DTP-HepB-Hib, Polio and Pneumococcal",
