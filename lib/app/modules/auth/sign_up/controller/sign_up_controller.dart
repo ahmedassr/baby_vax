@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../../../main.dart';
 import '../../../../core/imports/import_manger.dart';
 import '../../../../core/notification/application/notification_coordinator.dart';
+import '../../../../core/notification/data/onesignal_notification_provider.dart';
 
 class SignupController extends GetxController
     with StateMixin, StateMixinHelper {
@@ -142,7 +143,8 @@ class SignupController extends GetxController
   Future<bool> _createUserProfile(UserModel user) async {
     try {
       // إنشاء المستخدم في Firestore
-      await AppConstant.fireStoreHelper.createUser(uid: user.uid, userDate: user.toMap());
+      await AppConstant.fireStoreHelper
+          .createUser(uid: user.uid, userDate: user.toMap());
 
       // إنشاء Medical Dates
       final vaccines = MedicalDatesGenerator.generator(user.birthday ?? '');
@@ -164,11 +166,12 @@ class SignupController extends GetxController
           );
         }
       }
-      AppConstant.fireStoreHelper.updateFcmToken();
       SessionManager.uId = user.uid;
       AppConstant.getStorage.write(AppConstant.isLoginKey, true);
       AppConstant.getStorage.write(AppConstant.uidKey, user.uid);
-
+      await AppConstant.fireStoreHelper.updateFcmToken();
+      await Get.find<OneSingleNotificationProvider>()
+          .setUser(SessionManager.uId);
       AppConstant.alertService.showAlert(
         AlertModel.success(
           message: "User created successfully.",
@@ -184,5 +187,4 @@ class SignupController extends GetxController
       return false;
     }
   }
-
 }

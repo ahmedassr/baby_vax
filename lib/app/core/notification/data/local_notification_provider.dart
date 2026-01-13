@@ -28,10 +28,6 @@ class LocalNotificationProvider implements NotificationService {
   Future<void> schedule(NotificationPayload payload) async {
     final tzDate = tz.TZDateTime.from(payload.scheduledAt, tz.local);
 
-    logger.d(
-      '📅 Scheduling notification [${payload.id}] at $tzDate',
-    );
-
     await _plugin.zonedSchedule(
       payload.id.hashCode,
       payload.title,
@@ -48,18 +44,18 @@ class LocalNotificationProvider implements NotificationService {
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
 
-    logger.i('✅ Notification scheduled [${payload.id}]');
+    logger.i('✅ Notification scheduled → → → [${payload.id}]');
   }
 
   @override
   Future<void> cancel(String id) async {
-    logger.w('🗑️ Cancel notification [$id]');
+    logger.w('🗑️ successfully Cancel notification → → → [$id]');
     await _plugin.cancel(id.hashCode);
   }
 
   @override
   Future<void> cancelAll() async {
-    logger.w('🗑️ Cancel all notifications');
+    logger.i('🗑️ successfully Cancel all notifications');
     await _plugin.cancelAll();
   }
 }

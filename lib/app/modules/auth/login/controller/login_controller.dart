@@ -1,4 +1,5 @@
 import 'package:baby_vax/app/core/notification/application/notification_coordinator.dart';
+import 'package:baby_vax/app/core/notification/data/onesignal_notification_provider.dart';
 import '../../../../core/imports/import_manger.dart';
 
 class LoginController extends GetxController with StateMixin, StateMixinHelper {
@@ -47,6 +48,7 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
         await Get.find<NotificationCoordinator>().rescheduleAllVaccines(
             userId: SessionManager.uId,
             userName: authResult.user?.displayName ?? "Your baby");
+        await Get.find<OneSingleNotificationProvider>().setUser(SessionManager.uId);
         Get.toNamed(AppRoutes.mainMenu);
         setSuccess();
       } else {

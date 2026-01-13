@@ -24,8 +24,6 @@ class NotificationCoordinator extends GetxService {
     required DateTime date,
   }) async {
     try {
-      logger.i(
-          '📅 Scheduling vaccine [$vaccineName] for user [$userName] at $date');
 
       final reminder = NotificationPayload(
           id: '$vaccineId-main',
@@ -44,7 +42,7 @@ class NotificationCoordinator extends GetxService {
       await _notificationService.schedule(reminder);
       await _notificationService.schedule(advance);
       logger.i(
-          '✅ Vaccine notifications scheduled: [$vaccineId-main, $vaccineId-advance]');
+          '📅 Vaccine notifications scheduled: [$vaccineId-main, $vaccineId-advance]');
     } catch (e, s) {
       logger.e(
         '❌ Failed to schedule vaccine [$vaccineName]',
@@ -56,12 +54,9 @@ class NotificationCoordinator extends GetxService {
 
   Future<void> cancelVaccine(String vaccineId) async {
     try {
-      logger.w('🗑️ Canceling vaccine notifications for [$vaccineId]');
-
       await _notificationService.cancel('$vaccineId-main');
       await _notificationService.cancel('$vaccineId-advance');
-
-      logger.i('✅ Vaccine notifications canceled for [$vaccineId]');
+      logger.i('🗑️ Vaccine notifications canceled for [$vaccineId]');
     } catch (e, s) {
       logger.e(
         '❌ Failed to cancel vaccine notifications [$vaccineId]',
