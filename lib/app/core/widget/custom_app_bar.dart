@@ -10,6 +10,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? customLeading;
   final VoidCallback? onBackPressed;
   final double elevation;
+  final Color? background;
+  final Color? foreground;
 
   const CustomAppBar(
       {super.key,
@@ -18,6 +20,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.action,
       this.customLeading,
       this.onBackPressed,
+      this.background,
+      this.foreground,
       this.elevation = 0,
       this.fontSize = 22});
 
@@ -38,7 +42,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           : null,
       centerTitle: true,
       automaticallyImplyLeading: showBackButton,
-      backgroundColor: Colors.transparent,
+      backgroundColor: background ?? Colors.transparent,
+      foregroundColor: foreground,
       leadingWidth: 48.w,
       leading: _buildLeadingWidget(
           size: 24.0,

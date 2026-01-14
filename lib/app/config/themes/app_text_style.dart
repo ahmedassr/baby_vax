@@ -13,6 +13,7 @@ class AppTextStyles {
   static final headLineLarge = style(34, FontWeight.w800);
   static final headLineMedium = style(32, FontWeight.w800);
   static final headLineSmall = style(24, FontWeight.w700);
+  static final headLineExtraSmall = style(22, FontWeight.w700);
 
   //titles
   static final titleLarge = style(22, FontWeight.w800);

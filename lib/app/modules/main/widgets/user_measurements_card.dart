@@ -1,4 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
+import 'measurement_card.dart';
 
 class UserMeasurementCard extends StatelessWidget {
   final String bloodPercentage;
@@ -6,102 +7,106 @@ class UserMeasurementCard extends StatelessWidget {
   final String headSize;
   final String height;
 
-  const UserMeasurementCard(
-      {super.key,
-      required this.weight,
-      required this.height,
-      required this.bloodPercentage,
-      required this.headSize});
+  const UserMeasurementCard({
+    super.key,
+    required this.weight,
+    required this.height,
+    required this.bloodPercentage,
+    required this.headSize,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 8,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40),
-        child: Column(
-          children: [
-            AppText(
-              text: "Baby Measurements",
-              style: AppTextStyles.headLineMedium
-                  .copyWith(fontSize: 22, color: AppColors.primary),
+    final isDark = context.isDarkMode;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: isDark ? Colors.black.withValues(alpha: 0.2) : Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          if (!isDark)
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 12,
+              spreadRadius: 0,
+              offset: const Offset(0, 4),
             ),
-            30.sbh,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(
-                      Icons.monitor_weight,
-                      color: AppColors.primary,
-                      size: 35,
-                    ),
-                    10.sbh,
-                    KeyValueRichText(
-                      label: "Weight\n",
-                      value: " $weight",
-                      labelTextStyle: AppTextStyles.boldLarge,
-                      valueTextStyle: AppTextStyles.boldLarge
-                          .copyWith(color: AppColors.primary),
-                    ),
-                    30.sbh,
-                    const Icon(
-                      Icons.bloodtype,
-                      color: AppColors.primary,
-                      size: 35,
-                    ),
-                    10.sbh,
-                    KeyValueRichText(
-                      label: "Blood Percentage\n",
-                      value: " $bloodPercentage",
-                      labelTextStyle: AppTextStyles.boldLarge,
-                      valueTextStyle: AppTextStyles.boldLarge
-                          .copyWith(color: AppColors.primary),
-                    ),
-                  ],
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                40.sbw,
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(
-                      Icons.height,
-                      color: AppColors.primary,
-                      size: 35,
-                    ),
-                    10.sbh,
-                    KeyValueRichText(
-                      label: "Height\n",
-                      value: " $height",
-                      labelTextStyle: AppTextStyles.boldLarge,
-                      valueTextStyle: AppTextStyles.boldLarge
-                          .copyWith(color: AppColors.primary),
-                    ),
-                    30.sbh,
-                    const Icon(
-                      Icons.account_circle_rounded,
-                      color: AppColors.primary,
-                      size: 35,
-                    ),
-                    10.sbh,
-                    KeyValueRichText(
-                      label: "Head Size\n",
-                      value: " $headSize",
-                      labelTextStyle: AppTextStyles.boldLarge,
-                      valueTextStyle: AppTextStyles.boldLarge
-                          .copyWith(color: AppColors.primary),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ],
-        ),
+                child: const Icon(
+                  Icons.analytics_outlined,
+                  color: AppColors.primary,
+                  size: 20,
+                ),
+              ),
+              12.sbw,
+              AppText(
+                text: "Baby Measurements",
+                style: AppTextStyles.titleLarge.copyWith(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+          24.sbh,
+          // Grid Layout
+          GridView.count(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 2,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
+            childAspectRatio: 0.95,
+            children: [
+              MeasurementCard(
+                icon: Icons.monitor_weight_outlined,
+                title: "Weight",
+                value: weight,
+                onTap: () {
+                  // Handle tap if needed
+                },
+              ),
+              MeasurementCard(
+                icon: Icons.height_outlined,
+                title: "Height",
+                value: height,
+                onTap: () {
+                  // Handle tap if needed
+                },
+              ),
+              MeasurementCard(
+                icon: Icons.bloodtype_outlined,
+                title: "Blood Percentage",
+                value: bloodPercentage,
+                onTap: () {
+                  // Handle tap if needed
+                },
+              ),
+              MeasurementCard(
+                icon: Icons.account_circle_outlined,
+                title: "Head Size",
+                value: headSize,
+                onTap: () {
+                  // Handle tap if needed
+                },
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

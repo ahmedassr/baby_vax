@@ -1,7 +1,10 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/values/app_enum/medical_date_state_enum.dart';
 import 'package:baby_vax/app/core/values/app_image.dart';
-import 'package:baby_vax/app/modules/medical_dates/model/medical_dates_model.dart';
+import 'package:baby_vax/app/modules/medical_dates/widgets/medical_date_card.dart';
+import 'package:baby_vax/app/modules/medical_dates/widgets/medical_dates_empty_state.dart';
+
+import '../widgets/medical_dates_header.dart';
 
 class MedicalDatesView extends GetView<MedicalDatesController> {
   const MedicalDatesView({super.key});
@@ -9,28 +12,61 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
   @override
   Widget build(BuildContext context) {
     Get.lazyPut<MedicalDatesController>(() => MedicalDatesController());
+
     return controller.obx(
-      (dates) => RefreshableListBuilder(
-        itemCount: dates?.length ?? 1,
-        onRefresh: () => controller.fetchMedicalDates(),
-        itemBuilder: (context, index) {
-          return AppDismissibleListItem(
-            title: KeyValueRichText(label: "Name: ", value: dates![index].name),
-            subTitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                KeyValueRichText(label: "Date: ", value: dates[index].date),
-                KeyValueRichText(
-                    label: "State: ", value: dates[index].state.label),
-              ],
-            ),
-            leadingIcon: Icons.calendar_month_rounded,
-            hideTrailingIcon: true,
-            disableDismiss: true,
-            onTap: () => controller.onMedicalDatePressed(dates[index]),
+      (dates) {
+        final hasDates = dates != null && dates.isNotEmpty;
+
+        if (!hasDates) {
+          return MedicalDatesEmptyState(
+            onAddPressed: () {
+              // TODO: Wire up add-medical-date flow when available
+            },
           );
-        },
-      ),
+        }
+
+        return Stack(
+          children: [
+            RefreshableListBuilder(
+              itemCount: dates.length + 1,
+              onRefresh: () => controller.fetchMedicalDates(),
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return MedicalDatesHeader(
+                    hasUpcoming: dates.any(
+                      (d) => d.state == MedicalDateStateEnum.pending,
+                    ),
+                  );
+                }
+
+                final medicalDate = dates[index - 1];
+                return MedicalDateCard(
+                  date: medicalDate,
+                  onTap: () => controller.onMedicalDatePressed(medicalDate),
+                );
+              },
+            ),
+            Positioned(
+              right: 24,
+              bottom: 24,
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  // TODO: Wire up add-medical-date flow when available
+                },
+                backgroundColor: AppColors.primary,
+                icon: const Icon(
+                  Icons.add,
+                  color: AppColors.white,
+                ),
+                label: const AppText(
+                  text: 'Add medical date',
+                  color: AppColors.white,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
       onLoading: const Center(
         child: AppShimmerLoading(),
       ),

@@ -11,8 +11,7 @@ class MainMenuController extends GetxController {
     BottomNavBarModel(
         title: "Main",
         view: const MainView(),
-        icon: Icons.home_filled,
-        showEdit: true),
+        icon: Icons.home_filled),
     BottomNavBarModel(
         title: "Medical Dates",
         view: const MedicalDatesView(),
