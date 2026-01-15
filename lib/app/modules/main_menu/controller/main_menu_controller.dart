@@ -1,6 +1,7 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/modules/main/controller/main_controller.dart';
 import 'package:baby_vax/app/modules/setting/view/setting_view.dart';
+import 'package:baby_vax/app/modules/tips/controller/tips_controller.dart';
 import 'package:baby_vax/app/modules/tips/view/tips_view.dart';
 
 import '../../main/view/main_view.dart';
@@ -34,6 +35,8 @@ class MainMenuController extends GetxController {
         break;
       case 1:
         Get.find<MedicalDatesController>().fetchMedicalDates();
+      case 2:
+        Get.find<TipsController>().fetchTips();
     }
   }
 
