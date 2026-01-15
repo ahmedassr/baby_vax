@@ -53,6 +53,10 @@ class FireStoreHelperService extends GetxService {
     required List<String> path,
     required T Function(Map<String, dynamic>) fromMap,
   }) async {
+    if (SessionManager.uId.isEmpty) {
+      logger.w("Execution skipped: User might not be logged in.");
+      return null;
+    }
     if (!_validatePath(path, PathValidationType.basic)) return null;
 
     return _execute(
@@ -76,7 +80,8 @@ class FireStoreHelperService extends GetxService {
             }
             final data =
                 snap.docs.map((doc) => fromMap(_docToMap(doc))).toList();
-            _logger.i("✅ Fetched ${data.length} items from → ${path.join('/')} successfully");
+            _logger.i(
+                "✅ Fetched ${data.length} items from → ${path.join('/')} successfully");
             return data;
           }
           if (path.length.isEven && ref is DocumentReference) {
@@ -172,7 +177,6 @@ class FireStoreHelperService extends GetxService {
       } else {
         ref = ref.collection(path[i]);
       }
-
     }
     _logger.i("✅ Path resolved successfully");
     return ref;
