@@ -1,6 +1,8 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/modules/medical_dates/model/medical_dates_model.dart';
 
+import '../../../core/widget/app_leading_icon.dart';
+
 class MedicalDateCard extends StatelessWidget {
   final MedicalDatesModel date;
   final VoidCallback? onTap;
@@ -34,7 +36,7 @@ class MedicalDateCard extends StatelessWidget {
         ],
       ),
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
           onTap: onTap,
@@ -43,77 +45,54 @@ class MedicalDateCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildLeadingIcon(context),
+                const AppLeadingIcon(icon: Icons.calendar_month_rounded,),
                 16.sbw,
-                Expanded(child: _buildContent(context)),
+                Expanded(child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: AppText(
+                            text: date.date,
+                            style: AppTextStyles.titleSmall.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: isDark
+                                  ? AppColors.textWhite
+                                  : theme.colorScheme.onSurface,
+                            ),
+                          ),
+                        ),
+                        8.sbw,
+                        _buildStatusChip(context),
+                      ],
+                    ),
+                    8.sbh,
+                    AppText(
+                      text: date.name,
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: isDark ? AppColors.textWhite : AppColors.textBlack,
+                      ),
+                    ),
+                    if (date.description.isNotEmpty) ...[
+                      4.sbh,
+                      AppText(
+                        text: date.description,
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: isDark ? AppColors.greyMedium : AppColors.greyDark,
+                        ),
+                        maxLines: 2,
+                      ),
+                    ],
+                  ],
+                )),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildLeadingIcon(BuildContext context) {
-    return Container(
-      width: 48,
-      height: 48,
-      decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: const Icon(
-        Icons.calendar_month_rounded,
-        color: AppColors.primary,
-        size: 26,
-      ),
-    );
-  }
-
-  Widget _buildContent(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = context.isDarkMode;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: AppText(
-                text: date.date,
-                style: AppTextStyles.titleSmall.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: isDark
-                      ? AppColors.textWhite
-                      : theme.colorScheme.onSurface,
-                ),
-              ),
-            ),
-            8.sbw,
-            _buildStatusChip(context),
-          ],
-        ),
-        8.sbh,
-        AppText(
-          text: date.name,
-          style: AppTextStyles.bodyMedium.copyWith(
-            fontWeight: FontWeight.w600,
-            color: isDark ? AppColors.textWhite : AppColors.textBlack,
-          ),
-        ),
-        if (date.description.isNotEmpty) ...[
-          4.sbh,
-          AppText(
-            text: date.description,
-            style: AppTextStyles.bodySmall.copyWith(
-              color: isDark ? AppColors.greyMedium : AppColors.greyDark,
-            ),
-            maxLines: 2,
-          ),
-        ],
-      ],
     );
   }
 

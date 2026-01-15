@@ -26,6 +26,7 @@ class MedicalDatesHeader extends StatelessWidget {
             text: hasUpcoming
                 ? "Track your baby's upcoming and past appointments."
                 : "No upcoming appointments. Add medical dates to stay on track.",
+            maxLines: 3,
             style: AppTextStyles.bodyMedium.copyWith(
               color: colorScheme.onSurface.withValues(alpha: 0.7),
             ),

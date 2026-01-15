@@ -11,17 +11,15 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut<MedicalDatesController>(() => MedicalDatesController());
+    // Get.lazyPut<MedicalDatesController>(() => MedicalDatesController());
 
     return controller.obx(
       (dates) {
         final hasDates = dates != null && dates.isNotEmpty;
 
         if (!hasDates) {
-          return MedicalDatesEmptyState(
-            onAddPressed: () {
-              // TODO: Wire up add-medical-date flow when available
-            },
+          return const AppEmptyState(
+            animationPath: AppAnimations.noRecords,
           );
         }
 
