@@ -9,7 +9,7 @@ class TipsHeader extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -22,7 +22,8 @@ class TipsHeader extends StatelessWidget {
           8.sbh,
           AppText(
             text: "Helpful advice to care for your baby’s health and growth.",
-            style: AppTextStyles.bodySmall.copyWith(
+            maxLines: 3,
+            style: AppTextStyles.bodyMedium.copyWith(
               color: colorScheme.onSurface.withOpacity(0.7),
             ),
           ),

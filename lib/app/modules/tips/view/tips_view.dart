@@ -8,54 +8,36 @@ class TipsView extends GetView<TipsController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut<TipsController>(() => TipsController());
-
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: controller.obx(
-            (tips) {
-          if (tips == null || tips.isEmpty) {
-            return const AppEmptyState(
-              message: "No tips available yet. Check back later!",
-              animationPath: AppAnimations.noRecords,
-            );
-          }
-
-          return RefreshIndicator(
-            onRefresh: () => controller.fetchTips(),
-            color: AppColors.primary,
-            child: CustomScrollView(
-              slivers: [
-                const SliverToBoxAdapter(child: TipsHeader()),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                        final tip = tips[index];
-                        return TipCard(
-                          title: tip.title,
-                          description: tip.description,
-                          icon: Icons.privacy_tip_outlined,
-                          onTap: () => controller.onTipPressed(tip),
-                        );
-                      },
-                      childCount: tips.length,
-                    ),
-                  ),
-                ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: 24), // Bottom spacing
-                ),
-              ],
-            ),
+    // Get.lazyPut<TipsController>(() => TipsController())
+    return controller.obx(
+      (tips) {
+        if (tips == null || tips.isEmpty) {
+          return const AppEmptyState(
+            message: "No tips available yet. Check back later!",
+            animationPath: AppAnimations.noRecords,
           );
-        },
-        onLoading: const Center(child: AppShimmerLoading()),
-        onError: (error) => AppEmptyState(
-          message: error ?? "Something went wrong!",
-          animationPath: AppAnimations.noRecords,
-        ),
+        }
+
+        return RefreshableListBuilder(
+          onRefresh: () => controller.fetchTips(),
+          itemCount: tips.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return const TipsHeader();
+            }
+            final tip = tips[index];
+            return TipCard(
+              title: tip.title,
+              description: tip.description,
+              onTap: () => controller.onTipPressed(tip),
+            );
+          },
+        );
+      },
+      onLoading: const Center(child: AppShimmerLoading()),
+      onError: (error) => AppEmptyState(
+        message: error ?? "Something went wrong!",
+        animationPath: AppAnimations.noRecords,
       ),
     );
   }
