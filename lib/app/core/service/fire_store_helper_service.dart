@@ -52,6 +52,7 @@ class FireStoreHelperService extends GetxService {
   Future<List<T>?> fetchData<T>({
     required List<String> path,
     required T Function(Map<String, dynamic>) fromMap,
+    Query Function(Query query)? queryBuilder,
   }) async {
     if (SessionManager.uId.isEmpty) {
       logger.w("Execution skipped: User might not be logged in.");
@@ -73,7 +74,11 @@ class FireStoreHelperService extends GetxService {
           }
 
           if (path.length.isOdd && ref is CollectionReference) {
-            final snap = await ref.get();
+            Query query = ref;
+            if (queryBuilder != null) {
+              query = queryBuilder(query);
+            }
+            final snap = await query.get();
             if (snap.docs.isEmpty) {
               _logger.w("⚠️ No documents found → ${path.join('/')}");
               return [];

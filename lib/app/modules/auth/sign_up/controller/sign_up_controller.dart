@@ -30,36 +30,61 @@ class SignupController extends GetxController
     "headSizeErrorText": "".obs,
     "heightErrorText": "".obs,
   };
-  Rx<DateTime> selectedBirthday = Rx<DateTime>(DateTime.now());
+  Rx<DateTime> selectedBirthday = Rx<DateTime>(
+    DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      DateTime.now().hour,
+      DateTime.now().minute,
+    ),
+  );
 
   @override
   void onInit() {
     super.onInit();
     setSuccess();
     signupControllers["birthdayController"]?.text =
-        DateFormat("yyyy-MM-dd").format(selectedBirthday.value);
+        DateFormat("yyyy-MM-dd HH:mm:ss").format(selectedBirthday.value);
   }
 
   @override
   void onClose() {
-    // TODO: implement onClose
     super.onClose();
     signupControllers.forEach((_, c) => c.dispose());
   }
 
   Future<void> selectBirthday() async {
-    final pickedDate = await Get.dialog(DatePickerDialog(
-        initialDate: selectedBirthday.value,
-        firstDate: DateTime(2000),
-        lastDate: DateTime.now()));
-    if (pickedDate != null) {
-      selectedBirthday(pickedDate);
-      signupControllers["birthdayController"]?.text =
-          DateFormat("yyyy-MM-dd").format(pickedDate);
-    } else {
-      signupErrorText["birthdayErrorText"]?.value =
-          "Date of birth can't be empty.";
-    }
+    final context = Get.context;
+    if (context == null || !context.mounted) return;
+
+    final DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedBirthday.value,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+
+    if (selectedDate == null || !context.mounted) return;
+
+    final TimeOfDay? selectedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(selectedBirthday.value));
+
+    if (!context.mounted) return;
+
+    selectedBirthday.value = selectedTime == null
+        ? selectedDate
+        : DateTime(
+            selectedDate.year,
+            selectedDate.month,
+            selectedDate.day,
+            selectedTime.hour,
+            selectedTime.minute,
+          );
+
+    signupControllers["birthdayController"]?.text =
+        DateFormat("yyyy-MM-dd HH:mm:ss").format(selectedBirthday.value);
   }
 
   bool isValidate() {
@@ -143,11 +168,9 @@ class SignupController extends GetxController
 
   Future<bool> _createUserProfile(UserModel user) async {
     try {
-      // إنشاء المستخدم في Firestore
       await AppConstant.fireStoreHelper
           .createUser(uid: user.uid, userDate: user.toMap());
 
-      // إنشاء Medical Dates
       final vaccines = MedicalDatesGenerator.generator(user.birthday ?? '');
       await AppConstant.fireStoreHelper.createDynamicPath<MedicalDatesModel>(
         path: ["users", user.uid, "medical_dates"],

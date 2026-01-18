@@ -39,7 +39,7 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
 
                 final medicalDate = dates[index - 1];
                 return MedicalDateCard(
-                  date: medicalDate,
+                  data: medicalDate,
                   onTap: () => controller.onMedicalDatePressed(medicalDate),
                 );
               },

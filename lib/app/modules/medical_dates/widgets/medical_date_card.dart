@@ -4,12 +4,12 @@ import 'package:baby_vax/app/modules/medical_dates/model/medical_dates_model.dar
 import '../../../core/widget/app_leading_icon.dart';
 
 class MedicalDateCard extends StatelessWidget {
-  final MedicalDatesModel date;
+  final MedicalDatesModel data;
   final VoidCallback? onTap;
 
   const MedicalDateCard({
     super.key,
-    required this.date,
+    required this.data,
     this.onTap,
   });
 
@@ -55,7 +55,8 @@ class MedicalDateCard extends StatelessWidget {
                       children: [
                         Expanded(
                           child: AppText(
-                            text: date.date,
+                            text: data.date,
+                            maxLines: 2,
                             style: AppTextStyles.titleSmall.copyWith(
                               fontWeight: FontWeight.w700,
                               color: isDark
@@ -70,16 +71,16 @@ class MedicalDateCard extends StatelessWidget {
                     ),
                     8.sbh,
                     AppText(
-                      text: date.name,
+                      text: data.name,
                       style: AppTextStyles.bodyMedium.copyWith(
                         fontWeight: FontWeight.w600,
                         color: isDark ? AppColors.textWhite : AppColors.textBlack,
                       ),
                     ),
-                    if (date.description.isNotEmpty) ...[
+                    if (data.description.isNotEmpty) ...[
                       4.sbh,
                       AppText(
-                        text: date.description,
+                        text: data.description,
                         style: AppTextStyles.bodySmall.copyWith(
                           color: isDark ? AppColors.greyMedium : AppColors.greyDark,
                         ),
@@ -102,7 +103,7 @@ class MedicalDateCard extends StatelessWidget {
     Color bg;
     Color fg;
 
-    switch (date.state) {
+    switch (data.state) {
       case MedicalDateStateEnum.completed:
         bg = Colors.green.withValues(alpha: 0.12);
         fg = Colors.green.shade700;
@@ -124,7 +125,7 @@ class MedicalDateCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(999),
       ),
       child: AppText(
-        text: date.state.label,
+        text: data.state.label,
         style: AppTextStyles.captionMedium.copyWith(
           color: fg,
           fontWeight: FontWeight.w600,
