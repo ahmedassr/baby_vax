@@ -52,6 +52,12 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
         await Get.find<OneSingleNotificationProvider>()
             .setUser(SessionManager.uId);
         await Get.find<MainController>().fetchUserData();
+        await Get.find<NotificationCoordinator>().scheduleVaccine(
+          vaccineId: "welcome_${SessionManager.uId}",
+          userName: authResult.user?.displayName ?? "Your baby",
+          vaccineName: "مرحبًا بعودتك!",
+          date: DateTime.now().add(const Duration(minutes: 1)), // 5 ثوانٍ للتجربة
+        );
         setSuccess();
         Get.toNamed(AppRoutes.mainMenu);
       } else {

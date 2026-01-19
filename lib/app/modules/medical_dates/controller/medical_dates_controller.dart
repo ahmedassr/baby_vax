@@ -1,6 +1,5 @@
-import 'package:baby_vax/app/config/session/session_manager.dart';
 import 'package:baby_vax/app/core/imports/import_manger.dart';
-import 'package:baby_vax/app/modules/medical_dates/model/medical_dates_model.dart';
+
 
 class MedicalDatesController extends GetxController
     with StateMixin<List<MedicalDatesModel>>, StateMixinHelper {

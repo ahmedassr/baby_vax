@@ -37,7 +37,7 @@ class MedicalDatesModel {
         description: json?["description"],
         date: json?["date"] ?? "",
         state: MedicalDateStateEnum.values.byName(json?["state"] ?? ""),
-        id: "${json?["name"]}_${json?["date"]}");
+        id: json?["id"]);
   }
 
   factory MedicalDatesModel.fromDocument(DocumentSnapshot doc) {
@@ -47,7 +47,7 @@ class MedicalDatesModel {
         description: data["description"],
         date: data["date"],
         state: MedicalDateStateEnum.values.byName(data["state"]),
-        id: "${data["name"]}_${data["date"]}");
+        id: data["id"]);
   }
 
   Map<String, dynamic> toMap() {
@@ -56,7 +56,7 @@ class MedicalDatesModel {
       "description": description,
       "date": date,
       "state": state.name,
-      "id": "${name}_$date",
+      "id": id ?? "${name}_$date",
     };
   }
 }

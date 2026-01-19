@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:baby_vax/app/config/session/session_manager.dart';
 import 'package:baby_vax/app/modules/medical_dates/model/medical_dates_model.dart';
 import 'package:baby_vax/app/core/utils/medical_dates_generator.dart';
@@ -171,6 +173,8 @@ class SignupController extends GetxController
       await AppConstant.fireStoreHelper
           .createUser(uid: user.uid, userDate: user.toMap());
 
+      logger.d("${user.birthday}");
+
       final vaccines = MedicalDatesGenerator.generator(user.birthday ?? '');
       await AppConstant.fireStoreHelper.createDynamicPath<MedicalDatesModel>(
         path: ["users", user.uid, "medical_dates"],
@@ -182,12 +186,14 @@ class SignupController extends GetxController
       for (var vaccine in vaccines) {
         final date = DateTime.parse(vaccine.date);
         if (date.isAfter(DateTime.now())) {
+          final vaccineId = "${vaccine.name}_$date";
           await Get.find<NotificationCoordinator>().scheduleVaccine(
-            vaccineId: vaccine.id ?? "",
+            vaccineId: vaccineId,
             userName: user.name ?? "Your baby",
             vaccineName: vaccine.name,
             date: date,
           );
+          logger.f("${vaccine.id}");
         }
       }
       SessionManager.uId = user.uid;

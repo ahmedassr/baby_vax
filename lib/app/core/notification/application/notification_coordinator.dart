@@ -1,21 +1,20 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class NotificationCoordinator extends GetxService {
-   NotificationService _notificationService =
-      Get.find<NotificationService>();
+  NotificationService _notificationService = Get.find<NotificationService>();
 
-   NotificationCoordinator({NotificationService? service})
-       : _notificationService = service ?? Get.find<NotificationService>();
+  NotificationCoordinator({NotificationService? service})
+      : _notificationService = service ?? Get.find<NotificationService>();
 
-   // طريقة للاختبار لتغيير الخدمة
-   void overrideNotificationService(NotificationService service) {
-     _notificationService = service;
-   }
+  // طريقة للاختبار لتغيير الخدمة
+  void overrideNotificationService(NotificationService service) {
+    _notificationService = service;
+  }
 
-   /// For Test 
-   Future<void> cancelAll() async {
-     await _notificationService.cancelAll();
-   }
+  /// For Test
+  Future<void> cancelAll() async {
+    await _notificationService.cancelAll();
+  }
 
   Future<void> scheduleVaccine({
     required String vaccineId,
@@ -24,22 +23,37 @@ class NotificationCoordinator extends GetxService {
     required DateTime date,
   }) async {
     try {
-
+      DateTime mainDate = DateTime(date.year, date.month, date.day, date.hour);
+      final difference = mainDate.difference(DateTime.now());
+      if (mainDate.isBefore(DateTime.now())) {
+        if (difference.inDays == 0) {
+          mainDate = DateTime.now().add(const Duration(minutes: 1));
+        } else {
+          logger.w('⏭️ Skipping past main vaccine [$vaccineName] at $date');
+          return;
+        }
+      }
       final reminder = NotificationPayload(
           id: '$vaccineId-main',
           title: '🩺 موعد تطعيم اليوم',
           body: '$userName، اليوم موعد $vaccineName',
-          scheduledAt: DateTime(date.year, date.month, date.day, 9));
+          scheduledAt: mainDate);
 
-      final dayBefore = date.subtract(const Duration(days: 1));
+      await _notificationService.schedule(reminder);
+      logger.i('📅 Vaccine notifications scheduled: [$vaccineId-main]');
+
+      DateTime dayBefore = mainDate.subtract(const Duration(days: 1));
+      if (dayBefore.isBefore(DateTime.now())) {
+        logger.w('⏭️ Skipping past advance vaccine [$vaccineName] at $date');
+        return;
+      }
       final advance = NotificationPayload(
           id: '$vaccineId-advance',
           title: '📅 تذكير مسبق',
           body: '$userName، غداً موعد $vaccineName',
-          scheduledAt:
-              DateTime(dayBefore.year, dayBefore.month, dayBefore.day, 18));
+          scheduledAt: DateTime(
+              dayBefore.year, dayBefore.month, dayBefore.day, dayBefore.hour));
 
-      await _notificationService.schedule(reminder);
       await _notificationService.schedule(advance);
       logger.i(
           '📅 Vaccine notifications scheduled: [$vaccineId-main, $vaccineId-advance]');
