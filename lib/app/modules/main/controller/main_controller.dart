@@ -23,8 +23,6 @@ class MainController extends GetxController with StateMixin, StateMixinHelper {
       fromMap: MedicalDatesModel.fromJson,
     );
     nextVaccination.value = vaccinations?.firstOrNull;
-    logger.f(
-        "${nextVaccination.value == null} , ${nextVaccination.value?.name} , ${nextVaccination.value?.date}");
   }
 
   Future fetchUserData() async {
