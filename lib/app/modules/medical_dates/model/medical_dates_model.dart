@@ -4,7 +4,7 @@ import 'package:baby_vax/app/core/values/app_enum/medical_date_state_enum.dart';
 class MedicalDatesModel {
   final String name;
   final String description;
-  final String date;
+  final DateTime date;
   final MedicalDateStateEnum state;
   final String? id;
 
@@ -18,7 +18,7 @@ class MedicalDatesModel {
   MedicalDatesModel copyWith({
     String? name,
     String? description,
-    String? date,
+    DateTime? date,
     MedicalDateStateEnum? state,
     String? id,
   }) {
@@ -32,29 +32,21 @@ class MedicalDatesModel {
   }
 
   factory MedicalDatesModel.fromJson(Map<String, dynamic>? json) {
+    final date = json?["date"];
+    DateTime parsedDate = date is Timestamp ? date.toDate() : date;
     return MedicalDatesModel(
         name: json?["name"] ?? "",
         description: json?["description"],
-        date: json?["date"] ?? "",
+        date: parsedDate,
         state: MedicalDateStateEnum.values.byName(json?["state"] ?? ""),
         id: json?["id"]);
-  }
-
-  factory MedicalDatesModel.fromDocument(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
-    return MedicalDatesModel(
-        name: data["name"],
-        description: data["description"],
-        date: data["date"],
-        state: MedicalDateStateEnum.values.byName(data["state"]),
-        id: data["id"]);
   }
 
   Map<String, dynamic> toMap() {
     return {
       "name": name,
       "description": description,
-      "date": date,
+      "date": Timestamp.fromDate(date),
       "state": state.name,
       "id": id ?? "${name}_$date",
     };

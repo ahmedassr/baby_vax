@@ -8,15 +8,11 @@ class MedicalDateDetailsController extends GetxController
 
   bool get isActive {
     final state = medicalDate?.state;
-    final dateStr = medicalDate?.date;
+    final date = medicalDate?.date;
 
-    if (state != MedicalDateStateEnum.pending ||
-        dateStr == null ||
-        dateStr.isEmpty) {
+    if (state != MedicalDateStateEnum.pending || date == null) {
       return false;
     }
-    final date = DateTime.tryParse(dateStr);
-    if(date == null) return false;
     return date.isBefore(DateTime.now());
   }
 

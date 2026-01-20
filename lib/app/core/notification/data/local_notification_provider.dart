@@ -33,13 +33,18 @@ class LocalNotificationProvider implements NotificationService {
       payload.title,
       payload.body,
       tzDate,
-      const NotificationDetails(
+      NotificationDetails(
         android: AndroidNotificationDetails(
           'vaccine_reminders',
           'Vaccine Reminders',
           importance: Importance.high,
+          styleInformation: BigTextStyleInformation(
+            payload.body,
+            contentTitle: payload.title,
+            summaryText: 'Baby Vax',
+          ),
         ),
-        iOS: DarwinNotificationDetails(),
+        iOS: const DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );

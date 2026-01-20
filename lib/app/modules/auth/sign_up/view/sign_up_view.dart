@@ -116,6 +116,7 @@ class SignupView extends GetView<SignupController> {
                             controller: controller
                                     .signupControllers["passwordController"] ??
                                 TextEditingController(),
+                            obscureText: true,
                             errorText: (controller
                                         .signupErrorText["passwordErrorText"]
                                         ?.value

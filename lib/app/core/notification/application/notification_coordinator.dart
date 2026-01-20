@@ -23,7 +23,7 @@ class NotificationCoordinator extends GetxService {
     required DateTime date,
   }) async {
     try {
-      DateTime mainDate = DateTime(date.year, date.month, date.day, date.hour);
+      DateTime mainDate = DateTime(date.year, date.month, date.day, 9);
       final difference = mainDate.difference(DateTime.now());
       if (mainDate.isBefore(DateTime.now())) {
         if (difference.inDays == 0) {
@@ -36,12 +36,12 @@ class NotificationCoordinator extends GetxService {
       final reminder = NotificationPayload(
           id: '$vaccineId-main',
           title: '🩺 موعد تطعيم اليوم',
-          body: '$userName، اليوم موعد $vaccineName',
+          body: '👶 $userName\nاليوم موعد تطعيم:\n$vaccineName',
           scheduledAt: mainDate);
 
       await _notificationService.schedule(reminder);
-      logger.i('📅 Vaccine notifications scheduled: [$vaccineId-main]');
-
+      logger.i(
+          '📅 Scheduled vaccine notifications | Vaccine ID: $vaccineId | Type: Main');
       DateTime dayBefore = mainDate.subtract(const Duration(days: 1));
       if (dayBefore.isBefore(DateTime.now())) {
         logger.w('⏭️ Skipping past advance vaccine [$vaccineName] at $date');
@@ -50,13 +50,13 @@ class NotificationCoordinator extends GetxService {
       final advance = NotificationPayload(
           id: '$vaccineId-advance',
           title: '📅 تذكير مسبق',
-          body: '$userName، غداً موعد $vaccineName',
-          scheduledAt: DateTime(
-              dayBefore.year, dayBefore.month, dayBefore.day, dayBefore.hour));
+          body: '👶 $userName\nغذا موعد تطعيم:\n$vaccineName',
+          scheduledAt:
+              DateTime(dayBefore.year, dayBefore.month, dayBefore.day, 18));
 
       await _notificationService.schedule(advance);
       logger.i(
-          '📅 Vaccine notifications scheduled: [$vaccineId-main, $vaccineId-advance]');
+          '📅 Scheduled vaccine notifications | Vaccine ID: $vaccineId | Type: advance');
     } catch (e, s) {
       logger.e(
         '❌ Failed to schedule vaccine [$vaccineName]',
@@ -100,13 +100,12 @@ class NotificationCoordinator extends GetxService {
       }
 
       for (final vaccine in vaccines) {
-        final date = DateTime.parse(vaccine.date);
-        if (date.isAfter(DateTime.now())) {
+        if (vaccine.date.isAfter(DateTime.now())) {
           await scheduleVaccine(
             vaccineId: vaccine.id ?? "",
             userName: userName,
             vaccineName: vaccine.name,
-            date: date,
+            date: vaccine.date,
           );
         } else {
           logger.w(

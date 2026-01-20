@@ -32,7 +32,7 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
                 24.sbh,
                 MedicalDateDetailCard(
                   name: controller.medicalDate?.name,
-                  date: controller.medicalDate?.date,
+                  date: controller.medicalDate?.date.toString(),
                   description: controller.medicalDate?.description,
                   state: controller.medicalDate?.state,
                 ),

@@ -1,12 +1,6 @@
-import 'dart:math';
-
-import 'package:baby_vax/app/config/session/session_manager.dart';
-import 'package:baby_vax/app/modules/medical_dates/model/medical_dates_model.dart';
 import 'package:baby_vax/app/core/utils/medical_dates_generator.dart';
 import 'package:intl/intl.dart';
-import '../../../../../main.dart';
 import '../../../../core/imports/import_manger.dart';
-import '../../../../core/notification/application/notification_coordinator.dart';
 import '../../../../core/notification/data/onesignal_notification_provider.dart';
 import '../../../main/controller/main_controller.dart';
 
@@ -52,8 +46,8 @@ class SignupController extends GetxController
 
   @override
   void onClose() {
-    super.onClose();
     signupControllers.forEach((_, c) => c.dispose());
+    super.onClose();
   }
 
   Future<void> selectBirthday() async {
@@ -184,7 +178,7 @@ class SignupController extends GetxController
 
       // Notification Schedule
       for (var vaccine in vaccines) {
-        final date = DateTime.parse(vaccine.date);
+        final date = vaccine.date;
         if (date.isAfter(DateTime.now())) {
           final vaccineId = "${vaccine.name}_$date";
           await Get.find<NotificationCoordinator>().scheduleVaccine(
@@ -193,7 +187,6 @@ class SignupController extends GetxController
             vaccineName: vaccine.name,
             date: date,
           );
-          logger.f("${vaccine.id}");
         }
       }
       SessionManager.uId = user.uid;

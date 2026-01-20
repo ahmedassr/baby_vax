@@ -8,16 +8,22 @@ class MainController extends GetxController with StateMixin, StateMixinHelper {
   void onInit() {
     super.onInit();
     fetchUserData();
-    getNextVaccination();
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
   }
 
   Future<void> getNextVaccination() async {
+    final now = DateTime.now();
+    final todayStart = DateTime(now.year, now.month, now.day);
     final vaccinations =
         await AppConstant.fireStoreHelper.fetchData<MedicalDatesModel>(
       path: ["users", SessionManager.uId, "medical_dates"],
       queryBuilder: (q) => q
-          .where('date',
-              isGreaterThanOrEqualTo: DateTime.now().toIso8601String())
+          .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart))
           .orderBy('date')
           .limit(1),
       fromMap: MedicalDatesModel.fromJson,
@@ -39,6 +45,7 @@ class MainController extends GetxController with StateMixin, StateMixinHelper {
         setEmpty();
       } else {
         userDetails.value = data;
+        await getNextVaccination();
         setSuccess();
       }
     } catch (_) {
