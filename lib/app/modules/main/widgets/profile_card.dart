@@ -19,6 +19,7 @@ class ProfileCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -28,7 +29,7 @@ class ProfileCard extends StatelessWidget {
                   AppColors.primary.withValues(alpha: 0.05),
                 ]
               : [
-                  AppColors.primary.withValues(alpha: 0.08),
+                  AppColors.primary.withValues(alpha: 0.3),
                   Colors.white,
                 ],
         ),
@@ -117,7 +118,7 @@ class ProfileCard extends StatelessWidget {
                   child: const Icon(
                     Icons.edit_outlined,
                     color: AppColors.primary,
-                    size: 20,
+                    size: 24,
                   ),
                 ),
               ],

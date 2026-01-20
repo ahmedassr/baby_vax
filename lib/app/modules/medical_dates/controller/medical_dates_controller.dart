@@ -1,6 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 
-
 class MedicalDatesController extends GetxController
     with StateMixin<List<MedicalDatesModel>>, StateMixinHelper {
   final searchController = TextEditingController();
@@ -15,13 +14,14 @@ class MedicalDatesController extends GetxController
     Get.toNamed(AppRoutes.medicalDateDetails);
     AppConstant.argumentService
         .setArgument(InternalScreenArgs(medicalDate: medicalDate));
-  }
+    }
 
   Future fetchMedicalDates() async {
     setLoading();
     try {
       final medicalDates = await AppConstant.fireStoreHelper.fetchData(
           path: ["users", SessionManager.uId, "medical_dates"],
+          queryBuilder: (q) => q.orderBy('date'),
           fromMap: (e) => MedicalDatesModel.fromJson(e));
       if (medicalDates?.isEmpty ?? true) {
         setEmpty();

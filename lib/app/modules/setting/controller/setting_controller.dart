@@ -19,10 +19,10 @@ class SettingsController extends GetxController {
         yesAction: () async {
           AppConstant.getStorage.write(AppConstant.isLoginKey, false);
           SessionManager.uId = "";
-          AppConstant.getStorage.clear();
           await Get.find<NotificationService>().cancelAll();
           await FirebaseAuth.instance.signOut();
           await Get.find<OneSingleNotificationProvider>().logout();
+          AppConstant.getStorage.clear();
           Get.toNamed(AppRoutes.login);
         },
         noAction: () => Get.back()));

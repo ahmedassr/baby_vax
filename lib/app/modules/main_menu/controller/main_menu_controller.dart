@@ -49,4 +49,11 @@ class MainMenuController extends GetxController {
         InternalScreenArgs(user: Get.find<MainController>().userDetails.value));
     Get.toNamed(AppRoutes.editUser);
   }
+
+  @override
+  void onClose() {
+    currentIndex.value = 0;
+    super.onClose();
+
+  }
 }
