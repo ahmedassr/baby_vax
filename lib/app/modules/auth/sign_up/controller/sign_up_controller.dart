@@ -35,13 +35,14 @@ class SignupController extends GetxController
       DateTime.now().minute,
     ),
   );
+  final dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
 
   @override
   void onInit() {
     super.onInit();
     setSuccess();
     signupControllers["birthdayController"]?.text =
-        DateFormat("yyyy-MM-dd HH:mm:ss").format(selectedBirthday.value);
+        dateFormat.format(selectedBirthday.value);
   }
 
   @override
@@ -80,7 +81,7 @@ class SignupController extends GetxController
           );
 
     signupControllers["birthdayController"]?.text =
-        DateFormat("yyyy-MM-dd HH:mm:ss").format(selectedBirthday.value);
+        dateFormat.format(selectedBirthday.value);
   }
 
   bool isValidate() {
@@ -169,20 +170,21 @@ class SignupController extends GetxController
 
       logger.d("${user.birthday}");
 
-      final vaccines = MedicalDatesGenerator.generator(user.birthday ?? '');
-      await AppConstant.fireStoreHelper.createDynamicPath<MedicalDatesModel>(
+      final generatedVaccines =
+          MedicalDatesGenerator.generator(user.birthday ?? '');
+      final vaccines = await AppConstant.fireStoreHelper
+          .createDynamicPath<MedicalDatesModel>(
         path: ["users", user.uid, "medical_dates"],
-        data: vaccines,
+        data: generatedVaccines,
         toMap: (e) => e.toMap(),
+        attachId: (ref, model) => model.copyWith(id: ref.id),
       );
-
       // Notification Schedule
       for (var vaccine in vaccines) {
         final date = vaccine.date;
         if (date.isAfter(DateTime.now())) {
-          final vaccineId = "${vaccine.name}_$date";
           await Get.find<NotificationCoordinator>().scheduleVaccine(
-            vaccineId: vaccineId,
+            vaccineId: vaccine.id ?? "",
             userName: user.name ?? "Your baby",
             vaccineName: vaccine.name,
             date: date,

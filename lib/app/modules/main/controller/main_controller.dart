@@ -23,10 +23,11 @@ class MainController extends GetxController with StateMixin, StateMixinHelper {
         await AppConstant.fireStoreHelper.fetchData<MedicalDatesModel>(
       path: ["users", SessionManager.uId, "medical_dates"],
       queryBuilder: (q) => q
+          .where('state', isEqualTo: MedicalDateStateEnum.pending.label)
           .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart))
           .orderBy('date')
           .limit(1),
-      fromMap: MedicalDatesModel.fromJson,
+      fromDocument: MedicalDatesModel.fromDocument,
     );
     nextVaccination.value = vaccinations?.firstOrNull;
   }

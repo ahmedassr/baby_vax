@@ -22,7 +22,7 @@ class MedicalDatesController extends GetxController
       final medicalDates = await AppConstant.fireStoreHelper.fetchData(
           path: ["users", SessionManager.uId, "medical_dates"],
           queryBuilder: (q) => q.orderBy('date'),
-          fromMap: (e) => MedicalDatesModel.fromJson(e));
+          fromDocument: MedicalDatesModel.fromDocument);
       if (medicalDates?.isEmpty ?? true) {
         setEmpty();
       } else {

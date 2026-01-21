@@ -1,7 +1,7 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class MedicalDateStatusBadge extends StatelessWidget {
-  final MedicalDateStateEnum state;
+  final String state;
 
   const MedicalDateStatusBadge({
     super.key,
@@ -11,11 +11,11 @@ class MedicalDateStatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    final stateEnum = MedicalDateStateEnum.fromLabel(state);
     Color bg;
     Color fg;
 
-    switch (state) {
+    switch (stateEnum) {
       case MedicalDateStateEnum.completed:
         bg = Colors.green.withValues(alpha: 0.12);
         fg = Colors.green.shade700;
@@ -37,7 +37,7 @@ class MedicalDateStatusBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(999),
       ),
       child: AppText(
-        text: state.label,
+        text: stateEnum.label,
         style: AppTextStyles.captionMedium.copyWith(
           color: fg,
           fontWeight: FontWeight.w600,
@@ -47,8 +47,3 @@ class MedicalDateStatusBadge extends StatelessWidget {
     );
   }
 }
-
-
-
-
-

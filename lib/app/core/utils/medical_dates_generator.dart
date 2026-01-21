@@ -4,7 +4,7 @@ import 'package:baby_vax/app/core/values/app_enum/medical_date_state_enum.dart';
 class MedicalDatesGenerator {
   static List<MedicalDatesModel> generator(String birthDateStr) {
     DateTime birthDate = DateTime.parse(birthDateStr);
-    MedicalDateStateEnum pendingState = MedicalDateStateEnum.pending;
+    String pendingState = MedicalDateStateEnum.pending.label;
     return [
       MedicalDatesModel(
           name: "BCG and Hepatitis B (1st dose)",

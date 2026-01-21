@@ -51,7 +51,8 @@ class FireStoreHelperService extends GetxService {
 
   Future<List<T>?> fetchData<T>({
     required List<String> path,
-    required T Function(Map<String, dynamic>) fromMap,
+    // required T Function(Map<String, dynamic>) fromMap,
+    required T Function(DocumentSnapshot doc) fromDocument,
     Query Function(Query query)? queryBuilder,
   }) async {
     if (SessionManager.uId.isEmpty) {
@@ -83,8 +84,9 @@ class FireStoreHelperService extends GetxService {
               _logger.w("⚠️ No documents found → ${path.join('/')}");
               return [];
             }
-            final data =
-                snap.docs.map((doc) => fromMap(_docToMap(doc))).toList();
+            // final data =
+            //     snap.docs.map((doc) => fromMap(_docToMap(doc))).toList();
+            final data = snap.docs.map((doc) => fromDocument(doc)).toList();
             _logger.i(
                 "✅ Fetched ${data.length} items from → ${path.join('/')} successfully");
             return data;
@@ -95,7 +97,8 @@ class FireStoreHelperService extends GetxService {
               _logger.w("⚠️ No documents found → ${path.join('/')}");
               return [];
             }
-            final data = fromMap(_docToMap(snap));
+            // final data = fromMap(_docToMap(snap));
+            final data = fromDocument(snap);
             return [data];
           }
 
@@ -144,29 +147,35 @@ class FireStoreHelperService extends GetxService {
         });
   }
 
-  Future<void> createDynamicPath<T>(
-      {required List<String> path,
-      required List<T> data,
-      required Map<String, dynamic> Function(T) toMap}) async {
-    if (!_validatePath(path, PathValidationType.collection)) return;
+  Future<List<T>> createDynamicPath<T>({
+    required List<String> path,
+    required List<T> data,
+    required Map<String, dynamic> Function(T) toMap,
+    required T Function(DocumentReference ref, T model) attachId,
+  }) async {
+    if (!_validatePath(path, PathValidationType.collection)) return [];
 
-    _execute(
-        operation: "Create Dynamic Path",
-        action: () async {
-          CollectionReference? currentRef = _resolvePathRef(path);
+    return await _execute<List<T>>(
+            operation: "Create Dynamic Path",
+            action: () async {
+              CollectionReference? currentRef = _resolvePathRef(path);
 
-          if (currentRef == null) return;
+              if (currentRef == null) return [];
 
-          _logger
-              .i("🧩 Creating dynamic collection at path: ${path.join('/')}");
+              _logger.i(
+                  "🧩 Creating dynamic collection at path: ${path.join('/')}");
+              final result = <T>[];
 
-          for (var item in data) {
-            await currentRef.add(toMap(item));
-            _logger.i('📌 Adding item: $item');
-          }
+              for (var item in data) {
+                final doc = await currentRef.add(toMap(item));
+                result.add(attachId(doc, item));
+                _logger.i('📌 Adding item: $item');
+              }
 
-          _logger.i("✅ All documents created successfully");
-        });
+              _logger.i("✅ All documents created successfully");
+              return result;
+            }) ??
+        [];
   }
 
   dynamic _resolvePathRef(List<String> path) {
@@ -187,14 +196,14 @@ class FireStoreHelperService extends GetxService {
     return ref;
   }
 
-  Map<String, dynamic> _docToMap(DocumentSnapshot doc) {
-    final data = doc.data();
-    if (data == null || data is! Map<String, dynamic>) return {};
-    return {
-      ...data,
-      "_id": doc.id,
-    };
-  }
+  // Map<String, dynamic> _docToMap(DocumentSnapshot doc) {
+  //   final data = doc.data();
+  //   if (data == null || data is! Map<String, dynamic>) return {};
+  //   return {
+  //     ...data,
+  //     "_id": doc.id,
+  //   };
+  // }
 
   bool _validatePath(List<String> path, PathValidationType type) {
     if (path.isEmpty) {

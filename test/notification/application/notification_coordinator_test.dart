@@ -14,7 +14,6 @@ void main() {
       coordinator = NotificationCoordinator();
 
       // override internal service with fake
-      // إذا _notificationService final، يمكن عمل constructor جديد للـ test
       coordinator.overrideNotificationService(fakeService);
     });
 
@@ -30,7 +29,7 @@ void main() {
 
       // تحقق من أن آخر إشعار تم جدولته
       expect(fakeService.scheduled.length, 2);
-      expect(fakeService.scheduled[0].id, 'vax_1-main');   // 🟢 الرئيسي
+      expect(fakeService.scheduled[0].id, 'vax_1-main');
       expect(fakeService.scheduled[1].id, 'vax_1-advance');
     });
 

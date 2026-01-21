@@ -15,7 +15,7 @@ class TipsController extends GetxController
     setLoading();
     try {
       final tips = await AppConstant.fireStoreHelper
-          .fetchData(path: ["tips"], fromMap: (e) => TipsModel.fromJson(e));
+          .fetchData(path: ["tips"], fromDocument: TipsModel.fromDocument);
       if (tips?.isEmpty ?? true) {
         setEmpty();
       } else {

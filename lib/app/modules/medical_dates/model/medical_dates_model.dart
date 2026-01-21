@@ -5,7 +5,7 @@ class MedicalDatesModel {
   final String name;
   final String description;
   final DateTime date;
-  final MedicalDateStateEnum state;
+  final String state;
   final String? id;
 
   MedicalDatesModel(
@@ -19,7 +19,7 @@ class MedicalDatesModel {
     String? name,
     String? description,
     DateTime? date,
-    MedicalDateStateEnum? state,
+    String? state,
     String? id,
   }) {
     return MedicalDatesModel(
@@ -38,8 +38,20 @@ class MedicalDatesModel {
         name: json?["name"] ?? "",
         description: json?["description"],
         date: parsedDate,
-        state: MedicalDateStateEnum.values.byName(json?["state"] ?? ""),
+        state: json?["state"] ?? "",
         id: json?["id"]);
+  }
+
+  factory MedicalDatesModel.fromDocument(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    final date = data["date"];
+    DateTime parsedDate = date is Timestamp ? date.toDate() : date;
+    return MedicalDatesModel(
+        name: data["name"],
+        description: data["description"],
+        date: parsedDate,
+        state: data["state"],
+        id: doc.id);
   }
 
   Map<String, dynamic> toMap() {
@@ -47,8 +59,8 @@ class MedicalDatesModel {
       "name": name,
       "description": description,
       "date": Timestamp.fromDate(date),
-      "state": state.name,
-      "id": id ?? "${name}_$date",
+      "state": state,
+      // "id": id ?? "${name}_$date",
     };
   }
 }

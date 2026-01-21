@@ -1,6 +1,4 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
-import 'package:baby_vax/app/modules/medical_dates/model/medical_dates_model.dart';
-
 import '../../../core/widget/app_leading_icon.dart';
 import '../../../core/widget/vaccination_count_badge.dart';
 
@@ -120,11 +118,11 @@ class MedicalDateCard extends StatelessWidget {
 
   Widget _buildStatusChip(BuildContext context) {
     final theme = Theme.of(context);
-
+    final stateEnum = MedicalDateStateEnum.fromLabel(data.state);
     Color bg;
     Color fg;
 
-    switch (data.state) {
+    switch (stateEnum) {
       case MedicalDateStateEnum.completed:
         bg = Colors.green.withValues(alpha: 0.12);
         fg = Colors.green.shade700;
@@ -146,7 +144,7 @@ class MedicalDateCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(999),
       ),
       child: AppText(
-        text: data.state.label,
+        text: data.state,
         style: AppTextStyles.captionMedium.copyWith(
           color: fg,
           fontWeight: FontWeight.w600,

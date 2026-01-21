@@ -3,38 +3,6 @@ import '../../../core/imports/import_manger.dart';
 class TipDetailsView extends GetView<TipDetailsController> {
   const TipDetailsView({super.key});
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   final theme = Theme.of(context);
-  //   final colorScheme = theme.colorScheme;
-  //
-  //   return Scaffold(
-  //     appBar: CustomAppBar(
-  //       title: "Tip Details",
-  //       fontSize: 16,
-  //       background: colorScheme.background,
-  //       foreground: colorScheme.onBackground,
-  //     ),
-  //     body: controller.tip == null
-  //         ? const AppEmptyState(
-  //             message: "Tip details are not available.",
-  //             animationPath: AppAnimations.noRecords,
-  //           )
-  //         : SingleChildScrollView(
-  //             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 DetailCard(
-  //                   title: controller.tip!.title,
-  //                   description: controller.tip!.description,
-  //                   image: controller.tip!.image,
-  //                 )
-  //               ],
-  //             ),
-  //           ),
-  //   );
-  // }
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -81,6 +49,20 @@ class TipDetailsView extends GetView<TipDetailsController> {
                               fit: BoxFit.cover,
                               width: double.infinity,
                               height: 170,
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes != null
+                                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              },
                               errorBuilder: (context, _, __) => SizedBox(
                                 height: 80,
                                 child: Center(

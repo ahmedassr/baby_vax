@@ -5,7 +5,7 @@ class MedicalDateDetailCard extends StatelessWidget {
   final String? name;
   final String? date;
   final String? description;
-  final MedicalDateStateEnum? state;
+  final String? state;
 
   const MedicalDateDetailCard({
     super.key,

@@ -1,4 +1,3 @@
-import 'package:baby_vax/app/modules/medical_dates/model/medical_dates_model.dart';
 import '../../../core/imports/import_manger.dart';
 
 class MedicalDateDetailsController extends GetxController
@@ -7,7 +6,7 @@ class MedicalDateDetailsController extends GetxController
   final args = InternalScreenArgs.fromArgs.medicalDate;
 
   bool get isActive {
-    final state = medicalDate?.state;
+    final state = MedicalDateStateEnum.fromLabel(medicalDate?.state);
     final date = medicalDate?.date;
 
     if (state != MedicalDateStateEnum.pending || date == null) {
@@ -31,11 +30,31 @@ class MedicalDateDetailsController extends GetxController
     }
   }
 
+  Future fetchDate() async {
+    setLoading();
+    try {
+      final date = await AppConstant.fireStoreHelper.fetchData(path: [
+        "users",
+        SessionManager.uId,
+        "medical_dates",
+        medicalDate?.id ?? ""
+      ], fromDocument: MedicalDatesModel.fromDocument);
+      if (date?.isEmpty ?? true) {
+        setEmpty();
+      } else {
+        medicalDate = date?.first;
+        setSuccess();
+      }
+    } catch (_) {
+      setError("Failed to fetch medical date details");
+    }
+  }
+
   Future updateState() async {
     setLoading();
     try {
       var data = medicalDate!.copyWith(
-        state: MedicalDateStateEnum.completed,
+        state: MedicalDateStateEnum.completed.label,
       );
       await AppConstant.fireStoreHelper.updateData(path: [
         "users",
@@ -46,26 +65,6 @@ class MedicalDateDetailsController extends GetxController
       await fetchDate();
     } catch (_) {
       setError("Failed to update the date state");
-    }
-  }
-
-  Future fetchDate() async {
-    setLoading();
-    try {
-      final date = await AppConstant.fireStoreHelper.fetchData(path: [
-        "users",
-        SessionManager.uId,
-        "medical_dates",
-        medicalDate?.id ?? ""
-      ], fromMap: (e) => MedicalDatesModel.fromJson(e));
-      if (date?.isEmpty ?? true) {
-        setEmpty();
-      } else {
-        medicalDate = date?.first;
-        setSuccess();
-      }
-    } catch (_) {
-      setError("Failed to fetch medical date details");
     }
   }
 }

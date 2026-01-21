@@ -35,7 +35,7 @@ class NotificationCoordinator extends GetxService {
       }
       final reminder = NotificationPayload(
           id: '$vaccineId-main',
-          title: '🩺 موعد تطعيم اليوم',
+          title: '🧪 موعد تطعيم اليوم',
           body: '👶 $userName\nاليوم موعد تطعيم:\n$vaccineName',
           scheduledAt: mainDate);
 
@@ -44,7 +44,8 @@ class NotificationCoordinator extends GetxService {
           '📅 Scheduled vaccine notifications | Vaccine ID: $vaccineId | Type: Main');
       DateTime dayBefore = mainDate.subtract(const Duration(days: 1));
       if (dayBefore.isBefore(DateTime.now())) {
-        logger.w('⏭️ Skipping past advance vaccine [$vaccineName] at $date');
+        logger
+            .w('⏭️ Skipping past advance vaccine 🧪 [$vaccineName] at ⏰ $date');
         return;
       }
       final advance = NotificationPayload(
@@ -91,7 +92,7 @@ class NotificationCoordinator extends GetxService {
       final vaccines =
           await AppConstant.fireStoreHelper.fetchData<MedicalDatesModel>(
         path: ['users', userId, 'medical_dates'],
-        fromMap: MedicalDatesModel.fromJson,
+        fromDocument: MedicalDatesModel.fromDocument,
       );
 
       if (vaccines == null || vaccines.isEmpty) {
