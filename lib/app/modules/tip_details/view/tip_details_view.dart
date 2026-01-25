@@ -9,14 +9,10 @@ class TipDetailsView extends GetView<TipDetailsController> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
-      appBar: CustomAppBar(
+      backgroundColor: context.theme.scaffoldBackgroundColor,
+      appBar: const CustomAppBar(
         title: "Tip Details",
         fontSize: 18,
-        background: colorScheme.background,
-        foreground: AppColors.primary,
-        // use green for headline
-        elevation: 0.5,
       ),
       body: controller.tip == null
           ? const AppEmptyState(
@@ -30,10 +26,10 @@ class TipDetailsView extends GetView<TipDetailsController> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: colorScheme.surface.withOpacity(0.95),
+                      color: colorScheme.surface.withValues(alpha:0.95),
                       borderRadius: BorderRadius.circular(24),
                       border: Border.all(
-                        color: AppColors.primary.withOpacity(0.10),
+                        color: AppColors.primary.withValues(alpha:0.10),
                         width: 1.4,
                       ),
                     ),
@@ -68,7 +64,7 @@ class TipDetailsView extends GetView<TipDetailsController> {
                                 child: Center(
                                   child: Icon(
                                     Icons.image_not_supported_rounded,
-                                    color: AppColors.primary.withOpacity(0.2),
+                                    color: AppColors.primary.withValues(alpha: 0.2),
                                     size: 40,
                                   ),
                                 ),

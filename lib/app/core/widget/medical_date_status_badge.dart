@@ -22,7 +22,7 @@ class MedicalDateStatusBadge extends StatelessWidget {
         break;
       case MedicalDateStateEnum.skipped:
         bg = theme.colorScheme.error.withValues(alpha: 0.12);
-        fg = theme.colorScheme.error;
+        fg = Colors.red.shade600;
         break;
       case MedicalDateStateEnum.pending:
         bg = AppColors.primary.withValues(alpha: 0.1);

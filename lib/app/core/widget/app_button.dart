@@ -19,7 +19,8 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    final bool isDark = context.isDarkMode;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: ElevatedButton(
@@ -27,7 +28,8 @@ class AppButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             elevation: 0.3,
             minimumSize: Size(minWidth ?? double.infinity, minHeight ?? 50),
-            backgroundColor: color ?? AppColors.secondPrimary,
+            backgroundColor: color ??
+                (isDark ? AppColors.buttonDark : AppColors.buttonLight),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(radius ?? 20))),
         child: Padding(

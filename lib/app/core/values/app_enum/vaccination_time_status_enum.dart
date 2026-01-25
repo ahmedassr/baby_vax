@@ -12,7 +12,7 @@ enum VaccinationTimeStatusEnum {
 }
 
 extension VaccinationTimeStatusExtension on VaccinationTimeStatusEnum {
-  String get name{
+  String get name {
     switch (this) {
       case VaccinationTimeStatusEnum.overdue:
         return "Overdue";
@@ -32,25 +32,36 @@ extension VaccinationTimeStatusExtension on VaccinationTimeStatusEnum {
         return "Years Left";
     }
   }
+
   Color badgeBackgroundColor(BuildContext context) {
     final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+
+    double alpha(double light, double dark) => isDark ? dark : light;
+
     switch (this) {
       case VaccinationTimeStatusEnum.overdue:
-        return Colors.red.shade600;
+        return scheme.error.withValues(alpha: alpha(0.12, 0.28));
+
       case VaccinationTimeStatusEnum.today:
-        return Colors.orange.shade600;
       case VaccinationTimeStatusEnum.hoursLeft:
-        return Colors.orange.shade500;
+        return scheme.tertiary.withValues(alpha: alpha(0.14, 0.3));
+
       case VaccinationTimeStatusEnum.tomorrow:
-        return Colors.amber.shade500;
+        return scheme.secondary.withValues(alpha: alpha(0.14, 0.3));
+
       case VaccinationTimeStatusEnum.daysLeft:
-        return theme.colorScheme.primary.withValues(alpha: 0.9);
+        return scheme.primary.withValues(alpha: alpha(0.14, 0.3));
+
       case VaccinationTimeStatusEnum.weeksLeft:
-        return theme.colorScheme.primary.withValues(alpha: 0.75);
+        return scheme.primary.withValues(alpha: alpha(0.12, 0.26));
+
       case VaccinationTimeStatusEnum.monthsLeft:
-        return theme.colorScheme.primary.withValues(alpha: 0.6);
+        return scheme.primary.withValues(alpha: alpha(0.1, 0.22));
+
       case VaccinationTimeStatusEnum.yearsLeft:
-        return theme.colorScheme.primary.withValues(alpha: 0.45);
+        return scheme.primary.withValues(alpha: alpha(0.08, 0.18));
     }
   }
 }

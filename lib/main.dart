@@ -8,11 +8,17 @@ final Logger logger = Logger();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initAppService();
-  runApp(const MyApp());
+  final isDarkMode =
+      AppConstant.getStorage.read(AppConstant.isDarkModeKey) ?? false;
+  runApp(MyApp(
+    isDarkMode: isDarkMode,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isDarkMode;
+
+  const MyApp({super.key, required this.isDarkMode});
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +38,9 @@ class MyApp extends StatelessWidget {
                 debugShowCheckedModeBanner: false,
                 initialBinding: AppBinding(),
                 title: "Baby Vax",
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
                 initialRoute: isLoggedIn ? AppRoutes.mainMenu : AppRoutes.login,
                 getPages: AppPages.routes,
               );

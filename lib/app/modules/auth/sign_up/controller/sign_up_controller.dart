@@ -192,8 +192,8 @@ class SignupController extends GetxController
         }
       }
       SessionManager.uId = user.uid;
-      AppConstant.getStorage.write(AppConstant.isLoginKey, true);
-      AppConstant.getStorage.write(AppConstant.uidKey, user.uid);
+     await AppConstant.getStorage.write(AppConstant.isLoginKey, true);
+      await AppConstant.getStorage.write(AppConstant.uidKey, user.uid);
       await AppConstant.fireStoreHelper.updateFcmToken();
       await Get.find<OneSingleNotificationProvider>()
           .setUser(SessionManager.uId);

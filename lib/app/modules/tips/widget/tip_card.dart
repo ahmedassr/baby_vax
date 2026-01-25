@@ -23,8 +23,8 @@ class TipCard extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
           color: isDark
-              ? colorScheme.surfaceVariant.withValues(alpha: 0.6)
-              : colorScheme.surface,
+              ? AppColors.cardDark
+              : AppColors.backgroundLight,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             if (!isDark)

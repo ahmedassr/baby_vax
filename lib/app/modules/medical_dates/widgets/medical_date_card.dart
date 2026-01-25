@@ -1,4 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
+import 'package:baby_vax/app/core/widget/medical_date_status_badge.dart';
 import '../../../core/widget/app_leading_icon.dart';
 import '../../../core/widget/vaccination_count_badge.dart';
 
@@ -21,9 +22,7 @@ class MedicalDateCard extends StatelessWidget {
         Container(
           margin: const EdgeInsets.symmetric(vertical: 30),
           decoration: BoxDecoration(
-            color: isDark
-                ? colorScheme.surfaceVariant.withValues(alpha: 0.6)
-                : colorScheme.surface,
+            color: isDark ? AppColors.cardDark : AppColors.backgroundLight,
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16),
                 bottomRight: Radius.circular(16),
@@ -71,7 +70,7 @@ class MedicalDateCard extends StatelessWidget {
                               ),
                             ),
                             8.sbw,
-                            _buildStatusChip(context),
+                            MedicalDateStatusBadge(state: data.state),
                           ],
                         ),
                         8.sbh,
@@ -116,6 +115,7 @@ class MedicalDateCard extends StatelessWidget {
     );
   }
 
+/*
   Widget _buildStatusChip(BuildContext context) {
     final theme = Theme.of(context);
     final stateEnum = MedicalDateStateEnum.fromLabel(data.state);
@@ -153,4 +153,5 @@ class MedicalDateCard extends StatelessWidget {
       ),
     );
   }
+*/
 }

@@ -1,5 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
-import 'package:baby_vax/app/modules/medical_date_details/widgets/medical_date_status_badge.dart';
+import 'package:baby_vax/app/core/widget/medical_date_status_badge.dart';
 
 class MedicalDateDetailCard extends StatelessWidget {
   final String? name;
@@ -24,8 +24,8 @@ class MedicalDateDetailCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: isDark
-            ? colorScheme.surfaceVariant.withValues(alpha: 0.6)
-            : colorScheme.surface,
+            ? AppColors.cardDark
+            : AppColors.backgroundLight,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           if (!isDark)
