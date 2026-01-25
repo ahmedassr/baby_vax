@@ -7,11 +7,14 @@ import '../shared_model/remaining_time_result.dart';
 class VaccinationCountBadge extends StatelessWidget {
   final MedicalDatesModel? nextVaccination;
 
-  const VaccinationCountBadge({super.key,  this.nextVaccination});
+  const VaccinationCountBadge({super.key, this.nextVaccination});
 
   @override
   Widget build(BuildContext context) {
-    if (nextVaccination?.date == null) return const SizedBox.shrink();
+    if (nextVaccination?.date == null ||
+        nextVaccination?.state == MedicalDateStateEnum.skipped.label) {
+      return const SizedBox.shrink();
+    }
 
     final RemainingTimeResult result = nextVaccination!.date.remainingTime;
     final badgeColor = result.status.badgeBackgroundColor(context);

@@ -11,7 +11,6 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
 
   @override
   Widget build(BuildContext context) {
-    // Get.lazyPut<MedicalDatesController>(() => MedicalDatesController());
 
     return controller.obx(
       (dates) {
@@ -32,7 +31,7 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
                 if (index == 0) {
                   return MedicalDatesHeader(
                     hasUpcoming: dates.any(
-                      (d) => d.state == MedicalDateStateEnum.pending,
+                      (d) => d.state == MedicalDateStateEnum.pending.label,
                     ),
                   );
                 }
@@ -57,7 +56,7 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
                   color: AppColors.white,
                 ),
                 label: const AppText(
-                  text: 'Add medical date',
+                  text: 'Add a custom date',
                   color: AppColors.white,
                 ),
               ),

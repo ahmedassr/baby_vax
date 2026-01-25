@@ -31,7 +31,7 @@ class MedicalDateCard extends StatelessWidget {
             boxShadow: [
               if (!isDark)
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
+                  color: AppColors.black.withValues(alpha: 0.10),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),

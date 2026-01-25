@@ -39,7 +39,7 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
                 32.sbh,
                 MedicalDateActions(
                   isCompleted: controller.medicalDate?.state ==
-                      MedicalDateStateEnum.completed,
+                      MedicalDateStateEnum.completed.label,
                   isActive: controller.isActive,
                   onMarkCompleted: controller.updateState,
                 ),

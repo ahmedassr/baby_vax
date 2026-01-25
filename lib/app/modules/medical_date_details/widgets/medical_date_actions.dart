@@ -15,15 +15,7 @@ class MedicalDateActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isCompleted) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          AppButton(
-            text: "Done",
-            onPressed: () => Get.back(),
-          ),
-        ],
-      );
+      return const SizedBox.shrink();
     }
 
     return Column(
@@ -37,8 +29,3 @@ class MedicalDateActions extends StatelessWidget {
     );
   }
 }
-
-
-
-
-

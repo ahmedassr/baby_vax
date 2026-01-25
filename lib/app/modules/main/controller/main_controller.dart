@@ -41,7 +41,7 @@ class MainController extends GetxController with StateMixin, StateMixinHelper {
     setLoading();
     try {
       final data = await AppConstant.fireStoreHelper
-          .getUser(uid: uid, fromMap: (e) => UserModel.fromJson(e));
+          .getUser(uid: uid, fromDocument: (e) => UserModel.fromDocument(e));
       if (data == null) {
         setEmpty();
       } else {

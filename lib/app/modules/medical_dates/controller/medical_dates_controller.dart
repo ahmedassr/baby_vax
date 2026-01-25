@@ -14,7 +14,7 @@ class MedicalDatesController extends GetxController
     Get.toNamed(AppRoutes.medicalDateDetails);
     AppConstant.argumentService
         .setArgument(InternalScreenArgs(medicalDate: medicalDate));
-    }
+  }
 
   Future fetchMedicalDates() async {
     setLoading();
@@ -27,9 +27,22 @@ class MedicalDatesController extends GetxController
         setEmpty();
       } else {
         setSuccess(medicalDates);
+        await updateMedicalDateStatus(medicalDates!);
       }
     } catch (_) {
       setError("Failed to fetch medical dates.");
     }
+  }
+
+  Future updateMedicalDateStatus(List<MedicalDatesModel> medicalDates) async {
+    final futures = medicalDates.where((m)=> m.date.isBefore(DateTime.now()) &&
+        m.state == MedicalDateStateEnum.pending.label).map((m){
+          final docId = m.id;
+          if(docId == null) return null;
+        return AppConstant.fireStoreHelper.updateData(
+              path: ["users", SessionManager.uId, "medical_dates", docId],
+              date: {'state': MedicalDateStateEnum.skipped.label});
+    }).whereType<Future>();
+    await Future.wait(futures);
   }
 }

@@ -6,7 +6,7 @@ class FireStoreHelperService extends GetxService {
   final Logger _logger = Logger();
 
   static const String _usersCollectionName = 'users';
-  static const String _docIdField = '_id';
+  // static const String _docIdField = '_id';
 
   CollectionReference get usersCollection =>
       _fireStore.collection(_usersCollectionName);
@@ -24,7 +24,7 @@ class FireStoreHelperService extends GetxService {
 
   Future<T?> getUser<T>({
     required String uid,
-    required T Function(Map<String, dynamic>) fromMap,
+    required T Function(DocumentSnapshot doc) fromDocument,
   }) async {
     return _execute(
         operation: "Get User Data",
@@ -37,13 +37,17 @@ class FireStoreHelperService extends GetxService {
             _logger.w("⚠️ User not found → uid: $uid");
             return null;
           }
+          // final map = _snapshotToMap(snapshot);
+          // if (map.isEmpty) {
+          //   _logger.w("⚠️ User document is empty or invalid → uid: $uid");
+          //   return null;
+          // }
 
-          final map = _snapshotToMap(snapshot);
-          if (map.isEmpty) {
+          final user = fromDocument(snapshot);
+          if(user == null){
             _logger.w("⚠️ User document is empty or invalid → uid: $uid");
             return null;
           }
-          final user = fromMap(map);
           _logger.i("✅ User fetched successfully → $user");
           return user;
         });
@@ -84,8 +88,6 @@ class FireStoreHelperService extends GetxService {
               _logger.w("⚠️ No documents found → ${path.join('/')}");
               return [];
             }
-            // final data =
-            //     snap.docs.map((doc) => fromMap(_docToMap(doc))).toList();
             final data = snap.docs.map((doc) => fromDocument(doc)).toList();
             _logger.i(
                 "✅ Fetched ${data.length} items from → ${path.join('/')} successfully");
@@ -97,7 +99,6 @@ class FireStoreHelperService extends GetxService {
               _logger.w("⚠️ No documents found → ${path.join('/')}");
               return [];
             }
-            // final data = fromMap(_docToMap(snap));
             final data = fromDocument(snap);
             return [data];
           }
@@ -228,11 +229,11 @@ class FireStoreHelperService extends GetxService {
     }
   }
 
-  Map<String, dynamic> _snapshotToMap(DocumentSnapshot doc) {
-    final raw = doc.data();
-    if (raw == null || raw is! Map<String, dynamic>) return {};
-    return {...raw, _docIdField: doc.id};
-  }
+  // Map<String, dynamic> _snapshotToMap(DocumentSnapshot doc) {
+  //   final raw = doc.data();
+  //   if (raw == null || raw is! Map<String, dynamic>) return {};
+  //   return {...raw, _docIdField: doc.id};
+  // }
 
   Future<T?> _execute<T>(
       {required String operation,
