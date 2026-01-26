@@ -9,7 +9,7 @@ class MainMenuView extends GetView<MainMenuController> {
     return Obx(() => Scaffold(
           backgroundColor: context.theme.scaffoldBackgroundColor,
           appBar: CustomAppBar(
-            title: controller.item[controller.currentIndex.value].title,
+            title: controller.item[controller.currentIndex.value].title.tr,
             showBackButton: false,
             action: getAppBarAction(),
             elevation: 8,

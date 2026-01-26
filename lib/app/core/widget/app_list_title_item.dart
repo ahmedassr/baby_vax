@@ -2,6 +2,7 @@ import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class AppListTitleItem extends StatelessWidget {
   final String? title;
+  final String? additionalTitle;
   final IconData? icon;
   final Color? iconColor;
   final double borderRadius;
@@ -11,6 +12,7 @@ class AppListTitleItem extends StatelessWidget {
   const AppListTitleItem(
       {super.key,
       this.title,
+      this.additionalTitle,
       this.icon,
       this.iconColor,
       this.borderRadius = 8,
@@ -44,7 +46,15 @@ class AppListTitleItem extends StatelessWidget {
                 style: AppTextStyles.bodyMedium.copyWith(
                     color: context.isDarkMode ? Colors.white : Colors.black),
               ),
-            )
+            ),
+            if(additionalTitle != null)...[
+              20.sbw,
+              AppText(
+                text: additionalTitle ?? "",
+                style: AppTextStyles.boldSmall.copyWith(
+                    color: AppColors.textHint),
+              ),
+            ]
           ],
         ),
       ),

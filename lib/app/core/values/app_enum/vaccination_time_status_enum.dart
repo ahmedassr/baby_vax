@@ -15,21 +15,21 @@ extension VaccinationTimeStatusExtension on VaccinationTimeStatusEnum {
   String get name {
     switch (this) {
       case VaccinationTimeStatusEnum.overdue:
-        return "Overdue";
+        return "VaccinationTimeStatusEnum_overdue".tr;
       case VaccinationTimeStatusEnum.today:
-        return "Today";
+        return "VaccinationTimeStatusEnum_today".tr;
       case VaccinationTimeStatusEnum.hoursLeft:
-        return "Hours Left";
+        return "VaccinationTimeStatusEnum_hoursLeft".tr;
       case VaccinationTimeStatusEnum.tomorrow:
-        return "Tomorrow";
+        return "VaccinationTimeStatusEnum_tomorrow".tr;
       case VaccinationTimeStatusEnum.daysLeft:
-        return "Days Left";
+        return "VaccinationTimeStatusEnum_daysLeft".tr;
       case VaccinationTimeStatusEnum.weeksLeft:
-        return "Weeks Left";
+        return "VaccinationTimeStatusEnum_weeksLeft".tr;
       case VaccinationTimeStatusEnum.monthsLeft:
-        return "Months Left";
+        return "VaccinationTimeStatusEnum_monthsLeft".tr;
       case VaccinationTimeStatusEnum.yearsLeft:
-        return "Years Left";
+        return "VaccinationTimeStatusEnum_yearsLeft".tr;
     }
   }
 

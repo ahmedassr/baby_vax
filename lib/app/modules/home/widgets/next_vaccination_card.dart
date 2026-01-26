@@ -35,6 +35,7 @@ class NextVaccinationCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              20.sbh,
               Row(
                 children: [
                   const AppLeadingIcon(icon: Icons.vaccines),
@@ -51,7 +52,6 @@ class NextVaccinationCard extends StatelessWidget {
                   ),
                 ],
               ),
-              24.sbh,
               if (nextVaccination != null) ...[
                 MedicalDateCard(
                   data: MedicalDatesModel(

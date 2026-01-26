@@ -22,6 +22,13 @@ Map<String, String> en = {
   "empty_weight_error_msg": "Weight can't be empty.",
   "empty_head_size_error_msg": "Head size can't be empty.",
   "empty_height_error_msg": "Height can't be empty.",
+  // Alert Title
+  "attention": "Attention",
+  "error": "Error",
+  "success": "Success",
+  // Alert Button Text:
+  "yes": "Yes",
+  "cancel": "Cancel",
 
   // Auth - Login → Controller:
   "LoginController_login_failed_msg": "Failed to login.",
@@ -92,11 +99,15 @@ Map<String, String> en = {
   // Settings → Controller:
   "SettingsController_logout_alert_msg": "Are you sure you want to log out?",
   // View:
+  "SettingsView_language_label": "Language",
   "SettingsView_terms_and_conditions_label": "Terms And Conditions",
   "SettingsView_about_us_label": "About US",
   "SettingsView_logout_label": "Log Out",
+  "SettingsView_select_language": "Select Language",
   // Widgets
-  "AppSettingDarkModeSwitch_dark_mode_label":"Dark Mode",
+  "AppSettingDarkModeSwitch_dark_mode_label": "Dark Mode",
+  "AppSettingDarkModeSwitch_light_mode_label": "Light Mode",
+
 
   // Tip Details → Controller:
   "TipDetailsController_missing_tip_msg": "The current tip is missing",
@@ -112,5 +123,17 @@ Map<String, String> en = {
   "TipsView_empty_state_text": "No tips available yet. Check back later!",
   //Widgets
   "TipsHeader_tips_title": "Tips",
-  "TipsHeader_tips_hint": "Helpful advice to care for your baby’s health and growth.",
+  "TipsHeader_tips_hint":
+      "Helpful advice to care for your baby’s health and growth.",
+
+  // Enum → → →
+  // Vaccination Time Status Enum:
+  "VaccinationTimeStatusEnum_overdue": "Overdue",
+  "VaccinationTimeStatusEnum_today": "Today",
+  "VaccinationTimeStatusEnum_tomorrow": "Tomorrow",
+  "VaccinationTimeStatusEnum_hoursLeft": "Hours Left",
+  "VaccinationTimeStatusEnum_daysLeft": "Days Left",
+  "VaccinationTimeStatusEnum_weeksLeft": "Weeks Left",
+  "VaccinationTimeStatusEnum_monthsLeft": "Months Left",
+  "VaccinationTimeStatusEnum_yearsLeft": "Years Left",
 };

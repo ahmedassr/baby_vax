@@ -10,21 +10,21 @@ class MainMenuController extends GetxController {
   final currentIndex = 0.obs;
   final List<BottomNavBarModel> item = [
     BottomNavBarModel(
-        title: "MainMenuController_home_title".tr,
+        title: "MainMenuController_home_title",
         view: const HomeView(),
         icon: Icons.home_filled),
     BottomNavBarModel(
-        title: "MainMenuController_medical_dates_title".tr,
+        title: "MainMenuController_medical_dates_title",
         view: const MedicalDatesView(),
         icon: Icons.calendar_month_rounded,
         showSearch: true),
     BottomNavBarModel(
-        title: "MainMenuController_tips_title".tr,
+        title: "MainMenuController_tips_title",
         view: const TipsView(),
         icon: Icons.privacy_tip,
         showSearch: true),
     BottomNavBarModel(
-        title: "MainMenuController_settings_title".tr, view: const SettingsView(), icon: Icons.settings),
+        title: "MainMenuController_settings_title", view: const SettingsView(), icon: Icons.settings),
   ];
 
   void changeValue(index) {

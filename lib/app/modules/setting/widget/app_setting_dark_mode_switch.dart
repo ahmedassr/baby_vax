@@ -10,20 +10,24 @@ class AppSettingDarkModeSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Obx(() => SwitchListTile(
-          title: AppText(
-            text: "AppSettingDarkModeSwitch_dark_mode_label".tr,
-            style: AppTextStyles.bodyMedium.copyWith(
-                color: context.isDarkMode ? Colors.white : Colors.black),
-          ),
-          secondary: Icon(
-            controller.isDarkMode.value ? Icons.dark_mode : Icons.light_mode,
-            color: controller.isDarkMode.value
-                ? AppColors.warning
-                : AppColors.primary,
-          ),
-          value: controller.isDarkMode.value,
-          onChanged: controller.toggleDarkMode)),
+      child: Obx(() =>
+          SwitchListTile(
+              title: AppText(
+                text: controller.isDarkMode.value
+                    ? "AppSettingDarkModeSwitch_dark_mode_label".tr
+                    : "AppSettingDarkModeSwitch_light_mode_label".tr,
+                style: AppTextStyles.bodyMedium.copyWith(
+                    color: context.isDarkMode ? Colors.white : Colors.black),
+              ),
+              secondary: Icon(
+                controller.isDarkMode.value ? Icons.dark_mode : Icons
+                    .light_mode,
+                color: controller.isDarkMode.value
+                    ? AppColors.warning
+                    : AppColors.primary,
+              ),
+              value: controller.isDarkMode.value,
+              onChanged: controller.toggleDarkMode)),
     );
   }
 }

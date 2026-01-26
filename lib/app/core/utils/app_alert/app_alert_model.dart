@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:baby_vax/app/core/imports/import_library.dart';
+
 import 'alert_type_enum.dart';
 
 class AlertModel {
@@ -60,7 +62,9 @@ class AlertModel {
           title: AlertType.attention.title,
           message: message,
           yesAction: yesAction,
-          noAction: noAction);
+          yesButtonText: "yes".tr,
+          noAction: noAction,
+          noButtonText: "cancel".tr);
 
   factory AlertModel.yesOrNo({
     String? imagePath,
