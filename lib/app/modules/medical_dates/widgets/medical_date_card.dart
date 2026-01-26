@@ -14,7 +14,6 @@ class MedicalDateCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
     final isDark = context.isDarkMode;
 
     return Stack(
@@ -115,43 +114,4 @@ class MedicalDateCard extends StatelessWidget {
     );
   }
 
-/*
-  Widget _buildStatusChip(BuildContext context) {
-    final theme = Theme.of(context);
-    final stateEnum = MedicalDateStateEnum.fromLabel(data.state);
-    Color bg;
-    Color fg;
-
-    switch (stateEnum) {
-      case MedicalDateStateEnum.completed:
-        bg = Colors.green.withValues(alpha: 0.12);
-        fg = Colors.green.shade700;
-        break;
-      case MedicalDateStateEnum.skipped:
-        bg = theme.colorScheme.error.withValues(alpha: 0.12);
-        fg = theme.colorScheme.error;
-        break;
-      case MedicalDateStateEnum.pending:
-        bg = AppColors.primary.withValues(alpha: 0.1);
-        fg = AppColors.primary;
-        break;
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: AppText(
-        text: data.state,
-        style: AppTextStyles.captionMedium.copyWith(
-          color: fg,
-          fontWeight: FontWeight.w600,
-          fontSize: 11,
-        ),
-      ),
-    );
-  }
-*/
 }

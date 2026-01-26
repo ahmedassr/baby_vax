@@ -41,7 +41,7 @@ class NextVaccinationCard extends StatelessWidget {
                   12.sbw,
                   Expanded(
                     child: AppText(
-                      text: "Next Vaccination",
+                      text: "NextVaccinationCard_next_vaccination_title".tr,
                       maxLines: 2,
                       style: AppTextStyles.titleLarge.copyWith(
                         color: AppColors.primary,

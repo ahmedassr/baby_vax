@@ -12,7 +12,7 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: controller.medicalDate?.name ?? "Medical Date Details",
+        title: controller.medicalDate?.name ?? "MedicalDateDetailsView_title".tr,
         fontSize: 18,
       ),
       body: controller.obx(
@@ -24,7 +24,7 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
               children: [
                 16.sbh,
                 AppText(
-                  text: "Vaccination details and notes",
+                  text: "MedicalDateDetailsView_details_and_notes".tr,
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: colorScheme.onSurface.withValues(alpha: 0.7),
                   ),

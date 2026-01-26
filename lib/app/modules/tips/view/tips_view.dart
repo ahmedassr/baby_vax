@@ -11,8 +11,8 @@ class TipsView extends GetView<TipsController> {
     return controller.obx(
       (tips) {
         if (tips == null || tips.isEmpty) {
-          return const AppEmptyState(
-            message: "No tips available yet. Check back later!",
+          return  AppEmptyState(
+            message: "TipsView_empty_state_text".tr,
             animationPath: AppAnimations.noRecords,
           );
         }
@@ -35,7 +35,7 @@ class TipsView extends GetView<TipsController> {
       },
       onLoading: const Center(child: AppShimmerLoading()),
       onError: (error) => AppEmptyState(
-        message: error ?? "Something went wrong!",
+        message: error ?? "unexpected_error".tr,
         animationPath: AppAnimations.noRecords,
       ),
     );

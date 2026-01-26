@@ -26,7 +26,7 @@ class MedicalDateDetailsController extends GetxController
     if (args != null) {
       medicalDate = args;
     } else {
-      setError("The current medical dates is missing");
+      setError("MedicalDateDetailsController_missing_medical_dates_msg".tr);
     }
   }
 
@@ -46,7 +46,7 @@ class MedicalDateDetailsController extends GetxController
         setSuccess();
       }
     } catch (_) {
-      setError("Failed to fetch medical date details");
+      setError("MedicalDateDetailsController_fetch_failed_msg".tr);
     }
   }
 
@@ -64,7 +64,7 @@ class MedicalDateDetailsController extends GetxController
       ], date: data.toMap());
       await fetchDate();
     } catch (_) {
-      setError("Failed to update the date state");
+      setError("MedicalDateDetailsController_state_update_failed_msg".tr);
     }
   }
 }

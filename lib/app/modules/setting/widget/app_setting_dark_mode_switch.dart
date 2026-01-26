@@ -12,7 +12,7 @@ class AppSettingDarkModeSwitch extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Obx(() => SwitchListTile(
           title: AppText(
-            text: "Dark Mode",
+            text: "AppSettingDarkModeSwitch_dark_mode_label".tr,
             style: AppTextStyles.bodyMedium.copyWith(
                 color: context.isDarkMode ? Colors.white : Colors.black),
           ),

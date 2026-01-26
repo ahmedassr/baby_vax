@@ -1,9 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
-import 'package:baby_vax/app/core/values/app_enum/medical_date_state_enum.dart';
-import 'package:baby_vax/app/core/values/app_image.dart';
 import 'package:baby_vax/app/modules/medical_dates/widgets/medical_date_card.dart';
-import 'package:baby_vax/app/modules/medical_dates/widgets/medical_dates_empty_state.dart';
-
 import '../widgets/medical_dates_header.dart';
 
 class MedicalDatesView extends GetView<MedicalDatesController> {

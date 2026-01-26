@@ -16,7 +16,7 @@ class MedicalDatesHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppText(
-            text: "Medical Dates",
+            text: "MedicalDatesHeader_medical_dates_label".tr,
             style: AppTextStyles.headLineSmall.copyWith(
               color: colorScheme.onBackground,
             ),
@@ -24,8 +24,8 @@ class MedicalDatesHeader extends StatelessWidget {
           8.sbh,
           AppText(
             text: hasUpcoming
-                ? "Track your baby's upcoming and past appointments."
-                : "No upcoming appointments. Add medical dates to stay on track.",
+                ? "MedicalDatesHeader_upcoming_appointments_label".tr
+                : "MedicalDatesHeader_no_upcoming_appointments_label".tr,
             maxLines: 3,
             style: AppTextStyles.bodyMedium.copyWith(
               color: colorScheme.onSurface.withValues(alpha: 0.7),

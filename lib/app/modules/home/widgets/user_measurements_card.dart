@@ -54,7 +54,7 @@ class UserMeasurementCard extends StatelessWidget {
               ),
               12.sbw,
               AppText(
-                text: "Baby Measurements",
+                text: "SignupView_baby_measurements_label".tr,
                 style: AppTextStyles.titleLarge.copyWith(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w700,
@@ -74,7 +74,7 @@ class UserMeasurementCard extends StatelessWidget {
             children: [
               MeasurementCard(
                 icon: Icons.monitor_weight_outlined,
-                title: "Weight",
+                title: "weight_label".tr,
                 value: weight,
                 onTap: () {
                   // Handle tap if needed
@@ -82,7 +82,7 @@ class UserMeasurementCard extends StatelessWidget {
               ),
               MeasurementCard(
                 icon: Icons.height_outlined,
-                title: "Height",
+                title: "height_label".tr,
                 value: height,
                 onTap: () {
                   // Handle tap if needed
@@ -90,7 +90,7 @@ class UserMeasurementCard extends StatelessWidget {
               ),
               MeasurementCard(
                 icon: Icons.bloodtype_outlined,
-                title: "Blood Percentage",
+                title: "blood_percentage_label".tr,
                 value: bloodPercentage,
                 onTap: () {
                   // Handle tap if needed
@@ -98,7 +98,7 @@ class UserMeasurementCard extends StatelessWidget {
               ),
               MeasurementCard(
                 icon: Icons.account_circle_outlined,
-                title: "Head Size",
+                title: "head_size_label".tr,
                 value: headSize,
                 onTap: () {
                   // Handle tap if needed

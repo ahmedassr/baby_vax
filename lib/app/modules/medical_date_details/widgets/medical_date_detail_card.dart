@@ -51,7 +51,7 @@ class MedicalDateDetailCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AppText(
-                        text: name?.isNotEmpty == true ? name! : "Medical date",
+                        text: name?.isNotEmpty == true ? name! : "MedicalDateDetailCard_medical_date_label".tr,
                         maxLines: 5,
                         style: AppTextStyles.titleSmall.copyWith(
                           fontWeight: FontWeight.w700,
@@ -70,7 +70,7 @@ class MedicalDateDetailCard extends StatelessWidget {
                         )
                       else
                         AppText(
-                          text: "Date not provided",
+                          text: "MedicalDateDetailCard_date_fallback_label".tr,
                           style: AppTextStyles.bodyMedium.copyWith(
                             color: colorScheme.onSurface.withValues(alpha: 0.6),
                           ),
@@ -87,7 +87,7 @@ class MedicalDateDetailCard extends StatelessWidget {
             if (description != null && description!.isNotEmpty) ...[
               20.sbh,
               AppText(
-                text: "Notes",
+                text: "MedicalDateDetailCard_notes_label".tr,
                 style: AppTextStyles.bodyMedium.copyWith(
                   fontWeight: FontWeight.w600,
                   color: colorScheme.onSurface,

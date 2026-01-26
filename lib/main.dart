@@ -1,4 +1,5 @@
 import 'package:baby_vax/app/core/binding/app_binding.dart';
+import 'package:baby_vax/app/core/values/languages/app_translations.dart';
 
 import 'app/core/imports/import_manger.dart';
 import 'app/core/service/init_app_service.dart';
@@ -43,6 +44,12 @@ class MyApp extends StatelessWidget {
                 themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
                 initialRoute: isLoggedIn ? AppRoutes.mainMenu : AppRoutes.login,
                 getPages: AppPages.routes,
+                locale: const Locale("en"),
+                fallbackLocale: const Locale("en"),
+                supportedLocales: const [Locale("en")],
+                localizationsDelegates: const [],
+                translations: AppTranslations(),
+
               );
             },
           );

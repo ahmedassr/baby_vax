@@ -1,6 +1,6 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 
-class MainController extends GetxController with StateMixin, StateMixinHelper {
+class HomeController extends GetxController with StateMixin, StateMixinHelper {
   final Rxn<UserModel> userDetails = Rxn<UserModel>();
   final Rxn<MedicalDatesModel> nextVaccination = Rxn<MedicalDatesModel>();
 
@@ -8,12 +8,6 @@ class MainController extends GetxController with StateMixin, StateMixinHelper {
   void onInit() {
     super.onInit();
     fetchUserData();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
   }
 
   Future<void> getNextVaccination() async {
@@ -35,7 +29,7 @@ class MainController extends GetxController with StateMixin, StateMixinHelper {
   Future fetchUserData() async {
     var uid = SessionManager.uId;
     if (uid.isEmpty) {
-      setError("The user ID is missing.");
+      setError("HomeController_id_missing_msg".tr);
       return;
     }
     setLoading();
@@ -50,7 +44,7 @@ class MainController extends GetxController with StateMixin, StateMixinHelper {
         setSuccess();
       }
     } catch (_) {
-      setError("An unexpected error occurred.");
+      setError("unexpected_error".tr);
     }
   }
 

@@ -30,7 +30,7 @@ class MedicalDatesController extends GetxController
         await updateMedicalDateStatus(medicalDates!);
       }
     } catch (_) {
-      setError("Failed to fetch medical dates.");
+      setError("MedicalDatesController_fetch_failed".tr);
     }
   }
 

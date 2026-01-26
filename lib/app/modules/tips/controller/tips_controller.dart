@@ -22,7 +22,7 @@ class TipsController extends GetxController
         setSuccess(tips);
       }
     } catch (_) {
-      setError("Failed to fetch Tips.");
+      setError("TipsController_fetch_failed_msg".tr);
     }
   }
 

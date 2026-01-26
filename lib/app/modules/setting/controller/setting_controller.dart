@@ -29,7 +29,7 @@ class SettingsController extends GetxController {
 
   void onLogout() {
     AppConstant.alertService.showAlert(AlertModel.attention(
-        message: "Are you sure you want to log out?",
+        message: "SettingsController_logout_alert_msg".tr,
         yesAction: () async {
           await AppConstant.getStorage.write(AppConstant.isLoginKey, false);
           await Get.find<NotificationService>().cancelAll();

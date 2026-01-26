@@ -14,14 +14,14 @@ class TipsHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppText(
-            text: "Tips",
+            text: "TipsHeader_tips_title".tr,
             style: AppTextStyles.headLineSmall.copyWith(
               color: colorScheme.onBackground,
             ),
           ),
           8.sbh,
           AppText(
-            text: "Helpful advice to care for your baby’s health and growth.",
+            text: "TipsHeader_tips_hint".tr,
             maxLines: 3,
             style: AppTextStyles.bodyMedium.copyWith(
               color: colorScheme.onSurface.withOpacity(0.7),

@@ -2,7 +2,7 @@ import 'package:baby_vax/app/core/utils/medical_dates_generator.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/imports/import_manger.dart';
 import '../../../../core/notification/data/onesignal_notification_provider.dart';
-import '../../../main/controller/main_controller.dart';
+import '../../../home/controller/home_controller.dart';
 
 class SignupController extends GetxController
     with StateMixin, StateMixinHelper {
@@ -90,37 +90,39 @@ class SignupController extends GetxController
       text.value = "";
     }
     if (signupControllers["emailController"]?.text.isEmpty ?? true) {
-      signupErrorText["emailErrorText"]?.value = "Email can't be empty.";
+      signupErrorText["emailErrorText"]?.value = "empty_email_error_msg".tr;
       valid = false;
     }
     if (signupControllers["nameController"]?.text.isEmpty ?? true) {
-      signupErrorText["nameErrorText"]?.value = "Name can't be empty.";
+      signupErrorText["nameErrorText"]?.value = "empty_name_error_msg".tr;
       valid = false;
     }
     if (signupControllers["passwordController"]?.text.isEmpty ?? true) {
-      signupErrorText["passwordErrorText"]?.value = "Password can't be empty.";
+      signupErrorText["passwordErrorText"]?.value =
+          "empty_password_error_msg".tr;
       valid = false;
     }
     if (signupControllers["birthdayController"]?.text.isEmpty ?? true) {
       signupErrorText["birthdayErrorText"]?.value =
-          "Date of birth can't be empty.";
+          "empty_date_of_birth_error_msg".tr;
       valid = false;
     }
     if (signupControllers["bloodPercentageController"]?.text.isEmpty ?? true) {
       signupErrorText["bloodPercentageErrorText"]?.value =
-          "Blood percentage can't be empty.";
+          "empty_blood_percentage_error_msg".tr;
       valid = false;
     }
     if (signupControllers["weightController"]?.text.isEmpty ?? true) {
-      signupErrorText["weightErrorText"]?.value = "Weight can't be empty.";
+      signupErrorText["weightErrorText"]?.value = "empty_weight_error_msg".tr;
       valid = false;
     }
     if (signupControllers["headSizeController"]?.text.isEmpty ?? true) {
-      signupErrorText["headSizeErrorText"]?.value = "Head size can't be empty.";
+      signupErrorText["headSizeErrorText"]?.value =
+          "empty_head_size_error_msg".tr;
       valid = false;
     }
     if (signupControllers["heightController"]?.text.isEmpty ?? true) {
-      signupErrorText["heightErrorText"]?.value = "Height can't be empty.";
+      signupErrorText["heightErrorText"]?.value = "empty_height_error_msg".tr;
       valid = false;
     }
     return valid;
@@ -153,8 +155,8 @@ class SignupController extends GetxController
         final isUserCreated = await _createUserProfile(user);
         if (!isUserCreated) {
           await authResult.user?.delete();
-          AppConstant.alertService.showError(
-              message: "Failed to create user profile. Please try again.");
+          AppConstant.alertService
+              .showError(message: "SignupController_create_user_failed_msg".tr);
           return;
         }
       }
@@ -192,15 +194,15 @@ class SignupController extends GetxController
         }
       }
       SessionManager.uId = user.uid;
-     await AppConstant.getStorage.write(AppConstant.isLoginKey, true);
+      await AppConstant.getStorage.write(AppConstant.isLoginKey, true);
       await AppConstant.getStorage.write(AppConstant.uidKey, user.uid);
       await AppConstant.fireStoreHelper.updateFcmToken();
       await Get.find<OneSingleNotificationProvider>()
           .setUser(SessionManager.uId);
-      await Get.find<MainController>().fetchUserData();
+      await Get.find<HomeController>().fetchUserData();
       AppConstant.alertService.showAlert(
         AlertModel.success(
-          message: "User created successfully.",
+          message: "SignupController_create_user_success_msg".tr,
           yesAction: () => Get.toNamed(AppRoutes.mainMenu),
         ),
       );
@@ -209,7 +211,7 @@ class SignupController extends GetxController
       return true;
     } catch (e) {
       logger.e("❌ Error creating user profile: $e");
-      setError("Failed to create user profile. Please try again.");
+      setError("SignupController_create_user_failed_msg".tr);
       return false;
     }
   }

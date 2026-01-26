@@ -1,5 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
-import 'package:baby_vax/app/modules/main/controller/main_controller.dart';
+import 'package:baby_vax/app/modules/home/controller/home_controller.dart';
 
 class EditUserController extends GetxController
     with StateMixin, StateMixinHelper {
@@ -48,17 +48,16 @@ class EditUserController extends GetxController
       await AppConstant.fireStoreHelper.updateData(
           path: ["users", SessionManager.uId], date: updatedUser.toMap());
 
-      Get.find<MainController>().fetchUserData();
+      Get.find<HomeController>().fetchUserData();
       setSuccess();
       Get.back();
     } catch (_) {
-      setError("Failed to update user.");
+      setError("EditUserController_update_user_failed".tr);
     }
   }
 
   @override
   void onClose() {
-    // TODO: implement onClose
     super.onClose();
     editUserController.forEach((key, value) => value.dispose());
   }

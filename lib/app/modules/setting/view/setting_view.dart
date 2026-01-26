@@ -16,19 +16,19 @@ class SettingsView extends GetView<SettingsController> {
           AppSettingDarkModeSwitch(controller: controller),
           20.sbh,
           AppListTitleItem(
-            title: "Terms And Conditions",
+            title: "SettingsView_terms_and_conditions_label".tr,
             icon: Icons.article_outlined,
             onTap: () {},
           ),
           20.sbh,
           AppListTitleItem(
-            title: "About US",
+            title: "SettingsView_about_us_label".tr,
             icon: Icons.info_outline,
             onTap: () {},
           ),
           20.sbh,
           AppListTitleItem(
-            title: "Log Out",
+            title: "SettingsView_logout_label".tr,
             icon: Icons.logout,
             onTap: controller.onLogout,
           )

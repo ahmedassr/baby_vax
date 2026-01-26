@@ -15,7 +15,7 @@ class LoginView extends GetView<LoginController> {
         minimum: AppConstant.buttonPadding,
         child: AppButton(
           onPressed: () => controller.userLogin(),
-          text: "Login",
+          text: "LoginView_login_title".tr,
         ),
       ),
       body: controller.obx(
@@ -46,7 +46,7 @@ class LoginView extends GetView<LoginController> {
                         ),
                         4.sbh,
                         AppText(
-                          text: "Log in to continue",
+                          text: "LoginView_login_hint".tr,
                           style: AppTextStyles.headLineMedium.copyWith(
                             color: AppColors.textGrey,
                             fontSize: 16,
@@ -56,9 +56,9 @@ class LoginView extends GetView<LoginController> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   Obx(() => LabeledTextField(
-                        label: "Email",
+                        label: "email_label".tr,
                         controller: controller.loginController["email"] ??
                             TextEditingController(),
                         keyboardType: TextInputType.emailAddress,
@@ -73,7 +73,7 @@ class LoginView extends GetView<LoginController> {
                       )),
                   24.sbh,
                   Obx(() => LabeledTextField(
-                        label: "Password",
+                        label: "password_label".tr,
                         controller: controller.loginController["password"] ??
                             TextEditingController(),
                         errorText: controller.passwordErrorText.value.isNotEmpty
@@ -81,8 +81,6 @@ class LoginView extends GetView<LoginController> {
                             : null,
                         obscureText: true,
                         borderRadius: 18,
-                        // contentPadding: const EdgeInsets.symmetric(
-                        //     vertical: 18, horizontal: 18),
                         labelStyle: AppTextStyles.bodyMedium.copyWith(
                           color: AppColors.textGrey,
                           fontWeight: FontWeight.w500,
@@ -98,7 +96,7 @@ class LoginView extends GetView<LoginController> {
                         child: Padding(
                           padding: const EdgeInsets.all(6.0),
                           child: AppText(
-                            text: "Create New Account",
+                            text: "LoginView_create_new_account".tr,
                             style: AppTextStyles.headLineSmall.copyWith(
                               fontSize: 18,
                               color: AppColors.primary,

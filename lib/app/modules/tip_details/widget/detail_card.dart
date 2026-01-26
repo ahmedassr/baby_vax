@@ -61,7 +61,7 @@ class DetailCard extends StatelessWidget {
               ),
             if (image?.isNotEmpty ?? false) 16.sbh,
             AppText(
-              text: description ?? "No description available.",
+              text: description ?? "no_description".tr,
               maxLines: 30,
               style: AppTextStyles.bodyMedium.copyWith(
                 color: colorScheme.onSurface.withOpacity(0.8),

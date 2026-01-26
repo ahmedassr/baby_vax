@@ -1,7 +1,4 @@
 import 'package:baby_vax/app/core/widget/app_leading_icon.dart';
-import 'package:baby_vax/app/core/widget/custom_app_bar.dart';
-import 'package:flutter/cupertino.dart';
-
 import '../../../../core/imports/import_manger.dart';
 import '../../../../core/widget/app_logo.dart';
 
@@ -19,7 +16,7 @@ class SignupView extends GetView<SignupController> {
           padding: AppConstant.buttonPadding,
           child: AppButton(
             onPressed: () => controller.userSignup(),
-            text: "Sign Up",
+            text: "SignupView_sign_up_title".tr,
           ),
         ),
       ),
@@ -40,7 +37,7 @@ class SignupView extends GetView<SignupController> {
                       const AppLogo(),
                       24.sbh,
                       AppText(
-                        text: "Sign Up",
+                        text: "SignupView_sign_up_title".tr,
                         style: AppTextStyles.headLineMedium.copyWith(
                           color: AppColors.primary,
                           fontSize: 32,
@@ -50,7 +47,7 @@ class SignupView extends GetView<SignupController> {
                       ),
                       4.sbh,
                       AppText(
-                        text: "Create an account for your baby care journey",
+                        text: "SignupView_sign_up_hint".tr,
                         maxLines: 2,
                         style: AppTextStyles.headLineMedium.copyWith(
                           color: AppColors.textGrey,
@@ -83,7 +80,7 @@ class SignupView extends GetView<SignupController> {
                           const AppLeadingIcon(icon: Icons.info_outline),
                           8.sbw,
                           AppText(
-                            text: "Baby Information",
+                            text: "SignupView_baby_information_label".tr,
                             style: AppTextStyles.headLineSmall.copyWith(
                               color: AppColors.primary,
                               fontWeight: FontWeight.bold,
@@ -95,7 +92,7 @@ class SignupView extends GetView<SignupController> {
                       ),
                       22.sbh,
                       Obx(() => LabeledTextField(
-                            label: "Email",
+                            label: "email_label".tr,
                             controller: controller
                                     .signupControllers["emailController"] ??
                                 TextEditingController(),
@@ -112,7 +109,7 @@ class SignupView extends GetView<SignupController> {
                       const SizedBox(height: 20),
                       // Password
                       Obx(() => LabeledTextField(
-                            label: "Password",
+                            label: "password_label".tr,
                             controller: controller
                                     .signupControllers["passwordController"] ??
                                 TextEditingController(),
@@ -129,7 +126,7 @@ class SignupView extends GetView<SignupController> {
                       const SizedBox(height: 20),
                       // Full Name
                       Obx(() => LabeledTextField(
-                            label: "Full Name",
+                            label: "full_name_label".tr,
                             controller: controller
                                     .signupControllers["nameController"] ??
                                 TextEditingController(),
@@ -145,7 +142,7 @@ class SignupView extends GetView<SignupController> {
                       const SizedBox(height: 20),
                       // Date of Birth
                       Obx(() => LabeledTextField(
-                            label: "Date of Birth",
+                            label: "date_of_birth_label".tr,
                             keyboardType: TextInputType.datetime,
                             controller: controller
                                     .signupControllers["birthdayController"] ??
@@ -185,7 +182,7 @@ class SignupView extends GetView<SignupController> {
                           const AppLeadingIcon(icon: Icons.analytics_outlined),
                           8.sbw,
                           AppText(
-                            text: "Baby's Measurements",
+                            text: "SignupView_baby_measurements_label".tr,
                             style: AppTextStyles.headLineSmall.copyWith(
                               color: AppColors.primary,
                               fontWeight: FontWeight.bold,
@@ -205,7 +202,7 @@ class SignupView extends GetView<SignupController> {
                             Obx(() => SizedBox(
                                   width: 130,
                                   child: LabeledTextField(
-                                    label: "Weight (kg)",
+                                    label: "SignupView_weight_label".tr,
                                     fontSize: 13,
                                     keyboardType: TextInputType.number,
                                     controller: controller.signupControllers[
@@ -226,7 +223,7 @@ class SignupView extends GetView<SignupController> {
                             Obx(() => SizedBox(
                                   width: 130,
                                   child: LabeledTextField(
-                                    label: "Height (cm)",
+                                    label: "SignupView_height_label".tr,
                                     keyboardType: TextInputType.number,
                                     fontSize: 13,
                                     controller: controller.signupControllers[
@@ -247,7 +244,7 @@ class SignupView extends GetView<SignupController> {
                             Obx(() => SizedBox(
                                   width: 130,
                                   child: LabeledTextField(
-                                    label: "Head Size (cm)",
+                                    label: "SignupView_head_size_label".tr,
                                     keyboardType: TextInputType.number,
                                     fontSize: 13,
                                     controller: controller.signupControllers[
@@ -269,7 +266,7 @@ class SignupView extends GetView<SignupController> {
                             Obx(() => SizedBox(
                                   width: 130,
                                   child: LabeledTextField(
-                                    label: "Blood % (g/dl)",
+                                    label: "SignupView_blood_label".tr,
                                     fontSize: 13,
                                     keyboardType: TextInputType.number,
                                     controller: controller.signupControllers[

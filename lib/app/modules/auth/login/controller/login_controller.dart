@@ -1,7 +1,6 @@
-import 'package:baby_vax/app/core/notification/application/notification_coordinator.dart';
 import 'package:baby_vax/app/core/notification/data/onesignal_notification_provider.dart';
 import '../../../../core/imports/import_manger.dart';
-import '../../../main/controller/main_controller.dart';
+import '../../../home/controller/home_controller.dart';
 
 class LoginController extends GetxController with StateMixin, StateMixinHelper {
   final loginController = {
@@ -30,11 +29,11 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
     String email = loginController["email"]?.text.trim() ?? "";
     String password = loginController["password"]?.text.trim() ?? "";
     if (email.isEmpty) {
-      emailErrorText("Email can't be empty.");
+      emailErrorText("empty_email_error_msg".tr);
       return;
     }
     if (password.isEmpty) {
-      passwordErrorText("password can't be empty.");
+      passwordErrorText("empty_password_error_msg".tr);
       return;
     }
     setLoading();
@@ -51,11 +50,11 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
             userName: authResult.user?.displayName ?? "Your baby");
         await Get.find<OneSingleNotificationProvider>()
             .setUser(SessionManager.uId);
-        await Get.find<MainController>().fetchUserData();
+        await Get.find<HomeController>().fetchUserData();
         setSuccess();
         Get.toNamed(AppRoutes.mainMenu);
       } else {
-        setError("Failed to login.");
+        setError("LoginController_login_failed_msg".tr);
       }
     } on FirebaseAuthException catch (error) {
       setError(getFriendlyErrorMessage(error.toString()));

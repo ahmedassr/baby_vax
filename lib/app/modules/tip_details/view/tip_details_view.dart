@@ -15,8 +15,8 @@ class TipDetailsView extends GetView<TipDetailsController> {
         fontSize: 18,
       ),
       body: controller.tip == null
-          ? const AppEmptyState(
-              message: "Tip details are not available.",
+          ?  AppEmptyState(
+              message: "TipDetailsView_empty_state_text".tr,
               animationPath: AppAnimations.noRecords,
             )
           : SingleChildScrollView(

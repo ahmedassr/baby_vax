@@ -6,8 +6,8 @@ class EditUserView extends GetView<EditUserController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: "Edit User",
+      appBar: CustomAppBar(
+        title: "EditUserView_edit_user_title".tr,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -15,37 +15,38 @@ class EditUserView extends GetView<EditUserController> {
           child: Column(
             children: [
               LabeledTextField(
-                  label: "Email",
+                  label: "email_label".tr,
                   controller: controller.editUserController["email"] ??
                       TextEditingController()),
               20.sbh,
               LabeledTextField(
-                  label: "Name",
+                  label: "name_label".tr,
                   controller: controller.editUserController["name"] ??
                       TextEditingController()),
               20.sbh,
               LabeledTextField(
-                  label: "Weight",
+                  label: "weight_label".tr,
                   controller: controller.editUserController["weight"] ??
                       TextEditingController()),
               20.sbh,
               LabeledTextField(
-                  label: "Height",
+                  label: "height_label".tr,
                   controller: controller.editUserController["height"] ??
                       TextEditingController()),
               20.sbh,
               LabeledTextField(
-                  label: "Blood Percentage:",
-                  controller: controller.editUserController["bloodPercentage"] ??
-                      TextEditingController()),
+                  label: "blood_percentage_label".tr,
+                  controller:
+                      controller.editUserController["bloodPercentage"] ??
+                          TextEditingController()),
               20.sbh,
               LabeledTextField(
-                  label: "Head Size",
+                  label: "head_size_label".tr,
                   controller: controller.editUserController["headSize"] ??
                       TextEditingController()),
               70.sbh,
               AppButton(
-                text: "Edit",
+                text: "EditUserView_edit_label".tr,
                 onPressed: controller.updateUser,
               ),
             ],
