@@ -37,7 +37,7 @@ class MedicalDateStatusBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(999),
       ),
       child: AppText(
-        text: stateEnum.label,
+        text: stateEnum.label.tr,
         style: AppTextStyles.captionMedium.copyWith(
           color: fg,
           fontWeight: FontWeight.w600,

@@ -127,6 +127,7 @@ Map<String, String> en = {
       "Helpful advice to care for your baby’s health and growth.",
 
   // Enum → → →
+
   // Vaccination Time Status Enum:
   "VaccinationTimeStatusEnum_overdue": "Overdue",
   "VaccinationTimeStatusEnum_today": "Today",
@@ -136,4 +137,8 @@ Map<String, String> en = {
   "VaccinationTimeStatusEnum_weeksLeft": "Weeks Left",
   "VaccinationTimeStatusEnum_monthsLeft": "Months Left",
   "VaccinationTimeStatusEnum_yearsLeft": "Years Left",
+  // Medical Date State Enum:
+  "Pending": "Pending",
+  "Completed": "Completed",
+  "Skipped": "Skipped"
 };

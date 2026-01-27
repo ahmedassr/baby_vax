@@ -151,6 +151,10 @@ Map<String, String> ar = {
   "VaccinationTimeStatusEnum_weeksLeft": " أسابيع متبقية",
   "VaccinationTimeStatusEnum_monthsLeft": " أشهر متبقية",
   "VaccinationTimeStatusEnum_yearsLeft": "سنوات متبقية",
+  // Medical Date State Enum:
+  "Pending": "قادم",
+  "Completed": "مكتمل",
+  "Skipped": "متجاوز"
 
 
 };
