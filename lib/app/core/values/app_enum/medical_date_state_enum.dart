@@ -1,18 +1,15 @@
 enum MedicalDateStateEnum {
-  pending,
-  completed,
-  skipped,
-}
+  pending("Pending"),
+  completed("Completed"),
+  skipped("Skipped");
 
-extension MedicalDateStateEnumEx on MedicalDateStateEnum {
-  String get label {
-    switch (this) {
-      case MedicalDateStateEnum.pending:
-        return "Pending";
-      case MedicalDateStateEnum.completed:
-        return "Completed";
-      case MedicalDateStateEnum.skipped:
-        return "Skipped";
-    }
+  final String label;
+
+  const MedicalDateStateEnum(this.label);
+
+  static MedicalDateStateEnum fromLabel(String? value) {
+    return MedicalDateStateEnum.values.firstWhere(
+        (e) => e.label.toLowerCase() == value?.toLowerCase(),
+        orElse: () => MedicalDateStateEnum.skipped);
   }
 }

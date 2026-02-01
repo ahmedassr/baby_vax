@@ -2,6 +2,8 @@ import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/modules/setting/controller/setting_controller.dart';
 import 'package:baby_vax/app/modules/setting/widget/app_setting_dark_mode_switch.dart';
 
+import '../widget/language_selector.dart';
+
 class SettingsView extends GetView<SettingsController> {
   const SettingsView({super.key});
 
@@ -15,20 +17,22 @@ class SettingsView extends GetView<SettingsController> {
         children: [
           AppSettingDarkModeSwitch(controller: controller),
           20.sbh,
+          const LanguageSelector(),
+          20.sbh,
           AppListTitleItem(
-            title: "Terms And Conditions",
+            title: "SettingsView_terms_and_conditions_label".tr,
             icon: Icons.article_outlined,
             onTap: () {},
           ),
           20.sbh,
           AppListTitleItem(
-            title: "About US",
+            title: "SettingsView_about_us_label".tr,
             icon: Icons.info_outline,
             onTap: () {},
           ),
           20.sbh,
           AppListTitleItem(
-            title: "Log Out",
+            title: "SettingsView_logout_label".tr,
             icon: Icons.logout,
             onTap: controller.onLogout,
           )

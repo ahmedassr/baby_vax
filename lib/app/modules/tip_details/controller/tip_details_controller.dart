@@ -6,7 +6,6 @@ class TipDetailsController extends GetxController with StateMixin , StateMixinHe
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     initializeTipArgument();
   }
@@ -15,7 +14,7 @@ class TipDetailsController extends GetxController with StateMixin , StateMixinHe
     if (args != null) {
       tip = args;
     }else{
-      setError("The current tip is missing");
+      setError("TipDetailsController_missing_tip_msg".tr);
     }
   }
 

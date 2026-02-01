@@ -1,21 +1,20 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class NotificationCoordinator extends GetxService {
-   NotificationService _notificationService =
-      Get.find<NotificationService>();
+  NotificationService _notificationService = Get.find<NotificationService>();
 
-   NotificationCoordinator({NotificationService? service})
-       : _notificationService = service ?? Get.find<NotificationService>();
+  NotificationCoordinator({NotificationService? service})
+      : _notificationService = service ?? Get.find<NotificationService>();
 
-   // طريقة للاختبار لتغيير الخدمة
-   void overrideNotificationService(NotificationService service) {
-     _notificationService = service;
-   }
+  // طريقة للاختبار لتغيير الخدمة
+  void overrideNotificationService(NotificationService service) {
+    _notificationService = service;
+  }
 
-   /// For Test 
-   Future<void> cancelAll() async {
-     await _notificationService.cancelAll();
-   }
+  /// For Test
+  Future<void> cancelAll() async {
+    await _notificationService.cancelAll();
+  }
 
   Future<void> scheduleVaccine({
     required String vaccineId,
@@ -24,25 +23,41 @@ class NotificationCoordinator extends GetxService {
     required DateTime date,
   }) async {
     try {
-
+      DateTime mainDate = DateTime(date.year, date.month, date.day, 9);
+      final difference = mainDate.difference(DateTime.now());
+      if (mainDate.isBefore(DateTime.now())) {
+        if (difference.inDays == 0) {
+          mainDate = DateTime.now().add(const Duration(minutes: 1));
+        } else {
+          logger.w('⏭️ Skipping past main vaccine [$vaccineName] at $date');
+          return;
+        }
+      }
       final reminder = NotificationPayload(
           id: '$vaccineId-main',
-          title: '🩺 موعد تطعيم اليوم',
-          body: '$userName، اليوم موعد $vaccineName',
-          scheduledAt: DateTime(date.year, date.month, date.day, 9));
+          title: '🧪 موعد تطعيم اليوم',
+          body: '👶 $userName\nاليوم موعد تطعيم:\n$vaccineName',
+          scheduledAt: mainDate);
 
-      final dayBefore = date.subtract(const Duration(days: 1));
+      await _notificationService.schedule(reminder);
+      logger.i(
+          '📅 Scheduled vaccine notifications | Vaccine ID: $vaccineId | Type: Main');
+      DateTime dayBefore = mainDate.subtract(const Duration(days: 1));
+      if (dayBefore.isBefore(DateTime.now())) {
+        logger
+            .w('⏭️ Skipping past advance vaccine 🧪 [$vaccineName] at ⏰ $date');
+        return;
+      }
       final advance = NotificationPayload(
           id: '$vaccineId-advance',
           title: '📅 تذكير مسبق',
-          body: '$userName، غداً موعد $vaccineName',
+          body: '👶 $userName\nغذا موعد تطعيم:\n$vaccineName',
           scheduledAt:
               DateTime(dayBefore.year, dayBefore.month, dayBefore.day, 18));
 
-      await _notificationService.schedule(reminder);
       await _notificationService.schedule(advance);
       logger.i(
-          '📅 Vaccine notifications scheduled: [$vaccineId-main, $vaccineId-advance]');
+          '📅 Scheduled vaccine notifications | Vaccine ID: $vaccineId | Type: advance');
     } catch (e, s) {
       logger.e(
         '❌ Failed to schedule vaccine [$vaccineName]',
@@ -77,7 +92,7 @@ class NotificationCoordinator extends GetxService {
       final vaccines =
           await AppConstant.fireStoreHelper.fetchData<MedicalDatesModel>(
         path: ['users', userId, 'medical_dates'],
-        fromMap: MedicalDatesModel.fromJson,
+        fromDocument: MedicalDatesModel.fromDocument,
       );
 
       if (vaccines == null || vaccines.isEmpty) {
@@ -86,13 +101,12 @@ class NotificationCoordinator extends GetxService {
       }
 
       for (final vaccine in vaccines) {
-        final date = DateTime.parse(vaccine.date);
-        if (date.isAfter(DateTime.now())) {
+        if (vaccine.date.isAfter(DateTime.now())) {
           await scheduleVaccine(
             vaccineId: vaccine.id ?? "",
             userName: userName,
             vaccineName: vaccine.name,
-            date: date,
+            date: vaccine.date,
           );
         } else {
           logger.w(

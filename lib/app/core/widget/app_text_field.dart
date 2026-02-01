@@ -14,11 +14,14 @@ class AppTextField extends StatelessWidget {
   final String? label;
   final Color? fillColor;
   final double? radius;
+  final TextStyle? labelStyle;
+  final bool? obscureText;
 
   const AppTextField(
       {super.key,
       required this.controller,
       this.readOnly = false,
+      this.obscureText,
       this.onTap,
       this.onChanged,
       this.onSaved,
@@ -27,7 +30,8 @@ class AppTextField extends StatelessWidget {
       this.hintText,
       this.label,
       this.fillColor,
-      this.radius});
+      this.radius,
+      this.labelStyle});
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +42,7 @@ class AppTextField extends StatelessWidget {
       onTap: onTap,
       onChanged: onChanged,
       onSaved: onSaved,
+      obscureText: obscureText ?? false,
       keyboardType: keyboardType,
       decoration: InputDecoration(
         errorText: errorText,
@@ -47,13 +52,17 @@ class AppTextField extends StatelessWidget {
             color:
                 context.isDarkMode ? AppColors.greyDark : AppColors.greyMedium),
         labelText: label,
-        labelStyle: AppTextStyles.headLineMedium.copyWith(
-            color:
-                context.isDarkMode ? AppColors.textWhite : AppColors.textBlack),
+        labelStyle: labelStyle ??
+            AppTextStyles.headLineMedium.copyWith(
+                color: context.isDarkMode
+                    ? AppColors.textWhite
+                    : AppColors.textBlack),
         fillColor: fillColor ??
             (context.isDarkMode
                 ? AppColors.backgroundDark
                 : AppColors.backgroundLight),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(radius ?? 20),
             borderSide: BorderSide(

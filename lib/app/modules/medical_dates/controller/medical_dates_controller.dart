@@ -1,6 +1,4 @@
-import 'package:baby_vax/app/config/session/session_manager.dart';
 import 'package:baby_vax/app/core/imports/import_manger.dart';
-import 'package:baby_vax/app/modules/medical_dates/model/medical_dates_model.dart';
 
 class MedicalDatesController extends GetxController
     with StateMixin<List<MedicalDatesModel>>, StateMixinHelper {
@@ -23,14 +21,28 @@ class MedicalDatesController extends GetxController
     try {
       final medicalDates = await AppConstant.fireStoreHelper.fetchData(
           path: ["users", SessionManager.uId, "medical_dates"],
-          fromMap: (e) => MedicalDatesModel.fromJson(e));
+          queryBuilder: (q) => q.orderBy('date'),
+          fromDocument: MedicalDatesModel.fromDocument);
       if (medicalDates?.isEmpty ?? true) {
         setEmpty();
       } else {
         setSuccess(medicalDates);
+        await updateMedicalDateStatus(medicalDates!);
       }
     } catch (_) {
-      setError("Failed to fetch medical dates.");
+      setError("MedicalDatesController_fetch_failed".tr);
     }
+  }
+
+  Future updateMedicalDateStatus(List<MedicalDatesModel> medicalDates) async {
+    final futures = medicalDates.where((m)=> m.date.isBefore(DateTime.now()) &&
+        m.state == MedicalDateStateEnum.pending.label).map((m){
+          final docId = m.id;
+          if(docId == null) return null;
+        return AppConstant.fireStoreHelper.updateData(
+              path: ["users", SessionManager.uId, "medical_dates", docId],
+              date: {'state': MedicalDateStateEnum.skipped.label});
+    }).whereType<Future>();
+    await Future.wait(futures);
   }
 }

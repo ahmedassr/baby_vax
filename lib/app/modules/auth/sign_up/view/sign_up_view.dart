@@ -1,7 +1,6 @@
-import 'package:baby_vax/app/core/widget/custom_app_bar.dart';
-import 'package:flutter/cupertino.dart';
-
+import 'package:baby_vax/app/core/widget/app_leading_icon.dart';
 import '../../../../core/imports/import_manger.dart';
+import '../../../../core/widget/app_logo.dart';
 
 class SignupView extends GetView<SignupController> {
   const SignupView({super.key});
@@ -9,32 +8,91 @@ class SignupView extends GetView<SignupController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Padding(
-        padding: AppConstant.buttonPadding,
-        child: AppButton(
-            onPressed: () => controller.userSignup(), text: "Sign Up"),
+      backgroundColor: context.isDarkMode
+          ? AppColors.backgroundDark
+          : const Color(0xFFFDFDFC),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: AppConstant.buttonPadding,
+          child: AppButton(
+            onPressed: () => controller.userSignup(),
+            text: "SignupView_sign_up_title".tr,
+          ),
+        ),
       ),
       appBar: const CustomAppBar(),
       body: controller.obx(
-          (_) => SingleChildScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                child: Padding(
-                  padding: AppConstant.columnPadding,
+        (_) => SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Padding(
+            padding: AppConstant.columnPadding
+                .copyWith(top: 0, left: 24, right: 24, bottom: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                10.sbh,
+                Center(
+                  child: Column(
+                    children: [
+                      const AppLogo(),
+                      24.sbh,
+                      AppText(
+                        text: "SignupView_sign_up_title".tr,
+                        style: AppTextStyles.headLineMedium.copyWith(
+                          color: AppColors.primary,
+                          fontSize: 32,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      4.sbh,
+                      AppText(
+                        text: "SignupView_sign_up_hint".tr,
+                        maxLines: 2,
+                        style: AppTextStyles.headLineMedium.copyWith(
+                          color: AppColors.textGrey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 40),
+                // FORM SECTION
+                Container(
+                  decoration: BoxDecoration(
+                    color: context.isDarkMode
+                        ? AppColors.backgroundDark
+                        : Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: AppColors.primary.withOpacity(0.06),
+                    ),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      45.sbh,
-                      Center(
-                        child: AppText(
-                          text: "Sign Up",
-                          style: AppTextStyles.headLineMedium
-                              .copyWith(color: AppColors.primary, fontSize: 30),
-                        ),
+                      Row(
+                        children: [
+                          const AppLeadingIcon(icon: Icons.info_outline),
+                          8.sbw,
+                          AppText(
+                            text: "SignupView_baby_information_label".tr,
+                            style: AppTextStyles.headLineSmall.copyWith(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                        ],
                       ),
-                      50.sbh,
+                      22.sbh,
                       Obx(() => LabeledTextField(
-                            label: "Email",
+                            label: "email_label".tr,
                             controller: controller
                                     .signupControllers["emailController"] ??
                                 TextEditingController(),
@@ -48,12 +106,14 @@ class SignupView extends GetView<SignupController> {
                                     .signupErrorText["emailErrorText"]?.value
                                 : null,
                           )),
-                      10.sbh,
+                      const SizedBox(height: 20),
+                      // Password
                       Obx(() => LabeledTextField(
-                            label: "password",
+                            label: "password_label".tr,
                             controller: controller
                                     .signupControllers["passwordController"] ??
                                 TextEditingController(),
+                            obscureText: true,
                             errorText: (controller
                                         .signupErrorText["passwordErrorText"]
                                         ?.value
@@ -63,9 +123,10 @@ class SignupView extends GetView<SignupController> {
                                     .signupErrorText["passwordErrorText"]?.value
                                 : null,
                           )),
-                      10.sbh,
+                      const SizedBox(height: 20),
+                      // Full Name
                       Obx(() => LabeledTextField(
-                            label: "Full Name",
+                            label: "full_name_label".tr,
                             controller: controller
                                     .signupControllers["nameController"] ??
                                 TextEditingController(),
@@ -78,9 +139,10 @@ class SignupView extends GetView<SignupController> {
                                     .signupErrorText["nameErrorText"]?.value
                                 : null,
                           )),
-                      10.sbh,
+                      const SizedBox(height: 20),
+                      // Date of Birth
                       Obx(() => LabeledTextField(
-                            label: "Date of birth",
+                            label: "date_of_birth_label".tr,
                             keyboardType: TextInputType.datetime,
                             controller: controller
                                     .signupControllers["birthdayController"] ??
@@ -96,126 +158,154 @@ class SignupView extends GetView<SignupController> {
                                     .signupErrorText["birthdayErrorText"]?.value
                                 : null,
                           )),
-                      20.sbh,
-                      AppText(
-                        text: "Baby's Measurements :",
-                        style: AppTextStyles.headLineSmall.copyWith(
-                            color: context.isDarkMode
-                                ? AppColors.backgroundLight
-                                : AppColors.primary),
-                      ),
-                      20.sbh,
-                      Center(
-                        child: IntrinsicHeight(
-                          child: Wrap(
-                            spacing: 0.2.sw,
-                            runSpacing: 30,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Obx(() => SizedBox(
-                                    width: 110,
-                                    child: LabeledTextField(
-                                      label: "Weight(kg)",
-                                      fontSize: 12,
-                                      keyboardType: TextInputType.number,
-                                      controller: controller.signupControllers[
-                                              "weightController"] ??
-                                          TextEditingController(),
-                                      errorText: (controller
-                                                  .signupErrorText[
-                                                      "weightErrorText"]
-                                                  ?.value
-                                                  .isNotEmpty ??
-                                              false)
-                                          ? controller
-                                              .signupErrorText["weightErrorText"]
-                                              ?.value
-                                          : null,
-                                    ),
-                                  )),
-                              Obx(() => SizedBox(
-                                    width: 110,
-                                    child: LabeledTextField(
-                                      label: "Height(cm)",
-                                      keyboardType: TextInputType.number,
-                                      fontSize: 12,
-                                      controller: controller.signupControllers[
-                                              "heightController"] ??
-                                          TextEditingController(),
-                                      errorText: (controller
-                                                  .signupErrorText[
-                                                      "heightErrorText"]
-                                                  ?.value
-                                                  .isNotEmpty ??
-                                              false)
-                                          ? controller
-                                              .signupErrorText["heightErrorText"]
-                                              ?.value
-                                          : null,
-                                    ),
-                                  )),
-                              Obx(() => SizedBox(
-                                    width: 110,
-                                    child: LabeledTextField(
-                                      label: "Head Size(cm)",
-                                      keyboardType: TextInputType.number,
-                                      fontSize: 12,
-                                      controller: controller.signupControllers[
-                                              "headSizeController"] ??
-                                          TextEditingController(),
-                                      errorText: (controller
-                                                  .signupErrorText[
-                                                      "headSizeErrorText"]
-                                                  ?.value
-                                                  .isNotEmpty ??
-                                              false)
-                                          ? controller
-                                              .signupErrorText[
-                                                  "headSizeErrorText"]
-                                              ?.value
-                                          : null,
-                                    ),
-                                  )),
-                              Obx(() => SizedBox(
-                                    width: 110,
-                                    child: LabeledTextField(
-                                      label: "Blood Percentage(g/dl)",
-                                      fontSize: 12,
-                                      keyboardType: TextInputType.number,
-                                      controller: controller.signupControllers[
-                                              "bloodPercentageController"] ??
-                                          TextEditingController(),
-                                      errorText: (controller
-                                                  .signupErrorText[
-                                                      "bloodPercentageErrorText"]
-                                                  ?.value
-                                                  .isNotEmpty ??
-                                              false)
-                                          ? controller
-                                              .signupErrorText[
-                                                  "bloodPercentageErrorText"]
-                                              ?.value
-                                          : null,
-                                    ),
-                                  )),
-                            ],
-                          ),
-                        ),
-                      )
                     ],
                   ),
                 ),
-              ),
-          onLoading: const Center(child: CupertinoActivityIndicator()),
-          onError: (error) {
-        if (error != null && error.isNotEmpty) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            AppConstant.alertService.showError(message: error);
-            controller.setSuccess();
-          });
-        }
-        return const SizedBox.shrink();
-      }),
+                const SizedBox(height: 32),
+                Container(
+                  decoration: BoxDecoration(
+                    color: context.isDarkMode
+                        ? AppColors.backgroundDark
+                        : AppColors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: AppColors.primary.withOpacity(0.05),
+                    ),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const AppLeadingIcon(icon: Icons.analytics_outlined),
+                          8.sbw,
+                          AppText(
+                            text: "SignupView_baby_measurements_label".tr,
+                            style: AppTextStyles.headLineSmall.copyWith(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                        ],
+                      ),
+                      22.sbh,
+                      Center(
+                        child: Wrap(
+                          spacing: 22,
+                          runSpacing: 22,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Obx(() => SizedBox(
+                                  width: 130,
+                                  child: LabeledTextField(
+                                    label: "SignupView_weight_label".tr,
+                                    fontSize: 13,
+                                    keyboardType: TextInputType.number,
+                                    controller: controller.signupControllers[
+                                            "weightController"] ??
+                                        TextEditingController(),
+                                    errorText: (controller
+                                                .signupErrorText[
+                                                    "weightErrorText"]
+                                                ?.value
+                                                .isNotEmpty ??
+                                            false)
+                                        ? controller
+                                            .signupErrorText["weightErrorText"]
+                                            ?.value
+                                        : null,
+                                  ),
+                                )),
+                            Obx(() => SizedBox(
+                                  width: 130,
+                                  child: LabeledTextField(
+                                    label: "SignupView_height_label".tr,
+                                    keyboardType: TextInputType.number,
+                                    fontSize: 13,
+                                    controller: controller.signupControllers[
+                                            "heightController"] ??
+                                        TextEditingController(),
+                                    errorText: (controller
+                                                .signupErrorText[
+                                                    "heightErrorText"]
+                                                ?.value
+                                                .isNotEmpty ??
+                                            false)
+                                        ? controller
+                                            .signupErrorText["heightErrorText"]
+                                            ?.value
+                                        : null,
+                                  ),
+                                )),
+                            Obx(() => SizedBox(
+                                  width: 130,
+                                  child: LabeledTextField(
+                                    label: "SignupView_head_size_label".tr,
+                                    keyboardType: TextInputType.number,
+                                    fontSize: 13,
+                                    controller: controller.signupControllers[
+                                            "headSizeController"] ??
+                                        TextEditingController(),
+                                    errorText: (controller
+                                                .signupErrorText[
+                                                    "headSizeErrorText"]
+                                                ?.value
+                                                .isNotEmpty ??
+                                            false)
+                                        ? controller
+                                            .signupErrorText[
+                                                "headSizeErrorText"]
+                                            ?.value
+                                        : null,
+                                  ),
+                                )),
+                            Obx(() => SizedBox(
+                                  width: 130,
+                                  child: LabeledTextField(
+                                    label: "SignupView_blood_label".tr,
+                                    fontSize: 13,
+                                    keyboardType: TextInputType.number,
+                                    controller: controller.signupControllers[
+                                            "bloodPercentageController"] ??
+                                        TextEditingController(),
+                                    errorText: (controller
+                                                .signupErrorText[
+                                                    "bloodPercentageErrorText"]
+                                                ?.value
+                                                .isNotEmpty ??
+                                            false)
+                                        ? controller
+                                            .signupErrorText[
+                                                "bloodPercentageErrorText"]
+                                            ?.value
+                                        : null,
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onLoading: const Center(child: CupertinoActivityIndicator()),
+        onError: (error) {
+          if (error != null && error.isNotEmpty) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              AppConstant.alertService.showError(message: error);
+              controller.setSuccess();
+            });
+          }
+          return const SizedBox.shrink();
+        },
+      ),
     );
   }
 }

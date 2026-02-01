@@ -16,7 +16,7 @@ class SearchOnTips extends GetView<TipsController> {
         child: Column(
           children: [
             LabeledTextField(
-              label: "Which tips are you looking for?",
+              label: "SearchOnTips_search_field_label".tr,
               controller: controller.searchController,
               onChanged: (value) => controller.tips.filterBy(value,
                   predicate: (tip, query) =>

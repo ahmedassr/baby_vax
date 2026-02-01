@@ -8,14 +8,14 @@ class SearchOnMedicalDates extends GetView<MedicalDatesController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: "Search Medical Dates"),
+      appBar:  CustomAppBar(title: "SearchOnMedicalDates_title".tr),
       body: Padding(
         padding: AppConstant.columnPadding,
         child: controller.obx(
           (state) => Column(
             children: [
               LabeledTextField(
-                label: "Which medical dates are you looking for?",
+                label: "SearchOnMedicalDates_search_field_label".tr,
                 controller: controller.searchController,
                 onChanged: (value) => state?.filterBy(
                     value.toLowerCase(),

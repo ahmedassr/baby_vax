@@ -14,15 +14,19 @@ class TipsController extends GetxController
   Future<void> fetchTips() async {
     setLoading();
     try {
+      final currentLanguage =
+          AppConstant.getStorage.read(AppConstant.languageKey) ?? "en";
+      var collection = currentLanguage == "en" ? "tips_en" : "tips";
       final tips = await AppConstant.fireStoreHelper
-          .fetchData(path: ["tips"], fromMap: (e) => TipsModel.fromJson(e));
+          .fetchData(path: [collection], fromDocument: TipsModel.fromDocument);
       if (tips?.isEmpty ?? true) {
         setEmpty();
+        logger.w("empty");
       } else {
         setSuccess(tips);
       }
     } catch (_) {
-      setError("Failed to fetch Tips.");
+      setError("TipsController_fetch_failed_msg".tr);
     }
   }
 

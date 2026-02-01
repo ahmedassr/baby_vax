@@ -1,4 +1,3 @@
-import 'package:baby_vax/app/modules/medical_dates/model/medical_dates_model.dart';
 import '../../../core/imports/import_manger.dart';
 
 class MedicalDateDetailsController extends GetxController
@@ -7,16 +6,12 @@ class MedicalDateDetailsController extends GetxController
   final args = InternalScreenArgs.fromArgs.medicalDate;
 
   bool get isActive {
-    final state = medicalDate?.state;
-    final dateStr = medicalDate?.date;
+    final state = MedicalDateStateEnum.fromLabel(medicalDate?.state);
+    final date = medicalDate?.date;
 
-    if (state != MedicalDateStateEnum.pending ||
-        dateStr == null ||
-        dateStr.isEmpty) {
+    if (state != MedicalDateStateEnum.pending || date == null) {
       return false;
     }
-    final date = DateTime.tryParse(dateStr);
-    if(date == null) return false;
     return date.isBefore(DateTime.now());
   }
 
@@ -31,25 +26,7 @@ class MedicalDateDetailsController extends GetxController
     if (args != null) {
       medicalDate = args;
     } else {
-      setError("The current medical dates is missing");
-    }
-  }
-
-  Future updateState() async {
-    setLoading();
-    try {
-      var data = medicalDate!.copyWith(
-        state: MedicalDateStateEnum.completed,
-      );
-      await AppConstant.fireStoreHelper.updateData(path: [
-        "users",
-        SessionManager.uId,
-        "medical_dates",
-        medicalDate?.id ?? ""
-      ], date: data.toMap());
-      await fetchDate();
-    } catch (_) {
-      setError("Failed to update the date state");
+      setError("MedicalDateDetailsController_missing_medical_dates_msg".tr);
     }
   }
 
@@ -61,7 +38,7 @@ class MedicalDateDetailsController extends GetxController
         SessionManager.uId,
         "medical_dates",
         medicalDate?.id ?? ""
-      ], fromMap: (e) => MedicalDatesModel.fromJson(e));
+      ], fromDocument: MedicalDatesModel.fromDocument);
       if (date?.isEmpty ?? true) {
         setEmpty();
       } else {
@@ -69,7 +46,25 @@ class MedicalDateDetailsController extends GetxController
         setSuccess();
       }
     } catch (_) {
-      setError("Failed to fetch medical date details");
+      setError("MedicalDateDetailsController_fetch_failed_msg".tr);
+    }
+  }
+
+  Future updateState() async {
+    setLoading();
+    try {
+      var data = medicalDate!.copyWith(
+        state: MedicalDateStateEnum.completed.label,
+      );
+      await AppConstant.fireStoreHelper.updateData(path: [
+        "users",
+        SessionManager.uId,
+        "medical_dates",
+        medicalDate?.id ?? ""
+      ], date: data.toMap());
+      await fetchDate();
+    } catch (_) {
+      setError("MedicalDateDetailsController_state_update_failed_msg".tr);
     }
   }
 }

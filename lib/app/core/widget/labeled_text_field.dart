@@ -5,10 +5,13 @@ class LabeledTextField extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType? keyboardType;
   final bool readOnly;
+  final bool obscureText;
   final Function(String)? onChanged;
   final VoidCallback? onTap;
   final String? errorText;
   final double? fontSize;
+  final double? borderRadius;
+  final TextStyle? labelStyle;
 
   const LabeledTextField({
     super.key,
@@ -16,10 +19,13 @@ class LabeledTextField extends StatelessWidget {
     required this.controller,
     this.keyboardType,
     this.readOnly = false,
+    this.obscureText = false,
     this.onChanged,
     this.onTap,
     this.errorText,
     this.fontSize,
+    this.borderRadius,
+    this.labelStyle,
   });
 
   @override
@@ -42,6 +48,9 @@ class LabeledTextField extends StatelessWidget {
           onChanged: (value) => onChanged?.call(value),
           onTap: onTap,
           errorText: errorText,
+          radius: borderRadius,
+          obscureText: obscureText,
+          labelStyle: labelStyle,
         ),
         8.sbh,
       ],

@@ -3,7 +3,7 @@ import 'package:baby_vax/app/core/imports/import_manger.dart';
 class AppButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String text;
-  final Color color;
+  final Color? color;
   final double? radius;
   final double? minWidth;
   final double? minHeight;
@@ -12,21 +12,24 @@ class AppButton extends StatelessWidget {
       {super.key,
       required this.text,
       this.onPressed,
-      this.color = AppColors.primary,
+      this.color,
       this.radius,
       this.minWidth,
       this.minHeight});
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    final bool isDark = context.isDarkMode;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
+            elevation: 0.3,
             minimumSize: Size(minWidth ?? double.infinity, minHeight ?? 50),
-            backgroundColor: color,
+            backgroundColor: color ??
+                (isDark ? AppColors.buttonDark : AppColors.buttonLight),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(radius ?? 20))),
         child: Padding(
@@ -34,7 +37,7 @@ class AppButton extends StatelessWidget {
           child: AppText(
             text: text,
             style: AppTextStyles.headLineSmall
-                .copyWith(color: AppColors.backgroundLight, fontSize: 22),
+                .copyWith(color: AppColors.primary, fontSize: 22),
           ),
         ),
       ),

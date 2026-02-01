@@ -1,3 +1,5 @@
+import 'package:baby_vax/app/core/imports/import_library.dart';
+
 enum AlertType{
 error,
 fieldRequired,
@@ -10,13 +12,13 @@ customWithThirdAction;
 String get title{
 switch(this){
   case AlertType.error :
-    return "Error";
+    return "error".tr;
   case AlertType.attention :
-    return "Attention";
+    return "attention".tr;
   case AlertType.success :
-    return "Success";
+    return "success".tr;
   case AlertType.fieldRequired :
-    return "Error";
+    return "error".tr;
   case AlertType.yesOrNo :
     return "";
   case AlertType.customWithSingleAction:
