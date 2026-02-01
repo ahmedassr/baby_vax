@@ -28,7 +28,35 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
+    return ScreenUtilInit(
+      designSize: const Size(414, 896),
+      builder: (context, _) {
+        return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          initialBinding: AppBinding(),
+          title: "Baby Vax",
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          initialRoute: AppRoutes.splash,
+          getPages: AppPages.routes,
+          locale: Locale(currentLanguage),
+          fallbackLocale: Locale(currentLanguage),
+          supportedLocales: const [
+            Locale("en"),
+            Locale("ar"),
+          ],
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          translations: AppTranslations(),
+        );
+      },
+    );
+
+    /*return FutureBuilder<bool>(
         future: _checkLoginState(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -47,7 +75,7 @@ class MyApp extends StatelessWidget {
                 theme: AppTheme.lightTheme,
                 darkTheme: AppTheme.darkTheme,
                 themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-                initialRoute: isLoggedIn ? AppRoutes.mainMenu : AppRoutes.login,
+                initialRoute: AppRoutes.splash,
                 getPages: AppPages.routes,
                 locale: Locale(currentLanguage),
                 fallbackLocale: Locale(currentLanguage),
@@ -64,11 +92,11 @@ class MyApp extends StatelessWidget {
               );
             },
           );
-        });
+        });*/
   }
 
-  Future<bool> _checkLoginState() {
-    return Future.value(
-        AppConstant.getStorage.read(AppConstant.isLoginKey) ?? false);
-  }
+  // Future<bool> _checkLoginState() {
+  //   return Future.value(
+  //       AppConstant.getStorage.read(AppConstant.isLoginKey) ?? false);
+  // }
 }
