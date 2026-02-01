@@ -7,7 +7,6 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
 
   @override
   Widget build(BuildContext context) {
-
     return controller.obx(
       (dates) {
         final hasDates = dates != null && dates.isNotEmpty;
@@ -67,8 +66,11 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
         message: error,
         animationPath: AppAnimations.noRecords,
       ),
-      onEmpty: const AppEmptyState(
-        animationPath: AppAnimations.noRecords,
+      onEmpty: Center(
+        child: AppEmptyState(
+          message: "TipsView_empty_state_text".tr,
+          animationPath: AppAnimations.noRecords,
+        ),
       ),
     );
   }

@@ -60,8 +60,11 @@ class HomeView extends GetView<HomeController> {
         message: error,
         animationPath: AppAnimations.noRecords,
       ),
-      onEmpty: const AppEmptyState(
-        animationPath: AppAnimations.noRecords,
+      onEmpty: Center(
+        child: AppEmptyState(
+          message: "TipsView_empty_state_text".tr,
+          animationPath: AppAnimations.noRecords,
+        ),
       ),
     );
   }
