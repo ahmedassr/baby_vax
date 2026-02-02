@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class AppTheme {
   static final String fontFamily = GoogleFonts.cairo().fontFamily ?? "Arial";
 
+  // Text Theme
   static TextTheme getTextTheme(Color textColor) => TextTheme(
         displayLarge: AppTextStyles.headLineLarge.copyWith(color: textColor),
         bodyLarge: AppTextStyles.bodyLarge.copyWith(color: textColor),
@@ -12,11 +13,13 @@ class AppTheme {
         labelLarge: AppTextStyles.textLarge.copyWith(color: textColor),
       );
 
+  // Elevated Button Style
   static ButtonStyle getElevatedButtonStyle() => ElevatedButton.styleFrom(
         backgroundColor: AppColors.secondPrimary,
         textStyle: AppTextStyles.textLarge,
       );
 
+  // Light Mode
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     fontFamily: fontFamily,
@@ -27,6 +30,7 @@ class AppTheme {
         ElevatedButtonThemeData(style: getElevatedButtonStyle()),
   );
 
+  // Dark Mode
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     fontFamily: fontFamily,

@@ -1,12 +1,13 @@
+import 'package:baby_vax/app/config/constant/app_path.dart';
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class NotificationCoordinator extends GetxService {
   NotificationService _notificationService = Get.find<NotificationService>();
 
-  NotificationCoordinator({NotificationService? service})
-      : _notificationService = service ?? Get.find<NotificationService>();
+  NotificationCoordinator()
+      : _notificationService = Get.find<NotificationService>();
 
-  // طريقة للاختبار لتغيير الخدمة
+  /// For Test
   void overrideNotificationService(NotificationService service) {
     _notificationService = service;
   }
@@ -23,7 +24,8 @@ class NotificationCoordinator extends GetxService {
     required DateTime date,
   }) async {
     try {
-      DateTime mainDate = DateTime(date.year, date.month, date.day, 9);
+      DateTime mainDate = DateTime(
+          date.year, date.month, date.day, AppConstant.morningReminderHour);
       final difference = mainDate.difference(DateTime.now());
       if (mainDate.isBefore(DateTime.now())) {
         if (difference.inDays == 0) {
@@ -52,8 +54,8 @@ class NotificationCoordinator extends GetxService {
           id: '$vaccineId-advance',
           title: '📅 تذكير مسبق',
           body: '👶 $userName\nغذا موعد تطعيم:\n$vaccineName',
-          scheduledAt:
-              DateTime(dayBefore.year, dayBefore.month, dayBefore.day, 18));
+          scheduledAt: DateTime(dayBefore.year, dayBefore.month, dayBefore.day,
+              AppConstant.eveningReminderHour));
 
       await _notificationService.schedule(advance);
       logger.i(
@@ -89,13 +91,16 @@ class NotificationCoordinator extends GetxService {
       logger.i('🔄 Rescheduling all vaccine notifications for user [$userId]');
       await _notificationService.cancelAll();
 
-      final vaccines =
-          await AppConstant.fireStoreHelper.fetchData<MedicalDatesModel>(
-        path: ['users', userId, 'medical_dates'],
-        fromDocument: MedicalDatesModel.fromDocument,
-      );
+      // final vaccines =
+      //     await AppConstant.fireStoreHelper.fetchData<MedicalDatesModel>(
+      //   path: ['users', userId, 'medical_dates'],
+      //   fromDocument: MedicalDatesModel.fromDocument,
+      // );
+      final vaccines = await AppConstant.fireStoreHelper1.getCollection(
+          path: AppPath.userMedicalDates(userId),
+          fromDoc: MedicalDatesModel.fromDocument);
 
-      if (vaccines == null || vaccines.isEmpty) {
+      if (vaccines.isEmpty) {
         logger.w('⚠️ No vaccines found for user [$userId]');
         return;
       }

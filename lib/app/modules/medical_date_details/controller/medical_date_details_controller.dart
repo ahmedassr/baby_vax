@@ -1,3 +1,5 @@
+import 'package:baby_vax/app/config/constant/app_path.dart';
+
 import '../../../core/imports/import_manger.dart';
 
 class MedicalDateDetailsController extends GetxController
@@ -33,16 +35,20 @@ class MedicalDateDetailsController extends GetxController
   Future fetchDate() async {
     setLoading();
     try {
-      final date = await AppConstant.fireStoreHelper.fetchData(path: [
-        "users",
-        SessionManager.uId,
-        "medical_dates",
-        medicalDate?.id ?? ""
-      ], fromDocument: MedicalDatesModel.fromDocument);
-      if (date?.isEmpty ?? true) {
+      // final date = await AppConstant.fireStoreHelper.fetchData(path: [
+      //   "users",
+      //   SessionManager.uId,
+      //   "medical_dates",
+      //   medicalDate?.id ?? ""
+      // ], fromDocument: MedicalDatesModel.fromDocument);
+      final data = await AppConstant.fireStoreHelper1.getDocument(
+          path:
+              "${AppPath.userMedicalDates(SessionManager.uId)}/${medicalDate?.id}",
+          fromDoc: MedicalDatesModel.fromDocument);
+      if (data == null) {
         setEmpty();
       } else {
-        medicalDate = date?.first;
+        medicalDate = data;
         setSuccess();
       }
     } catch (_) {
@@ -56,12 +62,17 @@ class MedicalDateDetailsController extends GetxController
       var data = medicalDate!.copyWith(
         state: MedicalDateStateEnum.completed.label,
       );
-      await AppConstant.fireStoreHelper.updateData(path: [
-        "users",
-        SessionManager.uId,
-        "medical_dates",
-        medicalDate?.id ?? ""
-      ], date: data.toMap());
+      // await AppConstant.fireStoreHelper.updateData(path: [
+      //   "users",
+      //   SessionManager.uId,
+      //   "medical_dates",
+      //   medicalDate?.id ?? ""
+      // ], date: data.toMap());
+      await AppConstant.fireStoreHelper1.updateData(
+          path:
+              "${AppPath.userMedicalDates(SessionManager.uId)}/${medicalDate?.id}",
+          data: data.toMap());
+
       await fetchDate();
     } catch (_) {
       setError("MedicalDateDetailsController_state_update_failed_msg".tr);

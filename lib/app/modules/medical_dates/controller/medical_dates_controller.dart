@@ -1,3 +1,4 @@
+import 'package:baby_vax/app/config/constant/app_path.dart';
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class MedicalDatesController extends GetxController
@@ -19,15 +20,18 @@ class MedicalDatesController extends GetxController
   Future fetchMedicalDates() async {
     setLoading();
     try {
-      final medicalDates = await AppConstant.fireStoreHelper.fetchData(
-          path: ["users", SessionManager.uId, "medical_dates"],
-          queryBuilder: (q) => q.orderBy('date'),
-          fromDocument: MedicalDatesModel.fromDocument);
-      if (medicalDates?.isEmpty ?? true) {
+      // final medicalDates = await AppConstant.fireStoreHelper.fetchData(
+      //     path: ["users", SessionManager.uId, "medical_dates"],
+      //     queryBuilder: (q) => q.orderBy('date'),
+      //     fromDocument: MedicalDatesModel.fromDocument);
+      final medicalDates = await AppConstant.fireStoreHelper1.getCollection(
+          path: AppPath.userMedicalDates(SessionManager.uId),
+          fromDoc: MedicalDatesModel.fromDocument);
+      if (medicalDates.isEmpty) {
         setEmpty();
       } else {
         setSuccess(medicalDates);
-        await updateMedicalDateStatus(medicalDates!);
+        await updateMedicalDateStatus(medicalDates);
       }
     } catch (_) {
       setError("MedicalDatesController_fetch_failed".tr);
@@ -35,13 +39,20 @@ class MedicalDatesController extends GetxController
   }
 
   Future updateMedicalDateStatus(List<MedicalDatesModel> medicalDates) async {
-    final futures = medicalDates.where((m)=> m.date.isBefore(DateTime.now()) &&
-        m.state == MedicalDateStateEnum.pending.label).map((m){
-          final docId = m.id;
-          if(docId == null) return null;
-        return AppConstant.fireStoreHelper.updateData(
-              path: ["users", SessionManager.uId, "medical_dates", docId],
-              date: {'state': MedicalDateStateEnum.skipped.label});
+    final futures = medicalDates
+        .where((m) =>
+            m.date.isBefore(DateTime.now()) &&
+            m.state == MedicalDateStateEnum.pending.label)
+        .map((m) {
+      final docId = m.id;
+      if (docId == null) return null;
+      // return AppConstant.fireStoreHelper.updateData(
+      //     path: ["users", SessionManager.uId, "medical_dates", docId],
+      //     date: {'state': MedicalDateStateEnum.skipped.label});
+
+      return AppConstant.fireStoreHelper1.updateData(
+          path: "${AppPath.userMedicalDates(SessionManager.uId)}/$docId",
+          data: {'state': MedicalDateStateEnum.skipped.label});
     }).whereType<Future>();
     await Future.wait(futures);
   }
