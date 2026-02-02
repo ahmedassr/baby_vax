@@ -1,6 +1,4 @@
-import 'package:baby_vax/app/config/constant/app_constant.dart';
-import 'package:baby_vax/app/core/imports/import_library.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:flutter/foundation.dart';
 
 class RefreshableListBuilder extends StatelessWidget {
@@ -31,7 +29,7 @@ class RefreshableListBuilder extends StatelessWidget {
           CupertinoSliverRefreshControl(onRefresh: onRefresh!)
         ],
         SliverPadding(
-          padding: padding ?? AppConstant.columnPadding,
+          padding: padding ?? AppSpacing.columnPadding,
           sliver: SliverList(
               delegate: SliverChildBuilderDelegate(itemBuilder,
                   childCount: itemCount)),

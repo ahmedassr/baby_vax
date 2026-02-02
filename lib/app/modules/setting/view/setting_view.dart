@@ -11,7 +11,7 @@ class SettingsView extends GetView<SettingsController> {
   Widget build(BuildContext context) {
     Get.lazyPut<SettingsController>(() => SettingsController());
     return Padding(
-      padding: AppConstant.columnPadding,
+      padding: AppSpacing.columnPadding,
       child: ListView(
         physics: const BouncingScrollPhysics(),
         children: [

@@ -12,7 +12,7 @@ class LoginView extends GetView<LoginController> {
       backgroundColor:
           isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       bottomNavigationBar: SafeArea(
-        minimum: AppConstant.buttonPadding,
+        minimum: AppSpacing.buttonPadding,
         child: AppButton(
           onPressed: () => controller.userLogin(),
           text: "LoginView_login_title".tr,

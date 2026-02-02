@@ -1,6 +1,4 @@
-import 'package:baby_vax/app/core/imports/import_library.dart';
-import 'package:baby_vax/app/config/constant/app_constant.dart';
-import 'package:baby_vax/app/core/routes/app_routes.dart';
+import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class SplashController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -18,7 +16,7 @@ class SplashController extends GetxController
   }
 
   Future<void> _init() async {
-    isLoggedIn = AppConstant.getStorage.read(AppConstant.isLoginKey) ?? false;
+    isLoggedIn = AppConstant.getStorage.read(StorageKey.isLoginKey) ?? false;
 
     animationController = AnimationController(
       vsync: this,

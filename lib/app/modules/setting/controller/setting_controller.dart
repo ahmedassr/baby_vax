@@ -19,7 +19,7 @@ class SettingsController extends GetxController {
 
   Future<void> loadThemePreference() async {
     bool savedTheme =
-        AppConstant.getStorage.read(AppConstant.isDarkModeKey) ?? false;
+        AppConstant.getStorage.read(StorageKey.isDarkModeKey) ?? false;
     isDarkMode.value = savedTheme;
     Get.changeThemeMode(savedTheme ? ThemeMode.dark : ThemeMode.light);
   }
@@ -27,14 +27,14 @@ class SettingsController extends GetxController {
   Future<void> toggleDarkMode(bool value) async {
     isDarkMode(value);
     Get.changeThemeMode(value ? ThemeMode.dark : ThemeMode.light);
-    await AppConstant.getStorage.write(AppConstant.isDarkModeKey, value);
+    await AppConstant.getStorage.write(StorageKey.isDarkModeKey, value);
   }
 
   void onLogout() {
     AppConstant.alertService.showAlert(AlertModel.attention(
         message: "SettingsController_logout_alert_msg".tr,
         yesAction: () async {
-          await AppConstant.getStorage.write(AppConstant.isLoginKey, false);
+          await AppConstant.getStorage.write(StorageKey.isLoginKey, false);
           await Get.find<NotificationService>().cancelAll();
           await FirebaseAuth.instance.signOut();
           await Get.find<OneSingleNotificationProvider>().logout();
@@ -50,6 +50,6 @@ class SettingsController extends GetxController {
     Locale newLocale = newLang == "ar" ? const Locale('ar', 'SA') : const Locale('en', 'US');
     Get.updateLocale(newLocale);
     currentLanguage.value = newLang;
-    await AppConstant.getStorage.write(AppConstant.languageKey, newLang);
+    await AppConstant.getStorage.write(StorageKey.languageKey, newLang);
   }
 }

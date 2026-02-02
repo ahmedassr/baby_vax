@@ -26,7 +26,7 @@ class AppListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: padding ?? AppConstant.listItemPadding,
+      padding: padding ?? AppSpacing.listItemPadding,
       child: InkWell(
         onTap: onTap,
         child: ListTile(
@@ -38,7 +38,7 @@ class AppListItem extends StatelessWidget {
           tileColor: context.isDarkMode
               ? Colors.black.withValues(alpha: 0.2)
               : Colors.white,
-          contentPadding: AppConstant.listItemPadding,
+          contentPadding: AppSpacing.listItemPadding,
           leading: CircleAvatar(
             backgroundColor: AppColors.primary.withValues(alpha: 0.9),
             radius: 24,

@@ -1,4 +1,4 @@
-import 'package:baby_vax/app/core/utils/medical_dates_generator.dart';
+import 'package:baby_vax/app/core/service/medical_dates_generator.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/imports/import_manger.dart';
 import '../../../../core/notification/data/onesignal_notification_provider.dart';
@@ -194,8 +194,8 @@ class SignupController extends GetxController
         }
       }
       SessionManager.uId = user.uid;
-      await AppConstant.getStorage.write(AppConstant.isLoginKey, true);
-      await AppConstant.getStorage.write(AppConstant.uidKey, user.uid);
+      await AppConstant.getStorage.write(StorageKey.isLoginKey, true);
+      await AppConstant.getStorage.write(StorageKey.uidKey, user.uid);
       await AppConstant.fireStoreHelper.updateFcmToken();
       await Get.find<OneSingleNotificationProvider>()
           .setUser(SessionManager.uId);

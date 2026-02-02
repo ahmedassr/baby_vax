@@ -1,4 +1,4 @@
-import 'package:baby_vax/app/config/constant/app_colors.dart';
+import 'package:baby_vax/app/config/themes/app_colors.dart';
 import 'package:baby_vax/app/config/themes/app_text_style.dart';
 import 'package:baby_vax/app/core/imports/import_library.dart';
 

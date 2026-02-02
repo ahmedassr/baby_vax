@@ -12,7 +12,7 @@ class SearchOnTips extends GetView<TipsController> {
     return Scaffold(
       appBar: const CustomAppBar(title: "Search Tips"),
       body: Padding(
-        padding: AppConstant.columnPadding,
+        padding: AppSpacing.columnPadding,
         child: Column(
           children: [
             LabeledTextField(

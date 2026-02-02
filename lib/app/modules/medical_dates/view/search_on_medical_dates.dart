@@ -10,7 +10,7 @@ class SearchOnMedicalDates extends GetView<MedicalDatesController> {
     return Scaffold(
       appBar:  CustomAppBar(title: "SearchOnMedicalDates_title".tr),
       body: Padding(
-        padding: AppConstant.columnPadding,
+        padding: AppSpacing.columnPadding,
         child: controller.obx(
           (state) => Column(
             children: [

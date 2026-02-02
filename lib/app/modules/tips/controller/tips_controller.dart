@@ -15,7 +15,7 @@ class TipsController extends GetxController
     setLoading();
     try {
       final currentLanguage =
-          AppConstant.getStorage.read(AppConstant.languageKey) ?? "en";
+          AppConstant.getStorage.read(StorageKey.languageKey) ?? "en";
       var collection = currentLanguage == "en" ? "tips_en" : "tips";
       final tips = await AppConstant.fireStoreHelper
           .fetchData(path: [collection], fromDocument: TipsModel.fromDocument);
