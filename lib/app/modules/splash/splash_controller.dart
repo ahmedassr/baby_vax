@@ -26,7 +26,7 @@ class SplashController extends GetxController
     );
 
     logoSlide = Tween<Offset>(
-      begin: const Offset(0, 4),
+      begin: const Offset(0, 2),
       end: Offset.zero,
     ).animate(
       CurvedAnimation(
