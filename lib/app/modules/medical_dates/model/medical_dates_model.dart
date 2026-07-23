@@ -1,5 +1,4 @@
 import 'package:baby_vax/app/core/imports/import_library.dart';
-import 'package:baby_vax/app/core/values/app_enum/medical_date_state_enum.dart';
 
 class MedicalDatesModel {
   final String name;

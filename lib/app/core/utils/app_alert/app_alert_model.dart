@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:baby_vax/app/core/imports/import_library.dart';
 
 import 'alert_type_enum.dart';
@@ -30,7 +28,7 @@ class AlertModel {
   });
 
   factory AlertModel.error(
-          {required String message, VoidCallback? yesAction}) =>
+      {required String message, VoidCallback? yesAction}) =>
       AlertModel._(
           type: AlertType.error,
           title: AlertType.error.title,
@@ -38,7 +36,7 @@ class AlertModel {
           yesAction: yesAction);
 
   factory AlertModel.success(
-          {required String message, VoidCallback? yesAction}) =>
+      {required String message, VoidCallback? yesAction}) =>
       AlertModel._(
           type: AlertType.success,
           title: AlertType.success.title,
@@ -46,7 +44,7 @@ class AlertModel {
           yesAction: yesAction);
 
   factory AlertModel.fieldRequired(
-          {required String fieldName, VoidCallback? yesAction}) =>
+      {required String fieldName, VoidCallback? yesAction}) =>
       AlertModel._(
           type: AlertType.fieldRequired,
           title: AlertType.fieldRequired.title,
@@ -54,9 +52,9 @@ class AlertModel {
           yesAction: yesAction);
 
   factory AlertModel.attention(
-          {required String message,
-          VoidCallback? yesAction,
-          VoidCallback? noAction}) =>
+      {required String message,
+        VoidCallback? yesAction,
+        VoidCallback? noAction}) =>
       AlertModel._(
           type: AlertType.attention,
           title: AlertType.attention.title,
@@ -84,4 +82,29 @@ class AlertModel {
           yesButtonText: yesButtonText,
           noAction: noAction,
           noButtonText: noButtonText);
+
+  factory AlertModel.custom({
+    required AlertType type,
+    String? title,
+    String? message,
+    String? imagePath,
+    String? yesButtonText,
+    String? noButtonText,
+    String? additionalButtonText,
+    VoidCallback? yesAction,
+    VoidCallback? noAction,
+    VoidCallback? additionalAction,
+  }) =>
+      AlertModel._(
+        type: type,
+        title: title,
+        message: message,
+        imagePath: imagePath,
+        yesButtonText: yesButtonText,
+        noButtonText: noButtonText,
+        additionalButtonText: additionalButtonText,
+        yesAction: yesAction,
+        noAction: noAction,
+        additionalAction: additionalAction,
+      );
 }

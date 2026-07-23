@@ -1,5 +1,4 @@
 import 'package:baby_vax/app/config/themes/app_colors.dart';
-import 'package:baby_vax/app/config/constant/app_constant.dart';
 import 'package:baby_vax/app/core/imports/import_library.dart';
 import 'package:shimmer/shimmer.dart';
 
