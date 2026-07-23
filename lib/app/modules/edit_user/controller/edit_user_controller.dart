@@ -51,7 +51,10 @@ class EditUserController extends GetxController
 
       Get.find<HomeController>().fetchUserData();
       setSuccess();
-      Get.back();
+      AppConstant.alertService.showAlert(AlertModel.success(
+        message: "SignupController_updated_user_success_msg".tr,
+        yesAction: Get.back,
+      ));
     } catch (_) {
       setError("EditUserController_update_user_failed".tr);
     }

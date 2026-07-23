@@ -41,6 +41,7 @@ Map<String, String> en = {
   "SignupController_create_user_failed_msg":
       "Failed to create user profile. Please try again.",
   "SignupController_create_user_success_msg": "User created successfully.",
+  "SignupController_updated_user_success_msg": "User updated successfully.",
   // View
   "SignupView_sign_up_title": "Sign Up",
   "SignupView_sign_up_hint": "Create an account for your baby care journey",

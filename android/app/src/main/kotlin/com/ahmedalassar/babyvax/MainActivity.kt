@@ -1,4 +1,4 @@
-package com.example.baby_vax
+package com.ahmedalassar.babyvax
 
 import io.flutter.embedding.android.FlutterActivity
 
