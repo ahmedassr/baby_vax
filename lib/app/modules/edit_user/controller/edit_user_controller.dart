@@ -1,3 +1,4 @@
+import 'package:baby_vax/app/config/constant/app_path.dart';
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/modules/home/controller/home_controller.dart';
 
@@ -45,12 +46,15 @@ class EditUserController extends GetxController
             editUserController["bloodPercentage"]?.text.trim() ?? "",
         headSize: editUserController["headSize"]?.text.trim() ?? "",
       );
-      await AppConstant.fireStoreHelper.updateData(
-          path: ["users", SessionManager.uId], date: updatedUser.toMap());
+      await AppConstant.fireStoreHelper1
+          .updateData(path: AppPath.currentUserDoc, data: updatedUser.toMap());
 
       Get.find<HomeController>().fetchUserData();
       setSuccess();
-      Get.back();
+      AppConstant.alertService.showAlert(AlertModel.success(
+        message: "SignupController_updated_user_success_msg".tr,
+        yesAction: Get.back,
+      ));
     } catch (_) {
       setError("EditUserController_update_user_failed".tr);
     }

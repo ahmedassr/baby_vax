@@ -26,7 +26,7 @@ class NotificationInitializer {
     await Get.find<OneSingleNotificationProvider>().initialize();
     FirebaseMessaging.instance.onTokenRefresh.listen((token) {
       if (SessionManager.uId.isNotEmpty) {
-        AppConstant.fireStoreHelper.updateFcmToken(token: token);
+        AppConstant.notificationService.updateFcmToken(token: token);
       }
     });
   }

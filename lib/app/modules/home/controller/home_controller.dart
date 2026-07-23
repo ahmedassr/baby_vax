@@ -1,3 +1,4 @@
+import 'package:baby_vax/app/config/constant/app_path.dart';
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class HomeController extends GetxController with StateMixin, StateMixinHelper {
@@ -13,17 +14,26 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
   Future<void> getNextVaccination() async {
     final now = DateTime.now();
     final todayStart = DateTime(now.year, now.month, now.day);
-    final vaccinations =
-        await AppConstant.fireStoreHelper.fetchData<MedicalDatesModel>(
-      path: ["users", SessionManager.uId, "medical_dates"],
+    // final vaccinations =
+    //     await AppConstant.fireStoreHelper.fetchData<MedicalDatesModel>(
+    //   path: ["users", SessionManager.uId, "medical_dates"],
+    //   queryBuilder: (q) => q
+    //       .where('state', isEqualTo: MedicalDateStateEnum.pending.label)
+    //       .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart))
+    //       .orderBy('date')
+    //       .limit(1),
+    //   fromDocument: MedicalDatesModel.fromDocument,
+    // );
+    final vaccinations = await AppConstant.fireStoreHelper1.getCollection(
+      path: AppPath.userMedicalDates(SessionManager.uId),
+      fromDoc: MedicalDatesModel.fromDocument,
       queryBuilder: (q) => q
           .where('state', isEqualTo: MedicalDateStateEnum.pending.label)
           .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart))
           .orderBy('date')
           .limit(1),
-      fromDocument: MedicalDatesModel.fromDocument,
     );
-    nextVaccination.value = vaccinations?.firstOrNull;
+    nextVaccination.value = vaccinations.firstOrNull;
   }
 
   Future fetchUserData() async {
@@ -34,8 +44,10 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
     }
     setLoading();
     try {
-      final data = await AppConstant.fireStoreHelper
-          .getUser(uid: uid, fromDocument: (e) => UserModel.fromDocument(e));
+      // final data = await AppConstant.fireStoreHelper
+      //     .getUser(uid: uid, fromDocument: (e) => UserModel.fromDocument(e));
+      final data = await AppConstant.fireStoreHelper1.getDocument(
+          path: AppPath.currentUserDoc, fromDoc: UserModel.fromDocument);
       if (data == null) {
         setEmpty();
       } else {

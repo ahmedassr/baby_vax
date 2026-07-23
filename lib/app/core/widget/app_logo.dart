@@ -1,6 +1,7 @@
+import 'package:baby_vax/app/core/imports/import_core.dart';
 import 'package:baby_vax/app/core/imports/import_library.dart';
 
-import '../../config/constant/app_colors.dart';
+import '../../config/themes/app_colors.dart';
 
 class AppLogo extends StatelessWidget{
   const AppLogo({super.key});
@@ -14,7 +15,7 @@ class AppLogo extends StatelessWidget{
         ),
         padding: const EdgeInsets.all(18),
         child: const ImageIcon(
-          AssetImage("assets/appIcon.png"),
+          AssetImage(AppImage.appIcon),
           size: 100,
           color: AppColors.primary,
         )

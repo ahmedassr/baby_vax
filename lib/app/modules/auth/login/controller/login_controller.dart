@@ -41,10 +41,10 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
       final authResult = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       if (authResult.user != null) {
-       await AppConstant.getStorage.write(AppConstant.isLoginKey, true);
-       await AppConstant.getStorage.write(AppConstant.uidKey, authResult.user?.uid);
+       await AppConstant.getStorage.write(StorageKey.isLoginKey, true);
+       await AppConstant.getStorage.write(StorageKey.uidKey, authResult.user?.uid);
         SessionManager.uId = authResult.user?.uid ?? "";
-        await AppConstant.fireStoreHelper.updateFcmToken();
+        await AppConstant.notificationService.updateFcmToken();
         await Get.find<NotificationCoordinator>().rescheduleAllVaccines(
             userId: SessionManager.uId,
             userName: authResult.user?.displayName ?? "Your baby");

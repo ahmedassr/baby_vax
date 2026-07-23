@@ -1,3 +1,4 @@
+import 'package:baby_vax/app/config/constant/app_path.dart';
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class TipsController extends GetxController
@@ -15,11 +16,14 @@ class TipsController extends GetxController
     setLoading();
     try {
       final currentLanguage =
-          AppConstant.getStorage.read(AppConstant.languageKey) ?? "en";
-      var collection = currentLanguage == "en" ? "tips_en" : "tips";
-      final tips = await AppConstant.fireStoreHelper
-          .fetchData(path: [collection], fromDocument: TipsModel.fromDocument);
-      if (tips?.isEmpty ?? true) {
+          AppConstant.getStorage.read(StorageKey.languageKey) ?? "en";
+      var collection =
+          currentLanguage == "en" ? AppPath.tipsEnColl : AppPath.tipsColl;
+      // final tips = await AppConstant.fireStoreHelper
+      //     .fetchData(path: [collection], fromDocument: TipsModel.fromDocument);
+      final tips = await AppConstant.fireStoreHelper1
+          .getCollection(path: collection, fromDoc: TipsModel.fromDocument);
+      if (tips.isEmpty) {
         setEmpty();
         logger.w("empty");
       } else {

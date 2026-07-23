@@ -45,6 +45,7 @@ Map<String, String> ar = {
   "SignupController_create_user_failed_msg":
       "تعذّر إنشاء ملف المستخدم. يرجى المحاولة لاحقًا.",
   "SignupController_create_user_success_msg": "تم إنشاء الحساب بنجاح.",
+  "SignupController_updated_user_success_msg": "تم تحديث المستخدم بنجاح.",
 
   // View
   "SignupView_sign_up_title": "إنشاء حساب",

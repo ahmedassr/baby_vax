@@ -1,6 +1,6 @@
 import 'package:baby_vax/app/core/imports/import_library.dart';
 
-import '../../config/constant/app_colors.dart';
+import '../../config/themes/app_colors.dart';
 
 class AppLeadingIcon extends StatelessWidget {
   final IconData icon;

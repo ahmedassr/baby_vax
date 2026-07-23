@@ -1,5 +1,6 @@
-import 'package:baby_vax/app/core/utils/medical_dates_generator.dart';
+import 'package:baby_vax/app/core/service/medical_dates_generator.dart';
 import 'package:intl/intl.dart';
+import '../../../../config/constant/app_path.dart';
 import '../../../../core/imports/import_manger.dart';
 import '../../../../core/notification/data/onesignal_notification_provider.dart';
 import '../../../home/controller/home_controller.dart';
@@ -167,20 +168,29 @@ class SignupController extends GetxController
 
   Future<bool> _createUserProfile(UserModel user) async {
     try {
-      await AppConstant.fireStoreHelper
-          .createUser(uid: user.uid, userDate: user.toMap());
+      // await AppConstant.fireStoreHelper
+      //     .createUser(uid: user.uid, userDate: user.toMap());
+
+      await AppConstant.fireStoreHelper1
+          .setData(path: user.uid, data: user.toMap());
 
       logger.d("${user.birthday}");
 
       final generatedVaccines =
           MedicalDatesGenerator.generator(user.birthday ?? '');
-      final vaccines = await AppConstant.fireStoreHelper
-          .createDynamicPath<MedicalDatesModel>(
-        path: ["users", user.uid, "medical_dates"],
-        data: generatedVaccines,
-        toMap: (e) => e.toMap(),
-        attachId: (ref, model) => model.copyWith(id: ref.id),
-      );
+      final path = AppPath.userMedicalDates(user.uid);
+
+      final tasks = generatedVaccines.map((vaccine) {
+        return AppConstant.fireStoreHelper1.addDocument<MedicalDatesModel>(
+          path: path,
+          data: vaccine.toMap(),
+          fromDoc: (doc) => MedicalDatesModel.fromDocument(doc),
+        );
+      }).toList();
+
+      final List<MedicalDatesModel?> results = await Future.wait(tasks);
+      final vaccines = results.whereType<MedicalDatesModel>().toList();
+
       // Notification Schedule
       for (var vaccine in vaccines) {
         final date = vaccine.date;
@@ -194,9 +204,9 @@ class SignupController extends GetxController
         }
       }
       SessionManager.uId = user.uid;
-      await AppConstant.getStorage.write(AppConstant.isLoginKey, true);
-      await AppConstant.getStorage.write(AppConstant.uidKey, user.uid);
-      await AppConstant.fireStoreHelper.updateFcmToken();
+      await AppConstant.getStorage.write(StorageKey.isLoginKey, true);
+      await AppConstant.getStorage.write(StorageKey.uidKey, user.uid);
+      await AppConstant.notificationService.updateFcmToken();
       await Get.find<OneSingleNotificationProvider>()
           .setUser(SessionManager.uId);
       await Get.find<HomeController>().fetchUserData();

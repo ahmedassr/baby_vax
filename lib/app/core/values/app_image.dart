@@ -1,5 +1,5 @@
 class AppImage{
-
+  static const String appIcon = "assets/animations/no_records.json";
 }
 
 class AppAnimations{

@@ -18,7 +18,7 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
       body: controller.obx(
         (_) => SingleChildScrollView(
           child: Padding(
-            padding: AppConstant.columnPadding,
+            padding: AppSpacing.columnPadding,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

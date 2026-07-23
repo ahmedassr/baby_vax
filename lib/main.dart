@@ -1,4 +1,4 @@
-import 'package:baby_vax/app/core/binding/app_binding.dart';
+import 'package:baby_vax/app/core/app_binding.dart';
 import 'package:baby_vax/app/core/values/languages/app_translations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app/core/imports/import_manger.dart';
@@ -10,9 +10,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initAppService();
   final isDarkMode =
-      AppConstant.getStorage.read(AppConstant.isDarkModeKey) ?? false;
+      AppConstant.getStorage.read(StorageKey.isDarkModeKey) ?? false;
   final currentLanguage =
-      AppConstant.getStorage.read(AppConstant.languageKey) ?? "en";
+      AppConstant.getStorage.read(StorageKey.languageKey) ?? "en";
   runApp(MyApp(
     isDarkMode: isDarkMode,
     currentLanguage: currentLanguage,

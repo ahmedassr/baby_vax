@@ -13,7 +13,7 @@ class SignupView extends GetView<SignupController> {
           : const Color(0xFFFDFDFC),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: AppConstant.buttonPadding,
+          padding: AppSpacing.buttonPadding,
           child: AppButton(
             onPressed: () => controller.userSignup(),
             text: "SignupView_sign_up_title".tr,
@@ -25,7 +25,7 @@ class SignupView extends GetView<SignupController> {
         (_) => SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Padding(
-            padding: AppConstant.columnPadding
+            padding: AppSpacing.columnPadding
                 .copyWith(top: 0, left: 24, right: 24, bottom: 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

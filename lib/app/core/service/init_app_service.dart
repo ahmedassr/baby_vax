@@ -10,6 +10,6 @@ Future<void> initAppService() async {
   Get.lazyPut<GetStorageService>(() => GetStorageService());
   Get.lazyPut<FireStoreHelperService>(() => FireStoreHelperService());
   // Session
-  SessionManager.uId = AppConstant.getStorage.read(AppConstant.uidKey) ?? "";
+  SessionManager.uId = AppConstant.getStorage.read(StorageKey.uidKey) ?? "";
   logger.i('✅ App services initialized successfully');
 }
