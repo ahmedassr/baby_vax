@@ -56,11 +56,11 @@ jobs:
 
       # 9. بناء نسخة release موقعة (AAB - الصيغة المطلوبة لـ Google Play)
       - name: Build release AAB
-        run: flutter build appbundle --release
+        run: flutter build appbundle --release --build-number=${{ github.run_number }}
 
       # 10. بناء نسخة release APK أيضاً (مفيدة للتجربة اليدوية خارج Play Store)
       - name: Build release APK
-        run: flutter build apk --release
+        run: flutter build apk --release --build-number=${{ github.run_number }}
 
       # 11. حفظ النسختين الموقعتين كـ artifacts تقدر تنزلهم من صفحة الـ Action
       - name: Upload release AAB
