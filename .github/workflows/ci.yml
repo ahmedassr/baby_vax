@@ -22,7 +22,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.25.7'   # عدّلها لنفس نسخة Flutter اللي تستخدمها محلياً (flutter --version)
+          flutter-version: '3.35.7'   # نفس نسخة الجهاز المحلي (flutter --version)
           channel: 'stable'
           cache: true
 
