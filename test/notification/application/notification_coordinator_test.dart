@@ -18,7 +18,7 @@ void main() {
     });
 
     test('should schedule vaccine correctly', () async {
-      final date = DateTime.now().add(const Duration(days: 1));
+      final date = DateTime.now().add(const Duration(days: 3));
 
       await coordinator.scheduleVaccine(
         vaccineId: 'vax_1',
