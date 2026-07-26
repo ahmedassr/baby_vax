@@ -67,7 +67,7 @@ class SignupView extends GetView<SignupController> {
                         : Colors.white,
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(
-                      color: AppColors.primary.withOpacity(0.06),
+                      color: AppColors.primary.withValues(alpha:0.06),
                     ),
                   ),
                   padding:
@@ -169,7 +169,7 @@ class SignupView extends GetView<SignupController> {
                         : AppColors.white,
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(
-                      color: AppColors.primary.withOpacity(0.05),
+                      color: AppColors.primary.withValues(alpha:0.05),
                     ),
                   ),
                   padding:

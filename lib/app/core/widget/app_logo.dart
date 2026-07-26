@@ -11,7 +11,7 @@ class AppLogo extends StatelessWidget{
     return Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: AppColors.primary.withOpacity(0.08),
+          color: AppColors.primary.withValues(alpha:0.08),
         ),
         padding: const EdgeInsets.all(18),
         child: const ImageIcon(
