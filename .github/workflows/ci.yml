@@ -22,7 +22,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.7'   # عدّلها لنفس نسخة Flutter اللي تستخدمها محلياً (flutter --version)
+          flutter-version: '3.25.7'   # عدّلها لنفس نسخة Flutter اللي تستخدمها محلياً (flutter --version)
           channel: 'stable'
           cache: true
 
@@ -38,13 +38,39 @@ jobs:
       - name: Run tests
         run: flutter test
 
-      # 6. بناء نسخة APK (بدون توقيع release بعد - هاي مرحلة لاحقة)
+      # 6. بناء نسخة APK تجريبية (debug) - سريعة للتأكد إنه ما في كسور بالكود
       - name: Build APK (debug)
         run: flutter build apk --debug
 
-      # 7. حفظ الـ APK كـ artifact تقدر تنزله من صفحة الـ Action نفسها للفحص
-      - name: Upload APK artifact
+      # 7. إعادة بناء ملف الـ keystore من الـ secret (لا ينحفظ بالكود أبداً)
+      - name: Decode keystore
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/baby-vax-release-key.jks
+
+      # 8. إعادة بناء key.properties من الـ secrets وقت التنفيذ فقط
+      - name: Create key.properties
+        run: |
+          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" > android/key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
+          echo "storeFile=baby-vax-release-key.jks" >> android/key.properties
+
+      # 9. بناء نسخة release موقعة (AAB - الصيغة المطلوبة لـ Google Play)
+      - name: Build release AAB
+        run: flutter build appbundle --release
+
+      # 10. بناء نسخة release APK أيضاً (مفيدة للتجربة اليدوية خارج Play Store)
+      - name: Build release APK
+        run: flutter build apk --release
+
+      # 11. حفظ النسختين الموقعتين كـ artifacts تقدر تنزلهم من صفحة الـ Action
+      - name: Upload release AAB
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug-apk
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          name: app-release-aab
+          path: build/app/outputs/bundle/release/app-release.aab
+
+      - name: Upload release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
