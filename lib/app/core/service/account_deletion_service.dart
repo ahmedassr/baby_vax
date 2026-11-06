@@ -1,5 +1,4 @@
 import 'package:baby_vax/app/config/constant/app_path.dart';
-import 'package:baby_vax/app/config/session/session_manager.dart';
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 /// Why the account could not be deleted, so the UI can say something useful

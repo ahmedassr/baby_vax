@@ -16,7 +16,7 @@ class TipsHeader extends StatelessWidget {
           AppText(
             text: "TipsHeader_tips_title".tr,
             style: AppTextStyles.headLineSmall.copyWith(
-              color: colorScheme.onBackground,
+              color: colorScheme.onSurface,
             ),
           ),
           8.sbh,
@@ -24,7 +24,7 @@ class TipsHeader extends StatelessWidget {
             text: "TipsHeader_tips_hint".tr,
             maxLines: 3,
             style: AppTextStyles.bodyMedium.copyWith(
-              color: colorScheme.onSurface.withOpacity(0.7),
+              color: colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
           16.sbh,

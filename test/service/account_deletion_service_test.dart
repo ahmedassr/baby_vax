@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// so the ordering guarantees and the partial-failure behaviour are both
 /// testable without Firebase.
 class _FakeSteps implements AccountDeletionSteps {
-  _FakeSteps({this.uid = 'uid_1', this.email = 'parent@example.com'});
+  _FakeSteps({this.uid = 'uid_1'}) : email = 'parent@example.com';
 
   final String? uid;
   final String? email;

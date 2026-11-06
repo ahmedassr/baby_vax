@@ -34,7 +34,7 @@ class VaccinationCountBadge extends StatelessWidget {
       child: AppText(
         text: result.value != null
             ? "${result.value} ${result.status.name}"
-            : result.status.name ?? "",
+            : result.status.name,
         style: AppTextStyles.bodySmall.copyWith(
           fontWeight: FontWeight.w700,
           fontSize: 12,

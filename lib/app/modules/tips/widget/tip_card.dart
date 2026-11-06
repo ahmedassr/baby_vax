@@ -37,7 +37,7 @@ class TipCard extends StatelessWidget {
         ),
         child: Material(
           elevation: 2,
-          shadowColor: AppColors.black.withOpacity(0.08),
+          shadowColor: AppColors.black.withValues(alpha: 0.08),
           color: AppColors.transparent,
           borderRadius: BorderRadius.circular(16),
           child: InkWell(
@@ -66,7 +66,7 @@ class TipCard extends StatelessWidget {
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: AppTextStyles.bodyMedium.copyWith(
-                            color: colorScheme.onSurface.withOpacity(0.7),
+                            color: colorScheme.onSurface.withValues(alpha: 0.7),
                           ),
                         ),
                       ],

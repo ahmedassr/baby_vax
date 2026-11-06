@@ -1,6 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/utils/app_extension.dart';
-import 'package:baby_vax/app/core/widget/custom_app_bar.dart';
 
 class SearchOnMedicalDates extends GetView<MedicalDatesController> {
   const SearchOnMedicalDates({super.key});

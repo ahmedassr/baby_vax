@@ -13,7 +13,7 @@ class DetailCard extends StatelessWidget {
 
     return Material(
       elevation: 2,
-      shadowColor: Colors.black.withOpacity(0.08),
+      shadowColor: Colors.black.withValues(alpha: 0.08),
       color: colorScheme.surface,
       borderRadius: BorderRadius.circular(16),
       child: Padding(
@@ -64,7 +64,7 @@ class DetailCard extends StatelessWidget {
               text: description ?? "no_description".tr,
               maxLines: 30,
               style: AppTextStyles.bodyMedium.copyWith(
-                color: colorScheme.onSurface.withOpacity(0.8),
+                color: colorScheme.onSurface.withValues(alpha: 0.8),
                 height: 1.5,
               ),
             ),

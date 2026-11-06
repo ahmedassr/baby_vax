@@ -18,7 +18,7 @@ class MedicalDatesHeader extends StatelessWidget {
           AppText(
             text: "MedicalDatesHeader_medical_dates_label".tr,
             style: AppTextStyles.headLineSmall.copyWith(
-              color: colorScheme.onBackground,
+              color: colorScheme.onSurface,
             ),
           ),
           8.sbh,

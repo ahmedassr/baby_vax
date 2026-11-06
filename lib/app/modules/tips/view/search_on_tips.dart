@@ -1,6 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/utils/app_extension.dart';
-import 'package:baby_vax/app/core/widget/custom_app_bar.dart';
 import 'package:baby_vax/app/modules/tips/controller/tips_controller.dart';
 import 'package:baby_vax/app/modules/tips/view/tips_view.dart';
 

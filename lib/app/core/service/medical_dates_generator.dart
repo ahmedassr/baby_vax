@@ -12,8 +12,8 @@ class InvalidBirthDateException implements Exception {
 }
 
 /// One entry in the immunization schedule.
-class _ScheduleEntry {
-  const _ScheduleEntry({
+class VaccineScheduleEntry {
+  const VaccineScheduleEntry({
     required this.code,
     required this.months,
     required this.name,
@@ -55,68 +55,68 @@ class _ScheduleEntry {
 ///     move it onto the previous or next calendar day.
 class MedicalDatesGenerator {
   /// The routine schedule. Order is chronological.
-  static const List<_ScheduleEntry> schedule = <_ScheduleEntry>[
-    _ScheduleEntry(
+  static const List<VaccineScheduleEntry> schedule = <VaccineScheduleEntry>[
+    VaccineScheduleEntry(
       code: 'bcg_hepb_birth',
       months: 0,
       name: 'BCG and Hepatitis B (1st dose)',
       description:
           'Protects against tuberculosis and hepatitis B. Given at birth.',
     ),
-    _ScheduleEntry(
+    VaccineScheduleEntry(
       code: 'penta_opv_pcv_1',
       months: 2,
       name: 'First DTP-HepB-Hib, Polio and Pneumococcal',
       description:
           'Prevents diphtheria, tetanus, whooping cough, hepatitis B, Hib, polio, and pneumonia. Given at 2 months.',
     ),
-    _ScheduleEntry(
+    VaccineScheduleEntry(
       code: 'penta_opv_pcv_2',
       months: 4,
       name: 'Second DTP-HepB-Hib, Polio and Pneumococcal',
       description: 'Second dose to strengthen protection. Given at 4 months.',
     ),
-    _ScheduleEntry(
+    VaccineScheduleEntry(
       code: 'penta_opv_pcv_3',
       months: 6,
       name: 'Third DTP-HepB-Hib, Polio and Pneumococcal',
       description: 'Final primary dose of early vaccines. Given at 6 months.',
     ),
-    _ScheduleEntry(
+    VaccineScheduleEntry(
       code: 'measles_1',
       months: 9,
       name: 'Measles (1st dose)',
       description: 'Protects against measles. Given at 9 months.',
     ),
-    _ScheduleEntry(
+    VaccineScheduleEntry(
       code: 'mmr_varicella_pcv_booster',
       months: 12,
       name: 'MMR, Varicella and Pneumococcal Booster',
       description:
           'Protects against measles, mumps, rubella, chickenpox, and boosts pneumonia protection. Given at 12 months.',
     ),
-    _ScheduleEntry(
+    VaccineScheduleEntry(
       code: 'penta_opv_mmr_2_booster',
       months: 18,
       name: 'Booster DTP-HepB-Hib, Polio and MMR (2nd dose)',
       description:
           'Booster for earlier vaccines and second dose of MMR. Given at 18 months.',
     ),
-    _ScheduleEntry(
+    VaccineScheduleEntry(
       code: 'school_entry_boosters',
       months: 60, // 5 years
       name: 'School Entry Boosters: DTP + Polio + Varicella (2nd dose)',
       description:
           'Boosters to protect before school: diphtheria, tetanus, polio, chickenpox. Given around 5 years.',
     ),
-    _ScheduleEntry(
+    VaccineScheduleEntry(
       code: 'hpv',
       months: 132, // 11 years
       name: 'HPV Vaccine',
       description:
           'Protects against human papillomavirus. Given at age 10-12, mostly for girls (sometimes boys).',
     ),
-    _ScheduleEntry(
+    VaccineScheduleEntry(
       code: 'td_booster',
       months: 180, // 15 years
       name: 'Td Booster (Tetanus & Diphtheria)',
@@ -149,7 +149,7 @@ class MedicalDatesGenerator {
     final String pendingState = MedicalDateStateEnum.pending.label;
 
     return schedule
-        .map((_ScheduleEntry entry) => MedicalDatesModel(
+        .map((VaccineScheduleEntry entry) => MedicalDatesModel(
               code: entry.code,
               name: entry.name,
               description: entry.description,

@@ -58,7 +58,7 @@ class MedicalDatesModel {
   /// field, threw while parsing and took out the whole schedule screen.
   factory MedicalDatesModel._fromMap(Map<String, dynamic> data, String? id) {
     return MedicalDatesModel(
-      id: id as String?,
+      id: id,
       code: data['code'] as String?,
       name: (data['name'] as String?) ?? '',
       description: (data['description'] as String?) ?? '',

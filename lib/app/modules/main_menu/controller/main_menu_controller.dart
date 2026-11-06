@@ -27,7 +27,7 @@ class MainMenuController extends GetxController {
         title: "MainMenuController_settings_title", view: const SettingsView(), icon: Icons.settings),
   ];
 
-  void changeValue(index) {
+  void changeValue(int index) {
     currentIndex(index);
     switch (index) {
       case 0:

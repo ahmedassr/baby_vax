@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:baby_vax/app/core/imports/import_library.dart';
 
@@ -11,11 +10,13 @@ class AlertModel {
   final String? imagePath;
   final String? yesButtonText;
   final String? noButtonText;
-  final String? additionalButtonText;
   final VoidCallback? yesAction;
   final VoidCallback? noAction;
-  final VoidCallback? additionalAction;
 
+  // There was a third "additional" button here, plumbed through to
+  // AlertWidget, but no factory ever set it, so it could never render.
+  // Removed along with its branch in AlertWidget rather than kept as an
+  // unreachable parameter.
   AlertModel._({
     required this.type,
     this.title,
@@ -23,10 +24,8 @@ class AlertModel {
     this.imagePath,
     this.yesButtonText,
     this.noButtonText,
-    this.additionalButtonText,
     this.yesAction,
     this.noAction,
-    this.additionalAction,
   });
 
   factory AlertModel.error(
