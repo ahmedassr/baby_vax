@@ -5,6 +5,10 @@ Autonomous cloud run, 2026-11-06.
 
 ---
 
+STATUS: DONE
+
+PR: https://github.com/ahmedassr/baby_vax/pull/2
+
 ## Progress
 
 **2026-11-06 — run 1. All phases complete, and `main` merged in.**
