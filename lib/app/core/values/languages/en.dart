@@ -138,6 +138,12 @@ Map<String, String> en = {
   "VaccinationTimeStatusEnum_weeksLeft": "Weeks Left",
   "VaccinationTimeStatusEnum_monthsLeft": "Months Left",
   "VaccinationTimeStatusEnum_yearsLeft": "Years Left",
+  // Notifications:
+  "Notification_vaccine_today_title": "Vaccination due today",
+  "Notification_vaccine_today_body": "@child - today is the appointment for: @vaccine",
+  "Notification_vaccine_tomorrow_title": "Vaccination due tomorrow",
+  "Notification_vaccine_tomorrow_body": "@child - tomorrow is the appointment for: @vaccine",
+  "Notification_permission_denied_msg": "Notifications are turned off, so vaccine reminders will not appear. You can turn them on in your device settings.",
   // Medical Date State Enum:
   "Pending": "Pending",
   "Completed": "Completed",

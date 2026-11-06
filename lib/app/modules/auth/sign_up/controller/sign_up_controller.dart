@@ -170,10 +170,11 @@ class SignupController extends GetxController
       // await AppConstant.fireStoreHelper
       //     .createUser(uid: user.uid, userDate: user.toMap());
 
+      // Must be the full `users/<uid>` document path. This previously passed
+      // the bare uid, which is a single-segment path and not a valid document
+      // reference, while every read uses AppPath.currentUserDoc ("users/<uid>").
       await AppConstant.fireStoreHelper1
-          .setData(path: user.uid, data: user.toMap());
-
-      logger.d("${user.birthday}");
+          .setData(path: AppPath.userDoc(user.uid), data: user.toMap());
 
       final generatedVaccines =
           MedicalDatesGenerator.generator(user.birthday ?? '');
@@ -187,26 +188,30 @@ class SignupController extends GetxController
         );
       }).toList();
 
-      final List<MedicalDatesModel?> results = await Future.wait(tasks);
-      final vaccines = results.whereType<MedicalDatesModel>().toList();
+      await Future.wait(tasks);
 
-      // Notification Schedule
-      for (var vaccine in vaccines) {
-        final date = vaccine.date;
-        if (date.isAfter(DateTime.now())) {
-          await Get.find<NotificationCoordinator>().scheduleVaccine(
-            vaccineId: vaccine.id ?? "",
-            userName: user.name ?? "Your baby",
-            vaccineName: vaccine.name,
-            date: date,
-          );
-        }
-      }
       SessionManager.uId = user.uid;
       await AppConstant.getStorage.write(StorageKey.isLoginKey, true);
       await AppConstant.getStorage.write(StorageKey.uidKey, user.uid);
-      await AppConstant.notificationService.updateFcmToken();
+      await AppConstant.getStorage
+          .write(StorageKey.userNameKey, user.name ?? "");
       await Get.find<HomeController>().fetchUserData();
+
+      final NotificationCoordinator reminders =
+          Get.find<NotificationCoordinator>();
+      // Asked here, where the user has just created a schedule, so the prompt
+      // has visible context. Denial does not block sign-up.
+      final bool granted = await reminders.requestPermission();
+      // One sync instead of a per-vaccine loop: it goes through the same
+      // horizon and cap logic as every other sync, so sign-up cannot schedule
+      // all 15 years of reminders at once and hit Android's alarm limit.
+      await reminders.syncFromFirestore(
+        userId: user.uid,
+        userName: user.name ?? "Your baby",
+      );
+      if (!granted) {
+        logger.w('Notification permission denied during sign-up');
+      }
       AppConstant.alertService.showAlert(
         AlertModel.success(
           message: "SignupController_create_user_success_msg".tr,

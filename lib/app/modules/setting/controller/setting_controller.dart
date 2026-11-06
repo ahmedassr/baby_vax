@@ -34,7 +34,9 @@ class SettingsController extends GetxController {
         message: "SettingsController_logout_alert_msg".tr,
         yesAction: () async {
           await AppConstant.getStorage.write(StorageKey.isLoginKey, false);
-          await Get.find<NotificationService>().cancelAll();
+          // A signed-out device must not keep notifying about a child's
+          // schedule.
+          await Get.find<NotificationCoordinator>().cancelAllReminders();
           await FirebaseAuth.instance.signOut();
           SessionManager.uId = "";
           AppConstant.getStorage.clear();

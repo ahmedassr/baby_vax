@@ -152,6 +152,12 @@ Map<String, String> ar = {
   "VaccinationTimeStatusEnum_weeksLeft": " أسابيع متبقية",
   "VaccinationTimeStatusEnum_monthsLeft": " أشهر متبقية",
   "VaccinationTimeStatusEnum_yearsLeft": "سنوات متبقية",
+  // Notifications:
+  "Notification_vaccine_today_title": "موعد تطعيم اليوم",
+  "Notification_vaccine_today_body": "@child - اليوم موعد تطعيم: @vaccine",
+  "Notification_vaccine_tomorrow_title": "موعد تطعيم غداً",
+  "Notification_vaccine_tomorrow_body": "@child - غداً موعد تطعيم: @vaccine",
+  "Notification_permission_denied_msg": "الإشعارات مغلقة، لذلك لن تظهر تذكيرات التطعيم. يمكنك تشغيلها من إعدادات جهازك.",
   // Medical Date State Enum:
   "Pending": "قادم",
   "Completed": "مكتمل",

@@ -40,7 +40,6 @@ dependencies:
   firebase_core: ^5.1.0
   firebase_auth: ^7.0.1
   cloud_firestore: ^7.1.0
-  firebase_messaging: ^17.0.1
   flutter_launcher_icons: ^0.14.2
   smooth_page_indicator: ^3.0.0
   fluttertoast: ^10.0.2

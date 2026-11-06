@@ -11,7 +11,6 @@ export 'package:firebase_auth/firebase_auth.dart';
 export 'package:cloud_firestore/cloud_firestore.dart';
 // Notification
 export 'package:flutter_local_notifications/flutter_local_notifications.dart';
-export 'package:firebase_messaging/firebase_messaging.dart';
 
 
 //Get Storage

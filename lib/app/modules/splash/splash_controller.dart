@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class SplashController extends GetxController
@@ -17,6 +19,19 @@ class SplashController extends GetxController
 
   Future<void> _init() async {
     isLoggedIn = AppConstant.getStorage.read(StorageKey.isLoginKey) ?? false;
+
+    // Top up reminders on every start. Reminders are only scheduled for the
+    // next few months (see NotificationCoordinator.horizonMonths), so this is
+    // what extends them over the schedule's 15-year span. It also re-reads the
+    // device timezone, picking up travel and DST changes, and repairs a state
+    // where the OS dropped pending alarms.
+    //
+    // Deliberately not awaited: the splash animation and routing must not wait
+    // on Firestore, and a failure here is logged by the coordinator rather
+    // than blocking the user from opening the app.
+    if (isLoggedIn) {
+      unawaited(_syncReminders());
+    }
 
     animationController = AnimationController(
       vsync: this,
@@ -61,6 +76,20 @@ class SplashController extends GetxController
         isLoggedIn ? AppRoutes.mainMenu : AppRoutes.login,
       );
     });
+  }
+
+  /// Re-reads the device timezone and rebuilds reminders from Firestore.
+  Future<void> _syncReminders() async {
+    final String userId = SessionManager.uId;
+    if (userId.isEmpty) return;
+
+    final String userName =
+        AppConstant.getStorage.read(StorageKey.userNameKey) ?? "Your baby";
+
+    await Get.find<NotificationCoordinator>().onTimeZoneChanged(
+      userId: userId,
+      userName: userName,
+    );
   }
 
   @override

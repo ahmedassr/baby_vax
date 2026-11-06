@@ -43,11 +43,25 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
        await AppConstant.getStorage.write(StorageKey.isLoginKey, true);
        await AppConstant.getStorage.write(StorageKey.uidKey, authResult.user?.uid);
         SessionManager.uId = authResult.user?.uid ?? "";
-        await AppConstant.notificationService.updateFcmToken();
-        await Get.find<NotificationCoordinator>().rescheduleAllVaccines(
-            userId: SessionManager.uId,
-            userName: authResult.user?.displayName ?? "Your baby");
         await Get.find<HomeController>().fetchUserData();
+        // Cache the name so app-start reminder top-ups work offline.
+        await AppConstant.getStorage.write(
+            StorageKey.userNameKey, authResult.user?.displayName ?? "");
+
+        final NotificationCoordinator reminders =
+            Get.find<NotificationCoordinator>();
+        // Ask now rather than at cold start: the user has just signed in and a
+        // schedule exists, so the prompt has visible context.
+        final bool granted = await reminders.requestPermission();
+        await reminders.syncFromFirestore(
+          userId: SessionManager.uId,
+          userName: authResult.user?.displayName ?? "Your baby",
+        );
+        if (!granted) {
+          // Reminders stay scheduled; they just will not be shown until the
+          // user enables notifications in system settings.
+          logger.w('Notification permission denied after login');
+        }
         setSuccess();
         Get.toNamed(AppRoutes.mainMenu);
       } else {
