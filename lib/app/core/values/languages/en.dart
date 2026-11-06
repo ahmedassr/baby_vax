@@ -109,7 +109,6 @@ Map<String, String> en = {
   "AppSettingDarkModeSwitch_dark_mode_label": "Dark Mode",
   "AppSettingDarkModeSwitch_light_mode_label": "Light Mode",
 
-
   // Tip Details → Controller:
   "TipDetailsController_missing_tip_msg": "The current tip is missing",
   // View
@@ -138,6 +137,66 @@ Map<String, String> en = {
   "VaccinationTimeStatusEnum_weeksLeft": "Weeks Left",
   "VaccinationTimeStatusEnum_monthsLeft": "Months Left",
   "VaccinationTimeStatusEnum_yearsLeft": "Years Left",
+  "show": "Show",
+  "hide": "Hide",
+  // Medical disclaimer:
+  "MedicalDisclaimer_title": "This is not medical advice",
+  "MedicalDisclaimer_body":
+      "This schedule is for information only. Always follow your own doctor and your country's national immunization schedule, which may differ from what you see here.",
+  "MedicalDisclaimer_source":
+      "Based on the Palestinian Ministry of Health routine childhood schedule, which follows WHO EPI recommendations.",
+  // Errors:
+  "error_generic_msg": "Something went wrong. Please try again.",
+  "error_offline_msg":
+      "You appear to be offline. Your schedule is still available, but changes will not be saved until you reconnect.",
+  "error_email_already_in_use_msg": "That email is already registered.",
+  "error_invalid_email_msg": "That email address does not look right.",
+  "error_weak_password_msg":
+      "Your password is too simple. Please choose a stronger one.",
+  "error_invalid_credentials_msg":
+      "Incorrect email or password. Please try again.",
+  "error_user_disabled_msg": "This account has been disabled.",
+  "error_too_many_requests_msg":
+      "Too many attempts. Please wait a moment and try again.",
+  "error_session_expired_msg":
+      "Your session has expired. Please sign in again.",
+  "error_permission_denied_msg": "You do not have permission to do that.",
+  "error_not_found_msg": "We could not find that record.",
+  // Delete account:
+  "SettingsView_delete_account_label": "Delete account",
+  "DeleteAccount_title": "Delete your account",
+  "DeleteAccount_warning_msg":
+      "This permanently deletes your account, your child's profile and the whole vaccination schedule. Reminders will stop. This cannot be undone.",
+  "DeleteAccount_password_label": "Confirm your password",
+  "DeleteAccount_password_hint": "Password",
+  "DeleteAccount_confirm_button": "Delete permanently",
+  "DeleteAccount_cancel_button": "Keep my account",
+  "DeleteAccount_empty_password_msg": "Please enter your password to continue.",
+  "DeleteAccount_wrong_password_msg": "That password is not correct.",
+  "DeleteAccount_requires_recent_login_msg":
+      "For your security, please sign out, sign in again, and then delete your account.",
+  "DeleteAccount_network_error_msg":
+      "No connection. Deleting an account needs internet, so please try again when you are online.",
+  "DeleteAccount_not_signed_in_msg": "You are not signed in.",
+  "DeleteAccount_unknown_error_msg":
+      "Something went wrong and your account was not deleted. Please try again.",
+  "DeleteAccount_success_msg":
+      "Your account and all of its data have been deleted.",
+  // Birth date validation:
+  "invalid_date_of_birth_error_msg": "Please enter a valid date of birth.",
+  "future_date_of_birth_error_msg":
+      "The date of birth cannot be in the future.",
+  "too_old_date_of_birth_error_msg":
+      "This app covers the vaccination schedule up to age 18.",
+  // Notifications:
+  "Notification_vaccine_today_title": "Vaccination due today",
+  "Notification_vaccine_today_body":
+      "@child - today is the appointment for: @vaccine",
+  "Notification_vaccine_tomorrow_title": "Vaccination due tomorrow",
+  "Notification_vaccine_tomorrow_body":
+      "@child - tomorrow is the appointment for: @vaccine",
+  "Notification_permission_denied_msg":
+      "Notifications are turned off, so vaccine reminders will not appear. You can turn them on in your device settings.",
   // Medical Date State Enum:
   "Pending": "Pending",
   "Completed": "Completed",

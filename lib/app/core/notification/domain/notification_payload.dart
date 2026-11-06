@@ -6,9 +6,7 @@ class NotificationPayload {
 
   NotificationPayload(
       {required this.id,
-        required this.title,
-        required this.body,
-        required this.scheduledAt});
-
-
+      required this.title,
+      required this.body,
+      required this.scheduledAt});
 }

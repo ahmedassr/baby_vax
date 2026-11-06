@@ -1,0 +1,114 @@
+rules_version = '2';
+
+// Baby Vax Firestore security rules.
+//
+// Model: one Firebase Auth user == one child profile.
+//   users/{userId}                      - the child's profile
+//   users/{userId}/medical_dates/{id}   - that child's vaccination schedule
+//   tips/{id}, tips_en/{id}             - app content, read-only for clients
+//
+// Default is deny: the final catch-all rejects every path not named here, so a
+// collection added later is closed until its rules are written.
+//
+// There are no Cloud Functions in this project (the app is on the Spark plan),
+// so nothing writes with admin privileges. Every write comes from the signed-in
+// owner and is validated here.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---- helpers ----------------------------------------------------------
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // The only authorization rule that matters: a user may touch their own
+    // document subtree and nothing else.
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    // Guards against a client writing an unbounded blob into any string field.
+    function isShortString(value, maxLen) {
+      return value is string && value.size() <= maxLen;
+    }
+
+    function isOptionalShortString(data, field, maxLen) {
+      return !data.keys().hasAny([field]) ||
+             data[field] == null ||
+             isShortString(data[field], maxLen);
+    }
+
+    // ---- users ------------------------------------------------------------
+
+    function isValidUser(data) {
+      return data.keys().hasOnly([
+               'uid', 'email', 'birthday', 'name',
+               'height', 'weight', 'bloodPercentage', 'headSize'
+             ])
+             // uid must match the document id, so a profile cannot claim to be
+             // someone else's.
+             && data.uid == request.auth.uid
+             && isShortString(data.email, 320)
+             && isOptionalShortString(data, 'birthday', 40)
+             && isOptionalShortString(data, 'name', 100)
+             && isOptionalShortString(data, 'height', 20)
+             && isOptionalShortString(data, 'weight', 20)
+             && isOptionalShortString(data, 'bloodPercentage', 20)
+             && isOptionalShortString(data, 'headSize', 20);
+    }
+
+    match /users/{userId} {
+      allow get, list: if isOwner(userId);
+      allow create, update: if isOwner(userId) && isValidUser(incoming());
+      // Needed by the in-app delete-account flow.
+      allow delete: if isOwner(userId);
+
+      // ---- medical_dates (the vaccination schedule) ----------------------
+
+      function isValidMedicalDate(data) {
+        return data.keys().hasOnly(['name', 'description', 'date', 'state', 'code'])
+               && data.keys().hasAll(['name', 'date', 'state'])
+               && isShortString(data.name, 200)
+               && isOptionalShortString(data, 'description', 1000)
+               && isOptionalShortString(data, 'code', 60)
+               && data.date is timestamp
+               // Only the three states the app understands. Anything else
+               // would make the schedule screen and the reminder sync behave
+               // unpredictably.
+               && data.state in ['Pending', 'Completed', 'Skipped'];
+      }
+
+      match /medical_dates/{medicalDateId} {
+        allow get, list: if isOwner(userId);
+        allow create, update: if isOwner(userId)
+                              && isValidMedicalDate(incoming());
+        allow delete: if isOwner(userId);
+      }
+    }
+
+    // ---- app content ------------------------------------------------------
+
+    // Tips are authored by Ahmed in the console. Clients read them; nothing in
+    // the app writes them, so writes are closed to everyone.
+    match /tips/{tipId} {
+      allow get, list: if isSignedIn();
+      allow write: if false;
+    }
+
+    match /tips_en/{tipId} {
+      allow get, list: if isSignedIn();
+      allow write: if false;
+    }
+
+    // ---- default deny -----------------------------------------------------
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

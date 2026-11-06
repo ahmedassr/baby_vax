@@ -23,9 +23,7 @@ class MedicalDateDetailCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: isDark
-            ? AppColors.cardDark
-            : AppColors.backgroundLight,
+        color: isDark ? AppColors.cardDark : AppColors.backgroundLight,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           if (!isDark)
@@ -51,7 +49,9 @@ class MedicalDateDetailCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AppText(
-                        text: name?.isNotEmpty == true ? name! : "MedicalDateDetailCard_medical_date_label".tr,
+                        text: name?.isNotEmpty == true
+                            ? name!
+                            : "MedicalDateDetailCard_medical_date_label".tr,
                         maxLines: 5,
                         style: AppTextStyles.titleSmall.copyWith(
                           fontWeight: FontWeight.w700,
@@ -124,9 +124,3 @@ class MedicalDateDetailCard extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-

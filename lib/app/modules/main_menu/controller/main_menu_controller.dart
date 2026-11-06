@@ -24,10 +24,12 @@ class MainMenuController extends GetxController {
         icon: Icons.privacy_tip,
         showSearch: true),
     BottomNavBarModel(
-        title: "MainMenuController_settings_title", view: const SettingsView(), icon: Icons.settings),
+        title: "MainMenuController_settings_title",
+        view: const SettingsView(),
+        icon: Icons.settings),
   ];
 
-  void changeValue(index) {
+  void changeValue(int index) {
     currentIndex(index);
     switch (index) {
       case 0:
@@ -54,6 +56,5 @@ class MainMenuController extends GetxController {
   void onClose() {
     currentIndex.value = 0;
     super.onClose();
-
   }
 }

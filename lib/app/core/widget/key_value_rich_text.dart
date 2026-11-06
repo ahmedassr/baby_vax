@@ -14,7 +14,7 @@ class KeyValueRichText extends StatelessWidget {
 
   const KeyValueRichText(
       {super.key,
-       this.label,
+      this.label,
       this.value,
       this.textColor,
       this.labelTextStyle,
@@ -28,16 +28,20 @@ class KeyValueRichText extends StatelessWidget {
     return AutoSizeText.rich(
       TextSpan(
         children: [
-          if(label != null)
-          TextSpan(
-              text: label,
-              style: labelTextStyle ?? AppTextStyles.bodyMedium
-                  .copyWith(fontSize: labelFontSize, color: textColor,)),
-          if(value != null)
-          TextSpan(
-              text: value,
-              style: valueTextStyle ?? AppTextStyles.captionLarge
-                  .copyWith(fontSize: labelFontSize, color: textColor))
+          if (label != null)
+            TextSpan(
+                text: label,
+                style: labelTextStyle ??
+                    AppTextStyles.bodyMedium.copyWith(
+                      fontSize: labelFontSize,
+                      color: textColor,
+                    )),
+          if (value != null)
+            TextSpan(
+                text: value,
+                style: valueTextStyle ??
+                    AppTextStyles.captionLarge
+                        .copyWith(fontSize: labelFontSize, color: textColor))
         ],
       ),
       textAlign: textAlign,

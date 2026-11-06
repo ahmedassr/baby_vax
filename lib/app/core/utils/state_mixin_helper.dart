@@ -7,5 +7,6 @@ mixin StateMixinHelper<T> on StateMixin<T> {
 
   void setEmpty([T? data]) => change(data, status: RxStatus.empty());
 
-  void setError([String? message]) => change(null, status: RxStatus.error(message ?? "Error Occurred"));
+  void setError([String? message]) =>
+      change(null, status: RxStatus.error(message ?? "Error Occurred"));
 }

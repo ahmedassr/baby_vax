@@ -1,4 +1,3 @@
-
 import '../../core/imports/import_library.dart';
 
 class AppColors {

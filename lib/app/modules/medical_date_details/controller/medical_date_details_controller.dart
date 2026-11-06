@@ -73,6 +73,13 @@ class MedicalDateDetailsController extends GetxController
               "${AppPath.userMedicalDates(SessionManager.uId)}/${medicalDate?.id}",
           data: data.toMap());
 
+      // The vaccine is done, so its pending reminders must go. Without this
+      // the parent is still reminded about a vaccination they already had.
+      final String? vaccineId = medicalDate?.id;
+      if (vaccineId != null && vaccineId.isNotEmpty) {
+        await Get.find<NotificationCoordinator>().cancelVaccine(vaccineId);
+      }
+
       await fetchDate();
     } catch (_) {
       setError("MedicalDateDetailsController_state_update_failed_msg".tr);

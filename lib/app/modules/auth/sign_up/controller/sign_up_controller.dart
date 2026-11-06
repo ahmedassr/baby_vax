@@ -2,7 +2,6 @@ import 'package:baby_vax/app/core/service/medical_dates_generator.dart';
 import 'package:intl/intl.dart';
 import '../../../../config/constant/app_path.dart';
 import '../../../../core/imports/import_manger.dart';
-import '../../../../core/notification/data/onesignal_notification_provider.dart';
 import '../../../home/controller/home_controller.dart';
 
 class SignupController extends GetxController
@@ -103,10 +102,20 @@ class SignupController extends GetxController
           "empty_password_error_msg".tr;
       valid = false;
     }
-    if (signupControllers["birthdayController"]?.text.isEmpty ?? true) {
+    final String birthdayText =
+        signupControllers["birthdayController"]?.text.trim() ?? "";
+    if (birthdayText.isEmpty) {
       signupErrorText["birthdayErrorText"]?.value =
           "empty_date_of_birth_error_msg".tr;
       valid = false;
+    } else {
+      // Validate here rather than letting the generator throw mid-signup,
+      // after the Auth user has already been created.
+      final String? birthdayError = _birthDateError(birthdayText);
+      if (birthdayError != null) {
+        signupErrorText["birthdayErrorText"]?.value = birthdayError;
+        valid = false;
+      }
     }
     if (signupControllers["bloodPercentageController"]?.text.isEmpty ?? true) {
       signupErrorText["bloodPercentageErrorText"]?.value =
@@ -127,6 +136,22 @@ class SignupController extends GetxController
       valid = false;
     }
     return valid;
+  }
+
+  /// Localized reason the birth date is unusable, or null when it is fine.
+  String? _birthDateError(String birthdayText) {
+    try {
+      MedicalDatesGenerator.parseBirthDate(birthdayText);
+      return null;
+    } on InvalidBirthDateException catch (e) {
+      if (e.reason.contains('future')) {
+        return "future_date_of_birth_error_msg".tr;
+      }
+      if (e.reason.contains('years ago')) {
+        return "too_old_date_of_birth_error_msg".tr;
+      }
+      return "invalid_date_of_birth_error_msg".tr;
+    }
   }
 
   Future<void> userSignup() async {
@@ -162,7 +187,7 @@ class SignupController extends GetxController
         }
       }
     } on FirebaseException catch (e) {
-      setError(getFriendlyErrorMessage(e.toString()));
+      setError(friendlyFirebaseError(e));
     }
   }
 
@@ -171,10 +196,11 @@ class SignupController extends GetxController
       // await AppConstant.fireStoreHelper
       //     .createUser(uid: user.uid, userDate: user.toMap());
 
+      // Must be the full `users/<uid>` document path. This previously passed
+      // the bare uid, which is a single-segment path and not a valid document
+      // reference, while every read uses AppPath.currentUserDoc ("users/<uid>").
       await AppConstant.fireStoreHelper1
-          .setData(path: user.uid, data: user.toMap());
-
-      logger.d("${user.birthday}");
+          .setData(path: AppPath.userDoc(user.uid), data: user.toMap());
 
       final generatedVaccines =
           MedicalDatesGenerator.generator(user.birthday ?? '');
@@ -188,28 +214,30 @@ class SignupController extends GetxController
         );
       }).toList();
 
-      final List<MedicalDatesModel?> results = await Future.wait(tasks);
-      final vaccines = results.whereType<MedicalDatesModel>().toList();
+      await Future.wait(tasks);
 
-      // Notification Schedule
-      for (var vaccine in vaccines) {
-        final date = vaccine.date;
-        if (date.isAfter(DateTime.now())) {
-          await Get.find<NotificationCoordinator>().scheduleVaccine(
-            vaccineId: vaccine.id ?? "",
-            userName: user.name ?? "Your baby",
-            vaccineName: vaccine.name,
-            date: date,
-          );
-        }
-      }
       SessionManager.uId = user.uid;
       await AppConstant.getStorage.write(StorageKey.isLoginKey, true);
       await AppConstant.getStorage.write(StorageKey.uidKey, user.uid);
-      await AppConstant.notificationService.updateFcmToken();
-      await Get.find<OneSingleNotificationProvider>()
-          .setUser(SessionManager.uId);
+      await AppConstant.getStorage
+          .write(StorageKey.userNameKey, user.name ?? "");
       await Get.find<HomeController>().fetchUserData();
+
+      final NotificationCoordinator reminders =
+          Get.find<NotificationCoordinator>();
+      // Asked here, where the user has just created a schedule, so the prompt
+      // has visible context. Denial does not block sign-up.
+      final bool granted = await reminders.requestPermission();
+      // One sync instead of a per-vaccine loop: it goes through the same
+      // horizon and cap logic as every other sync, so sign-up cannot schedule
+      // all 15 years of reminders at once and hit Android's alarm limit.
+      await reminders.syncFromFirestore(
+        userId: user.uid,
+        userName: user.name ?? "Your baby",
+      );
+      if (!granted) {
+        logger.w('Notification permission denied during sign-up');
+      }
       AppConstant.alertService.showAlert(
         AlertModel.success(
           message: "SignupController_create_user_success_msg".tr,

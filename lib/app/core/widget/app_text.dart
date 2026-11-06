@@ -37,7 +37,9 @@ class AppText extends StatelessWidget {
             fontWeight: fontWeight,
             fontSize: fontSize,
             color: color ??
-                (context.isDarkMode ? AppColors.textWhite : AppColors.textBlack),
+                (context.isDarkMode
+                    ? AppColors.textWhite
+                    : AppColors.textBlack),
             height: height,
           ),
     );

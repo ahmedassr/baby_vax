@@ -32,7 +32,7 @@ class MainMenuView extends GetView<MainMenuController> {
 
   List<Widget> getAppBarAction() {
     final List<Widget> action = [];
-    if(controller.item[controller.currentIndex.value].showEdit){
+    if (controller.item[controller.currentIndex.value].showEdit) {
       action.add(IconButton(
           onPressed: controller.onEditPressed,
           icon: const Icon(Icons.mode_edit_outlined)));

@@ -16,7 +16,6 @@ export 'package:baby_vax/app/core/values/storage_key.dart';
 export 'package:baby_vax/app/core/shared_model/internal_screen_args.dart';
 // Notification
 export 'package:baby_vax/app/core/notification/application/notification_coordinator.dart';
-export 'package:baby_vax/app/core/notification/data/fcm_notification_provider.dart';
 export 'package:baby_vax/app/core/notification/data/local_notification_provider.dart';
 export 'package:baby_vax/app/core/notification/domain/notification_payload.dart';
 export 'package:baby_vax/app/core/notification/domain/notification_service.dart';

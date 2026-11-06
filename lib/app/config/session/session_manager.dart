@@ -1,3 +1,3 @@
-class SessionManager{
+class SessionManager {
   static String uId = "";
 }

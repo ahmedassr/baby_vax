@@ -9,9 +9,12 @@ class AlertModel {
   final String? imagePath;
   final String? yesButtonText;
   final String? noButtonText;
-  final String? additionalButtonText;
   final VoidCallback? yesAction;
   final VoidCallback? noAction;
+
+  // Optional third button, rendered by AlertWidget when additionalAction is
+  // set. Only AlertModel.custom exposes it.
+  final String? additionalButtonText;
   final VoidCallback? additionalAction;
 
   AlertModel._({
@@ -21,14 +24,14 @@ class AlertModel {
     this.imagePath,
     this.yesButtonText,
     this.noButtonText,
-    this.additionalButtonText,
     this.yesAction,
     this.noAction,
+    this.additionalButtonText,
     this.additionalAction,
   });
 
   factory AlertModel.error(
-      {required String message, VoidCallback? yesAction}) =>
+          {required String message, VoidCallback? yesAction}) =>
       AlertModel._(
           type: AlertType.error,
           title: AlertType.error.title,
@@ -36,7 +39,7 @@ class AlertModel {
           yesAction: yesAction);
 
   factory AlertModel.success(
-      {required String message, VoidCallback? yesAction}) =>
+          {required String message, VoidCallback? yesAction}) =>
       AlertModel._(
           type: AlertType.success,
           title: AlertType.success.title,
@@ -44,7 +47,7 @@ class AlertModel {
           yesAction: yesAction);
 
   factory AlertModel.fieldRequired(
-      {required String fieldName, VoidCallback? yesAction}) =>
+          {required String fieldName, VoidCallback? yesAction}) =>
       AlertModel._(
           type: AlertType.fieldRequired,
           title: AlertType.fieldRequired.title,
@@ -52,9 +55,9 @@ class AlertModel {
           yesAction: yesAction);
 
   factory AlertModel.attention(
-      {required String message,
-        VoidCallback? yesAction,
-        VoidCallback? noAction}) =>
+          {required String message,
+          VoidCallback? yesAction,
+          VoidCallback? noAction}) =>
       AlertModel._(
           type: AlertType.attention,
           title: AlertType.attention.title,

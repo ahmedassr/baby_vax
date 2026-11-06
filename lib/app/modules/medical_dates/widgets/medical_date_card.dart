@@ -113,5 +113,4 @@ class MedicalDateCard extends StatelessWidget {
       ],
     );
   }
-
 }

@@ -5,5 +5,3 @@ extension SizedBoxExtension on num {
 
   SizedBox get sbw => SizedBox(width: toDouble().w);
 }
-
-
