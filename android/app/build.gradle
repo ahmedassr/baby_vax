@@ -15,26 +15,29 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.ahmedalassar.babyvax"
-    compileSdk = flutter.compileSdkVersion
+    // Pinned explicitly rather than tracking flutter.compileSdkVersion: Google
+    // Play requires new apps and updates to target API 36 (since 31 Aug 2026),
+    // so this must not drift with the Flutter SDK.
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
         coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        jvmTarget = JavaVersion.VERSION_17
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        // Registered application id. Changing this would orphan the Play
+        // listing and every existing install, so it is fixed.
         applicationId = "com.ahmedalassar.babyvax"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdkVersion = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        // See the compileSdk note above: Play's API 36 requirement.
+        targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
