@@ -100,7 +100,8 @@ class SettingsController extends GetxController {
 
   Future changeLanguage() async {
     String newLang = currentLanguage.value == "ar" ? "en" : "ar";
-    Locale newLocale = newLang == "ar" ? const Locale('ar', 'SA') : const Locale('en', 'US');
+    Locale newLocale =
+        newLang == "ar" ? const Locale('ar', 'SA') : const Locale('en', 'US');
     Get.updateLocale(newLocale);
     currentLanguage.value = newLang;
     await AppConstant.getStorage.write(StorageKey.languageKey, newLang);

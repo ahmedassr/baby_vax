@@ -32,9 +32,8 @@ class AppListItem extends StatelessWidget {
         child: ListTile(
           shape: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                  color: Colors.transparent,
-                  width: 0)),
+              borderSide:
+                  const BorderSide(color: Colors.transparent, width: 0)),
           tileColor: context.isDarkMode
               ? Colors.black.withValues(alpha: 0.2)
               : Colors.white,

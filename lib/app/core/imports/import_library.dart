@@ -12,6 +12,5 @@ export 'package:cloud_firestore/cloud_firestore.dart';
 // Notification
 export 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-
 //Get Storage
 export 'package:get_storage/get_storage.dart';

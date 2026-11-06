@@ -14,6 +14,5 @@ class BottomNavBarModel {
       required this.icon,
       this.showAdd = false,
       this.showSearch = false,
-      this.showEdit= false
-      });
+      this.showEdit = false});
 }

@@ -8,7 +8,8 @@ import 'package:baby_vax/app/core/notification/domain/notification_service.dart'
 /// replaces rather than appends — that is the duplicate-reminder property the
 /// tests assert on.
 class FakeNotificationService implements NotificationService {
-  final Map<String, NotificationPayload> store = <String, NotificationPayload>{};
+  final Map<String, NotificationPayload> store =
+      <String, NotificationPayload>{};
 
   bool cancelAllCalled = false;
   bool initializeCalled = false;

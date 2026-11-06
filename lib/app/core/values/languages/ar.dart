@@ -154,35 +154,62 @@ Map<String, String> ar = {
   "VaccinationTimeStatusEnum_yearsLeft": "سنوات متبقية",
   "show": "إظهار",
   "hide": "إخفاء",
+  // Medical disclaimer:
+  "MedicalDisclaimer_title": "هذه ليست نصيحة طبية",
+  "MedicalDisclaimer_body":
+      "هذا الجدول للمعلومات فقط. اتبع دائماً إرشادات طبيبك وجدول التطعيمات الوطني في بلدك، فقد يختلف عمّا تراه هنا.",
+  "MedicalDisclaimer_source":
+      "مبني على جدول التطعيمات الروتيني لوزارة الصحة الفلسطينية، والذي يتبع توصيات برنامج التطعيم الموسع لمنظمة الصحة العالمية.",
+  // Errors:
+  "error_generic_msg": "حدث خطأ. الرجاء المحاولة مرة أخرى.",
+  "error_offline_msg":
+      "يبدو أنك غير متصل بالإنترنت. جدول التطعيمات لا يزال متاحاً، لكن التعديلات لن تُحفظ حتى يعود الاتصال.",
+  "error_email_already_in_use_msg": "هذا البريد الإلكتروني مسجّل مسبقاً.",
+  "error_invalid_email_msg": "البريد الإلكتروني غير صحيح.",
+  "error_weak_password_msg": "كلمة المرور بسيطة جداً. الرجاء اختيار كلمة أقوى.",
+  "error_invalid_credentials_msg":
+      "البريد الإلكتروني أو كلمة المرور غير صحيحة. الرجاء المحاولة مرة أخرى.",
+  "error_user_disabled_msg": "تم تعطيل هذا الحساب.",
+  "error_too_many_requests_msg":
+      "محاولات كثيرة. الرجاء الانتظار قليلاً ثم المحاولة مرة أخرى.",
+  "error_session_expired_msg":
+      "انتهت صلاحية الجلسة. الرجاء تسجيل الدخول من جديد.",
+  "error_permission_denied_msg": "لا تملك صلاحية القيام بذلك.",
+  "error_not_found_msg": "لم نتمكن من العثور على هذا السجل.",
   // Delete account:
   "SettingsView_delete_account_label": "حذف الحساب",
   "DeleteAccount_title": "حذف حسابك",
-  "DeleteAccount_warning_msg": "سيتم حذف حسابك وملف طفلك وجدول التطعيمات بالكامل بشكل نهائي، وستتوقف التذكيرات. لا يمكن التراجع عن هذه الخطوة.",
+  "DeleteAccount_warning_msg":
+      "سيتم حذف حسابك وملف طفلك وجدول التطعيمات بالكامل بشكل نهائي، وستتوقف التذكيرات. لا يمكن التراجع عن هذه الخطوة.",
   "DeleteAccount_password_label": "أكّد كلمة المرور",
   "DeleteAccount_password_hint": "كلمة المرور",
   "DeleteAccount_confirm_button": "حذف نهائي",
   "DeleteAccount_cancel_button": "الاحتفاظ بالحساب",
   "DeleteAccount_empty_password_msg": "الرجاء إدخال كلمة المرور للمتابعة.",
   "DeleteAccount_wrong_password_msg": "كلمة المرور غير صحيحة.",
-  "DeleteAccount_requires_recent_login_msg": "لأمان حسابك، الرجاء تسجيل الخروج ثم الدخول من جديد، وبعدها احذف الحساب.",
-  "DeleteAccount_network_error_msg": "لا يوجد اتصال. حذف الحساب يحتاج إنترنت، الرجاء المحاولة عند توفر الاتصال.",
+  "DeleteAccount_requires_recent_login_msg":
+      "لأمان حسابك، الرجاء تسجيل الخروج ثم الدخول من جديد، وبعدها احذف الحساب.",
+  "DeleteAccount_network_error_msg":
+      "لا يوجد اتصال. حذف الحساب يحتاج إنترنت، الرجاء المحاولة عند توفر الاتصال.",
   "DeleteAccount_not_signed_in_msg": "لم تقم بتسجيل الدخول.",
-  "DeleteAccount_unknown_error_msg": "حدث خطأ ولم يتم حذف حسابك. الرجاء المحاولة مرة أخرى.",
+  "DeleteAccount_unknown_error_msg":
+      "حدث خطأ ولم يتم حذف حسابك. الرجاء المحاولة مرة أخرى.",
   "DeleteAccount_success_msg": "تم حذف حسابك وجميع بياناته.",
   // Birth date validation:
   "invalid_date_of_birth_error_msg": "الرجاء إدخال تاريخ ميلاد صحيح.",
-  "future_date_of_birth_error_msg": "تاريخ الميلاد لا يمكن أن يكون في المستقبل.",
-  "too_old_date_of_birth_error_msg": "يغطي التطبيق جدول التطعيمات حتى عمر 18 سنة.",
+  "future_date_of_birth_error_msg":
+      "تاريخ الميلاد لا يمكن أن يكون في المستقبل.",
+  "too_old_date_of_birth_error_msg":
+      "يغطي التطبيق جدول التطعيمات حتى عمر 18 سنة.",
   // Notifications:
   "Notification_vaccine_today_title": "موعد تطعيم اليوم",
   "Notification_vaccine_today_body": "@child - اليوم موعد تطعيم: @vaccine",
   "Notification_vaccine_tomorrow_title": "موعد تطعيم غداً",
   "Notification_vaccine_tomorrow_body": "@child - غداً موعد تطعيم: @vaccine",
-  "Notification_permission_denied_msg": "الإشعارات مغلقة، لذلك لن تظهر تذكيرات التطعيم. يمكنك تشغيلها من إعدادات جهازك.",
+  "Notification_permission_denied_msg":
+      "الإشعارات مغلقة، لذلك لن تظهر تذكيرات التطعيم. يمكنك تشغيلها من إعدادات جهازك.",
   // Medical Date State Enum:
   "Pending": "قادم",
   "Completed": "مكتمل",
   "Skipped": "متجاوز"
-
-
 };

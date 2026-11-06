@@ -81,8 +81,8 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
                   // Labelled for screen readers; an unlabelled icon button is
                   // announced only as "button".
                   tooltip: _obscured ? "show".tr : "hide".tr,
-                  icon: Icon(
-                      _obscured ? Icons.visibility : Icons.visibility_off),
+                  icon:
+                      Icon(_obscured ? Icons.visibility : Icons.visibility_off),
                   onPressed: () => setState(() => _obscured = !_obscured),
                 ),
               ),

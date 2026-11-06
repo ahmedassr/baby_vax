@@ -129,6 +129,3 @@ class ProfileCard extends StatelessWidget {
     );
   }
 }
-
-
-

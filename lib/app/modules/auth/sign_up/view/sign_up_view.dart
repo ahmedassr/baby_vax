@@ -291,6 +291,10 @@ class SignupView extends GetView<SignupController> {
                     ],
                   ),
                 ),
+                24.sbh,
+                // Shown where the schedule is created, so the parent sees it
+                // before relying on any date.
+                const MedicalDisclaimer(),
               ],
             ),
           ),

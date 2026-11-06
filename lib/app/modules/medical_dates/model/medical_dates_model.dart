@@ -41,7 +41,8 @@ class MedicalDatesModel {
   }
 
   factory MedicalDatesModel.fromJson(Map<String, dynamic>? json) =>
-      MedicalDatesModel._fromMap(json ?? const <String, dynamic>{}, json?['id']);
+      MedicalDatesModel._fromMap(
+          json ?? const <String, dynamic>{}, json?['id']);
 
   factory MedicalDatesModel.fromDocument(DocumentSnapshot doc) {
     final Object? raw = doc.data();

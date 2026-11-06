@@ -93,8 +93,7 @@ void main() {
     });
 
     test('rejects a future birth date', () {
-      expect(
-          () => MedicalDatesGenerator.parseBirthDate('2026-06-16', now: now),
+      expect(() => MedicalDatesGenerator.parseBirthDate('2026-06-16', now: now),
           throwsA(isA<InvalidBirthDateException>()));
     });
 

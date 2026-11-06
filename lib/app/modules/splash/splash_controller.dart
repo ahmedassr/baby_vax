@@ -68,7 +68,6 @@ class SplashController extends GetxController
       ),
     );
 
-
     animationController.forward();
 
     Future.delayed(const Duration(seconds: 4), () {

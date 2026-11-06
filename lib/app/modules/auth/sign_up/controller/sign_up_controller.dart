@@ -187,7 +187,7 @@ class SignupController extends GetxController
         }
       }
     } on FirebaseException catch (e) {
-      setError(getFriendlyErrorMessage(e.toString()));
+      setError(friendlyFirebaseError(e));
     }
   }
 

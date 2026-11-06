@@ -40,13 +40,14 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
       final authResult = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       if (authResult.user != null) {
-       await AppConstant.getStorage.write(StorageKey.isLoginKey, true);
-       await AppConstant.getStorage.write(StorageKey.uidKey, authResult.user?.uid);
+        await AppConstant.getStorage.write(StorageKey.isLoginKey, true);
+        await AppConstant.getStorage
+            .write(StorageKey.uidKey, authResult.user?.uid);
         SessionManager.uId = authResult.user?.uid ?? "";
         await Get.find<HomeController>().fetchUserData();
         // Cache the name so app-start reminder top-ups work offline.
-        await AppConstant.getStorage.write(
-            StorageKey.userNameKey, authResult.user?.displayName ?? "");
+        await AppConstant.getStorage
+            .write(StorageKey.userNameKey, authResult.user?.displayName ?? "");
 
         final NotificationCoordinator reminders =
             Get.find<NotificationCoordinator>();
@@ -68,7 +69,7 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
         setError("LoginController_login_failed_msg".tr);
       }
     } on FirebaseAuthException catch (error) {
-      setError(getFriendlyErrorMessage(error.toString()));
+      setError(friendlyFirebaseError(error));
       return;
     }
   }

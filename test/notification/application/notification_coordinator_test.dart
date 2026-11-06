@@ -126,8 +126,8 @@ void main() {
     test('schedules both reminders when the appointment is tomorrow', () async {
       // At 12:00 today, the evening-before reminder (today 18:00) is still
       // ahead, as is tomorrow 09:00.
-      final DateTime date = DateTime(
-          fixedNow.year, fixedNow.month, fixedNow.day + 1);
+      final DateTime date =
+          DateTime(fixedNow.year, fixedNow.month, fixedNow.day + 1);
 
       await coordinator.scheduleVaccine(
         vaccineId: 'vax_soon',
@@ -140,7 +140,8 @@ void main() {
           <String>['vax_soon-advance', 'vax_soon-main']);
     });
 
-    test('schedules nothing when the appointment is today and both times have '
+    test(
+        'schedules nothing when the appointment is today and both times have '
         'passed', () async {
       // advance = yesterday 18:00, main = today 09:00; "now" is today 12:00.
       final DateTime date =

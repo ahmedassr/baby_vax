@@ -3,7 +3,7 @@ import 'package:baby_vax/app/core/imports/import_library.dart';
 
 import '../../config/themes/app_colors.dart';
 
-class AppLogo extends StatelessWidget{
+class AppLogo extends StatelessWidget {
   const AppLogo({super.key});
 
   @override
@@ -18,8 +18,6 @@ class AppLogo extends StatelessWidget{
           AssetImage(AppImage.appIcon),
           size: 100,
           color: AppColors.primary,
-        )
-    );
+        ));
   }
-
 }

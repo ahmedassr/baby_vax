@@ -139,8 +139,7 @@ class FirebaseAccountDeletionSteps implements AccountDeletionSteps {
       // them, and after the parent is gone they are much harder to find.
       await AppConstant.fireStoreHelper1
           .deleteCollection(path: AppPath.userMedicalDates(uid));
-      await AppConstant.fireStoreHelper1
-          .deleteDocument(AppPath.userDoc(uid));
+      await AppConstant.fireStoreHelper1.deleteDocument(AppPath.userDoc(uid));
     } on FirebaseException catch (e) {
       throw AccountDeletionException(AccountDeletionError.network, e);
     } catch (e) {

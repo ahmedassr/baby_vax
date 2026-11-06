@@ -269,7 +269,8 @@ class NotificationCoordinator extends GetxService {
 
   /// Reminder keys currently pending with the OS. Exposed for diagnostics and
   /// tests.
-  Future<List<String>> pendingReminderIds() => _notificationService.pendingIds();
+  Future<List<String>> pendingReminderIds() =>
+      _notificationService.pendingIds();
 
   /// Calendar-correct month addition, clamping the day to the target month's
   /// length (31 Jan + 1 month -> 28/29 Feb).
