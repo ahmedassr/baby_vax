@@ -53,3 +53,11 @@ key.properties.*
 *keystore*.txt
 *keystore*.b64
 upload-keystore*
+
+# Firestore rules tests (Node)
+firestore-tests/node_modules/
+firestore-tests/package-lock.json
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+.firebase/

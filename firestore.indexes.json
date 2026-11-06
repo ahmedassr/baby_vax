@@ -1,0 +1,20 @@
+{
+  "indexes": [
+    {
+      "comment": "HomeController queries upcoming vaccinations: where('state' == 'Pending') + where('date' >= today) + orderBy('date'). A range filter plus an equality filter on a different field needs this composite index; without it the query fails at runtime with FAILED_PRECONDITION.",
+      "collectionGroup": "medical_dates",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "state",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "date",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
