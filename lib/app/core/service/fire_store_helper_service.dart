@@ -84,6 +84,46 @@ class FireStoreHelperService extends GetxService {
     );
   }
 
+  /// Deletes every document in a collection, in batches.
+  ///
+  /// Firestore does not delete subcollections when you delete their parent
+  /// document, so account deletion has to walk them explicitly or the child's
+  /// vaccination records are orphaned and left in the project forever.
+  ///
+  /// Batched because a write batch is capped at 500 operations, and paged so a
+  /// large collection does not have to be held in memory at once.
+  Future<int> deleteCollection({
+    required String path,
+    int batchSize = 300,
+  }) async {
+    return await _execute(
+          operation: "Delete Collection: $path",
+          action: () async {
+            int deleted = 0;
+            while (true) {
+              final QuerySnapshot<Map<String, dynamic>> snapshot =
+                  await _db.collection(path).limit(batchSize).get();
+
+              if (snapshot.docs.isEmpty) break;
+
+              final WriteBatch batch = _db.batch();
+              for (final QueryDocumentSnapshot<Map<String, dynamic>> doc
+                  in snapshot.docs) {
+                batch.delete(doc.reference);
+              }
+              await batch.commit();
+              deleted += snapshot.docs.length;
+
+              // A short page means that was the last one.
+              if (snapshot.docs.length < batchSize) break;
+            }
+            logger.i("Deleted $deleted document(s) from $path");
+            return deleted;
+          },
+        ) ??
+        0;
+  }
+
   // --- Internal Helpers ---
 
   /// The "Workhorse": Handles logging and error boundaries

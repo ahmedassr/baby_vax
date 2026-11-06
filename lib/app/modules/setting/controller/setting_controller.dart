@@ -1,11 +1,14 @@
 import 'package:baby_vax/app/config/session/session_manager.dart';
+import 'package:baby_vax/app/core/service/account_deletion_service.dart';
 
 import '../../../core/imports/import_manger.dart';
+import '../widget/delete_account_dialog.dart';
 import '../../../core/notification/application/notification_coordinator.dart';
 import '../../../core/notification/domain/notification_service.dart';
 
 class SettingsController extends GetxController {
   var isDarkMode = false.obs;
+  final RxBool isDeletingAccount = false.obs;
   var currentLanguage = (Get.locale?.languageCode ?? 'en').obs;
   var locale = Get.locale?.languageCode;
 
@@ -43,6 +46,59 @@ class SettingsController extends GetxController {
           Get.toNamed(AppRoutes.login);
         },
         noAction: () => Get.back()));
+  }
+
+  /// Play policy requires an in-app way to delete the account and its data.
+  ///
+  /// The heavy lifting is in [AccountDeletionService]; this method only drives
+  /// the dialog and turns failures into localized messages.
+  Future<void> onDeleteAccount({AccountDeletionService? service}) async {
+    final String? password = await Get.dialog<String>(
+      const DeleteAccountDialog(),
+      barrierDismissible: false,
+    );
+
+    // Null means the user backed out.
+    if (password == null || password.isEmpty) return;
+
+    isDeletingAccount.value = true;
+    try {
+      final AccountDeletionService deletion =
+          service ?? AccountDeletionService(FirebaseAccountDeletionSteps());
+      await deletion.deleteAccount(password: password);
+
+      AppConstant.alertService.showAlert(AlertModel.success(
+        message: "DeleteAccount_success_msg".tr,
+        yesAction: () => Get.offAllNamed(AppRoutes.login),
+      ));
+    } on AccountDeletionException catch (e) {
+      logger.w('Account deletion failed: ${e.error}', error: e.cause);
+      AppConstant.alertService
+          .showError(message: deletionErrorMessage(e.error));
+    } catch (e, s) {
+      logger.e('Account deletion failed unexpectedly', error: e, stackTrace: s);
+      AppConstant.alertService
+          .showError(message: "DeleteAccount_unknown_error_msg".tr);
+    } finally {
+      isDeletingAccount.value = false;
+    }
+  }
+
+  /// Maps a failure reason to its localized message. Separated out so the
+  /// mapping is testable without Firebase.
+  static String deletionErrorMessage(AccountDeletionError error) {
+    switch (error) {
+      case AccountDeletionError.wrongPassword:
+        return "DeleteAccount_wrong_password_msg".tr;
+      case AccountDeletionError.requiresRecentLogin:
+        return "DeleteAccount_requires_recent_login_msg".tr;
+      case AccountDeletionError.network:
+        return "DeleteAccount_network_error_msg".tr;
+      case AccountDeletionError.notSignedIn:
+        return "DeleteAccount_not_signed_in_msg".tr;
+      case AccountDeletionError.unknown:
+        return "DeleteAccount_unknown_error_msg".tr;
+    }
   }
 
   Future changeLanguage() async {

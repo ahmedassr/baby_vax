@@ -35,7 +35,18 @@ class SettingsView extends GetView<SettingsController> {
             title: "SettingsView_logout_label".tr,
             icon: Icons.logout,
             onTap: controller.onLogout,
-          )
+          ),
+          20.sbh,
+          // Required by Google Play's account-deletion policy: an app that
+          // lets users create an account must let them delete it in-app.
+          Obx(() => AppListTitleItem(
+                title: "SettingsView_delete_account_label".tr,
+                icon: Icons.delete_forever_outlined,
+                onTap: controller.isDeletingAccount.value
+                    ? null
+                    : controller.onDeleteAccount,
+              )),
+          20.sbh,
         ],
       ),
     );
