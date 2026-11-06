@@ -7,7 +7,14 @@ Autonomous cloud run, 2026-11-06.
 
 ## Progress
 
-**2026-11-06 — run 1. All phases complete.**
+**2026-11-06 — run 1. All phases complete, and `main` merged in.**
+
+`main` advanced 20 commits while this branch was in flight, with overlapping
+cleanup of its own (its own `dart fix`, `onBackground` → `onSurface`, a CI
+workflow with signed release builds). I merged `origin/main` into
+`release/play-v1` and resolved 11 conflicts, so the PR is mergeable. No
+force-push, and nothing of yours was discarded: see Decisions 9 and 11 for the
+two places where your newer work changed what I had done.
 
 Finished: environment and baseline; dependency and toolchain upgrade; release
 signing hardening; manifest permissions; local reminders as the single source;
@@ -27,7 +34,7 @@ Verified in this environment:
 | `flutter build appbundle --release` | **succeeds**, 63.5 MB AAB, R8 + resource shrinking |
 | Release artifact target SDK | **`targetSdkVersion="36"`**, `minSdkVersion="24"` |
 | Release artifact permissions | INTERNET, ACCESS_NETWORK_STATE, POST_NOTIFICATIONS, RECEIVE_BOOT_COMPLETED, VIBRATE — the restricted ones are gone, including after plugin manifest merging |
-| Secrets in the repo | none |
+| Secrets in the repo | **none on this branch** — but `main` still has a committed keystore, see Decision 1 |
 
 **Next:** nothing is blocked in code. What remains is the list under
 [What only Ahmed can do](#what-only-ahmed-can-do) — the keystore, the Play
@@ -157,7 +164,8 @@ caught, and a typo produced a schedule of impossible appointments.
 - R8 minify + resource shrinking on, with keep rules in
   `android/app/proguard-rules.pro`.
 - CI (`.github/workflows/ci.yml`): analyze + format + test, rules tests on the
-  emulator, and a debug-signed release bundle, on every PR.
+  emulator, and the signed release build that already existed on `main`,
+  merged together. See Decision 11.
 - `.gitignore` extended to `*.p12`, `*.pfx`, `key.properties.*` and base64
   keystore dumps.
 
@@ -165,30 +173,81 @@ caught, and a typo produced a schedule of impossible appointments.
 
 ## Decisions I made
 
-### 1. Known issue 1 was already resolved — no history purge
+### 1. ⚠️ The signing key IS leaked — I got this wrong at first, then corrected it
 
-The brief lists `android/app/keystore_base64.txt` as a committed PKCS12
-keystore. **It is not in the working tree and not in any commit reachable from
-any ref.** Verified by enumerating every blob path in every commit:
+**Read this first. It is the most important thing in this document.**
+
+`android/app/keystore_base64.txt` is a base64-encoded keystore, 3766 bytes,
+committed by you on **2026-07-26** in `bf1c504 "feat: add signed release build
+to CI"`. **It is still at the tip of `main` right now**, in a public
+repository, and has been for over three months.
+
+**Earlier in this run I reported the opposite.** I checked with:
 
 ```bash
-git rev-list --all | while read c; do git ls-tree -r --name-only $c; done | sort -u \
-  | grep -iE "keystore|\.jks|\.p12|\.pfx|key\.properties|analyze_report"
-# → no matches
+git rev-list --all | while read c; do git ls-tree -r --name-only $c; done | sort -u | grep -i keystore
 ```
 
-`.gitignore` already covered `*.jks`, `*.keystore` and `key.properties`, and
-`analyze_report.txt` is likewise absent.
+and got nothing, so I concluded there was nothing to purge. That was wrong, and
+the reason matters: this cloud session's clone only had `release/play-v1`.
+`origin/main` had not been fetched, so `--all` did not include it. The branch
+point (`1af972c`) predates the keystore commit by months, so the file was
+genuinely absent from everything I could see. I only found it when I merged
+`origin/main` in at the end of the run and git tried to add the file to the
+branch.
 
-**So there is nothing to purge, and I am not giving you `git filter-repo`
-commands** — running them would rewrite history for no reason. I did fix the
-parts that were genuinely broken: the release `signingConfig` accepted a null
-keystore, and `.gitignore` did not cover base64 keystore *dumps*.
+`analyze_report.txt` is in the same position — present at `main`'s tip, from
+`da1e7cd`.
 
-⚠️ If that file ever existed on a deleted branch or in a fork, the key could
-still be reachable through GitHub's dangling-commit API. If you believe you ever
-committed a real keystore, treat it as compromised and generate a fresh upload
-key regardless of what git says now.
+**What I did:** removed both from this branch in a normal commit, and extended
+`.gitignore` so neither can come back (`*keystore*.txt`, `*keystore*.b64`,
+`*.p12`, `*.pfx`, `key.properties.*`, `analyze_report.txt`). I did **not**
+rewrite history — that is one of your hard limits, and it is your call.
+
+#### What you must do
+
+**1. Treat that key as compromised and generate a new one.** Anyone who cloned
+the repo in the last three months has it, and the base64 is trivially
+decodable. The good news: **Baby Vax is not on Play yet**, so you can simply
+make a new upload key with no consequences. After your first upload you would
+have to go through Google's key-reset process instead. Do this before you
+upload anything — the commands are in
+[Commands for Ahmed](#commands-for-ahmed), section 1.
+
+Also rotate the `KEYSTORE_PASSWORD`, `KEY_PASSWORD` and `KEYSTORE_BASE64`
+GitHub secrets to match the new key. While the old keystore sits in the repo
+in plaintext, keeping its base64 in an encrypted Actions secret protects
+nothing.
+
+**2. Purge it from history.** Removing the file in a commit does not remove it
+from the history, and GitHub keeps unreferenced commits reachable by SHA. These
+commands rewrite history, so they are yours to run, not mine:
+
+```bash
+pip install git-filter-repo
+```
+
+```bash
+git clone --mirror https://github.com/ahmedassr/baby_vax.git baby_vax-mirror
+```
+
+```bash
+cd baby_vax-mirror && git filter-repo --invert-paths \
+  --path android/app/keystore_base64.txt \
+  --path analyze_report.txt
+```
+
+```bash
+git push --force --all && git push --force --tags
+```
+
+Then ask every collaborator to re-clone — their old clones still contain the
+key — and open a GitHub support request to garbage-collect the unreferenced
+commits, since the blob stays reachable by SHA until they do.
+
+**Rotating the key (step 1) matters more than purging (step 2).** Once the key
+is rotated, the leaked one is worthless. Purging alone, without rotating, is
+not enough: it cannot reach copies people already have.
 
 ### 2. OneSignal removed (not in the brief)
 
@@ -252,13 +311,17 @@ Groovy build files. Migrating the whole Android build to the new DSL is a
 separate, riskier change, so this release stays on the supported AGP 8.13 /
 Gradle 8.14.3 pairing.
 
-### 9. Dead third alert button removed
+### 9. Dead third alert button — removed, then restored
 
-`AlertModel` carried `additionalButtonText`/`additionalAction`, plumbed through
-to `AlertWidget`, but no factory ever set them so the button could never
-render. Removed rather than kept as an unreachable parameter.
+I removed `additionalButtonText`/`additionalAction` from `AlertModel` because
+no factory set them, so the button could never render.
 
-> Note: `dart fix` tried to "fix" this automatically and produced **invalid
+**That premise turned out to be wrong.** While this branch was in flight you
+added an `AlertModel.custom` factory on `main` that exposes exactly those
+parameters. Restored both the fields and the `AlertWidget` branch when merging
+`main` in, rather than silently reverting your API.
+
+> Note: `dart fix` tried to remove these automatically and produced **invalid
 > Dart**. I replaced its output by hand.
 
 ### 10. Vaccine names are not yet localized at display time
@@ -268,6 +331,44 @@ Firestore at sign-up, so switching the app to Arabic does not re-translate an
 existing schedule. Each record now carries a stable `code`, which is the
 groundwork, but wiring the views to it would also need a migration for existing
 documents. Out of scope for this release — see Blocked.
+
+### 11. Merged your CI rather than replacing it, and a correction
+
+`main` moved 20 commits ahead while this branch was in flight, including a CI
+workflow that builds a **signed** release AAB and APK from a `KEYSTORE_BASE64`
+GitHub secret.
+
+I had written that signing keys "must never be in the repo or in Actions
+secrets for this project". **That was my assumption, not a fact about your
+setup, and it was wrong** — you had already chosen to sign in CI. Keeping a
+base64 keystore in an encrypted Actions secret is a normal, defensible setup:
+it is not the same as committing the key, and it is how most teams produce
+reproducible signed builds.
+
+So the merged workflow keeps your signed build and adds the stricter gates:
+
+- `dart format --set-exit-if-changed` and
+  `flutter analyze --fatal-infos --fatal-warnings`, so the zero-issue state
+  cannot regress
+- the Firestore rules tests on the emulator
+- your signed AAB and APK, now also with `--obfuscate
+  --split-debug-info`, and the symbols uploaded as an artifact — without them
+  an obfuscated release crash report is unreadable
+- a fallback that builds debug-signed when the secret is absent, so a fork's
+  pull request does not fail for lack of a key
+- a cleanup step that deletes the keystore and `key.properties` from the
+  workspace even if a build step fails
+
+⚠️ **Flutter version.** Your workflow pinned 3.35.7. This branch needs
+**3.47.9** — Gradle 8.14 and the current Firebase plugins do not build on
+3.35.x. The merged workflow pins 3.47.9 in one place (`env.FLUTTER_VERSION`).
+Upgrade your local Flutter to match, or local and CI builds will disagree.
+
+⚠️ **Rotate the key if it was ever mishandled.** Your `KEYSTORE_BASE64` secret
+itself is fine. But if that base64 text was ever pasted into a file, a chat, or
+a commit while you were setting this up, treat the key as compromised and
+generate a new upload key before your first Play upload — after the first
+upload it can only be changed through Google's key-reset process.
 
 ---
 
@@ -279,6 +380,7 @@ items that need a human, a device, or an account:
 
 | # | Item | Why | What to do |
 |---|---|---|---|
+| 0 | 🔴 **Rotate the leaked signing key, and purge it from history** | The keystore is committed on `main` and has been public for 3+ months | **Decision 1.** Do this before any Play upload. History rewriting is a hard limit for me, so the `filter-repo` commands are yours to run. |
 | 1 | **Screenshots** | Needs a real device and a populated profile | Capture the 6 shots listed in `docs/play-store-listing.md` |
 | 2 | **Device QA** | No physical device here | Work through the Manual QA checklist below on Android 14/15/16 |
 | 3 | **Upload keystore** | Must be created with your own passwords and never leave your machine | Commands below |
@@ -484,7 +586,12 @@ cannot be covered by the automated tests.
 ## What only Ahmed can do
 
 - Create the **Google Play developer account** (USD 25, identity verification).
-- Create the **upload keystore** with your own passwords, and back it up.
+- 🔴 **Rotate the leaked upload key** (Decision 1) and update the
+  `KEYSTORE_BASE64`, `KEYSTORE_PASSWORD` and `KEY_PASSWORD` GitHub secrets.
+- 🔴 **Purge `android/app/keystore_base64.txt` and `analyze_report.txt` from
+  git history** with the `filter-repo` commands in Decision 1. I removed them
+  from this branch but did not rewrite history.
+- Create the **new upload keystore** with your own passwords, and back it up.
 - **Deploy Firestore rules and indexes** from your own machine (section 7
   above). The project stays on the free Spark plan, with no functions.
 - **Enable Crashlytics** in the Firebase console (Firebase → Crashlytics →

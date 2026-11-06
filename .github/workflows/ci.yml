@@ -1,5 +1,10 @@
 name: CI
 
+# Merged from two versions during the release/play-v1 merge:
+#  - the strict analyze/test/rules gates added on release/play-v1
+#  - the signed release build that already existed on main
+# Both are kept. See RELEASE_NOTES_FOR_AHMED.md, Decision 11.
+
 on:
   pull_request:
     branches: [main]
@@ -11,6 +16,13 @@ concurrency:
   # One run per branch: a new push cancels the in-flight run for the same ref.
   group: ci-${{ github.ref }}
   cancel-in-progress: true
+
+env:
+  # Keep in step with the version recorded in RELEASE_NOTES_FOR_AHMED.md.
+  # Pinned so CI cannot start failing because the stable channel moved.
+  # 3.47.9 is required: Gradle 8.14 and the current Firebase plugins do not
+  # build on the 3.35.x this workflow used before.
+  FLUTTER_VERSION: 3.47.9
 
 jobs:
   analyze-and-test:
@@ -24,9 +36,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          # Pinned so CI cannot start failing because the stable channel moved.
-          # Keep in step with the version in RELEASE_NOTES_FOR_AHMED.md.
-          flutter-version: 3.47.9
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
 
       - name: Install dependencies
@@ -70,13 +80,14 @@ jobs:
 
       - name: Run rules tests against the emulator
         working-directory: firestore-tests
-        # Uses the emulator only; it never touches the live Firebase project.
+        # Emulator only; it never touches the live Firebase project.
         run: npx -y firebase-tools@latest emulators:exec --only firestore --project baby-vax-rules-test "node --test rules.test.mjs"
 
   android-build:
-    name: Android release bundle
+    name: Android release build
+    needs: [analyze-and-test]
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
 
     steps:
       - uses: actions/checkout@v4
@@ -89,24 +100,111 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.47.9
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
 
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build release bundle
-        # Debug-signed: CI has no upload keystore, and signing keys must never
-        # live in the repo or in Actions. This proves the release build
-        # compiles, shrinks and packages; the uploadable AAB is built on
-        # Ahmed's machine with the real key. See RELEASE_NOTES_FOR_AHMED.md.
+      # Signing secrets are not available to pull requests from forks, and may
+      # not be configured at all. Detect once, then branch, so the workflow
+      # never fails merely because a key is absent.
+      - name: Check for signing secrets
+        id: signing
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::No KEYSTORE_BASE64 secret; building debug-signed instead."
+          fi
+
+      # ---- signed path (secrets present) ----
+
+      - name: Decode keystore
+        if: steps.signing.outputs.available == 'true'
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        # Written inside android/app, which is gitignored (*.jks), and lives
+        # only for the length of this job on an ephemeral runner.
+        run: echo "$KEYSTORE_BASE64" | base64 -d > android/app/baby-vax-release-key.jks
+
+      - name: Create key.properties
+        if: steps.signing.outputs.available == 'true'
+        run: |
+          {
+            echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}"
+            echo "keyPassword=${{ secrets.KEY_PASSWORD }}"
+            echo "keyAlias=${{ secrets.KEY_ALIAS }}"
+            echo "storeFile=baby-vax-release-key.jks"
+          } > android/key.properties
+
+      - name: Build signed AAB
+        if: steps.signing.outputs.available == 'true'
+        # --obfuscate with --split-debug-info keeps the symbols needed to read
+        # Crashlytics stack traces from this build; they are uploaded below.
+        run: |
+          flutter build appbundle --release \
+            --build-number=${{ github.run_number }} \
+            --obfuscate --split-debug-info=build/debug-symbols
+
+      - name: Build signed APK
+        if: steps.signing.outputs.available == 'true'
+        # Handy for manual testing outside Play.
+        run: |
+          flutter build apk --release \
+            --build-number=${{ github.run_number }} \
+            --obfuscate --split-debug-info=build/debug-symbols
+
+      - name: Upload signed AAB
+        if: steps.signing.outputs.available == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab
+          path: build/app/outputs/bundle/release/*.aab
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload signed APK
+        if: steps.signing.outputs.available == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload debug symbols
+        if: steps.signing.outputs.available == 'true'
+        # Without these an obfuscated release crash report is unreadable.
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-symbols
+          path: build/debug-symbols/
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Remove signing material
+        # Runs even if a build step failed, so nothing is left in the
+        # workspace for later steps to pick up.
+        if: always() && steps.signing.outputs.available == 'true'
+        run: rm -f android/app/baby-vax-release-key.jks android/key.properties
+
+      # ---- unsigned path (no secrets, e.g. a fork's pull request) ----
+
+      - name: Build debug-signed release bundle
+        if: steps.signing.outputs.available != 'true'
+        # Proves the release build compiles, shrinks and packages. The result
+        # cannot be uploaded to Play.
         run: flutter build appbundle --release -PdebugSignRelease=true
 
-      - name: Upload bundle
+      - name: Upload debug-signed bundle
+        if: steps.signing.outputs.available != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: app-release-debug-signed-aab
           path: build/app/outputs/bundle/release/*.aab
-          # Not uploadable to Play; for inspection only.
           if-no-files-found: error
           retention-days: 14

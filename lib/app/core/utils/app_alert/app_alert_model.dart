@@ -12,10 +12,11 @@ class AlertModel {
   final VoidCallback? yesAction;
   final VoidCallback? noAction;
 
-  // There was a third "additional" button here, plumbed through to
-  // AlertWidget, but no factory ever set it, so it could never render.
-  // Removed along with its branch in AlertWidget rather than kept as an
-  // unreachable parameter.
+  // Optional third button, rendered by AlertWidget when additionalAction is
+  // set. Only AlertModel.custom exposes it.
+  final String? additionalButtonText;
+  final VoidCallback? additionalAction;
+
   AlertModel._({
     required this.type,
     this.title,
@@ -25,6 +26,8 @@ class AlertModel {
     this.noButtonText,
     this.yesAction,
     this.noAction,
+    this.additionalButtonText,
+    this.additionalAction,
   });
 
   factory AlertModel.error(
@@ -82,4 +85,29 @@ class AlertModel {
           yesButtonText: yesButtonText,
           noAction: noAction,
           noButtonText: noButtonText);
+
+  factory AlertModel.custom({
+    required AlertType type,
+    String? title,
+    String? message,
+    String? imagePath,
+    String? yesButtonText,
+    String? noButtonText,
+    String? additionalButtonText,
+    VoidCallback? yesAction,
+    VoidCallback? noAction,
+    VoidCallback? additionalAction,
+  }) =>
+      AlertModel._(
+        type: type,
+        title: title,
+        message: message,
+        imagePath: imagePath,
+        yesButtonText: yesButtonText,
+        noButtonText: noButtonText,
+        additionalButtonText: additionalButtonText,
+        yesAction: yesAction,
+        noAction: noAction,
+        additionalAction: additionalAction,
+      );
 }

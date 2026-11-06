@@ -54,6 +54,9 @@ key.properties.*
 *keystore*.b64
 upload-keystore*
 
+# Generated analyzer output; should never be committed
+analyze_report.txt
+
 # Firestore rules tests (Node)
 firestore-tests/node_modules/
 firestore-tests/package-lock.json
