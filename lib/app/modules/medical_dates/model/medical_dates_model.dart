@@ -1,19 +1,26 @@
 import 'package:baby_vax/app/core/imports/import_library.dart';
-import 'package:baby_vax/app/core/values/app_enum/medical_date_state_enum.dart';
 
 class MedicalDatesModel {
+  MedicalDatesModel({
+    required this.name,
+    required this.description,
+    required this.date,
+    required this.state,
+    this.id,
+    this.code,
+  });
+
+  /// Firestore document id. Null for a record not yet written.
+  final String? id;
+
+  /// Stable schedule code (see [MedicalDatesGenerator]). Null for records
+  /// created before codes existed; display falls back to [name].
+  final String? code;
+
   final String name;
   final String description;
   final DateTime date;
   final String state;
-  final String? id;
-
-  MedicalDatesModel(
-      {required this.name,
-      required this.description,
-      required this.date,
-      required this.state,
-      this.id});
 
   MedicalDatesModel copyWith({
     String? name,
@@ -21,6 +28,7 @@ class MedicalDatesModel {
     DateTime? date,
     String? state,
     String? id,
+    String? code,
   }) {
     return MedicalDatesModel(
       name: name ?? this.name,
@@ -28,39 +36,58 @@ class MedicalDatesModel {
       date: date ?? this.date,
       state: state ?? this.state,
       id: id ?? this.id,
+      code: code ?? this.code,
     );
   }
 
-  factory MedicalDatesModel.fromJson(Map<String, dynamic>? json) {
-    final date = json?["date"];
-    DateTime parsedDate = date is Timestamp ? date.toDate() : date;
-    return MedicalDatesModel(
-        name: json?["name"] ?? "",
-        description: json?["description"],
-        date: parsedDate,
-        state: json?["state"] ?? "",
-        id: json?["id"]);
-  }
+  factory MedicalDatesModel.fromJson(Map<String, dynamic>? json) =>
+      MedicalDatesModel._fromMap(json ?? const <String, dynamic>{}, json?['id']);
 
   factory MedicalDatesModel.fromDocument(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
-    final date = data["date"];
-    DateTime parsedDate = date is Timestamp ? date.toDate() : date;
+    final Object? raw = doc.data();
+    final Map<String, dynamic> data =
+        raw is Map<String, dynamic> ? raw : const <String, dynamic>{};
+    return MedicalDatesModel._fromMap(data, doc.id);
+  }
+
+  /// Tolerant of partial documents.
+  ///
+  /// The previous version read `data["name"]` and `data["description"]`
+  /// straight into non-nullable fields and assumed `date` was always a
+  /// `Timestamp`, so a document written by an older build, or one missing a
+  /// field, threw while parsing and took out the whole schedule screen.
+  factory MedicalDatesModel._fromMap(Map<String, dynamic> data, String? id) {
     return MedicalDatesModel(
-        name: data["name"],
-        description: data["description"],
-        date: parsedDate,
-        state: data["state"],
-        id: doc.id);
+      id: id as String?,
+      code: data['code'] as String?,
+      name: (data['name'] as String?) ?? '',
+      description: (data['description'] as String?) ?? '',
+      date: _parseDate(data['date']),
+      state: (data['state'] as String?) ?? '',
+    );
+  }
+
+  /// Accepts a Firestore [Timestamp], a [DateTime], or an ISO-8601 string.
+  ///
+  /// Falls back to the epoch rather than throwing: a single malformed date
+  /// should leave that one row looking wrong, not break the list.
+  static DateTime _parseDate(Object? value) {
+    if (value is Timestamp) return value.toDate();
+    if (value is DateTime) return value;
+    if (value is String) {
+      final DateTime? parsed = DateTime.tryParse(value);
+      if (parsed != null) return parsed;
+    }
+    return DateTime.fromMillisecondsSinceEpoch(0);
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      "name": name,
-      "description": description,
-      "date": Timestamp.fromDate(date),
-      "state": state,
-      // "id": id ?? "${name}_$date",
+    return <String, dynamic>{
+      'name': name,
+      'description': description,
+      'date': Timestamp.fromDate(date),
+      'state': state,
+      if (code != null) 'code': code,
     };
   }
 }

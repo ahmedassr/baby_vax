@@ -138,6 +138,10 @@ Map<String, String> en = {
   "VaccinationTimeStatusEnum_weeksLeft": "Weeks Left",
   "VaccinationTimeStatusEnum_monthsLeft": "Months Left",
   "VaccinationTimeStatusEnum_yearsLeft": "Years Left",
+  // Birth date validation:
+  "invalid_date_of_birth_error_msg": "Please enter a valid date of birth.",
+  "future_date_of_birth_error_msg": "The date of birth cannot be in the future.",
+  "too_old_date_of_birth_error_msg": "This app covers the vaccination schedule up to age 18.",
   // Notifications:
   "Notification_vaccine_today_title": "Vaccination due today",
   "Notification_vaccine_today_body": "@child - today is the appointment for: @vaccine",

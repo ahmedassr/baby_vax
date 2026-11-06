@@ -152,6 +152,10 @@ Map<String, String> ar = {
   "VaccinationTimeStatusEnum_weeksLeft": " أسابيع متبقية",
   "VaccinationTimeStatusEnum_monthsLeft": " أشهر متبقية",
   "VaccinationTimeStatusEnum_yearsLeft": "سنوات متبقية",
+  // Birth date validation:
+  "invalid_date_of_birth_error_msg": "الرجاء إدخال تاريخ ميلاد صحيح.",
+  "future_date_of_birth_error_msg": "تاريخ الميلاد لا يمكن أن يكون في المستقبل.",
+  "too_old_date_of_birth_error_msg": "يغطي التطبيق جدول التطعيمات حتى عمر 18 سنة.",
   // Notifications:
   "Notification_vaccine_today_title": "موعد تطعيم اليوم",
   "Notification_vaccine_today_body": "@child - اليوم موعد تطعيم: @vaccine",

@@ -102,10 +102,20 @@ class SignupController extends GetxController
           "empty_password_error_msg".tr;
       valid = false;
     }
-    if (signupControllers["birthdayController"]?.text.isEmpty ?? true) {
+    final String birthdayText =
+        signupControllers["birthdayController"]?.text.trim() ?? "";
+    if (birthdayText.isEmpty) {
       signupErrorText["birthdayErrorText"]?.value =
           "empty_date_of_birth_error_msg".tr;
       valid = false;
+    } else {
+      // Validate here rather than letting the generator throw mid-signup,
+      // after the Auth user has already been created.
+      final String? birthdayError = _birthDateError(birthdayText);
+      if (birthdayError != null) {
+        signupErrorText["birthdayErrorText"]?.value = birthdayError;
+        valid = false;
+      }
     }
     if (signupControllers["bloodPercentageController"]?.text.isEmpty ?? true) {
       signupErrorText["bloodPercentageErrorText"]?.value =
@@ -126,6 +136,22 @@ class SignupController extends GetxController
       valid = false;
     }
     return valid;
+  }
+
+  /// Localized reason the birth date is unusable, or null when it is fine.
+  String? _birthDateError(String birthdayText) {
+    try {
+      MedicalDatesGenerator.parseBirthDate(birthdayText);
+      return null;
+    } on InvalidBirthDateException catch (e) {
+      if (e.reason.contains('future')) {
+        return "future_date_of_birth_error_msg".tr;
+      }
+      if (e.reason.contains('years ago')) {
+        return "too_old_date_of_birth_error_msg".tr;
+      }
+      return "invalid_date_of_birth_error_msg".tr;
+    }
   }
 
   Future<void> userSignup() async {
