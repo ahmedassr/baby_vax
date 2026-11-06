@@ -6,12 +6,31 @@ plugins {
     id "com.google.gms.google-services"
 }
 
+// Release signing is driven by android/key.properties, which is gitignored and
+// never committed. Ahmed creates it himself (see RELEASE_NOTES_FOR_AHMED.md).
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
+def hasKeystore = keystorePropertiesFile.exists()
 
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+if (hasKeystore) {
+    keystorePropertiesFile.withInputStream { keystoreProperties.load(it) }
+
+    // Fail early on a half-filled file rather than producing an unsigned or
+    // wrongly-signed artifact that Play rejects much later.
+    def missingKeys = ['storeFile', 'storePassword', 'keyAlias', 'keyPassword']
+            .findAll { !keystoreProperties[it]?.trim() }
+    if (!missingKeys.isEmpty()) {
+        throw new GradleException(
+            'android/key.properties is missing required entries: ' +
+            missingKeys.join(', ') + '.\n' +
+            "See 'Commands for Ahmed' in RELEASE_NOTES_FOR_AHMED.md.")
+    }
 }
+
+// Escape hatch for CI and sandbox verification: debug-sign a release build to
+// prove it compiles, without a real upload key. Never use for a Play upload.
+//   flutter build appbundle --release -PdebugSignRelease=true
+def debugSignRelease = project.hasProperty('debugSignRelease')
 
 android {
     namespace = "com.ahmedalassar.babyvax"
@@ -43,17 +62,36 @@ android {
     }
 
     signingConfigs {
-        release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            storePassword keystoreProperties['storePassword']
+        // Only declared when a real keystore is configured. The previous version
+        // always declared it with a possibly-null storeFile, which let a release
+        // build silently fall through to an effectively unsigned config.
+        if (hasKeystore) {
+            release {
+                storeFile = file(keystoreProperties['storeFile'])
+                storePassword = keystoreProperties['storePassword']
+                keyAlias = keystoreProperties['keyAlias']
+                keyPassword = keystoreProperties['keyPassword']
+            }
         }
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.release
+            if (hasKeystore) {
+                signingConfig = signingConfigs.release
+            } else if (debugSignRelease) {
+                // Verification build only; see the note above.
+                signingConfig = signingConfigs.debug
+            } else {
+                // No key and no opt-in: leave unsigned and let the guard at the
+                // bottom of this file stop the build with an actionable message.
+                signingConfig = null
+            }
+
+            minifyEnabled = true
+            shrinkResources = true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.pro'
         }
     }
     dependencies {
@@ -64,4 +102,27 @@ android {
 
 flutter {
     source = "../.."
+}
+
+// Stops a release build that would otherwise produce an unsigned artifact.
+// Scoped to the task graph so debug builds, `flutter analyze` and
+// `flutter test` are unaffected.
+gradle.taskGraph.whenReady { graph ->
+    def wantsRelease = graph.allTasks.any { task ->
+        task.project == project && task.name ==~ /(?i)(assemble|bundle).*Release.*/
+    }
+    if (wantsRelease && !hasKeystore && !debugSignRelease) {
+        throw new GradleException([
+            'Release build blocked: android/key.properties not found.',
+            '',
+            'A release build without it would be unsigned and rejected by Play.',
+            '',
+            'Either:',
+            '  1. Create the upload keystore and android/key.properties.',
+            "     Exact commands: 'Commands for Ahmed' in RELEASE_NOTES_FOR_AHMED.md",
+            '  2. For a compile check only, debug-sign it:',
+            '     flutter build appbundle --release -PdebugSignRelease=true',
+            '     (debug-signed artifacts cannot be uploaded to Play)',
+        ].join('\n'))
+    }
 }
