@@ -1,7 +1,125 @@
 # Baby Vax — Play Store release prep
 
 Branch `release/play-v1` → draft PR into `main`.
-Autonomous cloud run, 2026-11-06.
+Autonomous cloud run, 2026-11-06. Local follow-up run, 2026-11-08 (key
+rotation tooling, CI signing checks, app size).
+
+---
+
+## 🔴 Key rotation: do this first
+
+The old upload key (`android/app/keystore_base64.txt`, commit `bf1c504`) has
+been public on GitHub since 2026-07-26. **Never use it for Play.** Baby Vax is
+not on Play yet, so replacing it now costs nothing. After the first upload it
+would mean Google's key-reset process instead.
+
+### 1. Run the rotation script yourself, in your own terminal
+
+Not in Claude Code or any other tool that records the session. The script asks
+for your passwords.
+
+Prerequisites: JDK 17+ (`keytool`) and the GitHub CLI, logged in as an admin
+of `ahmedassr/baby_vax`:
+
+```powershell
+winget install --id GitHub.cli
+gh auth login
+```
+
+Then, from the repo root:
+
+```powershell
+# Windows
+powershell -ExecutionPolicy Bypass -File scripts\rotate-upload-key.ps1
+```
+
+```bash
+# Linux / macOS / Git Bash
+bash scripts/rotate-upload-key.sh
+```
+
+What it does:
+
+1. Checks `keytool` (JDK 17+), `gh`, `gh auth status`, and that `gh` can
+   see the repo.
+2. Asks for the store password, hidden and typed twice. Then it asks for the
+   key password, which **must be the same** password: a PKCS12 keystore has
+   one password, and keytool silently ignores a different key password, so
+   the build would later fail to open the key. Allowed characters are
+   printable ASCII with no spaces and no backslash, so the password survives
+   `key.properties` unchanged.
+3. Creates `~/keys/babyvax-upload.jks` (PKCS12, RSA 2048, 10000 days, alias
+   `upload`). It **refuses to overwrite** an existing file. If one exists,
+   it offers to *reuse* it, so you can re-run after a failed `gh` step.
+4. Sets the four GitHub secrets the workflow reads: `KEYSTORE_BASE64`,
+   `KEYSTORE_PASSWORD`, `KEY_PASSWORD`, `KEY_ALIAS`. Values go to `gh` over
+   stdin, never as arguments.
+5. Writes `android/key.properties` (gitignored, readable only by you) for
+   local release builds, and checks that git ignores it.
+6. Prints the SHA-1 and SHA-256 fingerprints.
+7. Ends with the backup reminder below.
+
+Passwords never appear on a command line, in shell history, or in logs. They
+reach `keytool` only through its own environment (`-storepass:env`).
+
+### 2. Back up, today
+
+Copy **the `.jks` file and its password** to **two places off the laptop**,
+for example:
+
+- your password manager (attach the `.jks` to the entry that holds the
+  password), and
+- an encrypted USB stick (BitLocker To Go / VeraCrypt) kept somewhere else.
+
+Losing it means no app updates until Google resets the upload key, which takes
+days.
+
+### 3. Fingerprints: what to do with them
+
+- **Play Console:** nothing to paste. Play reads the upload certificate from
+  your first signed upload. With Play App Signing (the default), Google then
+  re-signs the app with its own **app signing key**.
+- **Firebase Auth:** not needed. The app signs in with **email and password
+  only**. There is no Google Sign-In, phone auth or Dynamic Links, which are
+  the features that need a SHA-1 in Firebase. (`google-services.json`
+  currently has no `certificate_hash` entries, which confirms this.)
+- **Firebase App Check (Play Integrity):** this one *does* need a SHA-256,
+  but of Google's **app signing key**, not your upload key. Copy it from Play
+  Console → Test and release → App integrity → App signing after the first
+  upload, and add it under Firebase → Project settings → your Android app.
+  Builds you sideload with your upload key never get a valid Play Integrity
+  verdict anyway, so the upload key's SHA-256 adds nothing.
+- If the **old** key's fingerprints were ever added in Firebase, delete them.
+
+### 4. Then
+
+- Delete every local copy of the old keystore and its base64 text.
+- Purge it from git history: the `filter-repo` commands are in
+  [Decision 1](#1-️-the-signing-key-is-leaked--i-got-this-wrong-at-first-then-corrected-it).
+  Rotating matters more than purging: once rotated, the leaked key is worthless.
+
+### How CI uses the secrets now
+
+| Event | Build | Secrets |
+|---|---|---|
+| push to `main`, or Actions → CI → **Run workflow** | **signed** AAB + per-ABI APKs, uploaded | all four required |
+| pull requests, pushes to `release/**` | compile check, debug-signed, **nothing uploaded** | not read at all |
+
+On a signed run, `scripts/ci/android-signing.sh` stops the job with a named
+`::error::` before building if any secret is missing, the base64 is corrupt, a
+password is wrong, the alias is absent, or the key is an Android debug key. It
+checks `KEY_PASSWORD` by actually signing a throwaway jar. After the build it
+checks that every artifact is signed by exactly the upload certificate
+(`keytool` for the AAB, `apksigner` for the APKs), so an unsigned or
+debug-signed file can never be uploaded. Before this change, a missing
+`KEYSTORE_BASE64` on `main` silently produced a **debug-signed** bundle and
+uploaded it as an artifact. And the passwords were pasted into the shell
+script source with `${{ }}`, so a `"` or `$` in a password broke the step.
+Now they are passed through `env:`.
+
+All ten failure and success paths were tested locally against the debug
+keystore and a throwaway PKCS12 key (see the PR). No signed CI run was
+triggered.
 
 ---
 
