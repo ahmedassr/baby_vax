@@ -3,6 +3,7 @@ import 'package:baby_vax/app/core/values/languages/app_translations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/foundation.dart';
 
+import 'app/config/themes/app_fonts.dart';
 import 'app/core/imports/import_manger.dart';
 import 'app/core/service/init_app_service.dart';
 
@@ -31,6 +32,9 @@ class _ReleaseQuietFilter extends LogFilter {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Before anything can touch AppTheme, so the font never comes from the
+  // network.
+  configureBundledFonts();
   await initAppService();
   final isDarkMode =
       AppConstant.getStorage.read(StorageKey.isDarkModeKey) ?? false;

@@ -97,6 +97,8 @@ dev_dependencies:
   # Build-time generator only (`dart run flutter_launcher_icons`), so it
   # belongs here rather than in the app's dependencies.
   flutter_launcher_icons: ^0.14.2
+  # Tests only: pins the bundled font's SHA-256 (already a transitive dep).
+  crypto: ^3.0.8
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -119,9 +121,13 @@ flutter:
   #                            never loaded by Dart code
   # test/assets/asset_references_test.dart fails if code references a file
   # that is not listed here, or if a listed file is never referenced.
+  #  - assets/google_fonts/    Cairo, bundled so it is never fetched at
+  #                            runtime; see lib/app/config/themes/app_fonts.dart
   assets:
     - assets/appIcon.webp
     - assets/animations/no_records.json
+    - assets/google_fonts/Cairo-Regular.ttf
+    - assets/google_fonts/OFL.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -30,12 +30,25 @@ Map<String, List<String>> _assetPathsReferencedInCode() {
       .whereType<File>()
       .where((f) => f.path.endsWith('.dart'));
   for (final file in dartFiles) {
-    for (final m in _assetLiteral.allMatches(file.readAsStringSync())) {
+    final source = file.readAsStringSync();
+    for (final m in _assetLiteral.allMatches(source)) {
       refs.putIfAbsent(m.group(1)!, () => []).add(file.path);
+    }
+    // google_fonts finds bundled fonts by file name, not by a path in code:
+    // GoogleFonts.cairo() with no weight loads "Cairo-Regular.ttf" from
+    // wherever it is in the bundle. Count that call as a reference to it.
+    for (final m in _googleFontsCall.allMatches(source)) {
+      final family = m.group(1)![0].toUpperCase() + m.group(1)!.substring(1);
+      refs
+          .putIfAbsent('assets/google_fonts/$family-Regular.ttf', () => [])
+          .add(file.path);
     }
   }
   return refs;
 }
+
+/// `GoogleFonts.cairo()` with no arguments, i.e. the regular weight.
+final _googleFontsCall = RegExp(r'GoogleFonts\.([a-z]+)\(\)');
 
 String _extension(String path) {
   final dot = path.lastIndexOf('.');
