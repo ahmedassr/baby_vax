@@ -9,9 +9,16 @@ plugins {
 
 // Release signing is driven by android/key.properties, which is gitignored and
 // never committed. Ahmed creates it himself (see RELEASE_NOTES_FOR_AHMED.md).
+// Escape hatch for CI and sandbox verification: debug-sign a release build to
+// prove it compiles, without a real upload key. Never use for a Play upload.
+//   flutter build appbundle --release -PdebugSignRelease=true
+// It wins over key.properties, and the file is then not even opened, so a
+// compile check or size measurement never touches the real upload key.
+def debugSignRelease = project.hasProperty('debugSignRelease')
+
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
-def hasKeystore = keystorePropertiesFile.exists()
+def hasKeystore = !debugSignRelease && keystorePropertiesFile.exists()
 
 if (hasKeystore) {
     keystorePropertiesFile.withInputStream { keystoreProperties.load(it) }
@@ -27,11 +34,6 @@ if (hasKeystore) {
             "See 'Commands for Ahmed' in RELEASE_NOTES_FOR_AHMED.md.")
     }
 }
-
-// Escape hatch for CI and sandbox verification: debug-sign a release build to
-// prove it compiles, without a real upload key. Never use for a Play upload.
-//   flutter build appbundle --release -PdebugSignRelease=true
-def debugSignRelease = project.hasProperty('debugSignRelease')
 
 android {
     namespace = "com.ahmedalassar.babyvax"
