@@ -569,20 +569,25 @@ gpg -c ~/baby-vax-upload-key.jks
 flutter clean && flutter pub get
 ```
 
-```bash
-flutter build appbundle --release
-```
-
-The AAB lands at `build/app/outputs/bundle/release/app-release.aab`.
-
-### 5. Build with obfuscation and keep the symbols
-
-Recommended for the real upload. **Keep the `debug-symbols` directory** — you
-need it to read any crash report from that build.
+This is **the** release command, the same one CI uses. Always build Play
+uploads with obfuscation:
 
 ```bash
 flutter build appbundle --release --obfuscate --split-debug-info=build/debug-symbols
 ```
+
+The AAB lands at `build/app/outputs/bundle/release/app-release.aab`.
+
+### 5. Keep the symbols from every upload
+
+**Keep the `build/debug-symbols` directory** from each build you upload,
+labelled with its version code. Without it, Dart stack traces in
+Crashlytics from that build are unreadable. CI keeps them as the
+`debug-symbols` artifact for 90 days, so download a copy before that.
+
+The R8 mapping and native debug symbols are already inside the AAB
+(`BUNDLE-METADATA/`). Play uses them automatically, and they are never
+downloaded to phones.
 
 ### 6. Verify what you are about to upload
 
