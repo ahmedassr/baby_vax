@@ -68,11 +68,13 @@ jobs:
           cache-dependency-path: firestore-tests/package.json
 
       - name: Set up JDK
-        # The Firestore emulator is a Java process.
+        # The Firestore emulator is a Java process. firebase-tools 15 refuses
+        # to start on anything older than Java 21. (The Android job below
+        # stays on 17, which is what the Gradle build targets.)
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
 
       - name: Install dependencies
         working-directory: firestore-tests
@@ -81,7 +83,9 @@ jobs:
       - name: Run rules tests against the emulator
         working-directory: firestore-tests
         # Emulator only; it never touches the live Firebase project.
-        run: npx -y firebase-tools@latest emulators:exec --only firestore --project baby-vax-rules-test "node --test rules.test.mjs"
+        # Pinned to a major version: @latest is how a Java 21 requirement
+        # arrived unannounced and broke this job.
+        run: npx -y firebase-tools@15 emulators:exec --only firestore --project baby-vax-rules-test "node --test rules.test.mjs"
 
   android-build:
     name: Android release build
