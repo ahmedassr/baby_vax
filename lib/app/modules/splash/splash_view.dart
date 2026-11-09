@@ -1,5 +1,6 @@
 import 'package:baby_vax/app/config/themes/app_colors.dart';
 import 'package:baby_vax/app/core/imports/import_library.dart';
+import 'package:baby_vax/app/core/values/app_image.dart';
 import 'package:baby_vax/app/core/widget/app_text.dart';
 import 'package:baby_vax/app/modules/splash/splash_controller.dart';
 
@@ -20,9 +21,8 @@ class SplashView extends GetView<SplashController> {
               child: ScaleTransition(
                 scale: controller.logoScale,
                 child: Image.asset(
-                  // Lossless WebP of assets/appIcon.png (which stays as the
-                  // launcher-icon source). 512 px covers 120 dp up to 4x.
-                  'assets/appIcon.webp',
+                  // 512 px covers 120 dp up to 4x density.
+                  AppImage.appIcon,
                   width: 120,
                 ),
               ),

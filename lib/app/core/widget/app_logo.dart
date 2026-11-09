@@ -14,10 +14,14 @@ class AppLogo extends StatelessWidget {
           color: AppColors.primary.withValues(alpha: 0.08),
         ),
         padding: const EdgeInsets.all(18),
-        child: const ImageIcon(
-          AssetImage(AppImage.appIcon),
-          size: 100,
-          color: AppColors.primary,
+        // The real icon in its own colours. This was an ImageIcon pointed at
+        // a Lottie JSON file, which cannot decode as an image, so the login
+        // screen showed an empty circle.
+        child: Image.asset(
+          AppImage.appIcon,
+          width: 100,
+          height: 100,
+          semanticLabel: 'Baby Vax',
         ));
   }
 }
