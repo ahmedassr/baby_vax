@@ -121,6 +121,122 @@ All ten failure and success paths were tested locally against the debug
 keystore and a throwaway PKCS12 key (see the PR). No signed CI run was
 triggered.
 
+**Status (2026-11-09):** you ran the script on 2026-11-08. `gh secret list`
+shows all four secrets updated at 14:13:15–14:13:19 UTC that day.
+`android/key.properties` exists and is gitignored. Nobody else has read it.
+
+---
+
+## App size
+
+### What users actually download
+
+The AAB is not what Play sends to phones. Play cuts it into per-device split
+APKs (one ABI, one screen density, one language), and the AAB also carries
+debug symbols that are never downloaded. Measured with `bundletool
+build-apks` + `get-size total`, for an arm64 phone at 420 dpi, English,
+API 34:
+
+| | Before | After | Saved |
+|---|---:|---:|---:|
+| **Download, arm64 phone** | **11,168,009 B (10.65 MiB)** | **10,740,649 B (10.24 MiB)** | **427,360 B (−3.8%)** |
+| Download, any arm64 config (6 densities) | 11.14–11.18 MB | 10.73–10.75 MB | 411–428 KB |
+| Download, armeabi-v7a (older phones) | 10.73–10.77 MB | 10.32–10.35 MB | 409–426 KB |
+| Installed size, arm64 (APK entries) | 23,975 KiB | 23,301 KiB | 674 KiB |
+| Release AAB (obfuscated, 3 ABIs) | 59,407,202 B (56.7 MiB) | 58,495,953 B (55.8 MiB) | 911,249 B |
+
+Both builds used the same command: `flutter build appbundle --release
+--obfuscate --split-debug-info=build/debug-symbols -PdebugSignRelease=true`,
+Flutter 3.47.5, then bundletool 1.18.3. The earlier "63.5 MB" was a
+non-obfuscated build, and the "180 MB" debug APK carries a JIT engine and all
+ABIs; neither is what users get.
+
+### Where the 10.7 MB goes (arm64, after)
+
+| Part | Installed | Share | Can it shrink? |
+|---|---:|---:|---|
+| `libflutter.so`, the Flutter engine | 11,473 KiB | 49% | No, fixed per Flutter version |
+| `libapp.so`, compiled Dart code | 6,913 KiB | 30% | Only by dropping packages (see below) |
+| dex: Java/Kotlin, after R8 | 4,124 KiB | 18% | Mostly the Firebase SDKs |
+| Android resources | 155 KiB | 0.7% | |
+| App assets, all together | 132 KiB | 0.6% | Already minimal |
+| Everything else | 503 KiB | 2% | |
+
+Dart code by package (`--analyze-size --target-platform android-arm64`,
+before): `flutter` 3 MB; `timezone` 448 KB; `lottie` 373 KB (+ `archive`
+209 KB, which it pulls in); `flutter_localizations` 292 KB; the app's own
+code (`package:baby_vax`) only 202 KB.
+
+### What changed, and what each change saved (arm64, compressed)
+
+| Change | Effect |
+|---|---:|
+| Removed 6 unused packages: `cupertino_icons`, `smooth_page_indicator`, `fluttertoast`, `flutter_localization`, `flutter_svg`, `shared_preferences` (17 lock-file entries counting their dependencies) | dex −357 KB, resources −134 KB, Cupertino font −113 KB |
+| Stopped bundling `app_branding.png` and `appIcon.png` (build-time sources for the splash and launcher icons) | −179 KB |
+| `appIcon.webp` added: lossless, decodes to exactly the same pixels | +80 KB |
+| Cairo font bundled (see below) | +47 KB |
+| Moved `flutter_launcher_icons` to `dev_dependencies` | none (generator only) |
+
+Dart code (`libapp.so`) is byte-for-byte the same size: the removed packages
+were never imported, so tree shaking had already dropped their Dart code.
+What they still cost was native code, resources and a font.
+
+R8 minify and resource shrinking stay on. `--obfuscate --split-debug-info`
+is now the documented release command (Commands, section 4) and is what CI
+runs.
+
+### No visual change
+
+- `test/assets/asset_references_test.dart` (new) fails if code references a
+  path that is not bundled or not on disk, or if a bundled asset is never
+  used. It also decodes every image and parses every Lottie animation,
+  including any images an animation references.
+- `test/assets/bundled_font_test.dart` (new) proves Cairo loads from the
+  bundle with network fetching off, and pins its SHA-256.
+- `flutter analyze --fatal-infos --fatal-warnings`: no issues.
+  `flutter test`: **72/72 pass**.
+
+### Your decisions (2026-11-09)
+
+| # | Option | Saving | Decision |
+|---|---|---:|---|
+| 1 | Smaller timezone database (`latest` instead of `latest_all`) | ~190 KB | **Kept `latest_all`.** Old aliases like `Asia/Calcutta` would fall back to UTC and fire reminders at the wrong hour. |
+| 2 | Replace the one Lottie animation with a still image | ~0.6 MB Dart code | **Kept Lottie.** |
+| 3 | Bundle the Cairo font | −47 KB (costs size) | **Bundled.** Details below. |
+| 4 | Login-screen logo rendered as an empty circle | — | **Fixed.** Details below. |
+
+### Cairo font: bundled, never fetched
+
+`google_fonts` used to download Cairo from `fonts.gstatic.com` the first time
+the app ran. On a first launch offline the app showed the system font. And
+every device contacted Google, which the privacy policy did not mention.
+
+- `assets/google_fonts/Cairo-Regular.ttf` is **byte-for-byte** the file
+  `google_fonts` 9.0.0 downloads. Its SHA-256 `d33c4f55…b00` matches the hash
+  pinned in the package, so rendering is identical.
+- Only Regular is bundled, because Regular is the only weight the app has
+  ever loaded. `GoogleFonts.cairo()` with no weight resolves to the
+  `Cairo_regular` family, and the whole theme uses that one family; bold text
+  is synthesised from it by the engine. (Bundling real Bold and setting up
+  the theme to use it would change how bold text looks. That's a design
+  choice for later.)
+- `GoogleFonts.config.allowRuntimeFetching = false` is set first thing in
+  `main()`.
+- The SIL OFL 1.1 licence ships alongside the font, as the licence requires,
+  and appears on the app's Licenses page.
+- **Privacy policy:** it never mentioned Google Fonts, and now it doesn't
+  need to, because the app makes no font requests. No edit was needed. The
+  Data safety answers are unchanged.
+
+### Login logo fix
+
+`AppImage.appIcon` pointed at `assets/animations/no_records.json`, a Lottie
+file, and `AppLogo` drew it with `ImageIcon`, which cannot decode it, so the
+login screen showed an empty tinted circle. `AppLogo` now shows
+`assets/appIcon.webp` (the splash image) with `Image.asset`, in its own
+colours, at the same 100 × 100 inside the same circle. Add it to your device
+QA: open the login screen in light and dark mode.
+
 ---
 
 STATUS: DONE
@@ -289,7 +405,16 @@ caught, and a typo produced a schedule of impossible appointments.
   emulator, and the signed release build that already existed on `main`,
   merged together. See Decision 11.
 - `.gitignore` extended to `*.p12`, `*.pfx`, `key.properties.*` and base64
-  keystore dumps.
+  keystore dumps, plus `*keystore_base64*` and `.claude/settings.local.json`.
+- (2026-11-09) The **Firestore rules job had failed on every run**: with
+  `firebase-tools@latest` now at v15, which exits with "no longer supports
+  Java version before 21", while the job installed Java 17. It now uses
+  Java 21 and pins `firebase-tools@15`. The Android job stays on 17.
+- (2026-11-09) `-PdebugSignRelease=true` now takes precedence over
+  `key.properties` and doesn't open it, so a compile check or size
+  measurement never touches your real upload key.
+- (2026-11-09) `.gitattributes` keeps `*.sh` at LF, so the scripts still run
+  from a Windows checkout.
 
 ---
 
@@ -703,6 +828,10 @@ cannot be covered by the automated tests.
 
 ### General
 
+- [ ] Login screen shows the Baby Vax icon in colour inside the pale circle
+      (it used to be empty), in light and dark mode.
+- [ ] First launch in **aeroplane mode** on a fresh install: text is in
+      Cairo, not the system font.
 - [ ] Rotate the device on each screen; no crash.
 - [ ] Kill and relaunch from the launcher; the session is restored.
 - [ ] With TalkBack on, the disclaimer is read as one notice, and the
