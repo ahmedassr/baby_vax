@@ -20,7 +20,9 @@ class SplashView extends GetView<SplashController> {
               child: ScaleTransition(
                 scale: controller.logoScale,
                 child: Image.asset(
-                  'assets/appIcon.png',
+                  // Lossless WebP of assets/appIcon.png (which stays as the
+                  // launcher-icon source). 512 px covers 120 dp up to 4x.
+                  'assets/appIcon.webp',
                   width: 120,
                 ),
               ),
