@@ -60,6 +60,11 @@ class NotificationCoordinator extends GetxService {
   /// the schedule itself does not depend on notifications.
   Future<bool> requestPermission() => _notificationService.requestPermission();
 
+  /// Whether reminders will actually be shown. False when the user has
+  /// turned this app's notifications off in system settings.
+  Future<bool> notificationsEnabled() =>
+      _notificationService.areNotificationsEnabled();
+
   /// Schedules both reminders for one vaccine.
   ///
   /// Silently skips anything already in the past or beyond the horizon.

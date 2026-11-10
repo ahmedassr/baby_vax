@@ -1,14 +1,62 @@
 import 'package:baby_vax/app/config/constant/app_path.dart';
 import 'package:baby_vax/app/core/imports/import_manger.dart';
+import 'package:baby_vax/app/core/notification/data/notification_settings_opener.dart';
 
 class HomeController extends GetxController with StateMixin, StateMixinHelper {
+  HomeController({
+    Future<bool> Function()? notificationsEnabled,
+    NotificationSettingsOpener settingsOpener =
+        const NotificationSettingsOpener(),
+  })  : _notificationsEnabled =
+            notificationsEnabled ?? _coordinatorNotificationsEnabled,
+        _settingsOpener = settingsOpener;
+
+  final Future<bool> Function() _notificationsEnabled;
+  final NotificationSettingsOpener _settingsOpener;
+
   final Rxn<UserModel> userDetails = Rxn<UserModel>();
   final Rxn<MedicalDatesModel> nextVaccination = Rxn<MedicalDatesModel>();
+
+  /// True while this app's notifications are off in system settings, so
+  /// reminders would not be shown. Drives the banner on the home screen.
+  final RxBool notificationsOff = false.obs;
+
+  AppLifecycleListener? _lifecycle;
+
+  static Future<bool> _coordinatorNotificationsEnabled() async {
+    if (!Get.isRegistered<NotificationCoordinator>()) return true;
+    return Get.find<NotificationCoordinator>().notificationsEnabled();
+  }
 
   @override
   void onInit() {
     super.onInit();
+    // Re-check when the user comes back, typically from the settings
+    // screen the banner opened.
+    _lifecycle = AppLifecycleListener(onResume: refreshNotificationStatus);
     fetchUserData();
+  }
+
+  @override
+  void onClose() {
+    _lifecycle?.dispose();
+    super.onClose();
+  }
+
+  Future<void> refreshNotificationStatus() async {
+    if (!SessionManager.isSignedIn) {
+      notificationsOff.value = false;
+      return;
+    }
+    notificationsOff.value = !(await _notificationsEnabled());
+  }
+
+  Future<void> openNotificationSettings() async {
+    final bool opened = await _settingsOpener.open();
+    if (!opened) {
+      AppConstant.alertService
+          .showError(message: "Notification_permission_denied_msg".tr);
+    }
   }
 
   Future<void> getNextVaccination(String uid) async {
@@ -54,6 +102,7 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
         userDetails.value = data;
         await getNextVaccination(uid);
         setSuccess();
+        await refreshNotificationStatus();
       }
     } catch (_) {
       setError("unexpected_error".tr);

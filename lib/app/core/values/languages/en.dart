@@ -203,6 +203,7 @@ Map<String, String> en = {
   "Skipped": "Skipped",
 
   // Dose state actions:
+  "Notification_open_settings": "Open settings",
   "Reminder_default_child_name": "Your baby",
   "saved_offline_msg":
       "Saved on this phone. It will sync when you are back online.",

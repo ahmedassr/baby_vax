@@ -172,6 +172,32 @@ class LocalNotificationProvider implements NotificationService {
     }
   }
 
+  @override
+  Future<bool> areNotificationsEnabled() async {
+    _assertInitialized();
+    try {
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        final AndroidFlutterLocalNotificationsPlugin? android =
+            _plugin.resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>();
+        return await android?.areNotificationsEnabled() ?? false;
+      }
+      if (defaultTargetPlatform == TargetPlatform.iOS) {
+        final IOSFlutterLocalNotificationsPlugin? ios =
+            _plugin.resolvePlatformSpecificImplementation<
+                IOSFlutterLocalNotificationsPlugin>();
+        final NotificationsEnabledOptions? options =
+            await ios?.checkPermissions();
+        return options?.isEnabled ?? false;
+      }
+      return true;
+    } catch (e, s) {
+      logger.w('Notification status check failed', error: e, stackTrace: s);
+      // Unknown: don't nag the user with a banner we can't back up.
+      return true;
+    }
+  }
+
   void _assertInitialized() {
     assert(
       _initialized,

@@ -22,6 +22,11 @@ abstract class NotificationService {
   /// Asks for the OS notification permission. Returns false when denied.
   Future<bool> requestPermission();
 
+  /// Whether the OS will show this app's notifications right now. The user
+  /// can turn them off in system settings at any time, so check this
+  /// instead of remembering the answer to [requestPermission].
+  Future<bool> areNotificationsEnabled();
+
   /// Re-reads the device timezone, for use after a system timezone change.
   Future<void> refreshTimeZone();
 }

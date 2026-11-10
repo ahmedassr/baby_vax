@@ -214,6 +214,7 @@ Map<String, String> ar = {
   "Skipped": "متجاوز",
 
   // Dose state actions:
+  "Notification_open_settings": "فتح الإعدادات",
   "Reminder_default_child_name": "طفلك",
   "saved_offline_msg":
       "تم الحفظ على هذا الهاتف، وستتم المزامنة عند عودة الاتصال بالإنترنت.",

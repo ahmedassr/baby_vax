@@ -54,6 +54,12 @@ class FakeNotificationService implements NotificationService {
   @override
   Future<bool> requestPermission() async => permissionGranted;
 
+  /// Controls what [areNotificationsEnabled] returns.
+  bool notificationsEnabled = true;
+
+  @override
+  Future<bool> areNotificationsEnabled() async => notificationsEnabled;
+
   @override
   Future<void> refreshTimeZone() async {
     refreshTimeZoneCalled = true;
