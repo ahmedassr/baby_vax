@@ -42,8 +42,8 @@ class SplashView extends GetView<SplashController> {
             const SizedBox(height: 6),
             FadeTransition(
               opacity: controller.textOpacity,
-              child: const AppText(
-                text: 'Care • Protection • Growth',
+              child: AppText(
+                text: "SplashView_tagline".tr,
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey,

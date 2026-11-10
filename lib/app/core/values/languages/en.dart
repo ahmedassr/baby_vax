@@ -203,6 +203,20 @@ Map<String, String> en = {
   "Skipped": "Skipped",
 
   // Dose state actions:
+  "LoginView_welcome_back": "Welcome Back",
+  "MedicalDatesView_add_custom_date": "Add a custom date",
+  "SplashView_tagline": "Care • Protection • Growth",
+  "AlertModel_field_required_msg": "@field is missing.",
+  "VaccinationTimeStatus_hours_left_one": "1 hour left",
+  "VaccinationTimeStatus_hours_left_other": "@count hours left",
+  "VaccinationTimeStatus_days_left_one": "1 day left",
+  "VaccinationTimeStatus_days_left_other": "@count days left",
+  "VaccinationTimeStatus_weeks_left_one": "1 week left",
+  "VaccinationTimeStatus_weeks_left_other": "@count weeks left",
+  "VaccinationTimeStatus_months_left_one": "1 month left",
+  "VaccinationTimeStatus_months_left_other": "@count months left",
+  "VaccinationTimeStatus_years_left_one": "1 year left",
+  "VaccinationTimeStatus_years_left_other": "@count years left",
   // Generated vaccines, by MedicalDatesModel.code:
   "Vaccine_bcg_hepb_birth_name": "BCG and Hepatitis B (1st dose)",
   "Vaccine_bcg_hepb_birth_description":

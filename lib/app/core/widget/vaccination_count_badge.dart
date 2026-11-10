@@ -35,9 +35,7 @@ class VaccinationCountBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       margin: const EdgeInsets.only(left: 8),
       child: AppText(
-        text: result.value != null
-            ? "${result.value} ${result.status.name}"
-            : result.status.name,
+        text: result.status.withCount(result.value),
         style: AppTextStyles.bodySmall.copyWith(
           fontWeight: FontWeight.w700,
           fontSize: 12,

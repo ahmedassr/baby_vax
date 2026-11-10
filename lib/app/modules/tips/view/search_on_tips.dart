@@ -9,7 +9,7 @@ class SearchOnTips extends GetView<TipsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: "Search Tips"),
+      appBar: CustomAppBar(title: "SearchOnTips_title".tr),
       body: Padding(
         padding: AppSpacing.columnPadding,
         child: Column(

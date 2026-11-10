@@ -51,7 +51,8 @@ class AlertModel {
       AlertModel._(
           type: AlertType.fieldRequired,
           title: AlertType.fieldRequired.title,
-          message: "$fieldName is missing.",
+          message:
+              "AlertModel_field_required_msg".trParams({'field': fieldName}),
           yesAction: yesAction);
 
   factory AlertModel.attention(

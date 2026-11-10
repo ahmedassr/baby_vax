@@ -29,8 +29,8 @@ class HomeView extends GetView<HomeController> {
                       )
                     : const SizedBox.shrink()),
                 ProfileCard(
-                  name: controller.userDetails.value?.name ?? "y/n",
-                  email: controller.userDetails.value?.email ?? "y/n",
+                  name: controller.userDetails.value?.name ?? "-",
+                  email: controller.userDetails.value?.email ?? "-",
                   onEditPressed: () {
                     try {
                       Get.find<MainMenuController>().onEditPressed();

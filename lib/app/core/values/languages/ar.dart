@@ -214,6 +214,20 @@ Map<String, String> ar = {
   "Skipped": "متجاوز",
 
   // Dose state actions:
+  "LoginView_welcome_back": "مرحباً بعودتك",
+  "MedicalDatesView_add_custom_date": "إضافة موعد خاص",
+  "SplashView_tagline": "رعاية • حماية • نمو",
+  "AlertModel_field_required_msg": "حقل @field مطلوب.",
+  "VaccinationTimeStatus_hours_left_one": "متبقٍ ساعة واحدة",
+  "VaccinationTimeStatus_hours_left_other": "الساعات المتبقية: @count",
+  "VaccinationTimeStatus_days_left_one": "متبقٍ يوم واحد",
+  "VaccinationTimeStatus_days_left_other": "الأيام المتبقية: @count",
+  "VaccinationTimeStatus_weeks_left_one": "متبقٍ أسبوع واحد",
+  "VaccinationTimeStatus_weeks_left_other": "الأسابيع المتبقية: @count",
+  "VaccinationTimeStatus_months_left_one": "متبقٍ شهر واحد",
+  "VaccinationTimeStatus_months_left_other": "الأشهر المتبقية: @count",
+  "VaccinationTimeStatus_years_left_one": "متبقٍ سنة واحدة",
+  "VaccinationTimeStatus_years_left_other": "السنوات المتبقية: @count",
   // Generated vaccines, by MedicalDatesModel.code:
   "Vaccine_bcg_hepb_birth_name": "لقاح السل والتهاب الكبد ب (الجرعة الأولى)",
   "Vaccine_bcg_hepb_birth_description":

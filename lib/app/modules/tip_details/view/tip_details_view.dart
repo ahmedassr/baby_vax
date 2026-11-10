@@ -10,8 +10,8 @@ class TipDetailsView extends GetView<TipDetailsController> {
 
     return Scaffold(
       backgroundColor: context.theme.scaffoldBackgroundColor,
-      appBar: const CustomAppBar(
-        title: "Tip Details",
+      appBar: CustomAppBar(
+        title: "TipDetailsView_tip_details_title".tr,
         fontSize: 18,
       ),
       body: controller.tip == null
