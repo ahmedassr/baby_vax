@@ -58,7 +58,7 @@ class MedicalDateCard extends StatelessWidget {
                           children: [
                             Expanded(
                               child: AppText(
-                                text: data.date.toString(),
+                                text: AppDateFormat.date(data.date),
                                 maxLines: 2,
                                 style: AppTextStyles.titleSmall.copyWith(
                                   fontWeight: FontWeight.w700,

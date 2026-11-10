@@ -1,6 +1,7 @@
 import 'package:baby_vax/app/core/app_binding.dart';
 import 'package:baby_vax/app/core/values/languages/app_translations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter/foundation.dart';
 
 import 'app/config/themes/app_fonts.dart';
@@ -35,6 +36,9 @@ void main() async {
   // Before anything can touch AppTheme, so the font never comes from the
   // network.
   configureBundledFonts();
+  // Date names and digits for every supported language, so AppDateFormat
+  // works before (and outside) the Material localizations.
+  await initializeDateFormatting();
   await initAppService();
   // Null until the user picks a theme in settings: follow the system.
   final bool? isDarkMode =

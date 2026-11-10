@@ -33,7 +33,9 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
                 24.sbh,
                 MedicalDateDetailCard(
                   name: controller.medicalDate?.displayName,
-                  date: controller.medicalDate?.date.toString(),
+                  date: controller.medicalDate == null
+                      ? null
+                      : AppDateFormat.date(controller.medicalDate!.date),
                   description: controller.medicalDate?.displayDescription,
                   state: controller.medicalDate?.state,
                 ),

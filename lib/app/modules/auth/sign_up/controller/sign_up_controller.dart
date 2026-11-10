@@ -26,23 +26,29 @@ class SignupController extends GetxController
     "headSizeErrorText": "".obs,
     "heightErrorText": "".obs,
   };
+
+  /// A calendar day. The schedule only depends on the date of birth, so
+  /// there is no time part.
   Rx<DateTime> selectedBirthday = Rx<DateTime>(
-    DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-      DateTime.now().hour,
-      DateTime.now().minute,
-    ),
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
   );
-  final dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+
+  /// Stored form of the birthday: ISO date, fixed ASCII digits whatever the
+  /// UI language. The form field shows [AppDateFormat.date] instead.
+  static final DateFormat storageFormat = DateFormat('yyyy-MM-dd', 'en');
+
+  String get birthdayForStorage => storageFormat.format(selectedBirthday.value);
+
+  void _showBirthday() {
+    signupControllers["birthdayController"]?.text =
+        AppDateFormat.date(selectedBirthday.value);
+  }
 
   @override
   void onInit() {
     super.onInit();
     setSuccess();
-    signupControllers["birthdayController"]?.text =
-        dateFormat.format(selectedBirthday.value);
+    _showBirthday();
   }
 
   @override
@@ -64,24 +70,9 @@ class SignupController extends GetxController
 
     if (selectedDate == null || !context.mounted) return;
 
-    final TimeOfDay? selectedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(selectedBirthday.value));
-
-    if (!context.mounted) return;
-
-    selectedBirthday.value = selectedTime == null
-        ? selectedDate
-        : DateTime(
-            selectedDate.year,
-            selectedDate.month,
-            selectedDate.day,
-            selectedTime.hour,
-            selectedTime.minute,
-          );
-
-    signupControllers["birthdayController"]?.text =
-        dateFormat.format(selectedBirthday.value);
+    selectedBirthday.value =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    _showBirthday();
   }
 
   bool isValidate() {
@@ -111,7 +102,7 @@ class SignupController extends GetxController
     } else {
       // Validate here rather than letting the generator throw mid-signup,
       // after the Auth user has already been created.
-      final String? birthdayError = _birthDateError(birthdayText);
+      final String? birthdayError = _birthDateError(birthdayForStorage);
       if (birthdayError != null) {
         signupErrorText["birthdayErrorText"]?.value = birthdayError;
         valid = false;
@@ -161,7 +152,7 @@ class SignupController extends GetxController
     UserModel user = UserModel(
         uid: "",
         email: signupControllers["emailController"]?.text.trim() ?? "",
-        birthday: signupControllers["birthdayController"]?.text.trim() ?? "",
+        birthday: birthdayForStorage,
         name: signupControllers["nameController"]?.text.trim() ?? "",
         height: signupControllers["heightController"]?.text.trim() ?? "",
         weight: signupControllers["weightController"]?.text.trim() ?? "",
