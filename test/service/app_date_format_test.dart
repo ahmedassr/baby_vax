@@ -1,7 +1,6 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:baby_vax/app/core/service/medical_dates_generator.dart';
-import 'package:baby_vax/app/modules/auth/sign_up/controller/sign_up_controller.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
