@@ -245,6 +245,20 @@ PR: https://github.com/ahmedassr/baby_vax/pull/2
 
 ## Progress
 
+**2026-11-10 — fixes from the device QA pass (bugs 1–9).** One commit per
+fix on `release/play-v1`:
+
+| Bug | Fix |
+|---|---|
+| 1 | Dose states: stored states are only Pending / Completed / Skipped and only the user changes them (auto-Skipped removed). "Overdue" is display-only. Mark as given on any Pending dose (with a confirm dialog for future doses), Mark as skipped, Undo back to Pending. Completed/Skipped cancel the dose's reminders; undo reschedules them. Rules tests cover every state-only update. |
+| 2, 3 | No `users/{uid}/…` or `tips` reads without a signed-in Firebase user: a guard in `FireStoreHelperService` refuses them before they are sent. `firestore.rules` unchanged. |
+| 4 | Offline saves return after at most 2 s and say "Saved on this phone. It will sync when you are back online." Sign-up writes profile + schedule in one batch. |
+| 5 | (QA bug 4, onboarding) skipped for now, see [Later](#later). |
+| 6 | Arabic: vaccine names/descriptions by `code`, every remaining string translated, all dates via intl `DateFormat` with no time part, bidi isolates for mixed-direction text, countdown badge translated (it showed raw `daysLeft`). |
+| 7 | Home banner with "Open settings" while notifications are off. |
+| 8 | Reminders after login use the child's name from the Firestore user doc. |
+| 9 | Date picker in the app green; theme follows the system until the user picks one. |
+
 **2026-11-06 — run 1. All phases complete, and `main` merged in.**
 
 `main` advanced 20 commits while this branch was in flight, with overlapping
@@ -571,13 +585,13 @@ parameters. Restored both the fields and the `AlertWidget` branch when merging
 > Note: `dart fix` tried to remove these automatically and produced **invalid
 > Dart**. I replaced its output by hand.
 
-### 10. Vaccine names are not yet localized at display time
+### 10. Vaccine names are localized at display time (done 2026-11-10)
 
-Vaccine names and descriptions are generated in English and written to
-Firestore at sign-up, so switching the app to Arabic does not re-translate an
-existing schedule. Each record now carries a stable `code`, which is the
-groundwork, but wiring the views to it would also need a migration for existing
-documents. Out of scope for this release — see Blocked.
+Each generated record stores a stable `code`; the views and reminders show
+`Vaccine_<code>_name` / `_description` from the translation files, so switching
+language re-translates an existing schedule. Custom dates keep the user's text.
+No migration was needed: all live user data had been deleted before this
+change.
 
 ### 11. Merged your CI rather than replacing it, and a correction
 
@@ -634,7 +648,15 @@ items that need a human, a device, or an account:
 | 4 | **Console toggles** | Crashlytics and App Check enforcement are console-only | See "What only Ahmed can do" |
 | 5 | **Hosting the two pages** | Needs your GitHub Pages or Vercel account | See below |
 | 6 | **Demo account for Play review** | Must be created in the live Firebase project | The whole app is behind sign-in; Play rejects builds the reviewer cannot open |
-| 7 | **Vaccine-name localization** | Needs a migration for existing documents | Deferred; Decision 10 |
+| 7 | ~~Vaccine-name localization~~ | Done 2026-11-10, no migration needed | Decision 10 |
+
+### Later
+
+- **Onboarding** (QA bug 4): no onboarding screens for this release. The
+  medical disclaimer on sign-up and on the schedule screen covers what a first
+  run has to say. Revisit after the closed test.
+- **"Add a custom date"**: the button is labelled and translated, but its
+  add-date flow is still a TODO in `medical_dates_view.dart`.
 
 ### Partially done, worth knowing
 
