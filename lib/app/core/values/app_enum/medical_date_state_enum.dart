@@ -10,6 +10,6 @@ enum MedicalDateStateEnum {
   static MedicalDateStateEnum fromLabel(String? value) {
     return MedicalDateStateEnum.values.firstWhere(
         (e) => e.label.toLowerCase() == value?.toLowerCase(),
-        orElse: () => MedicalDateStateEnum.skipped);
+        orElse: () => MedicalDateStateEnum.pending);
   }
 }

@@ -211,5 +211,12 @@ Map<String, String> ar = {
   // Medical Date State Enum:
   "Pending": "قادم",
   "Completed": "مكتمل",
-  "Skipped": "متجاوز"
+  "Skipped": "متجاوز",
+
+  // Dose state actions:
+  "MedicalDateActions_mark_completed": "تحديد كمُعطاة",
+  "MedicalDateActions_mark_skipped": "تحديد كمتجاوزة",
+  "MedicalDateActions_undo": "تراجع (إرجاع إلى قادمة)",
+  "MedicalDateDetails_confirm_future_completion_msg":
+      "موعد هذه الجرعة @date. هل تريد تحديدها كمُعطاة؟"
 };

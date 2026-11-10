@@ -2,6 +2,7 @@
 export 'package:baby_vax/app/core/utils/base_extension.dart';
 export 'package:baby_vax/app/core/utils/state_mixin_helper.dart';
 export 'package:baby_vax/app/core/utils/firebase_error_message.dart';
+export 'package:baby_vax/app/core/utils/app_date_format.dart';
 
 //routes
 export 'package:baby_vax/app/core/routes/app_pages.dart';

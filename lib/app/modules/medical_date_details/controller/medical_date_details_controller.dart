@@ -1,21 +1,30 @@
 import 'package:baby_vax/app/config/constant/app_path.dart';
+import 'package:baby_vax/app/core/service/vaccine_state_service.dart';
 
 import '../../../core/imports/import_manger.dart';
 
 class MedicalDateDetailsController extends GetxController
     with StateMixin, StateMixinHelper {
+  MedicalDateDetailsController({VaccineStateService? stateService})
+      : _stateService = stateService ??
+            VaccineStateService(
+              writer: FirestoreDoseStateWriter(),
+              reminders: CoordinatorDoseReminders(),
+            );
+
+  final VaccineStateService _stateService;
+
   MedicalDatesModel? medicalDate;
   final args = InternalScreenArgs.fromArgs.medicalDate;
 
-  bool get isActive {
-    final state = MedicalDateStateEnum.fromLabel(medicalDate?.state);
-    final date = medicalDate?.date;
+  bool get canMarkCompleted =>
+      medicalDate != null && VaccineStatePolicy.canMarkCompleted(medicalDate!);
 
-    if (state != MedicalDateStateEnum.pending || date == null) {
-      return false;
-    }
-    return date.isBefore(DateTime.now());
-  }
+  bool get canMarkSkipped =>
+      medicalDate != null && VaccineStatePolicy.canMarkSkipped(medicalDate!);
+
+  bool get canUndo =>
+      medicalDate != null && VaccineStatePolicy.canUndo(medicalDate!);
 
   @override
   void onInit() {
@@ -35,12 +44,6 @@ class MedicalDateDetailsController extends GetxController
   Future fetchDate() async {
     setLoading();
     try {
-      // final date = await AppConstant.fireStoreHelper.fetchData(path: [
-      //   "users",
-      //   SessionManager.uId,
-      //   "medical_dates",
-      //   medicalDate?.id ?? ""
-      // ], fromDocument: MedicalDatesModel.fromDocument);
       final data = await AppConstant.fireStoreHelper1.getDocument(
           path:
               "${AppPath.userMedicalDates(SessionManager.uId)}/${medicalDate?.id}",
@@ -56,32 +59,40 @@ class MedicalDateDetailsController extends GetxController
     }
   }
 
-  Future updateState() async {
+  /// Marks the dose as given. A dose scheduled after today asks first.
+  void onMarkCompleted() {
+    final MedicalDatesModel? dose = medicalDate;
+    if (dose == null) return;
+
+    if (VaccineStatePolicy.completionNeedsConfirmation(dose, DateTime.now())) {
+      AppConstant.alertService.showAlert(AlertModel.attention(
+        message: "MedicalDateDetails_confirm_future_completion_msg".trParams(
+          <String, String>{'date': AppDateFormat.date(dose.date)},
+        ),
+        yesAction: () => _change(_stateService.markCompleted),
+        noAction: () {},
+      ));
+      return;
+    }
+    _change(_stateService.markCompleted);
+  }
+
+  void onMarkSkipped() => _change(_stateService.markSkipped);
+
+  void onUndo() => _change(_stateService.undo);
+
+  Future<void> _change(
+    Future<MedicalDatesModel> Function(MedicalDatesModel dose) action,
+  ) async {
+    final MedicalDatesModel? dose = medicalDate;
+    if (dose == null) return;
+
     setLoading();
     try {
-      var data = medicalDate!.copyWith(
-        state: MedicalDateStateEnum.completed.label,
-      );
-      // await AppConstant.fireStoreHelper.updateData(path: [
-      //   "users",
-      //   SessionManager.uId,
-      //   "medical_dates",
-      //   medicalDate?.id ?? ""
-      // ], date: data.toMap());
-      await AppConstant.fireStoreHelper1.updateData(
-          path:
-              "${AppPath.userMedicalDates(SessionManager.uId)}/${medicalDate?.id}",
-          data: data.toMap());
-
-      // The vaccine is done, so its pending reminders must go. Without this
-      // the parent is still reminded about a vaccination they already had.
-      final String? vaccineId = medicalDate?.id;
-      if (vaccineId != null && vaccineId.isNotEmpty) {
-        await Get.find<NotificationCoordinator>().cancelVaccine(vaccineId);
-      }
-
-      await fetchDate();
-    } catch (_) {
+      medicalDate = await action(dose);
+      setSuccess();
+    } catch (e, s) {
+      logger.w('Dose state change failed', error: e, stackTrace: s);
       setError("MedicalDateDetailsController_state_update_failed_msg".tr);
     }
   }

@@ -1,4 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
+import 'package:baby_vax/app/core/service/vaccine_state_service.dart';
 import 'package:baby_vax/app/core/utils/app_extension.dart';
 import 'package:baby_vax/app/core/values/app_enum/vaccination_time_status_enum.dart';
 
@@ -11,8 +12,10 @@ class VaccinationCountBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (nextVaccination?.date == null ||
-        nextVaccination?.state == MedicalDateStateEnum.skipped.label) {
+    // A countdown, or "Overdue", only means something for a dose still to be
+    // given. Completed and Skipped doses get no badge.
+    if (nextVaccination == null ||
+        !VaccineStatePolicy.isPending(nextVaccination!)) {
       return const SizedBox.shrink();
     }
 

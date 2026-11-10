@@ -200,5 +200,12 @@ Map<String, String> en = {
   // Medical Date State Enum:
   "Pending": "Pending",
   "Completed": "Completed",
-  "Skipped": "Skipped"
+  "Skipped": "Skipped",
+
+  // Dose state actions:
+  "MedicalDateActions_mark_completed": "Mark as given",
+  "MedicalDateActions_mark_skipped": "Mark as skipped",
+  "MedicalDateActions_undo": "Undo (mark as pending)",
+  "MedicalDateDetails_confirm_future_completion_msg":
+      "This dose is scheduled for @date. Mark it as given?"
 };

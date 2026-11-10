@@ -19,6 +19,7 @@ import {
   getDocs,
   setDoc,
   Timestamp,
+  updateDoc,
 } from 'firebase/firestore';
 
 const ALICE = 'alice_uid';
@@ -45,6 +46,10 @@ const validMedicalDate = (overrides = {}) => ({
   code: 'bcg_hepb_birth',
   ...overrides,
 });
+
+/** A copy of [obj] without [key]. */
+const without = (obj, key) =>
+  Object.fromEntries(Object.entries(obj).filter(([k]) => k !== key));
 
 let testEnv;
 
@@ -170,9 +175,11 @@ describe('users/{userId}/medical_dates/{id}', () => {
   });
 
   it('accepts a record without the optional code', async () => {
-    const { code, ...withoutCode } = validMedicalDate();
     await assertSucceeds(
-      setDoc(doc(asUser(ALICE), `${path(ALICE)}/v1`), withoutCode),
+      setDoc(
+        doc(asUser(ALICE), `${path(ALICE)}/v1`),
+        without(validMedicalDate(), 'code'),
+      ),
     );
   });
 
@@ -195,9 +202,11 @@ describe('users/{userId}/medical_dates/{id}', () => {
   });
 
   it('denies a record with no name', async () => {
-    const { name, ...withoutName } = validMedicalDate();
     await assertFails(
-      setDoc(doc(asUser(ALICE), `${path(ALICE)}/v1`), withoutName),
+      setDoc(
+        doc(asUser(ALICE), `${path(ALICE)}/v1`),
+        without(validMedicalDate(), 'name'),
+      ),
     );
   });
 
@@ -235,6 +244,56 @@ describe('users/{userId}/medical_dates/{id}', () => {
   it('denies a signed-out client', async () => {
     await assertFails(
       setDoc(doc(asAnon(), `${path(ALICE)}/v1`), validMedicalDate()),
+    );
+  });
+
+  // The app's state changes write only { state } (FirestoreDoseStateWriter).
+  // Every transition the app allows must pass the deployed rules.
+  for (const [from, to] of [
+    ['Pending', 'Completed'],
+    ['Pending', 'Skipped'],
+    ['Completed', 'Pending'],
+    ['Skipped', 'Pending'],
+  ]) {
+    it(`lets the owner change state ${from} -> ${to}`, async () => {
+      await seed((db) =>
+        setDoc(
+          doc(db, `${path(ALICE)}/v1`),
+          validMedicalDate({ state: from }),
+        ),
+      );
+      await assertSucceeds(
+        updateDoc(doc(asUser(ALICE), `${path(ALICE)}/v1`), { state: to }),
+      );
+    });
+  }
+
+  it('allows a state change on a record without a code', async () => {
+    await seed((db) =>
+      setDoc(doc(db, `${path(ALICE)}/v1`), without(validMedicalDate(), 'code')),
+    );
+    await assertSucceeds(
+      updateDoc(doc(asUser(ALICE), `${path(ALICE)}/v1`), {
+        state: 'Completed',
+      }),
+    );
+  });
+
+  it('denies a state update to Overdue, which is display-only', async () => {
+    await seed((db) =>
+      setDoc(doc(db, `${path(ALICE)}/v1`), validMedicalDate()),
+    );
+    await assertFails(
+      updateDoc(doc(asUser(ALICE), `${path(ALICE)}/v1`), { state: 'Overdue' }),
+    );
+  });
+
+  it("denies changing the state of another user's record", async () => {
+    await seed((db) =>
+      setDoc(doc(db, `${path(ALICE)}/v1`), validMedicalDate()),
+    );
+    await assertFails(
+      updateDoc(doc(asUser(BOB), `${path(ALICE)}/v1`), { state: 'Skipped' }),
     );
   });
 });
