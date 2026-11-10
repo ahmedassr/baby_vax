@@ -36,8 +36,9 @@ void main() async {
   // network.
   configureBundledFonts();
   await initAppService();
-  final isDarkMode =
-      AppConstant.getStorage.read(StorageKey.isDarkModeKey) ?? false;
+  // Null until the user picks a theme in settings: follow the system.
+  final bool? isDarkMode =
+      AppConstant.getStorage.read(StorageKey.isDarkModeKey);
   final currentLanguage =
       AppConstant.getStorage.read(StorageKey.languageKey) ?? "en";
   runApp(MyApp(
@@ -47,11 +48,11 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final bool isDarkMode;
+  /// The user's saved choice, or null to follow the system.
+  final bool? isDarkMode;
   final String currentLanguage;
 
-  const MyApp(
-      {super.key, required this.isDarkMode, required this.currentLanguage});
+  const MyApp({super.key, this.isDarkMode, required this.currentLanguage});
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +65,7 @@ class MyApp extends StatelessWidget {
           title: "Baby Vax",
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
-          themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          themeMode: AppTheme.themeModeFor(isDarkMode),
           initialRoute: AppRoutes.splash,
           getPages: AppPages.routes,
           locale: Locale(currentLanguage),

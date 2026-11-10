@@ -16,11 +16,12 @@ class SettingsController extends GetxController {
     currentLanguage.value = AppConstant.getStorage.read("language") ?? 'en';
   }
 
+  /// Until the user picks a theme the app follows the system, and the
+  /// switch shows what the system is using.
   Future<void> loadThemePreference() async {
-    bool savedTheme =
-        AppConstant.getStorage.read(StorageKey.isDarkModeKey) ?? false;
-    isDarkMode.value = savedTheme;
-    Get.changeThemeMode(savedTheme ? ThemeMode.dark : ThemeMode.light);
+    final bool? saved = AppConstant.getStorage.read(StorageKey.isDarkModeKey);
+    isDarkMode.value = saved ?? Get.isPlatformDarkMode;
+    Get.changeThemeMode(AppTheme.themeModeFor(saved));
   }
 
   Future<void> toggleDarkMode(bool value) async {

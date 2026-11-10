@@ -19,9 +19,27 @@ class AppTheme {
         textStyle: AppTextStyles.textLarge,
       );
 
+  /// The app's green as a full Material colour scheme. Without one, dialogs
+  /// and pickers (the sign-up date picker) fell back to Material's default
+  /// purple.
+  static ColorScheme colorScheme(Brightness brightness) => ColorScheme.fromSeed(
+        seedColor: AppColors.primary,
+        brightness: brightness,
+        primary: brightness == Brightness.light ? AppColors.primary : null,
+      );
+
+  /// Which theme to use for the stored choice. Nothing stored means the user
+  /// hasn't picked one, so follow the system.
+  static ThemeMode themeModeFor(bool? storedIsDark) => switch (storedIsDark) {
+        true => ThemeMode.dark,
+        false => ThemeMode.light,
+        null => ThemeMode.system,
+      };
+
   // Light Mode
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
+    colorScheme: colorScheme(Brightness.light),
     fontFamily: fontFamily,
     primaryColor: AppColors.primary,
     scaffoldBackgroundColor: AppColors.backgroundLight,
@@ -33,6 +51,7 @@ class AppTheme {
   // Dark Mode
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
+    colorScheme: colorScheme(Brightness.dark),
     fontFamily: fontFamily,
     primaryColor: AppColors.primary,
     scaffoldBackgroundColor: AppColors.backgroundDark,
