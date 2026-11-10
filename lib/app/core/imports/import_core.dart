@@ -5,6 +5,7 @@ export 'package:baby_vax/app/core/utils/firebase_error_message.dart';
 export 'package:baby_vax/app/core/utils/app_date_format.dart';
 export 'package:baby_vax/app/core/service/write_outcome.dart';
 export 'package:baby_vax/app/core/utils/reminder_child_name.dart';
+export 'package:baby_vax/app/core/utils/bidi.dart';
 export 'package:baby_vax/app/modules/medical_dates/model/medical_date_display.dart';
 
 //routes

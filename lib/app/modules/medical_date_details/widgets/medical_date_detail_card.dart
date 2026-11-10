@@ -50,7 +50,7 @@ class MedicalDateDetailCard extends StatelessWidget {
                     children: [
                       AppText(
                         text: name?.isNotEmpty == true
-                            ? name!
+                            ? bidiIsolate(name!)
                             : "MedicalDateDetailCard_medical_date_label".tr,
                         maxLines: 5,
                         style: AppTextStyles.titleSmall.copyWith(
@@ -95,7 +95,7 @@ class MedicalDateDetailCard extends StatelessWidget {
               ),
               8.sbh,
               AppText(
-                text: description!,
+                text: bidiIsolate(description!),
                 maxLines: 20,
                 style: AppTextStyles.bodyMedium.copyWith(
                   color: colorScheme.onSurface.withValues(alpha: 0.8),

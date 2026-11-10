@@ -67,7 +67,7 @@ class MedicalDateDetailsController extends GetxController
 
     if (VaccineStatePolicy.completionNeedsConfirmation(dose, DateTime.now())) {
       AppConstant.alertService.showAlert(AlertModel.attention(
-        message: "MedicalDateDetails_confirm_future_completion_msg".trParams(
+        message: "MedicalDateDetails_confirm_future_completion_msg".trIsolated(
           <String, String>{'date': AppDateFormat.date(dose.date)},
         ),
         yesAction: () => _change(_stateService.markCompleted),

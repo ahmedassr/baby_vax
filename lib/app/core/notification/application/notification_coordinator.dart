@@ -110,7 +110,7 @@ class NotificationCoordinator extends GetxService {
         now: now,
         horizon: horizon,
         title: 'Notification_vaccine_tomorrow_title'.tr,
-        body: 'Notification_vaccine_tomorrow_body'.trParams(<String, String>{
+        body: 'Notification_vaccine_tomorrow_body'.trIsolated(<String, String>{
           'child': userName,
           'vaccine': vaccineName,
         }),
@@ -122,7 +122,7 @@ class NotificationCoordinator extends GetxService {
         now: now,
         horizon: horizon,
         title: 'Notification_vaccine_today_title'.tr,
-        body: 'Notification_vaccine_today_body'.trParams(<String, String>{
+        body: 'Notification_vaccine_today_body'.trIsolated(<String, String>{
           'child': userName,
           'vaccine': vaccineName,
         }),

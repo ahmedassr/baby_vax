@@ -12,8 +12,9 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: controller.medicalDate?.displayName ??
-            "MedicalDateDetailsView_title".tr,
+        title: controller.medicalDate == null
+            ? "MedicalDateDetailsView_title".tr
+            : bidiIsolate(controller.medicalDate!.displayName),
         fontSize: 18,
       ),
       body: controller.obx(

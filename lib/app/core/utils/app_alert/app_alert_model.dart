@@ -1,4 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_library.dart';
+import 'package:baby_vax/app/core/utils/bidi.dart';
 
 import 'alert_type_enum.dart';
 
@@ -52,7 +53,7 @@ class AlertModel {
           type: AlertType.fieldRequired,
           title: AlertType.fieldRequired.title,
           message:
-              "AlertModel_field_required_msg".trParams({'field': fieldName}),
+              "AlertModel_field_required_msg".trIsolated({'field': fieldName}),
           yesAction: yesAction);
 
   factory AlertModel.attention(
