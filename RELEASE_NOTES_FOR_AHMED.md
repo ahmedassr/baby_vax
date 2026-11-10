@@ -252,8 +252,8 @@ fix on `release/play-v1`:
 |---|---|
 | 1 | Dose states: stored states are only Pending / Completed / Skipped and only the user changes them (auto-Skipped removed). "Overdue" is display-only. Mark as given on any Pending dose (with a confirm dialog for future doses), Mark as skipped, Undo back to Pending. Completed/Skipped cancel the dose's reminders; undo reschedules them. Rules tests cover every state-only update. |
 | 2, 3 | No `users/{uid}/…` or `tips` reads without a signed-in Firebase user: a guard in `FireStoreHelperService` refuses them before they are sent. `firestore.rules` unchanged. |
-| 4 | Offline saves return after at most 2 s and say "Saved on this phone. It will sync when you are back online." Sign-up writes profile + schedule in one batch. |
-| 5 | (QA bug 4, onboarding) skipped for now, see [Later](#later). |
+| 4 | Onboarding skipped for now, see [Later](#later). |
+| 5 | Offline saves return after at most 2 s and say "Saved on this phone. It will sync when you are back online." Sign-up writes profile + schedule in one batch. |
 | 6 | Arabic: vaccine names/descriptions by `code`, every remaining string translated, all dates via intl `DateFormat` with no time part, bidi isolates for mixed-direction text, countdown badge translated (it showed raw `daysLeft`). |
 | 7 | Home banner with "Open settings" while notifications are off. |
 | 8 | Reminders after login use the child's name from the Firestore user doc. |
