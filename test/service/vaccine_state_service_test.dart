@@ -8,10 +8,14 @@ class FakeWriter implements DoseStateWriter {
   final List<(String, MedicalDateStateEnum)> writes = [];
   Object? failWith;
 
+  WriteOutcome outcome = WriteOutcome.synced;
+
   @override
-  Future<void> writeState(String doseId, MedicalDateStateEnum state) async {
+  Future<WriteOutcome> writeState(
+      String doseId, MedicalDateStateEnum state) async {
     if (failWith != null) throw failWith!;
     writes.add((doseId, state));
+    return outcome;
   }
 }
 
@@ -126,7 +130,7 @@ void main() {
     });
 
     test('markCompleted writes Completed and cancels the reminders', () async {
-      final result = await service.markCompleted(dose());
+      final result = (await service.markCompleted(dose())).dose;
       expect(result.state, 'Completed');
       expect(writer.writes, [('dose_1', MedicalDateStateEnum.completed)]);
       expect(reminders.cancelled, ['dose_1']);
@@ -135,12 +139,12 @@ void main() {
 
     test('markCompleted works on a future Pending dose', () async {
       final result =
-          await service.markCompleted(dose(date: DateTime(2027, 3, 1)));
+          (await service.markCompleted(dose(date: DateTime(2027, 3, 1)))).dose;
       expect(result.state, 'Completed');
     });
 
     test('markSkipped writes Skipped and cancels the reminders', () async {
-      final result = await service.markSkipped(dose());
+      final result = (await service.markSkipped(dose())).dose;
       expect(result.state, 'Skipped');
       expect(writer.writes, [('dose_1', MedicalDateStateEnum.skipped)]);
       expect(reminders.cancelled, ['dose_1']);
@@ -148,7 +152,7 @@ void main() {
 
     for (final from in ['Completed', 'Skipped']) {
       test('undo from $from writes Pending and reschedules', () async {
-        final result = await service.undo(dose(state: from));
+        final result = (await service.undo(dose(state: from))).dose;
         expect(result.state, 'Pending');
         expect(writer.writes, [('dose_1', MedicalDateStateEnum.pending)]);
         expect(reminders.cancelled, isEmpty);
@@ -159,7 +163,7 @@ void main() {
 
     test('the result keeps every other field', () async {
       final original = dose(date: DateTime(2027, 3, 1));
-      final result = await service.markSkipped(original);
+      final result = (await service.markSkipped(original)).dose;
       expect(result.id, original.id);
       expect(result.code, original.code);
       expect(result.name, original.name);
@@ -187,6 +191,15 @@ void main() {
       await expectLater(
           service.markCompleted(dose(id: '')), throwsArgumentError);
       expect(writer.writes, isEmpty);
+    });
+
+    test('reports a change saved offline, and still updates reminders',
+        () async {
+      writer.outcome = WriteOutcome.pendingSync;
+      final change = await service.markCompleted(dose());
+      expect(change.outcome, WriteOutcome.pendingSync);
+      expect(change.dose.state, 'Completed');
+      expect(reminders.cancelled, ['dose_1']);
     });
 
     test('a failed write leaves the reminders alone', () async {

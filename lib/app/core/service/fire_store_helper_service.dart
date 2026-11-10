@@ -1,5 +1,6 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/service/firestore_access_guard.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class FireStoreHelperService extends GetxService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -44,41 +45,49 @@ class FireStoreHelperService extends GetxService {
     );
   }
 
-  Future<void> setData({
+  // Writes return as soon as Firestore has the change locally (see
+  // awaitAck). Offline they report WriteOutcome.pendingSync instead of
+  // waiting for a server acknowledgement that may not come for hours.
+
+  Future<WriteOutcome> setData({
     required String path,
     required Map<String, dynamic> data,
     bool merge = true,
-  }) async {
-    await _execute(
-      path: path,
-      operation: "Set Data: $path",
-      action: () => _db.doc(path).set(data, SetOptions(merge: merge)),
-    );
-  }
+  }) =>
+      _write(
+        path: path,
+        operation: "Set Data: $path",
+        ack: () => _db.doc(path).set(data, SetOptions(merge: merge)),
+      );
 
-  Future<void> updateData({
+  Future<WriteOutcome> updateData({
     required String path,
     required Map<String, dynamic> data,
-  }) async {
-    await _execute(
-      path: path,
-      operation: "Update Data: $path",
-      action: () => _db.doc(path).update(data),
-    );
-  }
+  }) =>
+      _write(
+        path: path,
+        operation: "Update Data: $path",
+        ack: () => _db.doc(path).update(data),
+      );
 
-  Future<T?> addDocument<T>({
-    required String path,
-    required Map<String, dynamic> data,
-    required T Function(DocumentSnapshot doc) fromDoc,
-  }) async {
-    return await _execute(
-      path: path,
-      operation: "Add Document to: $path",
-      action: () async {
-        final ref = await _db.collection(path).add(data);
-        final snapshot = await ref.get();
-        return fromDoc(snapshot);
+  /// A new document id in [collectionPath], generated on the device so a
+  /// record can be written offline.
+  String newDocumentId(String collectionPath) =>
+      _db.collection(collectionPath).doc().id;
+
+  /// Writes every entry of [sets] (document path -> data) in one atomic
+  /// batch: either all of them are stored or none are.
+  Future<WriteOutcome> commitSets(Map<String, Map<String, dynamic>> sets) {
+    for (final String path in sets.keys) {
+      FirestoreAccessGuard.check(path, SessionManager.signedInUid);
+    }
+    return _write(
+      path: sets.keys.isEmpty ? '' : sets.keys.first,
+      operation: "Batch Set: ${sets.length} document(s)",
+      ack: () {
+        final WriteBatch batch = _db.batch();
+        sets.forEach((path, data) => batch.set(_db.doc(path), data));
+        return batch.commit();
       },
     );
   }
@@ -162,5 +171,28 @@ class FireStoreHelperService extends GetxService {
       logger.e("❌ Unexpected Error during $operation", error: e);
       rethrow;
     }
+  }
+
+  /// [_execute] for writes: waits for the server only briefly (awaitAck).
+  Future<WriteOutcome> _write({
+    required String path,
+    required String operation,
+    required Future<void> Function() ack,
+  }) async {
+    return await _execute<WriteOutcome>(
+          path: path,
+          operation: operation,
+          action: () => awaitAck(
+            ack(),
+            onLateError: (e, s) {
+              // The UI already said "will sync". A rejection that arrives
+              // after reconnecting is recorded, so it is not lost silently.
+              logger.e("❌ Late failure of $operation", error: e);
+              FirebaseCrashlytics.instance.recordError(e, s,
+                  reason: 'Late failure of a queued Firestore write');
+            },
+          ),
+        ) ??
+        WriteOutcome.pendingSync;
   }
 }

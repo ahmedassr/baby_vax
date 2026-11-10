@@ -1,4 +1,5 @@
 import 'package:baby_vax/app/config/constant/app_path.dart';
+import 'package:baby_vax/app/modules/home/controller/home_controller.dart';
 import 'package:baby_vax/app/core/service/vaccine_state_service.dart';
 
 import '../../../core/imports/import_manger.dart';
@@ -82,18 +83,36 @@ class MedicalDateDetailsController extends GetxController
   void onUndo() => _change(_stateService.undo);
 
   Future<void> _change(
-    Future<MedicalDatesModel> Function(MedicalDatesModel dose) action,
+    Future<StateChange> Function(MedicalDatesModel dose) action,
   ) async {
     final MedicalDatesModel? dose = medicalDate;
     if (dose == null) return;
 
     setLoading();
     try {
-      medicalDate = await action(dose);
+      final StateChange change = await action(dose);
+      medicalDate = change.dose;
       setSuccess();
+      _refreshLists();
+      if (change.outcome == WriteOutcome.pendingSync) {
+        AppConstant.alertService
+            .showAlert(AlertModel.success(message: "saved_offline_msg".tr));
+      }
     } catch (e, s) {
       logger.w('Dose state change failed', error: e, stackTrace: s);
       setError("MedicalDateDetailsController_state_update_failed_msg".tr);
+    }
+  }
+
+  /// The schedule list and the home card show this dose too. Not awaited:
+  /// offline, these reads come from the local cache, which already has the
+  /// change.
+  void _refreshLists() {
+    if (Get.isRegistered<MedicalDatesController>()) {
+      Get.find<MedicalDatesController>().fetchMedicalDates();
+    }
+    if (Get.isRegistered<HomeController>()) {
+      Get.find<HomeController>().fetchUserData();
     }
   }
 }

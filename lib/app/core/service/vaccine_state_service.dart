@@ -59,7 +59,16 @@ class InvalidStateTransition implements Exception {
 
 /// Persists a dose's state. Only the `state` field is written.
 abstract class DoseStateWriter {
-  Future<void> writeState(String doseId, MedicalDateStateEnum state);
+  Future<WriteOutcome> writeState(String doseId, MedicalDateStateEnum state);
+}
+
+/// The dose after a state change, and whether the change reached the
+/// server or is waiting to sync.
+class StateChange {
+  const StateChange(this.dose, this.outcome);
+
+  final MedicalDatesModel dose;
+  final WriteOutcome outcome;
 }
 
 /// The reminders for one dose.
@@ -86,19 +95,19 @@ class VaccineStateService {
   final DoseStateWriter _writer;
   final DoseReminders _reminders;
 
-  Future<MedicalDatesModel> markCompleted(MedicalDatesModel dose) =>
+  Future<StateChange> markCompleted(MedicalDatesModel dose) =>
       _apply(dose, MedicalDateStateEnum.completed,
           allowed: VaccineStatePolicy.canMarkCompleted(dose));
 
-  Future<MedicalDatesModel> markSkipped(MedicalDatesModel dose) =>
+  Future<StateChange> markSkipped(MedicalDatesModel dose) =>
       _apply(dose, MedicalDateStateEnum.skipped,
           allowed: VaccineStatePolicy.canMarkSkipped(dose));
 
-  Future<MedicalDatesModel> undo(MedicalDatesModel dose) =>
+  Future<StateChange> undo(MedicalDatesModel dose) =>
       _apply(dose, MedicalDateStateEnum.pending,
           allowed: VaccineStatePolicy.canUndo(dose));
 
-  Future<MedicalDatesModel> _apply(
+  Future<StateChange> _apply(
     MedicalDatesModel dose,
     MedicalDateStateEnum to, {
     required bool allowed,
@@ -111,7 +120,9 @@ class VaccineStateService {
       throw InvalidStateTransition(VaccineStatePolicy.stateOf(dose), to);
     }
 
-    await _writer.writeState(id, to);
+    // Returns once the change is stored on the device; offline it does not
+    // wait for the server (see awaitAck).
+    final WriteOutcome outcome = await _writer.writeState(id, to);
 
     final MedicalDatesModel updated = dose.copyWith(state: to.label);
     if (to == MedicalDateStateEnum.pending) {
@@ -119,14 +130,14 @@ class VaccineStateService {
     } else {
       await _reminders.cancel(id);
     }
-    return updated;
+    return StateChange(updated, outcome);
   }
 }
 
 /// [DoseStateWriter] backed by the signed-in user's schedule in Firestore.
 class FirestoreDoseStateWriter implements DoseStateWriter {
   @override
-  Future<void> writeState(String doseId, MedicalDateStateEnum state) {
+  Future<WriteOutcome> writeState(String doseId, MedicalDateStateEnum state) {
     return AppConstant.fireStoreHelper1.updateData(
       path:
           '${AppPath.userMedicalDates(SessionManager.signedInUid ?? '')}/$doseId',

@@ -214,6 +214,8 @@ Map<String, String> ar = {
   "Skipped": "متجاوز",
 
   // Dose state actions:
+  "saved_offline_msg":
+      "تم الحفظ على هذا الهاتف، وستتم المزامنة عند عودة الاتصال بالإنترنت.",
   "MedicalDateActions_mark_completed": "تحديد كمُعطاة",
   "MedicalDateActions_mark_skipped": "تحديد كمتجاوزة",
   "MedicalDateActions_undo": "تراجع (إرجاع إلى قادمة)",

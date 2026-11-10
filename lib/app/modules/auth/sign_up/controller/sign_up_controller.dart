@@ -193,28 +193,19 @@ class SignupController extends GetxController
 
   Future<bool> _createUserProfile(UserModel user) async {
     try {
-      // await AppConstant.fireStoreHelper
-      //     .createUser(uid: user.uid, userDate: user.toMap());
-
-      // Must be the full `users/<uid>` document path. This previously passed
-      // the bare uid, which is a single-segment path and not a valid document
-      // reference, while every read uses AppPath.currentUserDoc ("users/<uid>").
-      await AppConstant.fireStoreHelper1
-          .setData(path: AppPath.userDoc(user.uid), data: user.toMap());
-
       final generatedVaccines =
           MedicalDatesGenerator.generator(user.birthday ?? '');
-      final path = AppPath.userMedicalDates(user.uid);
+      final String datesPath = AppPath.userMedicalDates(user.uid);
 
-      final tasks = generatedVaccines.map((vaccine) {
-        return AppConstant.fireStoreHelper1.addDocument<MedicalDatesModel>(
-          path: path,
-          data: vaccine.toMap(),
-          fromDoc: (doc) => MedicalDatesModel.fromDocument(doc),
-        );
-      }).toList();
-
-      await Future.wait(tasks);
+      // The profile and the whole generated schedule in one atomic batch,
+      // with ids made on the device: no half-created schedule if the
+      // connection drops, and no server read-back that hangs offline.
+      await AppConstant.fireStoreHelper1.commitSets({
+        AppPath.userDoc(user.uid): user.toMap(),
+        for (final vaccine in generatedVaccines)
+          '$datesPath/${AppConstant.fireStoreHelper1.newDocumentId(datesPath)}':
+              vaccine.toMap(),
+      });
 
       SessionManager.uId = user.uid;
       await AppConstant.getStorage.write(StorageKey.isLoginKey, true);

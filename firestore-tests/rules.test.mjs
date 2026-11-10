@@ -20,6 +20,7 @@ import {
   setDoc,
   Timestamp,
   updateDoc,
+  writeBatch,
 } from 'firebase/firestore';
 
 const ALICE = 'alice_uid';
@@ -295,6 +296,34 @@ describe('users/{userId}/medical_dates/{id}', () => {
     await assertFails(
       updateDoc(doc(asUser(BOB), `${path(ALICE)}/v1`), { state: 'Skipped' }),
     );
+  });
+});
+
+describe('sign-up batch', () => {
+  // Sign-up writes the profile and the whole generated schedule in one
+  // batch with client-generated ids (FireStoreHelperService.commitSets).
+  it('lets a new user write profile and schedule in one batch', async () => {
+    const db = asUser(ALICE);
+    const batch = writeBatch(db);
+    batch.set(doc(db, `users/${ALICE}`), validUser(ALICE));
+    for (let i = 0; i < 12; i++) {
+      batch.set(
+        doc(collection(db, `users/${ALICE}/medical_dates`)),
+        validMedicalDate({ code: `code_${i}` }),
+      );
+    }
+    await assertSucceeds(batch.commit());
+  });
+
+  it('rejects the whole batch if one record is invalid', async () => {
+    const db = asUser(ALICE);
+    const batch = writeBatch(db);
+    batch.set(doc(db, `users/${ALICE}`), validUser(ALICE));
+    batch.set(
+      doc(collection(db, `users/${ALICE}/medical_dates`)),
+      validMedicalDate({ state: 'Overdue' }),
+    );
+    await assertFails(batch.commit());
   });
 });
 
