@@ -160,7 +160,7 @@ class CoordinatorDoseReminders implements DoseReminders {
       vaccineId: dose.id!,
       userName: reminderChildName(
           AppConstant.getStorage.read(StorageKey.userNameKey)),
-      vaccineName: dose.name,
+      vaccineName: dose.displayName,
       date: dose.date,
     );
   }

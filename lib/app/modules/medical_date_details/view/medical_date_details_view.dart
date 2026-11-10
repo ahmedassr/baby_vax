@@ -12,8 +12,8 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title:
-            controller.medicalDate?.name ?? "MedicalDateDetailsView_title".tr,
+        title: controller.medicalDate?.displayName ??
+            "MedicalDateDetailsView_title".tr,
         fontSize: 18,
       ),
       body: controller.obx(
@@ -32,9 +32,9 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
                 ),
                 24.sbh,
                 MedicalDateDetailCard(
-                  name: controller.medicalDate?.name,
+                  name: controller.medicalDate?.displayName,
                   date: controller.medicalDate?.date.toString(),
-                  description: controller.medicalDate?.description,
+                  description: controller.medicalDate?.displayDescription,
                   state: controller.medicalDate?.state,
                 ),
                 32.sbh,

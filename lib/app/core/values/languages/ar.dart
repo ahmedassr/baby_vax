@@ -214,6 +214,42 @@ Map<String, String> ar = {
   "Skipped": "متجاوز",
 
   // Dose state actions:
+  // Generated vaccines, by MedicalDatesModel.code:
+  "Vaccine_bcg_hepb_birth_name": "لقاح السل والتهاب الكبد ب (الجرعة الأولى)",
+  "Vaccine_bcg_hepb_birth_description":
+      "يحمي من السل والتهاب الكبد ب. يُعطى عند الولادة.",
+  "Vaccine_penta_opv_pcv_1_name":
+      "الجرعة الأولى من اللقاح الخماسي وشلل الأطفال والمكورات الرئوية",
+  "Vaccine_penta_opv_pcv_1_description":
+      "يقي من الخناق (الدفتيريا) والكزاز والسعال الديكي والتهاب الكبد ب والمستدمية النزلية وشلل الأطفال والالتهاب الرئوي. يُعطى بعمر شهرين.",
+  "Vaccine_penta_opv_pcv_2_name":
+      "الجرعة الثانية من اللقاح الخماسي وشلل الأطفال والمكورات الرئوية",
+  "Vaccine_penta_opv_pcv_2_description":
+      "جرعة ثانية لتقوية الحماية. تُعطى بعمر 4 أشهر.",
+  "Vaccine_penta_opv_pcv_3_name":
+      "الجرعة الثالثة من اللقاح الخماسي وشلل الأطفال والمكورات الرئوية",
+  "Vaccine_penta_opv_pcv_3_description":
+      "آخر جرعة أساسية من لقاحات الطفولة المبكرة. تُعطى بعمر 6 أشهر.",
+  "Vaccine_measles_1_name": "الحصبة (الجرعة الأولى)",
+  "Vaccine_measles_1_description": "يحمي من الحصبة. يُعطى بعمر 9 أشهر.",
+  "Vaccine_mmr_varicella_pcv_booster_name":
+      "الحصبة والنكاف والحصبة الألمانية والجدري المائي وجرعة معززة للمكورات الرئوية",
+  "Vaccine_mmr_varicella_pcv_booster_description":
+      "يحمي من الحصبة والنكاف والحصبة الألمانية والجدري المائي، ويعزز الحماية من الالتهاب الرئوي. يُعطى بعمر 12 شهراً.",
+  "Vaccine_penta_opv_mmr_2_booster_name":
+      "جرعة معززة من اللقاح الخماسي وشلل الأطفال والجرعة الثانية من لقاح الحصبة والنكاف والحصبة الألمانية",
+  "Vaccine_penta_opv_mmr_2_booster_description":
+      "جرعة معززة للقاحات السابقة والجرعة الثانية من لقاح الحصبة والنكاف والحصبة الألمانية. تُعطى بعمر 18 شهراً.",
+  "Vaccine_school_entry_boosters_name":
+      "جرعات دخول المدرسة المعززة: الثلاثي البكتيري وشلل الأطفال والجدري المائي (الجرعة الثانية)",
+  "Vaccine_school_entry_boosters_description":
+      "جرعات معززة للحماية قبل المدرسة من الخناق والكزاز وشلل الأطفال والجدري المائي. تُعطى بعمر 5 سنوات تقريباً.",
+  "Vaccine_hpv_name": "لقاح فيروس الورم الحليمي البشري",
+  "Vaccine_hpv_description":
+      "يحمي من فيروس الورم الحليمي البشري. يُعطى بعمر 10 إلى 12 سنة، غالباً للفتيات (وأحياناً للفتيان).",
+  "Vaccine_td_booster_name": "جرعة معززة ضد الكزاز والخناق",
+  "Vaccine_td_booster_description":
+      "جرعة معززة للمراهقين ضد الكزاز والخناق (الدفتيريا). تُعطى بعمر 15 سنة.",
   "Notification_open_settings": "فتح الإعدادات",
   "Reminder_default_child_name": "طفلك",
   "saved_offline_msg":

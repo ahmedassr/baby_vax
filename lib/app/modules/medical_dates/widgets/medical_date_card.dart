@@ -74,7 +74,7 @@ class MedicalDateCard extends StatelessWidget {
                         ),
                         8.sbh,
                         AppText(
-                          text: data.name,
+                          text: data.displayName,
                           style: AppTextStyles.bodyMedium.copyWith(
                             fontWeight: FontWeight.w600,
                             color: isDark
@@ -82,10 +82,10 @@ class MedicalDateCard extends StatelessWidget {
                                 : AppColors.textBlack,
                           ),
                         ),
-                        if (data.description.isNotEmpty) ...[
+                        if (data.displayDescription.isNotEmpty) ...[
                           4.sbh,
                           AppText(
-                            text: data.description,
+                            text: data.displayDescription,
                             style: AppTextStyles.bodySmall.copyWith(
                               color: isDark
                                   ? AppColors.greyMedium

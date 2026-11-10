@@ -55,8 +55,8 @@ class NextVaccinationCard extends StatelessWidget {
               if (nextVaccination != null) ...[
                 MedicalDateCard(
                   data: MedicalDatesModel(
-                      name: nextVaccination?.name ?? "",
-                      description: nextVaccination?.description ?? "",
+                      name: nextVaccination?.displayName ?? "",
+                      description: nextVaccination?.displayDescription ?? "",
                       date: nextVaccination?.date ?? DateTime.now(),
                       state: nextVaccination!.state),
                   onTap: onPressed,

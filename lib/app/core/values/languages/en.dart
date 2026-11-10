@@ -203,6 +203,40 @@ Map<String, String> en = {
   "Skipped": "Skipped",
 
   // Dose state actions:
+  // Generated vaccines, by MedicalDatesModel.code:
+  "Vaccine_bcg_hepb_birth_name": "BCG and Hepatitis B (1st dose)",
+  "Vaccine_bcg_hepb_birth_description":
+      "Protects against tuberculosis and hepatitis B. Given at birth.",
+  "Vaccine_penta_opv_pcv_1_name": "First DTP-HepB-Hib, Polio and Pneumococcal",
+  "Vaccine_penta_opv_pcv_1_description":
+      "Prevents diphtheria, tetanus, whooping cough, hepatitis B, Hib, polio, and pneumonia. Given at 2 months.",
+  "Vaccine_penta_opv_pcv_2_name": "Second DTP-HepB-Hib, Polio and Pneumococcal",
+  "Vaccine_penta_opv_pcv_2_description":
+      "Second dose to strengthen protection. Given at 4 months.",
+  "Vaccine_penta_opv_pcv_3_name": "Third DTP-HepB-Hib, Polio and Pneumococcal",
+  "Vaccine_penta_opv_pcv_3_description":
+      "Final primary dose of early vaccines. Given at 6 months.",
+  "Vaccine_measles_1_name": "Measles (1st dose)",
+  "Vaccine_measles_1_description":
+      "Protects against measles. Given at 9 months.",
+  "Vaccine_mmr_varicella_pcv_booster_name":
+      "MMR, Varicella and Pneumococcal Booster",
+  "Vaccine_mmr_varicella_pcv_booster_description":
+      "Protects against measles, mumps, rubella, chickenpox, and boosts pneumonia protection. Given at 12 months.",
+  "Vaccine_penta_opv_mmr_2_booster_name":
+      "Booster DTP-HepB-Hib, Polio and MMR (2nd dose)",
+  "Vaccine_penta_opv_mmr_2_booster_description":
+      "Booster for earlier vaccines and second dose of MMR. Given at 18 months.",
+  "Vaccine_school_entry_boosters_name":
+      "School Entry Boosters: DTP + Polio + Varicella (2nd dose)",
+  "Vaccine_school_entry_boosters_description":
+      "Boosters to protect before school: diphtheria, tetanus, polio, chickenpox. Given around 5 years.",
+  "Vaccine_hpv_name": "HPV Vaccine",
+  "Vaccine_hpv_description":
+      "Protects against human papillomavirus. Given at age 10-12, mostly for girls (sometimes boys).",
+  "Vaccine_td_booster_name": "Td Booster (Tetanus & Diphtheria)",
+  "Vaccine_td_booster_description":
+      "Teenage booster for tetanus and diphtheria. Given at age 15.",
   "Notification_open_settings": "Open settings",
   "Reminder_default_child_name": "Your baby",
   "saved_offline_msg":

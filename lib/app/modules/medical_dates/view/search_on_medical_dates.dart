@@ -17,8 +17,9 @@ class SearchOnMedicalDates extends GetView<MedicalDatesController> {
                 label: "SearchOnMedicalDates_search_field_label".tr,
                 controller: controller.searchController,
                 onChanged: (value) => state?.filterBy(value.toLowerCase(),
-                    predicate: (dates, query) =>
-                        dates.name.toLowerCase().contains(query.toLowerCase()),
+                    predicate: (dates, query) => dates.displayName
+                        .toLowerCase()
+                        .contains(query.toLowerCase()),
                     onSuccess: (filtered) => controller.setSuccess(filtered),
                     onEmpty: () => controller.setEmpty()),
               ),

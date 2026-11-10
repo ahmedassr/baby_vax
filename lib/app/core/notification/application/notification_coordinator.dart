@@ -236,7 +236,7 @@ class NotificationCoordinator extends GetxService {
         await scheduleVaccine(
           vaccineId: vaccine.id!,
           userName: userName,
-          vaccineName: vaccine.name,
+          vaccineName: vaccine.displayName,
           date: vaccine.date,
         );
         scheduled += 2;
