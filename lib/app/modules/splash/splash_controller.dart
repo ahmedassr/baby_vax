@@ -83,7 +83,7 @@ class SplashController extends GetxController
     if (userId.isEmpty) return;
 
     final String userName =
-        AppConstant.getStorage.read(StorageKey.userNameKey) ?? "Your baby";
+        reminderChildName(AppConstant.getStorage.read(StorageKey.userNameKey));
 
     await Get.find<NotificationCoordinator>().onTimeZoneChanged(
       userId: userId,

@@ -158,8 +158,8 @@ class CoordinatorDoseReminders implements DoseReminders {
   Future<void> schedule(MedicalDatesModel dose) {
     return _coordinator.scheduleVaccine(
       vaccineId: dose.id!,
-      userName:
-          AppConstant.getStorage.read(StorageKey.userNameKey) ?? "Your baby",
+      userName: reminderChildName(
+          AppConstant.getStorage.read(StorageKey.userNameKey)),
       vaccineName: dose.name,
       date: dose.date,
     );

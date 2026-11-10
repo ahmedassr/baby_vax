@@ -224,7 +224,7 @@ class SignupController extends GetxController
       // all 15 years of reminders at once and hit Android's alarm limit.
       await reminders.syncFromFirestore(
         userId: user.uid,
-        userName: user.name ?? "Your baby",
+        userName: reminderChildName(user.name),
       );
       if (!granted) {
         logger.w('Notification permission denied during sign-up');

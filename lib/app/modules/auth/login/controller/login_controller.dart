@@ -44,10 +44,15 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
         await AppConstant.getStorage
             .write(StorageKey.uidKey, authResult.user?.uid);
         SessionManager.uId = authResult.user?.uid ?? "";
-        await Get.find<HomeController>().fetchUserData();
-        // Cache the name so app-start reminder top-ups work offline.
+        final HomeController home = Get.find<HomeController>();
+        await home.fetchUserData();
+        // The child's name is in the Firestore user doc. Auth displayName is
+        // never set by this app. Cached so app-start reminder top-ups work
+        // offline.
+        final String childName =
+            reminderChildName(home.userDetails.value?.name);
         await AppConstant.getStorage
-            .write(StorageKey.userNameKey, authResult.user?.displayName ?? "");
+            .write(StorageKey.userNameKey, home.userDetails.value?.name ?? "");
 
         final NotificationCoordinator reminders =
             Get.find<NotificationCoordinator>();
@@ -56,7 +61,7 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
         final bool granted = await reminders.requestPermission();
         await reminders.syncFromFirestore(
           userId: SessionManager.uId,
-          userName: authResult.user?.displayName ?? "Your baby",
+          userName: childName,
         );
         if (!granted) {
           // Reminders stay scheduled; they just will not be shown until the
