@@ -128,7 +128,8 @@ class FirestoreDoseStateWriter implements DoseStateWriter {
   @override
   Future<void> writeState(String doseId, MedicalDateStateEnum state) {
     return AppConstant.fireStoreHelper1.updateData(
-      path: '${AppPath.userMedicalDates(SessionManager.uId)}/$doseId',
+      path:
+          '${AppPath.userMedicalDates(SessionManager.signedInUid ?? '')}/$doseId',
       data: <String, dynamic>{'state': state.label},
     );
   }

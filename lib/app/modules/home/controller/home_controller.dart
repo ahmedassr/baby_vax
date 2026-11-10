@@ -11,7 +11,7 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
     fetchUserData();
   }
 
-  Future<void> getNextVaccination() async {
+  Future<void> getNextVaccination(String uid) async {
     final now = DateTime.now();
     final todayStart = DateTime(now.year, now.month, now.day);
     // final vaccinations =
@@ -25,7 +25,7 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
     //   fromDocument: MedicalDatesModel.fromDocument,
     // );
     final vaccinations = await AppConstant.fireStoreHelper1.getCollection(
-      path: AppPath.userMedicalDates(SessionManager.uId),
+      path: AppPath.userMedicalDates(uid),
       fromDoc: MedicalDatesModel.fromDocument,
       queryBuilder: (q) => q
           .where('state', isEqualTo: MedicalDateStateEnum.pending.label)
@@ -37,22 +37,22 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
   }
 
   Future fetchUserData() async {
-    var uid = SessionManager.uId;
-    if (uid.isEmpty) {
-      setError("HomeController_id_missing_msg".tr);
-      return;
-    }
+    // This controller is created at app start, before the splash screen
+    // knows whether anyone is signed in. Without a signed-in user there is
+    // nothing to read; login and sign-up call this again afterwards.
+    final String? uid = SessionManager.signedInUid;
+    if (uid == null) return;
     setLoading();
     try {
       // final data = await AppConstant.fireStoreHelper
       //     .getUser(uid: uid, fromDocument: (e) => UserModel.fromDocument(e));
       final data = await AppConstant.fireStoreHelper1.getDocument(
-          path: AppPath.currentUserDoc, fromDoc: UserModel.fromDocument);
+          path: AppPath.userDoc(uid), fromDoc: UserModel.fromDocument);
       if (data == null) {
         setEmpty();
       } else {
         userDetails.value = data;
-        await getNextVaccination();
+        await getNextVaccination(uid);
         setSuccess();
       }
     } catch (_) {

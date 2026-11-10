@@ -1,4 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
+import 'package:baby_vax/app/core/service/firestore_access_guard.dart';
 
 class FireStoreHelperService extends GetxService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -9,6 +10,7 @@ class FireStoreHelperService extends GetxService {
     Query Function(Query query)? queryBuilder,
   }) async {
     return await _execute(
+          path: path,
           operation: "Fetch Collection: $path",
           action: () async {
             Query query = _db.collection(path);
@@ -29,6 +31,7 @@ class FireStoreHelperService extends GetxService {
     required T Function(DocumentSnapshot doc) fromDoc,
   }) async {
     return await _execute(
+      path: path,
       operation: "Fetch Document: $path",
       action: () async {
         final doc = await _db.doc(path).get();
@@ -47,6 +50,7 @@ class FireStoreHelperService extends GetxService {
     bool merge = true,
   }) async {
     await _execute(
+      path: path,
       operation: "Set Data: $path",
       action: () => _db.doc(path).set(data, SetOptions(merge: merge)),
     );
@@ -57,6 +61,7 @@ class FireStoreHelperService extends GetxService {
     required Map<String, dynamic> data,
   }) async {
     await _execute(
+      path: path,
       operation: "Update Data: $path",
       action: () => _db.doc(path).update(data),
     );
@@ -68,6 +73,7 @@ class FireStoreHelperService extends GetxService {
     required T Function(DocumentSnapshot doc) fromDoc,
   }) async {
     return await _execute(
+      path: path,
       operation: "Add Document to: $path",
       action: () async {
         final ref = await _db.collection(path).add(data);
@@ -79,6 +85,7 @@ class FireStoreHelperService extends GetxService {
 
   Future<void> deleteDocument(String path) async {
     await _execute(
+      path: path,
       operation: "Delete Document: $path",
       action: () => _db.doc(path).delete(),
     );
@@ -97,6 +104,7 @@ class FireStoreHelperService extends GetxService {
     int batchSize = 300,
   }) async {
     return await _execute(
+          path: path,
           operation: "Delete Collection: $path",
           action: () async {
             int deleted = 0;
@@ -128,9 +136,18 @@ class FireStoreHelperService extends GetxService {
 
   /// The "Workhorse": Handles logging and error boundaries
   Future<T?> _execute<T>({
+    required String path,
     required String operation,
     required Future<T?> Function() action,
   }) async {
+    // Refuse before sending anything: the rules would deny it anyway, and a
+    // read with an empty or stale uid must never reach Firestore.
+    try {
+      FirestoreAccessGuard.check(path, SessionManager.signedInUid);
+    } on NotSignedInException {
+      logger.w("Refused $operation: not signed in");
+      rethrow;
+    }
     try {
       logger.i("🚀 Starting $operation");
       final result = await action();

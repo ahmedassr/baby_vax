@@ -46,7 +46,7 @@ class MedicalDateDetailsController extends GetxController
     try {
       final data = await AppConstant.fireStoreHelper1.getDocument(
           path:
-              "${AppPath.userMedicalDates(SessionManager.uId)}/${medicalDate?.id}",
+              "${AppPath.userMedicalDates(SessionManager.signedInUid ?? "")}/${medicalDate?.id}",
           fromDoc: MedicalDatesModel.fromDocument);
       if (data == null) {
         setEmpty();

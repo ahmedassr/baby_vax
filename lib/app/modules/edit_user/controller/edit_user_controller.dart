@@ -36,7 +36,7 @@ class EditUserController extends GetxController
     setLoading();
     try {
       final updatedUser = UserModel(
-        uid: SessionManager.uId,
+        uid: SessionManager.signedInUid ?? "",
         email: editUserController["email"]?.text.trim() ?? "",
         birthday: userArg?.birthday ?? "",
         name: editUserController["name"]?.text.trim() ?? "",

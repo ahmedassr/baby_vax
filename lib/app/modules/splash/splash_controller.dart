@@ -79,7 +79,7 @@ class SplashController extends GetxController
 
   /// Re-reads the device timezone and rebuilds reminders from Firestore.
   Future<void> _syncReminders() async {
-    final String userId = SessionManager.uId;
+    final String userId = SessionManager.signedInUid ?? "";
     if (userId.isEmpty) return;
 
     final String userName =
