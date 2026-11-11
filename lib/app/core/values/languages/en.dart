@@ -259,5 +259,16 @@ Map<String, String> en = {
   "MedicalDateActions_mark_skipped": "Mark as skipped",
   "MedicalDateActions_undo": "Undo (mark as pending)",
   "MedicalDateDetails_confirm_future_completion_msg":
-      "This dose is scheduled for @date. Mark it as given?"
+      "This dose is scheduled for @date. Mark it as given?",
+  // v1.1 design system
+  "loading_label": "Loading",
+  "optional_suffix": "(optional)",
+  "status_semantic_label": "Status: @status",
+  "state_error_title": "Something went wrong",
+  "state_empty_title": "Nothing here yet",
+  "retry_label": "Try again",
+  "close_label": "Close",
+  "progress_semantic_label": "@done of @total doses done",
+  "step_counter": "Step @current of @total",
+  "not_recorded_label": "not recorded",
 };

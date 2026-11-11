@@ -63,15 +63,15 @@ class HomeView extends GetView<HomeController> {
         },
       ),
       onLoading: const Center(
-        child: AppShimmerLoading(),
+        child: AppLoading(),
       ),
       onError: (error) => AppEmptyState(
-        message: error,
+        title: error ?? "state_error_title".tr,
         animationPath: AppAnimations.noRecords,
       ),
       onEmpty: Center(
         child: AppEmptyState(
-          message: "TipsView_empty_state_text".tr,
+          title: "TipsView_empty_state_text".tr,
           animationPath: AppAnimations.noRecords,
         ),
       ),

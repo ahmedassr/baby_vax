@@ -1,5 +1,4 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
-import 'package:baby_vax/app/core/widget/app_leading_icon.dart';
 
 class TipCard extends StatelessWidget {
   final String title;
@@ -46,7 +45,7 @@ class TipCard extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const AppLeadingIcon(icon: Icons.privacy_tip_outlined),
+                  const AppIconBadge(icon: Icons.privacy_tip_outlined),
                   16.sbw,
                   Expanded(
                     child: Column(

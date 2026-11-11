@@ -1,6 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
-import 'package:baby_vax/app/core/widget/medical_date_status_badge.dart';
-import '../../../core/widget/app_leading_icon.dart';
+import 'package:baby_vax/app/core/service/vaccine_state_service.dart';
 import '../../../core/widget/vaccination_count_badge.dart';
 
 class MedicalDateCard extends StatelessWidget {
@@ -45,7 +44,7 @@ class MedicalDateCard extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const AppLeadingIcon(
+                    const AppIconBadge(
                       icon: Icons.calendar_month_rounded,
                     ),
                     16.sbw,
@@ -69,7 +68,9 @@ class MedicalDateCard extends StatelessWidget {
                               ),
                             ),
                             8.sbw,
-                            MedicalDateStatusBadge(state: data.state),
+                            AppStatusChip(
+                                status: VaccineStatePolicy.displayStatus(
+                                    data, DateTime.now())),
                           ],
                         ),
                         8.sbh,

@@ -11,7 +11,7 @@ class TipsView extends GetView<TipsController> {
     return controller.obx((tips) {
       if (tips == null || tips.isEmpty) {
         return AppEmptyState(
-          message: "TipsView_empty_state_text".tr,
+          title: "TipsView_empty_state_text".tr,
           animationPath: AppAnimations.noRecords,
         );
       }
@@ -32,14 +32,14 @@ class TipsView extends GetView<TipsController> {
         },
       );
     },
-        onLoading: const Center(child: AppShimmerLoading()),
+        onLoading: const Center(child: AppLoading()),
         onError: (error) => AppEmptyState(
-              message: error ?? "unexpected_error".tr,
+              title: error ?? "state_error_title".tr,
               animationPath: AppAnimations.noRecords,
             ),
         onEmpty: Center(
           child: AppEmptyState(
-            message: "TipsView_empty_state_text".tr,
+            title: "TipsView_empty_state_text".tr,
             animationPath: AppAnimations.noRecords,
           ),
         ));

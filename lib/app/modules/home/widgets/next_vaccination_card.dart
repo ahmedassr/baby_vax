@@ -1,7 +1,6 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/widget/vaccination_count_badge.dart';
 import 'package:baby_vax/app/modules/medical_dates/widgets/medical_date_card.dart';
-import '../../../core/widget/app_leading_icon.dart';
 
 class NextVaccinationCard extends StatelessWidget {
   final MedicalDatesModel? nextVaccination;
@@ -38,7 +37,7 @@ class NextVaccinationCard extends StatelessWidget {
               20.sbh,
               Row(
                 children: [
-                  const AppLeadingIcon(icon: Icons.vaccines),
+                  const AppIconBadge(icon: Icons.vaccines),
                   12.sbw,
                   Expanded(
                     child: AppText(

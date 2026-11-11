@@ -65,11 +65,6 @@ class LoginView extends GetView<LoginController> {
                         errorText: controller.emailErrorText.value.isNotEmpty
                             ? controller.emailErrorText.value
                             : null,
-                        borderRadius: 18,
-                        labelStyle: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.textGrey,
-                          fontWeight: FontWeight.w500,
-                        ),
                       )),
                   24.sbh,
                   Obx(() => LabeledTextField(
@@ -80,11 +75,6 @@ class LoginView extends GetView<LoginController> {
                             ? controller.passwordErrorText.value
                             : null,
                         obscureText: true,
-                        borderRadius: 18,
-                        labelStyle: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.textGrey,
-                          fontWeight: FontWeight.w500,
-                        ),
                       )),
                   16.sbh,
                   Row(

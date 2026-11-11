@@ -1,4 +1,3 @@
-import 'package:baby_vax/app/core/widget/app_leading_icon.dart';
 import '../../../../core/imports/import_manger.dart';
 import '../../../../core/widget/app_logo.dart';
 
@@ -77,7 +76,7 @@ class SignupView extends GetView<SignupController> {
                     children: [
                       Row(
                         children: [
-                          const AppLeadingIcon(icon: Icons.info_outline),
+                          const AppIconBadge(icon: Icons.info_outline),
                           8.sbw,
                           AppText(
                             text: "SignupView_baby_information_label".tr,
@@ -179,7 +178,7 @@ class SignupView extends GetView<SignupController> {
                     children: [
                       Row(
                         children: [
-                          const AppLeadingIcon(icon: Icons.analytics_outlined),
+                          const AppIconBadge(icon: Icons.analytics_outlined),
                           8.sbw,
                           AppText(
                             text: "SignupView_baby_measurements_label".tr,
@@ -203,7 +202,6 @@ class SignupView extends GetView<SignupController> {
                                   width: 130,
                                   child: LabeledTextField(
                                     label: "SignupView_weight_label".tr,
-                                    fontSize: 13,
                                     keyboardType: TextInputType.number,
                                     controller: controller.signupControllers[
                                             "weightController"] ??
@@ -225,7 +223,6 @@ class SignupView extends GetView<SignupController> {
                                   child: LabeledTextField(
                                     label: "SignupView_height_label".tr,
                                     keyboardType: TextInputType.number,
-                                    fontSize: 13,
                                     controller: controller.signupControllers[
                                             "heightController"] ??
                                         TextEditingController(),
@@ -246,7 +243,6 @@ class SignupView extends GetView<SignupController> {
                                   child: LabeledTextField(
                                     label: "SignupView_head_size_label".tr,
                                     keyboardType: TextInputType.number,
-                                    fontSize: 13,
                                     controller: controller.signupControllers[
                                             "headSizeController"] ??
                                         TextEditingController(),
@@ -267,7 +263,6 @@ class SignupView extends GetView<SignupController> {
                                   width: 130,
                                   child: LabeledTextField(
                                     label: "SignupView_blood_label".tr,
-                                    fontSize: 13,
                                     keyboardType: TextInputType.number,
                                     controller: controller.signupControllers[
                                             "bloodPercentageController"] ??

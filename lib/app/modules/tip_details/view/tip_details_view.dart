@@ -16,7 +16,7 @@ class TipDetailsView extends GetView<TipDetailsController> {
       ),
       body: controller.tip == null
           ? AppEmptyState(
-              message: "TipDetailsView_empty_state_text".tr,
+              title: "TipDetailsView_empty_state_text".tr,
               animationPath: AppAnimations.noRecords,
             )
           : SingleChildScrollView(

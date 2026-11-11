@@ -43,6 +43,21 @@ class VaccineStatePolicy {
   static bool completionNeedsConfirmation(
           MedicalDatesModel dose, DateTime now) =>
       canMarkCompleted(dose) && isInFuture(dose, now);
+
+  /// What the UI shows for [dose] on [now]'s day: the stored state, except
+  /// that a pending dose whose day has passed shows as overdue.
+  static DoseDisplayStatus displayStatus(MedicalDatesModel dose, DateTime now) {
+    switch (stateOf(dose)) {
+      case MedicalDateStateEnum.completed:
+        return DoseDisplayStatus.completed;
+      case MedicalDateStateEnum.skipped:
+        return DoseDisplayStatus.skipped;
+      case MedicalDateStateEnum.pending:
+        return isOverdue(dose, now)
+            ? DoseDisplayStatus.overdue
+            : DoseDisplayStatus.pending;
+    }
+  }
 }
 
 /// Thrown when an action is not allowed from the dose's current state.

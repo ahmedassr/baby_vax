@@ -1,5 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
-import 'package:baby_vax/app/core/widget/medical_date_status_badge.dart';
+import 'package:baby_vax/app/core/service/vaccine_state_service.dart';
 
 class MedicalDateDetailCard extends StatelessWidget {
   final String? name;
@@ -80,7 +80,14 @@ class MedicalDateDetailCard extends StatelessWidget {
                 ),
                 if (state != null) ...[
                   8.sbw,
-                  MedicalDateStatusBadge(state: state!),
+                  AppStatusChip(
+                      status: VaccineStatePolicy.displayStatus(
+                          MedicalDatesModel(
+                              name: '',
+                              description: '',
+                              date: DateTime.now(),
+                              state: state!),
+                          DateTime.now())),
                 ],
               ],
             ),

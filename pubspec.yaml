@@ -41,14 +41,14 @@ dependencies:
   # painted, not drawn from the font), smooth_page_indicator, fluttertoast,
   # flutter_localization, flutter_svg, shared_preferences (get_storage is
   # the app's key-value store).
+  # v1.1 also removed auto_size_text (its one user, KeyValueRichText, was
+  # dead code) and shimmer (AppLoading pulses one opacity instead).
   firebase_core: ^5.1.0
   firebase_auth: ^7.0.1
   cloud_firestore: ^7.1.0
   intl: ^0.20.0
   lottie: ^3.2.0
-  auto_size_text: ^3.0.0
   get: ^4.7.2
-  shimmer: ^4.0.0
   google_fonts: ^9.0.0
   flutter_screenutil: ^5.9.3
   get_storage: ^2.1.1

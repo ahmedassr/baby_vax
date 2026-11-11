@@ -294,5 +294,16 @@ Map<String, String> ar = {
   "MedicalDateActions_mark_skipped": "تحديد كمتجاوزة",
   "MedicalDateActions_undo": "تراجع (إرجاع إلى قيد الانتظار)",
   "MedicalDateDetails_confirm_future_completion_msg":
-      "موعد هذه الجرعة @date. هل تريد تحديدها كمُعطاة؟"
+      "موعد هذه الجرعة @date. هل تريد تحديدها كمُعطاة؟",
+  // v1.1 design system
+  "loading_label": "جارٍ التحميل",
+  "optional_suffix": "(اختياري)",
+  "status_semantic_label": "الحالة: @status",
+  "state_error_title": "حدث خطأ ما",
+  "state_empty_title": "لا يوجد شيء هنا بعد",
+  "retry_label": "حاول مرة أخرى",
+  "close_label": "إغلاق",
+  "progress_semantic_label": "الجرعات المُعطاة: @done من @total",
+  "step_counter": "الخطوة @current من @total",
+  "not_recorded_label": "غير مسجّل",
 };
