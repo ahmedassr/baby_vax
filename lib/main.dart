@@ -39,6 +39,9 @@ void main() async {
   // Date names and digits for every supported language, so AppDateFormat
   // works before (and outside) the Material localizations.
   await initializeDateFormatting();
+  // Western digits in Arabic too, also in the date picker: must run before
+  // the Material localizations create their date formats.
+  AppDateFormat.useWesternDigits();
   await initAppService();
   // Null until the user picks a theme in settings: follow the system.
   final bool? isDarkMode =
