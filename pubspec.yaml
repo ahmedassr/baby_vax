@@ -63,20 +63,34 @@ dependencies:
 
 
 
+# Branding. Sources are the SVGs in assets/branding/; the PNGs next to them
+# in assets/branding/png/ are exported from those SVGs and are what these
+# two generators read. Neither folder is bundled into the app (see the
+# assets list below). Regenerate with:
+#   dart run flutter_launcher_icons
+#   dart run flutter_native_splash:create
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/appIcon.png"
-  adaptive_icon_background: "#ffffff"
-  adaptive_icon_foreground: "assets/appIcon.png"
+  image_path: "assets/branding/png/app-icon.png"
+  # Adaptive icon (Android 8+): solid brand-dark background, mark inside
+  # the 66dp safe zone, and a monochrome layer for Android 13 themed icons.
+  adaptive_icon_background: "#2E7324"
+  adaptive_icon_foreground: "assets/branding/png/adaptive-foreground.png"
+  adaptive_icon_monochrome: "assets/branding/png/adaptive-monochrome.png"
+  remove_alpha_ios: true
 
 flutter_native_splash:
-  color: "#FFFFFF"
-  branding: assets/app_branding.png
+  # The palette's scaffold colours (AppPalette), so the native splash hands
+  # over to the Flutter splash without a flash of a different colour.
+  color: "#F7F9F7"
+  color_dark: "#121417"
+  image: assets/branding/png/splash-legacy.png
 
   android_12:
-    icon_background_color: "#ffffff"
-    icon_background_color_dark: "#1C1C1E"
+    image: assets/branding/png/splash-android12.png
+    color: "#F7F9F7"
+    color_dark: "#121417"
 
   android: true
   ios: true
@@ -114,17 +128,16 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   # Listed file by file rather than `- assets/`, so build-time source images
   # are not shipped to users:
-  #  - assets/appIcon.png      launcher icon source (flutter_launcher_icons);
-  #                            the app shows appIcon.webp instead, a lossless
-  #                            and pixel-identical re-encode, 57% of the size
-  #  - assets/app_branding.png native splash source (flutter_native_splash);
-  #                            never loaded by Dart code
+  #  - assets/branding/       SVG sources and their exported PNGs, read by
+  #                            flutter_launcher_icons / flutter_native_splash
+  #                            at build time; the app shows app_logo.webp,
+  #                            a lossless export of branding/logo.svg
   # test/assets/asset_references_test.dart fails if code references a file
   # that is not listed here, or if a listed file is never referenced.
   #  - assets/google_fonts/    Cairo, bundled so it is never fetched at
   #                            runtime; see lib/app/config/themes/app_fonts.dart
   assets:
-    - assets/appIcon.webp
+    - assets/app_logo.webp
     - assets/animations/no_records.json
     - assets/google_fonts/Cairo-Regular.ttf
     - assets/google_fonts/OFL.txt

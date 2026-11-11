@@ -22,7 +22,7 @@ class SplashView extends GetView<SplashController> {
                 scale: controller.logoScale,
                 child: Image.asset(
                   // 512 px covers 120 dp up to 4x density.
-                  AppImage.appIcon,
+                  AppImage.appLogo,
                   width: 120,
                 ),
               ),

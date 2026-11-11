@@ -18,9 +18,10 @@ class AppLogo extends StatelessWidget {
         // a Lottie JSON file, which cannot decode as an image, so the login
         // screen showed an empty circle.
         child: Image.asset(
-          AppImage.appIcon,
+          AppImage.appLogo,
           width: 100,
           height: 100,
+          fit: BoxFit.contain,
           semanticLabel: 'Baby Vax',
         ));
   }
