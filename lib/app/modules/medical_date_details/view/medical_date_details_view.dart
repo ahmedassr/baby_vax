@@ -16,6 +16,7 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
             ? "MedicalDateDetailsView_title".tr
             : bidiIsolate(controller.medicalDate!.displayName),
         fontSize: 18,
+        titleMaxLines: 2,
       ),
       body: controller.obx(
         (_) => SingleChildScrollView(
