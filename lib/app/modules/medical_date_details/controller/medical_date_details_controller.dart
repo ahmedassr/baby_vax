@@ -1,106 +1,123 @@
-import 'package:baby_vax/app/config/constant/app_path.dart';
-import 'package:baby_vax/app/modules/home/controller/home_controller.dart';
+import 'dart:async';
+
 import 'package:baby_vax/app/core/service/vaccine_state_service.dart';
+import 'package:baby_vax/app/core/utils/app_haptics.dart';
+import 'package:baby_vax/app/modules/home/controller/home_controller.dart';
 
 import '../../../core/imports/import_manger.dart';
 
-class MedicalDateDetailsController extends GetxController
-    with StateMixin, StateMixinHelper {
-  MedicalDateDetailsController({VaccineStateService? stateService})
-      : _stateService = stateService ??
+/// One dose: what it is, when it is due, and marking it given, skipped, or
+/// back to pending.
+///
+/// v1.0 put the whole screen into a loading state during a change and, on a
+/// failure, into an error state that rendered nothing while a dialog opened
+/// from a post-frame callback. Now the screen stays put: the action button
+/// shows a spinner, and the outcome is a banner on the screen.
+class MedicalDateDetailsController extends GetxController {
+  MedicalDateDetailsController({
+    VaccineStateService? stateService,
+    MedicalDatesModel? dose,
+    Future<bool> Function(String message)? confirm,
+    DateTime Function()? clock,
+  })  : _stateService = stateService ??
             VaccineStateService(
               writer: FirestoreDoseStateWriter(),
               reminders: CoordinatorDoseReminders(),
-            );
+            ),
+        _confirm = confirm ?? _dialogConfirm,
+        _now = clock ?? DateTime.now,
+        _initial = dose ?? InternalScreenArgs.fromArgs.medicalDate;
 
   final VaccineStateService _stateService;
+  final Future<bool> Function(String message) _confirm;
+  final DateTime Function() _now;
+  final MedicalDatesModel? _initial;
 
-  MedicalDatesModel? medicalDate;
-  final args = InternalScreenArgs.fromArgs.medicalDate;
+  /// The dose shown; null when the screen was opened without one.
+  final Rxn<MedicalDatesModel> dose = Rxn<MedicalDatesModel>();
+
+  final RxBool isSaving = false.obs;
+
+  /// The last change was stored on the phone only ("Saved on this phone. It
+  /// will sync when you are back online.").
+  final RxBool savedOffline = false.obs;
+
+  final RxnString errorMessage = RxnString();
+
+  /// v1.0 name, kept for callers.
+  MedicalDatesModel? get medicalDate => dose.value;
+
+  DateTime get now => _now();
 
   bool get canMarkCompleted =>
-      medicalDate != null && VaccineStatePolicy.canMarkCompleted(medicalDate!);
+      dose.value != null && VaccineStatePolicy.canMarkCompleted(dose.value!);
 
   bool get canMarkSkipped =>
-      medicalDate != null && VaccineStatePolicy.canMarkSkipped(medicalDate!);
+      dose.value != null && VaccineStatePolicy.canMarkSkipped(dose.value!);
 
   bool get canUndo =>
-      medicalDate != null && VaccineStatePolicy.canUndo(medicalDate!);
+      dose.value != null && VaccineStatePolicy.canUndo(dose.value!);
 
   @override
   void onInit() {
     super.onInit();
-    initializeMedicalDateArgument();
-    setSuccess();
+    dose.value = _initial;
   }
 
-  void initializeMedicalDateArgument() {
-    if (args != null) {
-      medicalDate = args;
-    } else {
-      setError("MedicalDateDetailsController_missing_medical_dates_msg".tr);
+  static Future<bool> _dialogConfirm(String message) {
+    final Completer<bool> answer = Completer<bool>();
+    AppConstant.alertService
+        .showAlert(AlertModel.attention(
+      message: message,
+      yesAction: () => answer.complete(true),
+      noAction: () => answer.complete(false),
+    ))
+        .then((_) {
+      // Dismissed by tapping outside: treat as "no".
+      if (!answer.isCompleted) answer.complete(false);
+    });
+    return answer.future;
+  }
+
+  /// Marks the dose as given. A dose scheduled after today asks first,
+  /// since that is more likely a mis-tap than a dose given early.
+  Future<void> onMarkCompleted() async {
+    final MedicalDatesModel? d = dose.value;
+    if (d == null) return;
+    if (VaccineStatePolicy.completionNeedsConfirmation(d, _now())) {
+      final bool yes = await _confirm(
+          "MedicalDateDetails_confirm_future_completion_msg".trIsolated(
+              <String, String>{'date': AppDateFormat.date(d.date)}));
+      if (!yes) return;
     }
+    await _change(_stateService.markCompleted);
   }
 
-  Future fetchDate() async {
-    setLoading();
-    try {
-      final data = await AppConstant.fireStoreHelper1.getDocument(
-          path:
-              "${AppPath.userMedicalDates(SessionManager.signedInUid ?? "")}/${medicalDate?.id}",
-          fromDoc: MedicalDatesModel.fromDocument);
-      if (data == null) {
-        setEmpty();
-      } else {
-        medicalDate = data;
-        setSuccess();
-      }
-    } catch (_) {
-      setError("MedicalDateDetailsController_fetch_failed_msg".tr);
-    }
-  }
+  Future<void> onMarkSkipped() => _change(_stateService.markSkipped);
 
-  /// Marks the dose as given. A dose scheduled after today asks first.
-  void onMarkCompleted() {
-    final MedicalDatesModel? dose = medicalDate;
-    if (dose == null) return;
-
-    if (VaccineStatePolicy.completionNeedsConfirmation(dose, DateTime.now())) {
-      AppConstant.alertService.showAlert(AlertModel.attention(
-        message: "MedicalDateDetails_confirm_future_completion_msg".trIsolated(
-          <String, String>{'date': AppDateFormat.date(dose.date)},
-        ),
-        yesAction: () => _change(_stateService.markCompleted),
-        noAction: () {},
-      ));
-      return;
-    }
-    _change(_stateService.markCompleted);
-  }
-
-  void onMarkSkipped() => _change(_stateService.markSkipped);
-
-  void onUndo() => _change(_stateService.undo);
+  Future<void> onUndo() => _change(_stateService.undo);
 
   Future<void> _change(
     Future<StateChange> Function(MedicalDatesModel dose) action,
   ) async {
-    final MedicalDatesModel? dose = medicalDate;
-    if (dose == null) return;
+    final MedicalDatesModel? d = dose.value;
+    if (d == null || isSaving.value) return;
 
-    setLoading();
+    isSaving.value = true;
+    errorMessage.value = null;
+    savedOffline.value = false;
     try {
-      final StateChange change = await action(dose);
-      medicalDate = change.dose;
-      setSuccess();
+      final StateChange change = await action(d);
+      dose.value = change.dose;
+      savedOffline.value = change.outcome == WriteOutcome.pendingSync;
+      AppHaptics.confirm();
       _refreshLists();
-      if (change.outcome == WriteOutcome.pendingSync) {
-        AppConstant.alertService
-            .showAlert(AlertModel.success(message: "saved_offline_msg".tr));
-      }
     } catch (e, s) {
       logger.w('Dose state change failed', error: e, stackTrace: s);
-      setError("MedicalDateDetailsController_state_update_failed_msg".tr);
+      errorMessage.value =
+          "MedicalDateDetailsController_state_update_failed_msg".tr;
+    } finally {
+      isSaving.value = false;
     }
   }
 

@@ -416,4 +416,10 @@ Map<String, String> ar = {
   "Schedule_empty_title": "لا يوجد جدول بعد",
   "Schedule_empty_body": "سيظهر جدول طفلك هنا بعد إعداد الحساب.",
   "Schedule_filter_label": "عرض",
+  // v1.1 alerts
+  "ok_label": "حسناً",
+  // v1.1 dose details
+  "MedicalDateDetails_scheduled_label": "الموعد",
+  "MedicalDateDetails_age_label": "العمر",
+  "MedicalDateDetails_about_title": "عن هذه الجرعة",
 };

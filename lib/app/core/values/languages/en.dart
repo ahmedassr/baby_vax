@@ -375,4 +375,10 @@ Map<String, String> en = {
   "Schedule_empty_body":
       "Your baby's schedule appears here once the account is set up.",
   "Schedule_filter_label": "Show",
+  // v1.1 alerts
+  "ok_label": "OK",
+  // v1.1 dose details
+  "MedicalDateDetails_scheduled_label": "Scheduled",
+  "MedicalDateDetails_age_label": "Age",
+  "MedicalDateDetails_about_title": "About this dose",
 };
