@@ -1,6 +1,5 @@
 export 'package:get/get.dart';
 export 'package:flutter/material.dart' hide RefreshCallback;
-export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:lottie/lottie.dart';
 export 'package:logger/logger.dart';
 export 'package:flutter/cupertino.dart';

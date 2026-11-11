@@ -20,6 +20,9 @@ class AppTheme {
         onSurfaceVariant: scheme.onSurfaceVariant,
       );
 
+  /// The largest text scale the layouts are built and tested for.
+  static const double maxTextScale = 1.3;
+
   /// Which theme to use for the stored choice. Nothing stored means the user
   /// hasn't picked one, so follow the system.
   static ThemeMode themeModeFor(bool? storedIsDark) => switch (storedIsDark) {

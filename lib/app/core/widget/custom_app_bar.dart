@@ -10,7 +10,10 @@ import 'package:flutter/services.dart';
 /// `Colors.grey.shade200` hard-coded behind it in dark mode too.
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
-  final double fontSize;
+
+  /// Title size. Defaults to [titleSize], or [wrappedTitleSize] for a title
+  /// that wraps.
+  final double? fontSize;
   final bool showBackButton;
   final List<Widget>? action;
   final VoidCallback? onBackPressed;
@@ -24,6 +27,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// own line height is almost twice its size.
   static const double wrappedTitleLineHeight = 1.25;
 
+  /// Default size of a one-line title.
+  static const double titleSize = 20;
+
+  /// Default size of a wrapping title, a step down so two lines fit.
+  static const double wrappedTitleSize = 18;
+
   /// Largest text scale a wrapping title follows, so [preferredSize] (which
   /// cannot see the device setting) always leaves room for it.
   static const double wrappedTitleMaxTextScale = 1.3;
@@ -35,8 +44,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.action,
     this.onBackPressed,
     this.titleMaxLines,
-    this.fontSize = 20,
+    this.fontSize,
   });
+
+  double get _size =>
+      fontSize ?? (titleMaxLines == null ? titleSize : wrappedTitleSize);
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +77,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           : titleMaxLines == null
               ? Text(
                   title!,
-                  style: base?.copyWith(fontSize: fontSize),
+                  style: base?.copyWith(fontSize: _size),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 )
@@ -74,7 +86,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: Text(
                     title!,
                     style: base?.copyWith(
-                      fontSize: fontSize,
+                      fontSize: _size,
                       height: wrappedTitleLineHeight,
                     ),
                     maxLines: titleMaxLines,
@@ -93,7 +105,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       return const Size.fromHeight(kToolbarHeight);
     }
     final double text =
-        lines * fontSize * wrappedTitleLineHeight * wrappedTitleMaxTextScale;
+        lines * _size * wrappedTitleLineHeight * wrappedTitleMaxTextScale;
     return Size.fromHeight(
         text + 16 > kToolbarHeight ? text + 16 : kToolbarHeight);
   }

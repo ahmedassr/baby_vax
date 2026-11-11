@@ -1,6 +1,5 @@
 //theme
 export 'package:baby_vax/app/config/themes/app_theme.dart';
-export 'package:baby_vax/app/config/themes/app_text_style.dart';
 export 'package:baby_vax/app/config/themes/app_spacing.dart';
 export 'package:baby_vax/app/config/themes/app_typography.dart';
 export 'package:baby_vax/app/config/themes/app_color_schemes.dart';

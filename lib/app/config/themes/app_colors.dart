@@ -26,29 +26,4 @@ class AppColors {
 
   /// Fully transparent.
   static const Color transparent = Colors.transparent;
-
-  // ---- v1.0 names, removed once every screen is migrated ----------------
-  // Kept only so each screen can move onto the theme in its own commit
-  // without a flag day. They point at palette values now, so the screens
-  // that still use them already get the measured colours.
-
-  static const Color secondPrimary = AppPalette.lightPrimaryContainer;
-  static const Color black = Color(0xFF000000);
-  static const Color textHint = AppPalette.lightOnSurfaceVariant;
-  static const Color textWhite = AppPalette.darkOnSurface;
-  static const Color textBlack = AppPalette.lightOnSurface;
-  static const Color textGrey = AppPalette.lightOnSurfaceVariant;
-  static const Color backgroundLight = AppPalette.lightSurfaceContainerLow;
-  static const Color backgroundDark = AppPalette.darkSurface;
-  static const Color buttonDark = AppPalette.darkPrimaryContainer;
-  static const Color buttonLight = AppPalette.lightPrimaryContainer;
-  static const Color cardDark = AppPalette.darkSurfaceContainer;
-  static const Color greyMedium = AppPalette.darkOnSurfaceVariant;
-  static const Color greyDark = AppPalette.lightOnSurfaceVariant;
-  static const Color greyLight = AppPalette.lightSurfaceContainerHigh;
-  static const Color accent = AppPalette.darkSecondary;
-  static const Color error = AppPalette.lightError;
-  static const Color warning = accent;
-  static const Color success = AppPalette.brandDark;
-  static const Color info = AppPalette.lightTertiary;
 }

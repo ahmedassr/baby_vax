@@ -59,22 +59,6 @@ class AppSpacing {
   /// Inside a bottom sheet, with room for the drag handle.
   static const EdgeInsets sheet =
       EdgeInsets.only(left: xl, right: xl, top: md, bottom: xxl);
-
-  // ---- names kept from v1.0 ---------------------------------------------
-  // Still referenced by screens that have not been moved onto the system
-  // yet. They now resolve to scale values instead of 15/10/5/30.
-
-  /// Padding around a screen's bottom action button.
-  static const EdgeInsets buttonPadding =
-      EdgeInsets.symmetric(horizontal: lg, vertical: lg);
-
-  /// A column's own padding inside a screen.
-  static const EdgeInsets columnPadding =
-      EdgeInsets.symmetric(horizontal: lg, vertical: sm);
-
-  /// A list item's padding.
-  static const EdgeInsets listItemPadding =
-      EdgeInsets.symmetric(horizontal: sm, vertical: sm);
 }
 
 /// The app's corner radii.

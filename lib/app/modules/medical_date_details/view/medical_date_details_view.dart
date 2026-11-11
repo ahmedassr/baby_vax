@@ -17,7 +17,6 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
           title: dose == null
               ? "MedicalDateDetailsView_title".tr
               : bidiIsolate(dose.displayName),
-          fontSize: 18,
           titleMaxLines: 2,
         ),
         body: dose == null
