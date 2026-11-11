@@ -209,7 +209,7 @@ Map<String, String> ar = {
   "Notification_permission_denied_msg":
       "الإشعارات مغلقة، لذلك لن تظهر تذكيرات التطعيم. يمكنك تشغيلها من إعدادات جهازك.",
   // Medical Date State Enum:
-  "Pending": "قادم",
+  "Pending": "قيد الانتظار",
   "Completed": "مكتمل",
   "Skipped": "متجاوز",
 
@@ -218,16 +218,38 @@ Map<String, String> ar = {
   "MedicalDatesView_add_custom_date": "إضافة موعد خاص",
   "SplashView_tagline": "رعاية • حماية • نمو",
   "AlertModel_field_required_msg": "حقل @field مطلوب.",
+  // Countdown badge: one key per CLDR plural category (zero, one, two, few,
+  // many, other), picked by VaccinationTimeStatusExtension.withCount.
   "VaccinationTimeStatus_hours_left_one": "متبقٍ ساعة واحدة",
-  "VaccinationTimeStatus_hours_left_other": "الساعات المتبقية: @count",
+  "VaccinationTimeStatus_hours_left_two": "متبقٍ ساعتان",
+  "VaccinationTimeStatus_hours_left_few": "متبقٍ @count ساعات",
+  "VaccinationTimeStatus_hours_left_many": "متبقٍ @count ساعة",
+  "VaccinationTimeStatus_hours_left_other": "متبقٍ @count ساعة",
+  "VaccinationTimeStatus_hours_left_zero": "متبقٍ @count ساعة",
   "VaccinationTimeStatus_days_left_one": "متبقٍ يوم واحد",
-  "VaccinationTimeStatus_days_left_other": "الأيام المتبقية: @count",
+  "VaccinationTimeStatus_days_left_two": "متبقٍ يومان",
+  "VaccinationTimeStatus_days_left_few": "متبقٍ @count أيام",
+  "VaccinationTimeStatus_days_left_many": "متبقٍ @count يومًا",
+  "VaccinationTimeStatus_days_left_other": "متبقٍ @count يوم",
+  "VaccinationTimeStatus_days_left_zero": "متبقٍ @count يوم",
   "VaccinationTimeStatus_weeks_left_one": "متبقٍ أسبوع واحد",
-  "VaccinationTimeStatus_weeks_left_other": "الأسابيع المتبقية: @count",
+  "VaccinationTimeStatus_weeks_left_two": "متبقٍ أسبوعان",
+  "VaccinationTimeStatus_weeks_left_few": "متبقٍ @count أسابيع",
+  "VaccinationTimeStatus_weeks_left_many": "متبقٍ @count أسبوعًا",
+  "VaccinationTimeStatus_weeks_left_other": "متبقٍ @count أسبوع",
+  "VaccinationTimeStatus_weeks_left_zero": "متبقٍ @count أسبوع",
   "VaccinationTimeStatus_months_left_one": "متبقٍ شهر واحد",
-  "VaccinationTimeStatus_months_left_other": "الأشهر المتبقية: @count",
+  "VaccinationTimeStatus_months_left_two": "متبقٍ شهران",
+  "VaccinationTimeStatus_months_left_few": "متبقٍ @count أشهر",
+  "VaccinationTimeStatus_months_left_many": "متبقٍ @count شهرًا",
+  "VaccinationTimeStatus_months_left_other": "متبقٍ @count شهر",
+  "VaccinationTimeStatus_months_left_zero": "متبقٍ @count شهر",
   "VaccinationTimeStatus_years_left_one": "متبقٍ سنة واحدة",
-  "VaccinationTimeStatus_years_left_other": "السنوات المتبقية: @count",
+  "VaccinationTimeStatus_years_left_two": "متبقٍ سنتان",
+  "VaccinationTimeStatus_years_left_few": "متبقٍ @count سنوات",
+  "VaccinationTimeStatus_years_left_many": "متبقٍ @count سنةً",
+  "VaccinationTimeStatus_years_left_other": "متبقٍ @count سنة",
+  "VaccinationTimeStatus_years_left_zero": "متبقٍ @count سنة",
   // Generated vaccines, by MedicalDatesModel.code:
   "Vaccine_bcg_hepb_birth_name": "لقاح السل والتهاب الكبد ب (الجرعة الأولى)",
   "Vaccine_bcg_hepb_birth_description":
@@ -270,7 +292,7 @@ Map<String, String> ar = {
       "تم الحفظ على هذا الهاتف، وستتم المزامنة عند عودة الاتصال بالإنترنت.",
   "MedicalDateActions_mark_completed": "تحديد كمُعطاة",
   "MedicalDateActions_mark_skipped": "تحديد كمتجاوزة",
-  "MedicalDateActions_undo": "تراجع (إرجاع إلى قادمة)",
+  "MedicalDateActions_undo": "تراجع (إرجاع إلى قيد الانتظار)",
   "MedicalDateDetails_confirm_future_completion_msg":
       "موعد هذه الجرعة @date. هل تريد تحديدها كمُعطاة؟"
 };

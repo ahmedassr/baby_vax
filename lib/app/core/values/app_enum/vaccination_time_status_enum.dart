@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart' show Intl;
+
 import '../../imports/import_library.dart';
 
 enum VaccinationTimeStatusEnum {
@@ -38,8 +40,10 @@ extension VaccinationTimeStatusExtension on VaccinationTimeStatusEnum {
 
   /// The countdown text: "3 days left", "1 week left", "Today".
   ///
-  /// Arabic uses the "الأيام المتبقية: 3" form, which is correct for any
-  /// number without Arabic's dual and plural agreement rules.
+  /// The form is chosen by the CLDR plural rules of the current language
+  /// (zero, one, two, few, many, other), so Arabic gets "متبقٍ شهران",
+  /// "متبقٍ 3 أشهر", "متبقٍ 11 شهرًا". A language that has no key for a
+  /// category (English only has one and other) uses its "other" form.
   String withCount(int? count) {
     if (count == null) return label;
     final String unit = switch (this) {
@@ -51,9 +55,13 @@ extension VaccinationTimeStatusExtension on VaccinationTimeStatusEnum {
       _ => '',
     };
     if (unit.isEmpty) return label;
-    final String form = count == 1 ? 'one' : 'other';
-    return 'VaccinationTimeStatus_${unit}_left_$form'
-        .trParams({'count': '$count'});
+    final String base = 'VaccinationTimeStatus_${unit}_left_';
+    final String category =
+        pluralCategory(count, Get.locale?.languageCode ?? 'en');
+    String key = '$base$category';
+    // GetX returns the key itself when no language has a text for it.
+    if (key.tr == key) key = '${base}other';
+    return key.trParams({'count': '$count'});
   }
 
   Color badgeBackgroundColor(BuildContext context) {
@@ -88,3 +96,18 @@ extension VaccinationTimeStatusExtension on VaccinationTimeStatusEnum {
     }
   }
 }
+
+/// The CLDR plural category ("zero", "one", "two", "few", "many" or "other")
+/// of [count] in [locale]. An exact 0, 1 or 2 always gets its own category,
+/// as in ICU messages; [withCount] falls back to "other" when a language has
+/// no text for it.
+String pluralCategory(int count, String locale) => Intl.pluralLogic<String>(
+      count,
+      locale: locale,
+      zero: 'zero',
+      one: 'one',
+      two: 'two',
+      few: 'few',
+      many: 'many',
+      other: 'other',
+    );
