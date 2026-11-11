@@ -399,4 +399,19 @@ Map<String, String> en = {
   "Settings_notifications_hint": "Opens your phone's settings for Baby Vax.",
   "Settings_about": "About",
   "Settings_about_app": "About Baby Vax",
+  // v1.1 vaccination record
+  "Record_sheet_title": "Record this dose",
+  "Record_sheet_hint":
+      "Everything here is optional, but it makes the vaccination card more useful at the clinic.",
+  "Record_given_date": "Date given",
+  "Record_clinic": "Clinic or place",
+  "Record_lot": "Batch / lot number",
+  "Record_lot_hint": "Printed on the vial or your clinic card",
+  "Record_note": "Note",
+  "Record_save": "Save",
+  "Record_skip_details": "Mark as given without details",
+  "Record_section_title": "Vaccination record",
+  "Record_add_details": "Add details",
+  "Record_edit": "Edit details",
+  "Record_none": "No details recorded yet.",
 };

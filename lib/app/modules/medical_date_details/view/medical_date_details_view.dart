@@ -105,6 +105,7 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
                 ),
               )
             : const SizedBox.shrink()),
+        if (controller.canEditRecord) _RecordSection(controller: controller),
         if (dose.displayDescription.isNotEmpty) ...<Widget>[
           AppSectionHeader(title: "MedicalDateDetails_about_title".tr),
           AppCard(
@@ -143,6 +144,60 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
           }),
         ),
       ),
+    );
+  }
+}
+
+/// What was recorded when the dose was given, with Edit / Add details.
+class _RecordSection extends StatelessWidget {
+  const _RecordSection({required this.controller});
+
+  final MedicalDateDetailsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final DoseRecord r = controller.dose.value!.record;
+    final bool has = controller.hasRecord;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        AppSectionHeader(
+          title: "Record_section_title".tr,
+          actionLabel: has ? "Record_edit".tr : "Record_add_details".tr,
+          onAction: controller.onEditRecord,
+        ),
+        AppCard(
+          key: const Key('record_section'),
+          child: has
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    if (r.givenDate != null)
+                      _Fact(
+                          icon: Icons.event_available_rounded,
+                          label: "Record_given_date".tr,
+                          value: AppDateFormat.date(r.givenDate!)),
+                    if (r.clinic != null)
+                      _Fact(
+                          icon: Icons.local_hospital_outlined,
+                          label: "Record_clinic".tr,
+                          value: bidiIsolate(r.clinic!)),
+                    if (r.lot != null)
+                      _Fact(
+                          icon: Icons.qr_code_2_rounded,
+                          label: "Record_lot".tr,
+                          value: bidiIsolate(r.lot!)),
+                    if (r.note != null)
+                      _Fact(
+                          icon: Icons.notes_rounded,
+                          label: "Record_note".tr,
+                          value: bidiIsolate(r.note!)),
+                  ],
+                )
+              : Text("Record_none".tr, style: theme.textTheme.bodyMedium),
+        ),
+      ],
     );
   }
 }

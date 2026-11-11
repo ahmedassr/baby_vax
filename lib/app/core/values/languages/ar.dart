@@ -439,4 +439,19 @@ Map<String, String> ar = {
   "Settings_notifications_hint": "يفتح إعدادات هاتفك الخاصة ببيبي فاكس.",
   "Settings_about": "حول التطبيق",
   "Settings_about_app": "عن بيبي فاكس",
+  // v1.1 vaccination record
+  "Record_sheet_title": "تسجيل هذه الجرعة",
+  "Record_sheet_hint":
+      "كل ما هنا اختياري، لكنه يجعل بطاقة التطعيم أكثر فائدة في العيادة.",
+  "Record_given_date": "تاريخ الإعطاء",
+  "Record_clinic": "العيادة أو المكان",
+  "Record_lot": "رقم التشغيلة",
+  "Record_lot_hint": "مطبوع على العبوة أو على بطاقة العيادة",
+  "Record_note": "ملاحظة",
+  "Record_save": "حفظ",
+  "Record_skip_details": "تحديد كمُعطاة دون تفاصيل",
+  "Record_section_title": "سجل التطعيم",
+  "Record_add_details": "إضافة تفاصيل",
+  "Record_edit": "تعديل التفاصيل",
+  "Record_none": "لا توجد تفاصيل مسجّلة بعد.",
 };

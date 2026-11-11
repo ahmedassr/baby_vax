@@ -14,9 +14,12 @@ void main() {
   late FakeWriter writer;
   late FakeReminders reminders;
   late List<String> confirmations;
+  late List<bool> sheetsOpened;
 
   MedicalDateDetailsController put(MedicalDatesModel dose,
-      {bool confirmAnswer = true}) {
+      {bool confirmAnswer = true,
+      DoseRecord? sheetResult = const DoseRecord()}) {
+    sheetsOpened = <bool>[];
     writer = FakeWriter();
     reminders = FakeReminders();
     confirmations = <String>[];
@@ -26,6 +29,10 @@ void main() {
       confirm: (m) async {
         confirmations.add(m);
         return confirmAnswer;
+      },
+      recordSheet: (initial, {required bool editing}) async {
+        sheetsOpened.add(editing);
+        return sheetResult;
       },
       clock: () => fixedNow,
     );
@@ -124,6 +131,50 @@ void main() {
             writer: FakeWriter(), reminders: FakeReminders())));
     await pumpApp(tester, const MedicalDateDetailsView());
     expect(find.text('Back'), findsOneWidget);
+  });
+
+  testWidgets('dismissing the record sheet changes nothing', (tester) async {
+    put(pendingFuture(), sheetResult: null);
+    await pumpApp(tester, const MedicalDateDetailsView());
+    await tap(tester, 'mark_completed_button');
+    expect(sheetsOpened, <bool>[false]);
+    expect(writer.writes, isEmpty);
+  });
+
+  testWidgets('a filled record is saved with the dose and shown',
+      (tester) async {
+    final c = put(pendingFuture(),
+        sheetResult: DoseRecord(
+            givenDate: DateTime(2027, 3, 10),
+            clinic: 'Ramallah MCH',
+            lot: 'AB1234'));
+    await pumpApp(tester, const MedicalDateDetailsView());
+    await tap(tester, 'mark_completed_button');
+    expect(writer.records.single!.lot, 'AB1234');
+    expect(c.hasRecord, isTrue);
+    await tester.scrollUntilVisible(
+        find.byKey(const Key('record_section')), 200,
+        scrollable: find.byType(Scrollable).first);
+    expect(find.textContaining('Ramallah MCH'), findsOneWidget);
+    expect(find.textContaining('AB1234'), findsOneWidget);
+  });
+
+  testWidgets('the record of a given dose can be edited later', (tester) async {
+    put(completed(), sheetResult: const DoseRecord(clinic: 'UNRWA clinic'));
+    await pumpApp(tester, const MedicalDateDetailsView());
+    await tester.tap(find.text('Add details'));
+    await tester.pumpAndSettle();
+    expect(sheetsOpened, <bool>[true]);
+    expect(writer.recordWrites.single.$2.clinic, 'UNRWA clinic');
+    expect(writer.writes, isEmpty, reason: 'state unchanged');
+  });
+
+  testWidgets('a record left on a pending dose is not shown', (tester) async {
+    final c = put(pendingFuture()
+        .copyWith(record: const DoseRecord(clinic: 'left by v1.0 undo')));
+    await pumpApp(tester, const MedicalDateDetailsView());
+    expect(c.hasRecord, isFalse);
+    expect(find.textContaining('left by v1.0'), findsNothing);
   });
 
   testWidgets('tap targets and labels', (tester) async {

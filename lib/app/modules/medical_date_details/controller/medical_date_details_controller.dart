@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:baby_vax/app/core/service/vaccine_state_service.dart';
 import 'package:baby_vax/app/core/utils/app_haptics.dart';
 import 'package:baby_vax/app/modules/home/controller/home_controller.dart';
+import 'package:baby_vax/app/modules/medical_date_details/widgets/dose_record_sheet.dart';
 
 import '../../../core/imports/import_manger.dart';
 
@@ -18,8 +19,11 @@ class MedicalDateDetailsController extends GetxController {
     VaccineStateService? stateService,
     MedicalDatesModel? dose,
     Future<bool> Function(String message)? confirm,
+    Future<DoseRecord?> Function(DoseRecord initial, {required bool editing})?
+        recordSheet,
     DateTime Function()? clock,
-  })  : _stateService = stateService ??
+  })  : _recordSheetOverride = recordSheet,
+        _stateService = stateService ??
             VaccineStateService(
               writer: FirestoreDoseStateWriter(),
               reminders: CoordinatorDoseReminders(),
@@ -30,6 +34,12 @@ class MedicalDateDetailsController extends GetxController {
 
   final VaccineStateService _stateService;
   final Future<bool> Function(String message) _confirm;
+  final Future<DoseRecord?> Function(DoseRecord initial,
+      {required bool editing})? _recordSheetOverride;
+
+  Future<DoseRecord?> _recordSheet(DoseRecord initial,
+          {required bool editing}) =>
+      (_recordSheetOverride ?? _showRecordSheet)(initial, editing: editing);
   final DateTime Function() _now;
   final MedicalDatesModel? _initial;
 
@@ -58,6 +68,22 @@ class MedicalDateDetailsController extends GetxController {
   bool get canUndo =>
       dose.value != null && VaccineStatePolicy.canUndo(dose.value!);
 
+  /// Whether the dose is given and has something recorded about it. A
+  /// record left on a pending dose by a v1.0 undo is ignored.
+  bool get hasRecord =>
+      dose.value != null &&
+      VaccineStatePolicy.stateOf(dose.value!) ==
+          MedicalDateStateEnum.completed &&
+      !dose.value!.record.isEmpty;
+
+  bool get canEditRecord =>
+      dose.value != null &&
+      VaccineStatePolicy.stateOf(dose.value!) == MedicalDateStateEnum.completed;
+
+  Future<DoseRecord?> _showRecordSheet(DoseRecord initial,
+          {required bool editing}) =>
+      DoseRecordSheet.show(initial: initial, today: _now(), editing: editing);
+
   @override
   void onInit() {
     super.onInit();
@@ -80,7 +106,9 @@ class MedicalDateDetailsController extends GetxController {
   }
 
   /// Marks the dose as given. A dose scheduled after today asks first,
-  /// since that is more likely a mis-tap than a dose given early.
+  /// since that is more likely a mis-tap than a dose given early. Then the
+  /// record sheet opens; dismissing it changes nothing, "without details"
+  /// marks the dose given exactly as v1.0 did.
   Future<void> onMarkCompleted() async {
     final MedicalDatesModel? d = dose.value;
     if (d == null) return;
@@ -90,7 +118,21 @@ class MedicalDateDetailsController extends GetxController {
               <String, String>{'date': AppDateFormat.date(d.date)}));
       if (!yes) return;
     }
-    await _change(_stateService.markCompleted);
+    final DoseRecord? record =
+        await _recordSheet(const DoseRecord(), editing: false);
+    if (record == null) return;
+    await _change((MedicalDatesModel x) =>
+        _stateService.markCompleted(x, record: record));
+  }
+
+  /// Adds to or corrects the record of a dose that is already given.
+  Future<void> onEditRecord() async {
+    final MedicalDatesModel? d = dose.value;
+    if (d == null || !canEditRecord) return;
+    final DoseRecord? record = await _recordSheet(d.record, editing: true);
+    if (record == null) return;
+    await _change(
+        (MedicalDatesModel x) => _stateService.updateRecord(x, record));
   }
 
   Future<void> onMarkSkipped() => _change(_stateService.markSkipped);
