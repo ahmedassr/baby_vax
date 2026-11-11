@@ -320,4 +320,18 @@ Map<String, String> ar = {
   "Onboarding_record_title": "سجلّ يمكنك مشاركته",
   "Onboarding_record_body":
       "سجّل متى وأين أُعطيت كل جرعة، وتابع نمو طفلك، وشارك بطاقة التطعيم مع عيادتك.",
+  // v1.1 sign-in and password reset
+  "LoginView_forgot_password": "نسيت كلمة المرور؟",
+  "LoginView_no_account": "جديد في بيبي فاكس؟",
+  "short_password_error_msg": "استخدم @min أحرف على الأقل.",
+  "invalid_number_error_msg": "الرجاء إدخال رقم.",
+  "out_of_range_error_msg": "الرجاء إدخال قيمة بين @min و@max.",
+  "ForgotPassword_title": "إعادة تعيين كلمة المرور",
+  "ForgotPassword_hint":
+      "أدخل البريد الإلكتروني الذي سجّلت به وسنرسل لك رابطاً لاختيار كلمة مرور جديدة.",
+  "ForgotPassword_send": "إرسال رابط إعادة التعيين",
+  "ForgotPassword_sent_title": "تحقّق من بريدك الإلكتروني",
+  "ForgotPassword_sent_body":
+      "إذا كان هناك حساب مرتبط بـ @email فسيصلك رابط لإعادة تعيين كلمة المرور. قد يستغرق ذلك بضع دقائق، لذا تحقّق من مجلد الرسائل غير المرغوب فيها أيضاً.",
+  "ForgotPassword_back_to_login": "العودة لتسجيل الدخول",
 };

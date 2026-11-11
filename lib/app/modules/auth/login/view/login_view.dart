@@ -1,120 +1,118 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/widget/app_logo.dart';
 
+/// Sign-in. The form stays on screen whatever happens: field problems show
+/// under the field, server problems in a banner above the form.
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final bool isDark = context.isDarkMode;
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor:
-          isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
-      bottomNavigationBar: SafeArea(
-        minimum: AppSpacing.buttonPadding,
-        child: AppButton(
-          onPressed: () => controller.userLogin(),
-          text: "LoginView_login_title".tr,
-        ),
-      ),
-      body: controller.obx(
-        (_) => GestureDetector(
+      body: SafeArea(
+        child: GestureDetector(
+          // Tapping outside the fields hides the keyboard. Not a control,
+          // so it is kept out of the accessibility tree.
+          excludeFromSemantics: true,
           onTap: () => FocusScope.of(context).unfocus(),
           child: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+            padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.xxl, vertical: AppSpacing.xxl),
+            child: AutofillGroup(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  64.sbh,
-                  Center(
-                    child: Column(
-                      children: [
-                        const AppLogo(),
-                        24.sbh,
-                        AppText(
-                          text: "LoginView_welcome_back".tr,
-                          style: AppTextStyles.headLineMedium.copyWith(
-                            color: AppColors.primary,
-                            fontSize: 32,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -0.5,
+                children: <Widget>[
+                  const SizedBox(height: AppSpacing.lg),
+                  const Center(child: AppLogo(size: 72)),
+                  const SizedBox(height: AppSpacing.xl),
+                  Semantics(
+                    header: true,
+                    child: Text("LoginView_welcome_back".tr,
+                        style: theme.textTheme.headlineMedium,
+                        textAlign: TextAlign.center),
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text("LoginView_login_hint".tr,
+                      style: theme.textTheme.bodyLarge
+                          ?.copyWith(color: scheme.onSurfaceVariant),
+                      textAlign: TextAlign.center),
+                  const SizedBox(height: AppSpacing.xxl),
+                  Obx(() => controller.authError.value == null
+                      ? const SizedBox.shrink()
+                      : Padding(
+                          padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+                          child: AppBanner(
+                            key: const Key('login_error'),
+                            message: controller.authError.value!,
+                            tone: AppBannerTone.error,
                           ),
-                        ),
-                        4.sbh,
-                        AppText(
-                          text: "LoginView_login_hint".tr,
-                          style: AppTextStyles.headLineMedium.copyWith(
-                            color: AppColors.textGrey,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
+                        )),
+                  Obx(() => AppField(
+                        key: const Key('login_email'),
+                        label: "email_label".tr,
+                        controller: controller.email,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        autofillHints: const <String>[AutofillHints.email],
+                        errorText: controller.emailError.value,
+                        onChanged: controller.onEmailChanged,
+                      )),
+                  const SizedBox(height: AppSpacing.lg),
+                  Obx(() => AppField(
+                        key: const Key('login_password'),
+                        label: "password_label".tr,
+                        controller: controller.password,
+                        obscureText: true,
+                        textInputAction: TextInputAction.done,
+                        autofillHints: const <String>[AutofillHints.password],
+                        errorText: controller.passwordError.value,
+                        onChanged: controller.onPasswordChanged,
+                        onSubmitted: (_) => controller.userLogin(),
+                      )),
+                  Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: TextButton(
+                      key: const Key('login_forgot'),
+                      onPressed: controller.openForgotPassword,
+                      child: Text("LoginView_forgot_password".tr),
                     ),
                   ),
-                  const SizedBox(height: 40),
-                  Obx(() => LabeledTextField(
-                        label: "email_label".tr,
-                        controller: controller.loginController["email"] ??
-                            TextEditingController(),
-                        keyboardType: TextInputType.emailAddress,
-                        errorText: controller.emailErrorText.value.isNotEmpty
-                            ? controller.emailErrorText.value
-                            : null,
+                  const SizedBox(height: AppSpacing.md),
+                  Obx(() => AppButton(
+                        key: const Key('login_submit'),
+                        text: "LoginView_login_title".tr,
+                        loading: controller.isSubmitting.value,
+                        onPressed: controller.userLogin,
                       )),
-                  24.sbh,
-                  Obx(() => LabeledTextField(
-                        label: "password_label".tr,
-                        controller: controller.loginController["password"] ??
-                            TextEditingController(),
-                        errorText: controller.passwordErrorText.value.isNotEmpty
-                            ? controller.passwordErrorText.value
-                            : null,
-                        obscureText: true,
-                      )),
-                  16.sbh,
+                  const SizedBox(height: AppSpacing.xxl),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: () => Get.toNamed(AppRoutes.signup),
-                        child: Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: AppText(
-                            text: "LoginView_create_new_account".tr,
-                            style: AppTextStyles.headLineSmall.copyWith(
-                              fontSize: 18,
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
+                    children: <Widget>[
+                      const Expanded(child: Divider()),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.md),
+                        child: Text("LoginView_no_account".tr,
+                            style: theme.textTheme.bodySmall),
                       ),
+                      const Expanded(child: Divider()),
                     ],
                   ),
-                  24.sbh,
+                  const SizedBox(height: AppSpacing.lg),
+                  AppButton(
+                    key: const Key('login_signup'),
+                    text: "LoginView_create_new_account".tr,
+                    variant: AppButtonVariant.outline,
+                    onPressed: controller.openSignup,
+                  ),
                 ],
               ),
             ),
           ),
         ),
-        onLoading: const Center(
-          child: CupertinoActivityIndicator(),
-        ),
-        onError: (error) {
-          if (error != null && error.isNotEmpty) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              AppConstant.alertService.showError(message: error);
-              controller.setSuccess();
-            });
-          }
-          return const SizedBox.shrink();
-        },
       ),
     );
   }

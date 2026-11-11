@@ -12,7 +12,6 @@ class MainMenuView extends GetView<MainMenuController> {
             title: controller.item[controller.currentIndex.value].title.tr,
             showBackButton: false,
             action: getAppBarAction(),
-            elevation: 8,
           ),
           bottomNavigationBar: AppBottomNavigationBar(
               currentIndex: controller.currentIndex.value,

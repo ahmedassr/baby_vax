@@ -86,6 +86,7 @@ Future<void> pumpApp(
 const List<String> stubRoutes = <String>[
   AppRoutes.login,
   AppRoutes.signup,
+  AppRoutes.forgotPassword,
   AppRoutes.mainMenu,
   AppRoutes.main,
   AppRoutes.medicalDates,

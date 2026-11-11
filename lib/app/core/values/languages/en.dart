@@ -33,9 +33,9 @@ Map<String, String> en = {
   // Auth - Login → Controller:
   "LoginController_login_failed_msg": "Failed to login.",
   // View
-  "LoginView_login_title": "Login",
+  "LoginView_login_title": "Log in",
   "LoginView_login_hint": "Log in to continue",
-  "LoginView_create_new_account": "Create New Account",
+  "LoginView_create_new_account": "Create a new account",
 
   // Auth - SignUp → Controller:
   "SignupController_create_user_failed_msg":
@@ -285,4 +285,18 @@ Map<String, String> en = {
   "Onboarding_record_title": "A record you can share",
   "Onboarding_record_body":
       "Note where and when each dose was given, follow your baby's growth, and share a vaccination card with your clinic.",
+  // v1.1 sign-in and password reset
+  "LoginView_forgot_password": "Forgot password?",
+  "LoginView_no_account": "New to Baby Vax?",
+  "short_password_error_msg": "Use at least @min characters.",
+  "invalid_number_error_msg": "Please enter a number.",
+  "out_of_range_error_msg": "Please enter a value between @min and @max.",
+  "ForgotPassword_title": "Reset your password",
+  "ForgotPassword_hint":
+      "Enter the email you signed up with and we will send you a link to choose a new password.",
+  "ForgotPassword_send": "Send reset link",
+  "ForgotPassword_sent_title": "Check your inbox",
+  "ForgotPassword_sent_body":
+      "If an account exists for @email, a link to reset the password is on its way. It can take a few minutes, so check your spam folder too.",
+  "ForgotPassword_back_to_login": "Back to log in",
 };
