@@ -381,4 +381,6 @@ Map<String, String> en = {
   "MedicalDateDetails_scheduled_label": "Scheduled",
   "MedicalDateDetails_age_label": "Age",
   "MedicalDateDetails_about_title": "About this dose",
+  // v1.1 tips
+  "TipsView_empty_title": "No tips yet",
 };

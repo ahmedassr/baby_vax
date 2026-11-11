@@ -422,4 +422,6 @@ Map<String, String> ar = {
   "MedicalDateDetails_scheduled_label": "الموعد",
   "MedicalDateDetails_age_label": "العمر",
   "MedicalDateDetails_about_title": "عن هذه الجرعة",
+  // v1.1 tips
+  "TipsView_empty_title": "لا توجد نصائح بعد",
 };

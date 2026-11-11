@@ -3,8 +3,14 @@ import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 class TipsController extends GetxController
     with StateMixin<List<TipsModel>>, StateMixinHelper {
-  List<TipsModel> tips = <TipsModel>[].obs;
-  final searchController = TextEditingController();
+  TipsController({Future<List<TipsModel>> Function(String collection)? load})
+      : _load = load ?? _firestoreTips;
+
+  final Future<List<TipsModel>> Function(String collection) _load;
+
+  static Future<List<TipsModel>> _firestoreTips(String collection) =>
+      AppConstant.fireStoreHelper1
+          .getCollection(path: collection, fromDoc: TipsModel.fromDocument);
 
   @override
   void onInit() {
@@ -17,19 +23,14 @@ class TipsController extends GetxController
     // created at app start, so wait until someone is signed in; the tips tab
     // fetches again when opened.
     if (!SessionManager.isSignedIn) return;
-    setLoading();
+    if (state == null || state!.isEmpty) setLoading();
     try {
-      final currentLanguage =
-          AppConstant.getStorage.read(StorageKey.languageKey) ?? "en";
+      final String currentLanguage = Get.locale?.languageCode ?? "en";
       var collection =
           currentLanguage == "en" ? AppPath.tipsEnColl : AppPath.tipsColl;
-      // final tips = await AppConstant.fireStoreHelper
-      //     .fetchData(path: [collection], fromDocument: TipsModel.fromDocument);
-      final tips = await AppConstant.fireStoreHelper1
-          .getCollection(path: collection, fromDoc: TipsModel.fromDocument);
+      final tips = await _load(collection);
       if (tips.isEmpty) {
         setEmpty();
-        logger.w("empty");
       } else {
         setSuccess(tips);
       }
@@ -39,7 +40,7 @@ class TipsController extends GetxController
   }
 
   void onTipPressed(TipsModel tip) {
-    Get.toNamed(AppRoutes.tipDetails);
     AppConstant.argumentService.setArgument(InternalScreenArgs(tip: tip));
+    Get.toNamed(AppRoutes.tipDetails);
   }
 }

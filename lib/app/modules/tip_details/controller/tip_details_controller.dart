@@ -1,21 +1,10 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 
-class TipDetailsController extends GetxController
-    with StateMixin, StateMixinHelper {
-  final args = InternalScreenArgs.fromArgs.tip;
-  TipsModel? tip;
+/// Holds the tip opened from the list.
+class TipDetailsController extends GetxController {
+  TipDetailsController({TipsModel? tip})
+      : tip = tip ?? InternalScreenArgs.fromArgs.tip;
 
-  @override
-  void onInit() {
-    super.onInit();
-    initializeTipArgument();
-  }
-
-  void initializeTipArgument() {
-    if (args != null) {
-      tip = args;
-    } else {
-      setError("TipDetailsController_missing_tip_msg".tr);
-    }
-  }
+  /// Null when the screen was opened without a tip.
+  final TipsModel? tip;
 }
