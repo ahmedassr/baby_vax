@@ -40,7 +40,7 @@ class SettingsController extends GetxController {
           await Get.find<NotificationCoordinator>().cancelAllReminders();
           await FirebaseAuth.instance.signOut();
           SessionManager.uId = "";
-          AppConstant.getStorage.clear();
+          await AppConstant.getStorage.clearUserData();
           Get.toNamed(AppRoutes.login);
         },
         noAction: () => Get.back()));

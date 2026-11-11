@@ -35,7 +35,7 @@ class SplashController extends GetxController
 
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1600),
+      duration: const Duration(milliseconds: 1400),
     );
 
     logoSlide = Tween<Offset>(
@@ -68,13 +68,24 @@ class SplashController extends GetxController
       ),
     );
 
-    animationController.forward();
-
-    Future.delayed(const Duration(seconds: 4), () {
+    // Route as soon as the intro animation ends. v1.0 waited a fixed four
+    // seconds, more than twice the animation, on every cold start.
+    animationController.forward().whenComplete(() {
+      final bool seen =
+          AppConstant.getStorage.read(StorageKey.hasSeenOnboardingKey) ?? false;
       Get.offAllNamed(
-        isLoggedIn ? AppRoutes.mainMenu : AppRoutes.login,
-      );
+          nextRoute(isLoggedIn: isLoggedIn, hasSeenOnboarding: seen));
     });
+  }
+
+  /// Where the splash goes: the introduction the very first time, then the
+  /// schedule for a signed-in parent and sign-in for everyone else.
+  static String nextRoute({
+    required bool isLoggedIn,
+    required bool hasSeenOnboarding,
+  }) {
+    if (!hasSeenOnboarding && !isLoggedIn) return AppRoutes.onboarding;
+    return isLoggedIn ? AppRoutes.mainMenu : AppRoutes.login;
   }
 
   /// Re-reads the device timezone and rebuilds reminders from Firestore.

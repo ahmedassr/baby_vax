@@ -167,9 +167,10 @@ class FirebaseAccountDeletionSteps implements AccountDeletionSteps {
   Future<void> signOutAndClearLocalState() async {
     await FirebaseAuth.instance.signOut();
     SessionManager.uId = "";
-    // clear() erases the whole box, which is what we want here: no cached uid,
-    // child name, or login flag may survive a deletion.
-    AppConstant.getStorage.clear();
+    // No cached uid, child name or login flag may survive a deletion. Device
+    // preferences (language, theme, onboarding seen) are not about the
+    // account and are kept.
+    await AppConstant.getStorage.clearUserData();
   }
 
   static AccountDeletionError _mapAuthError(FirebaseAuthException e) {

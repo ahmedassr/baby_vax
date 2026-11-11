@@ -271,4 +271,18 @@ Map<String, String> en = {
   "progress_semantic_label": "@done of @total doses done",
   "step_counter": "Step @current of @total",
   "not_recorded_label": "not recorded",
+  // v1.1 onboarding
+  "Onboarding_skip": "Skip",
+  "Onboarding_get_started": "Get started",
+  "next_label": "Next",
+  "back_label": "Back",
+  "Onboarding_schedule_title": "Every dose, in one place",
+  "Onboarding_schedule_body":
+      "Add your baby's date of birth and Baby Vax builds the whole vaccination schedule, grouped by age, so you always know what is next.",
+  "Onboarding_reminders_title": "Gentle reminders",
+  "Onboarding_reminders_body":
+      "A reminder the evening before and the morning of each dose. They are set on this phone, so they work without internet.",
+  "Onboarding_record_title": "A record you can share",
+  "Onboarding_record_body":
+      "Note where and when each dose was given, follow your baby's growth, and share a vaccination card with your clinic.",
 };

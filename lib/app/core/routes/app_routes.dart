@@ -10,4 +10,5 @@ class AppRoutes {
   static const String tipDetails = "/medical_dates_details";
   static const String editUser = "/edit_user";
   static const String splash = "/splash";
+  static const String onboarding = "/onboarding";
 }

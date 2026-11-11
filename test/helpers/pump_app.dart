@@ -68,12 +68,38 @@ Future<void> pumpApp(
       GlobalCupertinoLocalizations.delegate,
     ],
     home: child,
+    // Every named route resolves to a stub that shows its name, so a test
+    // can assert where a screen navigated without building that screen.
+    getPages: <GetPage<dynamic>>[
+      for (final String r in stubRoutes)
+        GetPage<dynamic>(name: r, page: () => Scaffold(body: Text('route:$r'))),
+    ],
   ));
   if (settle) {
     await tester.pump(const Duration(milliseconds: 50));
     await tester.pump(const Duration(milliseconds: 300));
   }
 }
+
+/// Every route in [AppRoutes]; keep in step when a route is added (the
+/// navigation tests fail with "could not find a generator" otherwise).
+const List<String> stubRoutes = <String>[
+  AppRoutes.login,
+  AppRoutes.signup,
+  AppRoutes.mainMenu,
+  AppRoutes.main,
+  AppRoutes.medicalDates,
+  AppRoutes.setting,
+  AppRoutes.tips,
+  AppRoutes.medicalDateDetails,
+  AppRoutes.tipDetails,
+  AppRoutes.editUser,
+  AppRoutes.splash,
+  AppRoutes.onboarding,
+];
+
+/// The stub page a navigation in a test lands on.
+Finder routeStub(String route) => find.text('route:$route');
 
 /// Fails if layout threw (a RenderFlex overflow, most often).
 void expectNoOverflow(WidgetTester tester) {

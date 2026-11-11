@@ -306,4 +306,18 @@ Map<String, String> ar = {
   "progress_semantic_label": "الجرعات المُعطاة: @done من @total",
   "step_counter": "الخطوة @current من @total",
   "not_recorded_label": "غير مسجّل",
+  // v1.1 onboarding
+  "Onboarding_skip": "تخطٍّ",
+  "Onboarding_get_started": "ابدأ الآن",
+  "next_label": "التالي",
+  "back_label": "رجوع",
+  "Onboarding_schedule_title": "كل الجرعات في مكان واحد",
+  "Onboarding_schedule_body":
+      "أدخل تاريخ ميلاد طفلك ويُنشئ بيبي فاكس جدول التطعيمات كاملاً مرتّباً حسب العمر، لتعرف دائماً ما هو الموعد القادم.",
+  "Onboarding_reminders_title": "تذكيرات لطيفة",
+  "Onboarding_reminders_body":
+      "تذكير مساء اليوم السابق وصباح يوم كل جرعة. تُضبط التذكيرات على هذا الهاتف، فتعمل دون إنترنت.",
+  "Onboarding_record_title": "سجلّ يمكنك مشاركته",
+  "Onboarding_record_body":
+      "سجّل متى وأين أُعطيت كل جرعة، وتابع نمو طفلك، وشارك بطاقة التطعيم مع عيادتك.",
 };
