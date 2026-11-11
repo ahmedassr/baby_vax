@@ -8,23 +8,24 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
+/**
+ * The app's only activity. Hosts Flutter and answers the
+ * [SETTINGS_CHANNEL] method channel, which lets the Dart side open the
+ * system screen where the user can turn reminders back on.
+ */
 class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, SETTINGS_CHANNEL)
             .setMethodCallHandler { call, result ->
                 when (call.method) {
-                    "openNotificationSettings" -> result.success(openNotificationSettings())
+                    "openNotificationSettings" -> result.success(openNotificationSettingsOrAppDetails())
                     else -> result.notImplemented()
                 }
             }
     }
 
-    /**
-     * Opens this app's own notification settings page. Falls back to the
-     * app's details page if the device has no such screen.
-     */
-    private fun openNotificationSettings(): Boolean {
+    private fun openNotificationSettingsOrAppDetails(): Boolean {
         val notificationSettings =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)

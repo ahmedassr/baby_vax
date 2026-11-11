@@ -23,6 +23,12 @@
   it (after verifying the password) to redo steps 4-6.
 #>
 
+# Interactive script: prompts and progress belong on the console, not in the
+# output stream, so Write-Host is the right cmdlet here.
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '',
+    Justification = 'Interactive console script; output is for the person running it.')]
+param()
+
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
@@ -49,7 +55,7 @@ function Step([string]$Message) { Write-Host ''; Write-Host "==> $Message" -Fore
 
 # Quotes one argument for a Windows command line. Only paths and fixed words
 # go through here, never a password.
-function Quote-Arg([string]$Value) {
+function ConvertTo-QuotedArg([string]$Value) {
     if ($Value -notmatch '[\s"]') { return $Value }
     return '"' + ($Value -replace '"', '\"') + '"'
 }
@@ -69,7 +75,7 @@ function Invoke-Native {
     )
     $psi = New-Object System.Diagnostics.ProcessStartInfo
     $psi.FileName = $FilePath
-    $psi.Arguments = ($Arguments | ForEach-Object { Quote-Arg $_ }) -join ' '
+    $psi.Arguments = ($Arguments | ForEach-Object { ConvertTo-QuotedArg $_ }) -join ' '
     $psi.UseShellExecute = $false
     foreach ($k in $Env.Keys) { $psi.EnvironmentVariables[$k] = $Env[$k] }
     $hasStdin = $PSBoundParameters.ContainsKey('StdinText')
@@ -113,7 +119,7 @@ function Test-Password([string]$Pw, [int]$Min) {
     return $true
 }
 
-function Ask-Password([string]$Label, [int]$Min) {
+function Read-Password([string]$Label, [int]$Min) {
     while ($true) {
         $a = Read-Hidden "${Label}"
         if (-not (Test-Password $a $Min)) { $a = $null; continue }
@@ -186,9 +192,9 @@ try {
     if ($Mode -eq 'create') {
         Write-Host 'Choose a long password (16+ characters is good; a password manager can'
         Write-Host 'generate one). Printable ASCII, no spaces, no backslash.'
-        $StorePass = Ask-Password 'Store password' 12
+        $StorePass = Read-Password 'Store password' 12
     } else {
-        $StorePass = Ask-Password 'Store password of the existing keystore' 6
+        $StorePass = Read-Password 'Store password of the existing keystore' 6
     }
 
     Write-Host ''
@@ -196,7 +202,7 @@ try {
     Write-Host 'different key password, and the build would then fail to open the key.'
     Write-Host 'So enter the same password again here.'
     while ($true) {
-        $KeyPass = Ask-Password 'Key password' 6
+        $KeyPass = Read-Password 'Key password' 6
         if ($KeyPass -ceq $StorePass) { break }
         Write-Host '  The key password must equal the store password for PKCS12. Try again.'
         $KeyPass = $null
