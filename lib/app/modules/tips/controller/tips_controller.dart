@@ -13,6 +13,10 @@ class TipsController extends GetxController
   }
 
   Future<void> fetchTips() async {
+    // The rules only serve tips to signed-in users. This controller is
+    // created at app start, so wait until someone is signed in; the tips tab
+    // fetches again when opened.
+    if (!SessionManager.isSignedIn) return;
     setLoading();
     try {
       final currentLanguage =

@@ -20,9 +20,7 @@ class MeasurementCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: isDark
-            ? Colors.black.withValues(alpha: 0.3)
-            : Colors.white,
+        color: isDark ? Colors.black.withValues(alpha: 0.3) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           if (!isDark)
@@ -85,4 +83,3 @@ class MeasurementCard extends StatelessWidget {
     );
   }
 }
-

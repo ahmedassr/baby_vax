@@ -1,20 +1,25 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Re-schedules pending vaccine reminders after a reboot or an app
+         update. Paired with ScheduledNotificationBootReceiver below. -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <!-- Required on Android 13+ (API 33) to show any notification. Requested at
+         runtime once the user actually has a vaccination schedule. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <!-- Deliberately NOT declared:
+         * USE_FULL_SCREEN_INTENT - Play restricts it to calling and alarm
+           apps; vaccine reminders are ordinary notifications.
+         * SCHEDULE_EXACT_ALARM / USE_EXACT_ALARM - a day-level reminder does
+           not need minute precision, so reminders are scheduled with
+           AndroidScheduleMode.inexactAllowWhileIdle. Declaring either would
+           require a Play policy declaration we cannot justify. -->
 
     <application
         android:label="Baby Vax"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-
-        <!-- ✅ FCM Default Notification Channel -->
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="vaccine_reminders" />
 
         <receiver
             android:exported="false"

@@ -42,7 +42,29 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Android signing
+# Android signing — never commit keys or anything derived from them.
 *.jks
 *.keystore
+*.p12
+*.pfx
 key.properties
+key.properties.*
+# base64 / text dumps of a keystore are just as sensitive as the keystore
+*keystore*.txt
+*keystore*.b64
+*keystore_base64*
+upload-keystore*
+
+# Claude Code per-user settings (may hold local paths and permissions)
+.claude/settings.local.json
+
+# Generated analyzer output; should never be committed
+analyze_report.txt
+
+# Firestore rules tests (Node)
+firestore-tests/node_modules/
+firestore-tests/package-lock.json
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+.firebase/

@@ -22,9 +22,7 @@ class TipCard extends StatelessWidget {
     return Container(
         margin: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
-          color: isDark
-              ? AppColors.cardDark
-              : AppColors.backgroundLight,
+          color: isDark ? AppColors.cardDark : AppColors.backgroundLight,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             if (!isDark)
@@ -37,7 +35,7 @@ class TipCard extends StatelessWidget {
         ),
         child: Material(
           elevation: 2,
-          shadowColor: AppColors.black.withValues(alpha:0.08),
+          shadowColor: AppColors.black.withValues(alpha: 0.08),
           color: AppColors.transparent,
           borderRadius: BorderRadius.circular(16),
           child: InkWell(
@@ -66,7 +64,7 @@ class TipCard extends StatelessWidget {
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: AppTextStyles.bodyMedium.copyWith(
-                            color: colorScheme.onSurface.withValues(alpha:0.7),
+                            color: colorScheme.onSurface.withValues(alpha: 0.7),
                           ),
                         ),
                       ],

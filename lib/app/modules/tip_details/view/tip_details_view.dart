@@ -10,12 +10,12 @@ class TipDetailsView extends GetView<TipDetailsController> {
 
     return Scaffold(
       backgroundColor: context.theme.scaffoldBackgroundColor,
-      appBar: const CustomAppBar(
-        title: "Tip Details",
+      appBar: CustomAppBar(
+        title: "TipDetailsView_tip_details_title".tr,
         fontSize: 18,
       ),
       body: controller.tip == null
-          ?  AppEmptyState(
+          ? AppEmptyState(
               message: "TipDetailsView_empty_state_text".tr,
               animationPath: AppAnimations.noRecords,
             )
@@ -26,10 +26,10 @@ class TipDetailsView extends GetView<TipDetailsController> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: colorScheme.surface.withValues(alpha:0.95),
+                      color: colorScheme.surface.withValues(alpha: 0.95),
                       borderRadius: BorderRadius.circular(24),
                       border: Border.all(
-                        color: AppColors.primary.withValues(alpha:0.10),
+                        color: AppColors.primary.withValues(alpha: 0.10),
                         width: 1.4,
                       ),
                     ),
@@ -53,8 +53,11 @@ class TipDetailsView extends GetView<TipDetailsController> {
                                 }
                                 return Center(
                                   child: CircularProgressIndicator(
-                                    value: loadingProgress.expectedTotalBytes != null
-                                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
                                         : null,
                                   ),
                                 );
@@ -64,7 +67,8 @@ class TipDetailsView extends GetView<TipDetailsController> {
                                 child: Center(
                                   child: Icon(
                                     Icons.image_not_supported_rounded,
-                                    color: AppColors.primary.withValues(alpha: 0.2),
+                                    color: AppColors.primary
+                                        .withValues(alpha: 0.2),
                                     size: 40,
                                   ),
                                 ),

@@ -1,4 +1,3 @@
-import 'package:baby_vax/app/core/notification/data/onesignal_notification_provider.dart';
 import '../../../../core/imports/import_manger.dart';
 import '../../../home/controller/home_controller.dart';
 
@@ -41,23 +40,41 @@ class LoginController extends GetxController with StateMixin, StateMixinHelper {
       final authResult = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       if (authResult.user != null) {
-       await AppConstant.getStorage.write(StorageKey.isLoginKey, true);
-       await AppConstant.getStorage.write(StorageKey.uidKey, authResult.user?.uid);
+        await AppConstant.getStorage.write(StorageKey.isLoginKey, true);
+        await AppConstant.getStorage
+            .write(StorageKey.uidKey, authResult.user?.uid);
         SessionManager.uId = authResult.user?.uid ?? "";
-        await AppConstant.notificationService.updateFcmToken();
-        await Get.find<NotificationCoordinator>().rescheduleAllVaccines(
-            userId: SessionManager.uId,
-            userName: authResult.user?.displayName ?? "Your baby");
-        await Get.find<OneSingleNotificationProvider>()
-            .setUser(SessionManager.uId);
-        await Get.find<HomeController>().fetchUserData();
+        final HomeController home = Get.find<HomeController>();
+        await home.fetchUserData();
+        // The child's name is in the Firestore user doc. Auth displayName is
+        // never set by this app. Cached so app-start reminder top-ups work
+        // offline.
+        final String childName =
+            reminderChildName(home.userDetails.value?.name);
+        await AppConstant.getStorage
+            .write(StorageKey.userNameKey, home.userDetails.value?.name ?? "");
+
+        final NotificationCoordinator reminders =
+            Get.find<NotificationCoordinator>();
+        // Ask now rather than at cold start: the user has just signed in and a
+        // schedule exists, so the prompt has visible context.
+        final bool granted = await reminders.requestPermission();
+        await reminders.syncFromFirestore(
+          userId: SessionManager.uId,
+          userName: childName,
+        );
+        if (!granted) {
+          // Reminders stay scheduled; they just will not be shown until the
+          // user enables notifications in system settings.
+          logger.w('Notification permission denied after login');
+        }
         setSuccess();
         Get.toNamed(AppRoutes.mainMenu);
       } else {
         setError("LoginController_login_failed_msg".tr);
       }
     } on FirebaseAuthException catch (error) {
-      setError(getFriendlyErrorMessage(error.toString()));
+      setError(friendlyFirebaseError(error));
       return;
     }
   }

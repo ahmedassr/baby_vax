@@ -36,7 +36,7 @@ class LoginView extends GetView<LoginController> {
                         const AppLogo(),
                         24.sbh,
                         AppText(
-                          text: "Welcome Back",
+                          text: "LoginView_welcome_back".tr,
                           style: AppTextStyles.headLineMedium.copyWith(
                             color: AppColors.primary,
                             fontSize: 32,

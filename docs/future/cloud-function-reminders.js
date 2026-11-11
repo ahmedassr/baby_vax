@@ -1,3 +1,34 @@
+/*
+ * PARKED - NOT DEPLOYED, NOT WIRED INTO firebase.json.
+ *
+ * Why this is parked
+ * ------------------
+ * Cloud Functions require the Firebase Blaze (pay-as-you-go) plan. This
+ * project is on the free Spark plan and Blaze is not an option, so the app
+ * cannot depend on any server-side reminder path.
+ *
+ * Vaccine reminders are now scheduled entirely on-device with
+ * flutter_local_notifications (see lib/app/core/notification/). That is the
+ * single source of truth: it needs no server, costs nothing, and keeps working
+ * with no network at all - which matters for the users this app targets.
+ *
+ * Known bugs in the code below (it never ran correctly)
+ * ----------------------------------------------------
+ * If this is ever revived, these must be fixed first:
+ *   - `tomorrow` is used but never defined -> ReferenceError on every run.
+ *   - `totalSent` is incremented and returned but never declared.
+ *   - `totalReminders` and `sentSuccessfully` are declared and never used.
+ *   - it reads `vaccineData.data` for the date, but the client writes `date`,
+ *     so the date lookup would always miss.
+ *   - it reads every user document on every run, which does not scale and
+ *     costs a read per user per day.
+ *   - the reminder hour and timezone are hardcoded to Asia/Jerusalem.
+ *
+ * Reviving it would also mean reintroducing FCM token storage, which was
+ * removed from the client, and re-declaring that collection in the privacy
+ * policy and Play Data safety form.
+ */
+
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 

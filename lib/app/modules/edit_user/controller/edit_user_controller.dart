@@ -36,7 +36,7 @@ class EditUserController extends GetxController
     setLoading();
     try {
       final updatedUser = UserModel(
-        uid: SessionManager.uId,
+        uid: SessionManager.signedInUid ?? "",
         email: editUserController["email"]?.text.trim() ?? "",
         birthday: userArg?.birthday ?? "",
         name: editUserController["name"]?.text.trim() ?? "",
@@ -46,13 +46,17 @@ class EditUserController extends GetxController
             editUserController["bloodPercentage"]?.text.trim() ?? "",
         headSize: editUserController["headSize"]?.text.trim() ?? "",
       );
-      await AppConstant.fireStoreHelper1
+      // Returns once the change is stored on the device. Offline it does not
+      // wait for the server; Firestore sends it when the phone reconnects.
+      final WriteOutcome outcome = await AppConstant.fireStoreHelper1
           .updateData(path: AppPath.currentUserDoc, data: updatedUser.toMap());
 
       Get.find<HomeController>().fetchUserData();
       setSuccess();
       AppConstant.alertService.showAlert(AlertModel.success(
-        message: "SignupController_updated_user_success_msg".tr,
+        message: outcome == WriteOutcome.pendingSync
+            ? "saved_offline_msg".tr
+            : "SignupController_updated_user_success_msg".tr,
         yesAction: Get.back,
       ));
     } catch (_) {

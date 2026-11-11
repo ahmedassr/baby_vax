@@ -23,44 +23,45 @@ extension ListFilterExtension<T> on List<T> {
 }
 
 extension RemainingTimeExtension on DateTime {
-  RemainingTimeResult get remainingTime {
-    final difference = this.difference(DateTime.now());
+  RemainingTimeResult get remainingTime => remainingTimeFrom(DateTime.now());
 
-    if (difference.inSeconds <= 0) {
+  /// Time until this date, counted in whole calendar days.
+  ///
+  /// A dose is due on a day, so a dose due today is "Today" for the whole day
+  /// and only becomes overdue from tomorrow. The previous version compared
+  /// instants, so a dose stored at midnight showed as overdue on its own day.
+  ///
+  /// Days are counted on UTC calendar dates so a DST change between now and
+  /// the due date cannot turn 23 or 25 hours into the wrong number of days.
+  RemainingTimeResult remainingTimeFrom(DateTime now) {
+    final int days = DateTime.utc(year, month, day)
+        .difference(DateTime.utc(now.year, now.month, now.day))
+        .inDays;
+
+    if (days < 0) {
       return RemainingTimeResult(status: VaccinationTimeStatusEnum.overdue);
     }
-
-    if (difference.inDays == 0 && difference.inHours >= 1) {
-      return RemainingTimeResult(
-          status: VaccinationTimeStatusEnum.hoursLeft,
-          value: difference.inHours);
-    }
-
-    if (difference.inDays == 0) {
+    if (days == 0) {
       return RemainingTimeResult(status: VaccinationTimeStatusEnum.today);
     }
-
-    if (difference.inDays == 1) {
+    if (days == 1) {
       return RemainingTimeResult(status: VaccinationTimeStatusEnum.tomorrow);
     }
-
-    if (difference.inDays < 7) {
+    if (days < 7) {
       return RemainingTimeResult(
-          status: VaccinationTimeStatusEnum.daysLeft, value: difference.inDays);
+          status: VaccinationTimeStatusEnum.daysLeft, value: days);
     }
-    final weeks = (difference.inDays / 7).floor();
+    final int weeks = days ~/ 7;
     if (weeks <= 4) {
       return RemainingTimeResult(
           status: VaccinationTimeStatusEnum.weeksLeft, value: weeks);
     }
-    final months = (difference.inDays / 30).floor();
+    final int months = days ~/ 30;
     if (months <= 12) {
       return RemainingTimeResult(
           status: VaccinationTimeStatusEnum.monthsLeft, value: months);
     }
-
-    final years = (months / 12).floor();
     return RemainingTimeResult(
-        status: VaccinationTimeStatusEnum.yearsLeft, value: years);
+        status: VaccinationTimeStatusEnum.yearsLeft, value: months ~/ 12);
   }
 }

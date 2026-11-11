@@ -58,7 +58,7 @@ class MedicalDateCard extends StatelessWidget {
                           children: [
                             Expanded(
                               child: AppText(
-                                text: data.date.toString(),
+                                text: AppDateFormat.date(data.date),
                                 maxLines: 2,
                                 style: AppTextStyles.titleSmall.copyWith(
                                   fontWeight: FontWeight.w700,
@@ -74,7 +74,7 @@ class MedicalDateCard extends StatelessWidget {
                         ),
                         8.sbh,
                         AppText(
-                          text: data.name,
+                          text: bidiIsolate(data.displayName),
                           style: AppTextStyles.bodyMedium.copyWith(
                             fontWeight: FontWeight.w600,
                             color: isDark
@@ -82,10 +82,10 @@ class MedicalDateCard extends StatelessWidget {
                                 : AppColors.textBlack,
                           ),
                         ),
-                        if (data.description.isNotEmpty) ...[
+                        if (data.displayDescription.isNotEmpty) ...[
                           4.sbh,
                           AppText(
-                            text: data.description,
+                            text: bidiIsolate(data.displayDescription),
                             style: AppTextStyles.bodySmall.copyWith(
                               color: isDark
                                   ? AppColors.greyMedium
@@ -113,5 +113,4 @@ class MedicalDateCard extends StatelessWidget {
       ],
     );
   }
-
 }

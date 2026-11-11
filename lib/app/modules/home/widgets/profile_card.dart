@@ -89,7 +89,7 @@ class ProfileCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AppText(
-                        text: name,
+                        text: bidiIsolate(name),
                         style: AppTextStyles.titleSmall.copyWith(
                           fontWeight: FontWeight.w700,
                           color: isDark
@@ -99,7 +99,7 @@ class ProfileCard extends StatelessWidget {
                       ),
                       8.sbh,
                       AppText(
-                        text: email,
+                        text: bidiIsolate(email),
                         style: AppTextStyles.bodyMedium.copyWith(
                           color: isDark
                               ? AppColors.greyMedium
@@ -129,6 +129,3 @@ class ProfileCard extends StatelessWidget {
     );
   }
 }
-
-
-

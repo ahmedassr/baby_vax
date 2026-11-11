@@ -12,8 +12,11 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: controller.medicalDate?.name ?? "MedicalDateDetailsView_title".tr,
+        title: controller.medicalDate == null
+            ? "MedicalDateDetailsView_title".tr
+            : bidiIsolate(controller.medicalDate!.displayName),
         fontSize: 18,
+        titleMaxLines: 2,
       ),
       body: controller.obx(
         (_) => SingleChildScrollView(
@@ -31,17 +34,21 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
                 ),
                 24.sbh,
                 MedicalDateDetailCard(
-                  name: controller.medicalDate?.name,
-                  date: controller.medicalDate?.date.toString(),
-                  description: controller.medicalDate?.description,
+                  name: controller.medicalDate?.displayName,
+                  date: controller.medicalDate == null
+                      ? null
+                      : AppDateFormat.date(controller.medicalDate!.date),
+                  description: controller.medicalDate?.displayDescription,
                   state: controller.medicalDate?.state,
                 ),
                 32.sbh,
                 MedicalDateActions(
-                  isCompleted: controller.medicalDate?.state ==
-                      MedicalDateStateEnum.completed.label,
-                  isActive: controller.isActive,
-                  onMarkCompleted: controller.updateState,
+                  canMarkCompleted: controller.canMarkCompleted,
+                  canMarkSkipped: controller.canMarkSkipped,
+                  canUndo: controller.canUndo,
+                  onMarkCompleted: controller.onMarkCompleted,
+                  onMarkSkipped: controller.onMarkSkipped,
+                  onUndo: controller.onUndo,
                 ),
                 24.sbh,
               ],

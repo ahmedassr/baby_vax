@@ -13,6 +13,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? background;
   final Color? foreground;
 
+  /// When set, the title wraps to at most this many lines and ends with an
+  /// ellipsis, and the bar grows so every line is fully visible. When null
+  /// the bar keeps the standard height.
+  final int? titleMaxLines;
+
+  /// Line height of a wrapping title. Fixed, because the bundled Cairo font's
+  /// own line height is almost twice its size.
+  static const double wrappedTitleLineHeight = 1.25;
+
+  /// Largest text scale a wrapping title follows, so [preferredSize] (which
+  /// cannot see the device setting) always leaves room for it.
+  static const double wrappedTitleMaxTextScale = 1.3;
+
   const CustomAppBar(
       {super.key,
       this.title,
@@ -23,6 +36,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.background,
       this.foreground,
       this.elevation = 0,
+      this.titleMaxLines,
       this.fontSize = 22});
 
   @override
@@ -33,13 +47,28 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           : SystemUiOverlayStyle.dark,
       surfaceTintColor: context.theme.scaffoldBackgroundColor,
       elevation: elevation,
-      title: title != null
-          ? AppText(
-              text: title ?? "",
-              style: AppTextStyles.headLineSmall.copyWith(fontSize: fontSize),
-              maxLines: 3,
-            )
-          : null,
+      toolbarHeight: preferredSize.height,
+      title: title == null
+          ? null
+          : titleMaxLines == null
+              ? AppText(
+                  text: title ?? "",
+                  style:
+                      AppTextStyles.headLineSmall.copyWith(fontSize: fontSize),
+                  maxLines: 3,
+                )
+              : MediaQuery.withClampedTextScaling(
+                  maxScaleFactor: wrappedTitleMaxTextScale,
+                  child: AppText(
+                    text: title!,
+                    style: AppTextStyles.headLineSmall.copyWith(
+                      fontSize: fontSize,
+                      height: wrappedTitleLineHeight,
+                    ),
+                    maxLines: titleMaxLines,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
       centerTitle: true,
       automaticallyImplyLeading: showBackButton,
       backgroundColor: background ?? Colors.transparent,
@@ -55,8 +84,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize {
+    final int? lines = titleMaxLines;
+    if (title == null || lines == null) {
+      return const Size.fromHeight(kToolbarHeight);
+    }
+    final double text =
+        lines * fontSize * wrappedTitleLineHeight * wrappedTitleMaxTextScale;
+    return Size.fromHeight(
+        text + 16 > kToolbarHeight ? text + 16 : kToolbarHeight);
+  }
 }
 
 Widget _buildLeadingWidget(

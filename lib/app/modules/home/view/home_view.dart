@@ -1,5 +1,6 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/modules/home/widgets/next_vaccination_card.dart';
+import 'package:baby_vax/app/modules/home/widgets/notifications_off_banner.dart';
 import '../controller/home_controller.dart';
 import '../widgets/profile_card.dart';
 import '../widgets/user_measurements_card.dart';
@@ -19,9 +20,17 @@ class HomeView extends GetView<HomeController> {
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Column(
               children: [
+                Obx(() => controller.notificationsOff.value
+                    ? Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: NotificationsOffBanner(
+                          onOpenSettings: controller.openNotificationSettings,
+                        ),
+                      )
+                    : const SizedBox.shrink()),
                 ProfileCard(
-                  name: controller.userDetails.value?.name ?? "y/n",
-                  email: controller.userDetails.value?.email ?? "y/n",
+                  name: controller.userDetails.value?.name ?? "-",
+                  email: controller.userDetails.value?.email ?? "-",
                   onEditPressed: () {
                     try {
                       Get.find<MainMenuController>().onEditPressed();

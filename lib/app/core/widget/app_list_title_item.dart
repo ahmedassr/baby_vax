@@ -47,12 +47,12 @@ class AppListTitleItem extends StatelessWidget {
                     color: context.isDarkMode ? Colors.white : Colors.black),
               ),
             ),
-            if(additionalTitle != null)...[
+            if (additionalTitle != null) ...[
               20.sbw,
               AppText(
                 text: additionalTitle ?? "",
-                style: AppTextStyles.boldSmall.copyWith(
-                    color: AppColors.textHint),
+                style:
+                    AppTextStyles.boldSmall.copyWith(color: AppColors.textHint),
               ),
             ]
           ],

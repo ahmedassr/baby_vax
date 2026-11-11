@@ -9,6 +9,11 @@ class AppPath {
 
   // Documents
   static String userDoc(String uid) => '$usersColl/$uid';
-  static String get currentUserDoc => '$usersColl/${SessionManager.uId}';
-  static String userMedicalDates(String uid) => '${userDoc(uid)}/$medicalDatesColl';
+
+  /// The signed-in user's document. With nobody signed in this is
+  /// "users/", which FirestoreAccessGuard refuses.
+  static String get currentUserDoc =>
+      '$usersColl/${SessionManager.signedInUid ?? ''}';
+  static String userMedicalDates(String uid) =>
+      '${userDoc(uid)}/$medicalDatesColl';
 }

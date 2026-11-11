@@ -5,6 +5,8 @@ buildscript {
     }
     dependencies {
         classpath 'com.google.gms:google-services:4.4.2' // Google Services plugin
+        // Uploads the R8 mapping file so release crash reports are readable.
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:3.0.6'
     }
 }
 

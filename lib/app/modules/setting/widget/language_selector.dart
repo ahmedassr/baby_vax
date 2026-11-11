@@ -1,7 +1,7 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/modules/setting/controller/setting_controller.dart';
 
-class LanguageSelector extends StatelessWidget{
+class LanguageSelector extends StatelessWidget {
   const LanguageSelector({super.key});
 
   @override
@@ -18,16 +18,21 @@ class LanguageSelector extends StatelessWidget{
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: context.theme.scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(20)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                AppText(text: "SettingsView_select_language".tr, style: AppTextStyles.titleMedium),
+                AppText(
+                    text: "SettingsView_select_language".tr,
+                    style: AppTextStyles.titleMedium),
                 20.sbh,
                 ListTile(
                   title: const Text("العربية"),
-                  trailing: controller.currentLanguage.value == 'ar' ? const Icon(Icons.check_circle, color: AppColors.primary) : null,
+                  trailing: controller.currentLanguage.value == 'ar'
+                      ? const Icon(Icons.check_circle, color: AppColors.primary)
+                      : null,
                   onTap: () {
                     controller.changeLanguage();
                     Get.back();
@@ -35,7 +40,9 @@ class LanguageSelector extends StatelessWidget{
                 ),
                 ListTile(
                   title: const Text("English"),
-                  trailing: controller.currentLanguage.value == 'en' ? const Icon(Icons.check_circle, color: AppColors.primary) : null,
+                  trailing: controller.currentLanguage.value == 'en'
+                      ? const Icon(Icons.check_circle, color: AppColors.primary)
+                      : null,
                   onTap: () {
                     controller.changeLanguage();
                     Get.back();
@@ -48,5 +55,4 @@ class LanguageSelector extends StatelessWidget{
       },
     );
   }
-
 }

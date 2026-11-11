@@ -31,6 +31,10 @@ class MedicalDatesHeader extends StatelessWidget {
               color: colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
+          12.sbh,
+          // Standing reminder that this schedule is informational; required
+          // for a health app and expected by Play's health policy.
+          const MedicalDisclaimer(),
           16.sbh,
         ],
       ),

@@ -17,43 +17,40 @@ class MedicalDatesController extends GetxController
         .setArgument(InternalScreenArgs(medicalDate: medicalDate));
   }
 
+  /// Oldest date first, the order a parent works through the schedule.
+  ///
+  /// Sorted here rather than with `orderBy('date')`: Firestore returns
+  /// documents in id order, and the ids are random, so without this the
+  /// list came back shuffled. Ties keep a stable order by id.
+  static List<MedicalDatesModel> inScheduleOrder(
+          Iterable<MedicalDatesModel> doses) =>
+      doses.toList()
+        ..sort((MedicalDatesModel a, MedicalDatesModel b) {
+          final int byDate = a.date.compareTo(b.date);
+          return byDate != 0 ? byDate : (a.id ?? '').compareTo(b.id ?? '');
+        });
+
   Future fetchMedicalDates() async {
+    // Created at app start; nothing to read until someone signs in. The
+    // schedule tab fetches again when opened.
+    final String? uid = SessionManager.signedInUid;
+    if (uid == null) return;
     setLoading();
     try {
-      // final medicalDates = await AppConstant.fireStoreHelper.fetchData(
-      //     path: ["users", SessionManager.uId, "medical_dates"],
-      //     queryBuilder: (q) => q.orderBy('date'),
-      //     fromDocument: MedicalDatesModel.fromDocument);
-      final medicalDates = await AppConstant.fireStoreHelper1.getCollection(
-          path: AppPath.userMedicalDates(SessionManager.uId),
-          fromDoc: MedicalDatesModel.fromDocument);
+      final medicalDates = inScheduleOrder(await AppConstant.fireStoreHelper1
+          .getCollection(
+              path: AppPath.userMedicalDates(uid),
+              fromDoc: MedicalDatesModel.fromDocument));
+      // Read-only. The app never changes a dose's state on its own: a past
+      // Pending dose stays Pending and is shown as overdue. Only the user
+      // marks doses Completed or Skipped (see VaccineStateService).
       if (medicalDates.isEmpty) {
         setEmpty();
       } else {
         setSuccess(medicalDates);
-        await updateMedicalDateStatus(medicalDates);
       }
     } catch (_) {
       setError("MedicalDatesController_fetch_failed".tr);
     }
-  }
-
-  Future updateMedicalDateStatus(List<MedicalDatesModel> medicalDates) async {
-    final futures = medicalDates
-        .where((m) =>
-            m.date.isBefore(DateTime.now()) &&
-            m.state == MedicalDateStateEnum.pending.label)
-        .map((m) {
-      final docId = m.id;
-      if (docId == null) return null;
-      // return AppConstant.fireStoreHelper.updateData(
-      //     path: ["users", SessionManager.uId, "medical_dates", docId],
-      //     date: {'state': MedicalDateStateEnum.skipped.label});
-
-      return AppConstant.fireStoreHelper1.updateData(
-          path: "${AppPath.userMedicalDates(SessionManager.uId)}/$docId",
-          data: {'state': MedicalDateStateEnum.skipped.label});
-    }).whereType<Future>();
-    await Future.wait(futures);
   }
 }

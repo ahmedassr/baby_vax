@@ -2,7 +2,6 @@ import 'package:baby_vax/app/core/service/medical_dates_generator.dart';
 import 'package:intl/intl.dart';
 import '../../../../config/constant/app_path.dart';
 import '../../../../core/imports/import_manger.dart';
-import '../../../../core/notification/data/onesignal_notification_provider.dart';
 import '../../../home/controller/home_controller.dart';
 
 class SignupController extends GetxController
@@ -27,23 +26,29 @@ class SignupController extends GetxController
     "headSizeErrorText": "".obs,
     "heightErrorText": "".obs,
   };
+
+  /// A calendar day. The schedule only depends on the date of birth, so
+  /// there is no time part.
   Rx<DateTime> selectedBirthday = Rx<DateTime>(
-    DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-      DateTime.now().hour,
-      DateTime.now().minute,
-    ),
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
   );
-  final dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+
+  /// Stored form of the birthday: ISO date, fixed ASCII digits whatever the
+  /// UI language. The form field shows [AppDateFormat.date] instead.
+  static final DateFormat storageFormat = DateFormat('yyyy-MM-dd', 'en');
+
+  String get birthdayForStorage => storageFormat.format(selectedBirthday.value);
+
+  void _showBirthday() {
+    signupControllers["birthdayController"]?.text =
+        AppDateFormat.date(selectedBirthday.value);
+  }
 
   @override
   void onInit() {
     super.onInit();
     setSuccess();
-    signupControllers["birthdayController"]?.text =
-        dateFormat.format(selectedBirthday.value);
+    _showBirthday();
   }
 
   @override
@@ -65,24 +70,9 @@ class SignupController extends GetxController
 
     if (selectedDate == null || !context.mounted) return;
 
-    final TimeOfDay? selectedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(selectedBirthday.value));
-
-    if (!context.mounted) return;
-
-    selectedBirthday.value = selectedTime == null
-        ? selectedDate
-        : DateTime(
-            selectedDate.year,
-            selectedDate.month,
-            selectedDate.day,
-            selectedTime.hour,
-            selectedTime.minute,
-          );
-
-    signupControllers["birthdayController"]?.text =
-        dateFormat.format(selectedBirthday.value);
+    selectedBirthday.value =
+        DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    _showBirthday();
   }
 
   bool isValidate() {
@@ -103,10 +93,20 @@ class SignupController extends GetxController
           "empty_password_error_msg".tr;
       valid = false;
     }
-    if (signupControllers["birthdayController"]?.text.isEmpty ?? true) {
+    final String birthdayText =
+        signupControllers["birthdayController"]?.text.trim() ?? "";
+    if (birthdayText.isEmpty) {
       signupErrorText["birthdayErrorText"]?.value =
           "empty_date_of_birth_error_msg".tr;
       valid = false;
+    } else {
+      // Validate here rather than letting the generator throw mid-signup,
+      // after the Auth user has already been created.
+      final String? birthdayError = _birthDateError(birthdayForStorage);
+      if (birthdayError != null) {
+        signupErrorText["birthdayErrorText"]?.value = birthdayError;
+        valid = false;
+      }
     }
     if (signupControllers["bloodPercentageController"]?.text.isEmpty ?? true) {
       signupErrorText["bloodPercentageErrorText"]?.value =
@@ -129,6 +129,22 @@ class SignupController extends GetxController
     return valid;
   }
 
+  /// Localized reason the birth date is unusable, or null when it is fine.
+  String? _birthDateError(String birthdayText) {
+    try {
+      MedicalDatesGenerator.parseBirthDate(birthdayText);
+      return null;
+    } on InvalidBirthDateException catch (e) {
+      if (e.reason.contains('future')) {
+        return "future_date_of_birth_error_msg".tr;
+      }
+      if (e.reason.contains('years ago')) {
+        return "too_old_date_of_birth_error_msg".tr;
+      }
+      return "invalid_date_of_birth_error_msg".tr;
+    }
+  }
+
   Future<void> userSignup() async {
     if (!isValidate()) {
       return;
@@ -136,7 +152,7 @@ class SignupController extends GetxController
     UserModel user = UserModel(
         uid: "",
         email: signupControllers["emailController"]?.text.trim() ?? "",
-        birthday: signupControllers["birthdayController"]?.text.trim() ?? "",
+        birthday: birthdayForStorage,
         name: signupControllers["nameController"]?.text.trim() ?? "",
         height: signupControllers["heightController"]?.text.trim() ?? "",
         weight: signupControllers["weightController"]?.text.trim() ?? "",
@@ -162,54 +178,48 @@ class SignupController extends GetxController
         }
       }
     } on FirebaseException catch (e) {
-      setError(getFriendlyErrorMessage(e.toString()));
+      setError(friendlyFirebaseError(e));
     }
   }
 
   Future<bool> _createUserProfile(UserModel user) async {
     try {
-      // await AppConstant.fireStoreHelper
-      //     .createUser(uid: user.uid, userDate: user.toMap());
-
-      await AppConstant.fireStoreHelper1
-          .setData(path: user.uid, data: user.toMap());
-
-      logger.d("${user.birthday}");
-
       final generatedVaccines =
           MedicalDatesGenerator.generator(user.birthday ?? '');
-      final path = AppPath.userMedicalDates(user.uid);
+      final String datesPath = AppPath.userMedicalDates(user.uid);
 
-      final tasks = generatedVaccines.map((vaccine) {
-        return AppConstant.fireStoreHelper1.addDocument<MedicalDatesModel>(
-          path: path,
-          data: vaccine.toMap(),
-          fromDoc: (doc) => MedicalDatesModel.fromDocument(doc),
-        );
-      }).toList();
+      // The profile and the whole generated schedule in one atomic batch,
+      // with ids made on the device: no half-created schedule if the
+      // connection drops, and no server read-back that hangs offline.
+      await AppConstant.fireStoreHelper1.commitSets({
+        AppPath.userDoc(user.uid): user.toMap(),
+        for (final vaccine in generatedVaccines)
+          '$datesPath/${AppConstant.fireStoreHelper1.newDocumentId(datesPath)}':
+              vaccine.toMap(),
+      });
 
-      final List<MedicalDatesModel?> results = await Future.wait(tasks);
-      final vaccines = results.whereType<MedicalDatesModel>().toList();
-
-      // Notification Schedule
-      for (var vaccine in vaccines) {
-        final date = vaccine.date;
-        if (date.isAfter(DateTime.now())) {
-          await Get.find<NotificationCoordinator>().scheduleVaccine(
-            vaccineId: vaccine.id ?? "",
-            userName: user.name ?? "Your baby",
-            vaccineName: vaccine.name,
-            date: date,
-          );
-        }
-      }
       SessionManager.uId = user.uid;
       await AppConstant.getStorage.write(StorageKey.isLoginKey, true);
       await AppConstant.getStorage.write(StorageKey.uidKey, user.uid);
-      await AppConstant.notificationService.updateFcmToken();
-      await Get.find<OneSingleNotificationProvider>()
-          .setUser(SessionManager.uId);
+      await AppConstant.getStorage
+          .write(StorageKey.userNameKey, user.name ?? "");
       await Get.find<HomeController>().fetchUserData();
+
+      final NotificationCoordinator reminders =
+          Get.find<NotificationCoordinator>();
+      // Asked here, where the user has just created a schedule, so the prompt
+      // has visible context. Denial does not block sign-up.
+      final bool granted = await reminders.requestPermission();
+      // One sync instead of a per-vaccine loop: it goes through the same
+      // horizon and cap logic as every other sync, so sign-up cannot schedule
+      // all 15 years of reminders at once and hit Android's alarm limit.
+      await reminders.syncFromFirestore(
+        userId: user.uid,
+        userName: reminderChildName(user.name),
+      );
+      if (!granted) {
+        logger.w('Notification permission denied during sign-up');
+      }
       AppConstant.alertService.showAlert(
         AlertModel.success(
           message: "SignupController_create_user_success_msg".tr,

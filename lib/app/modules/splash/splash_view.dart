@@ -1,5 +1,6 @@
 import 'package:baby_vax/app/config/themes/app_colors.dart';
 import 'package:baby_vax/app/core/imports/import_library.dart';
+import 'package:baby_vax/app/core/values/app_image.dart';
 import 'package:baby_vax/app/core/widget/app_text.dart';
 import 'package:baby_vax/app/modules/splash/splash_controller.dart';
 
@@ -20,7 +21,8 @@ class SplashView extends GetView<SplashController> {
               child: ScaleTransition(
                 scale: controller.logoScale,
                 child: Image.asset(
-                  'assets/appIcon.png',
+                  // 512 px covers 120 dp up to 4x density.
+                  AppImage.appIcon,
                   width: 120,
                 ),
               ),
@@ -40,8 +42,8 @@ class SplashView extends GetView<SplashController> {
             const SizedBox(height: 6),
             FadeTransition(
               opacity: controller.textOpacity,
-              child: const AppText(
-                text: 'Care • Protection • Growth',
+              child: AppText(
+                text: "SplashView_tagline".tr,
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey,

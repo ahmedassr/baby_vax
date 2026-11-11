@@ -67,7 +67,7 @@ class SignupView extends GetView<SignupController> {
                         : Colors.white,
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(
-                      color: AppColors.primary.withValues(alpha:0.06),
+                      color: AppColors.primary.withValues(alpha: 0.06),
                     ),
                   ),
                   padding:
@@ -169,7 +169,7 @@ class SignupView extends GetView<SignupController> {
                         : AppColors.white,
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(
-                      color: AppColors.primary.withValues(alpha:0.05),
+                      color: AppColors.primary.withValues(alpha: 0.05),
                     ),
                   ),
                   padding:
@@ -291,6 +291,10 @@ class SignupView extends GetView<SignupController> {
                     ],
                   ),
                 ),
+                24.sbh,
+                // Shown where the schedule is created, so the parent sees it
+                // before relying on any date.
+                const MedicalDisclaimer(),
               ],
             ),
           ),

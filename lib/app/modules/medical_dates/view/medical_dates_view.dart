@@ -50,8 +50,8 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
                   Icons.add,
                   color: AppColors.white,
                 ),
-                label: const AppText(
-                  text: 'Add a custom date',
+                label: AppText(
+                  text: "MedicalDatesView_add_custom_date".tr,
                   color: AppColors.white,
                 ),
               ),
