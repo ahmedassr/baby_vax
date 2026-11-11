@@ -15,7 +15,12 @@ class AppEmptyState extends StatelessWidget {
     this.animationPath,
     this.actionLabel,
     this.onAction,
+    this.scrollable = true,
   });
+
+  /// False when placed inside another scroll view (a sliver list), so it
+  /// lays out as a plain column instead of filling and scrolling.
+  final bool scrollable;
 
   final String title;
   final String? message;
@@ -39,6 +44,7 @@ class AppEmptyState extends StatelessWidget {
           : _StateIcon(icon: icon),
       title: title,
       message: message,
+      scrollable: scrollable,
       action: actionLabel != null && onAction != null
           ? AppButton(
               text: actionLabel!,
@@ -120,8 +126,10 @@ class _StateLayout extends StatelessWidget {
     this.message,
     this.action,
     this.liveRegion = false,
+    this.scrollable = true,
   });
 
+  final bool scrollable;
   final Widget visual;
   final String title;
   final String? message;
@@ -131,6 +139,36 @@ class _StateLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme text = Theme.of(context).textTheme;
+    final Widget body = Semantics(
+      liveRegion: liveRegion,
+      container: true,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          visual,
+          const SizedBox(height: AppSpacing.xl),
+          Text(title, style: text.titleMedium, textAlign: TextAlign.center),
+          if (message != null) ...<Widget>[
+            const SizedBox(height: AppSpacing.sm),
+            Text(message!,
+                style: text.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant),
+                textAlign: TextAlign.center),
+          ],
+          if (action != null) ...<Widget>[
+            const SizedBox(height: AppSpacing.xl),
+            action!,
+          ],
+        ],
+      ),
+    );
+    if (!scrollable) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xxl, vertical: AppSpacing.xxxl),
+        child: Center(child: body),
+      );
+    }
     // Scrollable so a 1.3 text scale on a 360x640 screen never overflows,
     // and so pull-to-refresh can wrap it.
     return LayoutBuilder(
@@ -144,33 +182,7 @@ class _StateLayout extends StatelessWidget {
                 ? constraints.maxHeight - 2 * AppSpacing.xxxl
                 : 0,
           ),
-          child: Center(
-            child: Semantics(
-              liveRegion: liveRegion,
-              container: true,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  visual,
-                  const SizedBox(height: AppSpacing.xl),
-                  Text(title,
-                      style: text.titleMedium, textAlign: TextAlign.center),
-                  if (message != null) ...<Widget>[
-                    const SizedBox(height: AppSpacing.sm),
-                    Text(message!,
-                        style: text.bodyMedium?.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant),
-                        textAlign: TextAlign.center),
-                  ],
-                  if (action != null) ...<Widget>[
-                    const SizedBox(height: AppSpacing.xl),
-                    action!,
-                  ],
-                ],
-              ),
-            ),
-          ),
+          child: Center(child: body),
         ),
       ),
     );

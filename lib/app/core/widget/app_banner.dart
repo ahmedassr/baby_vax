@@ -18,6 +18,7 @@ class AppBanner extends StatelessWidget {
     this.onAction,
     this.onDismiss,
     this.icon,
+    this.actionKey,
   });
 
   final String message;
@@ -31,6 +32,9 @@ class AppBanner extends StatelessWidget {
 
   /// Overrides the tone's default icon.
   final IconData? icon;
+
+  /// Key for the action button, for tests.
+  final Key? actionKey;
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +112,7 @@ class AppBanner extends StatelessWidget {
               Align(
                 alignment: AlignmentDirectional.centerEnd,
                 child: TextButton(
+                  key: actionKey,
                   onPressed: onAction,
                   style: TextButton.styleFrom(foregroundColor: fg),
                   child: Text(actionLabel!),

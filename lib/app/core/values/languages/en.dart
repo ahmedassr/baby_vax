@@ -65,7 +65,7 @@ Map<String, String> en = {
 
   // MainMenu → Controller:
   "MainMenuController_home_title": "Home",
-  "MainMenuController_medical_dates_title": "Medical Dates",
+  "MainMenuController_medical_dates_title": "Schedule",
   "MainMenuController_tips_title": "Tips",
   "MainMenuController_settings_title": "Settings",
 
@@ -343,4 +343,36 @@ Map<String, String> en = {
   "reminders_off_label": "Off",
   "edit_label": "Edit",
   "edit_section_label": "Edit @section",
+  // v1.1 schedule age groups
+  "age_at_birth": "At birth",
+  "age_other": "Other dates",
+  "age_months_one": "1 month",
+  "age_months_other": "@count months",
+  "age_years_one": "1 year",
+  "age_years_other": "@count years",
+  // v1.1 home and schedule
+  "HomeView_overline": "Vaccination schedule for",
+  "HomeView_next_dose": "Next dose",
+  "HomeView_overdue_dose": "Overdue dose",
+  "HomeView_open_dose": "View dose",
+  "HomeView_more_overdue": "Also overdue: @count",
+  "HomeView_all_done_title": "Every dose is recorded",
+  "HomeView_all_done_body":
+      "Each dose in the schedule is marked as given or skipped.",
+  "HomeView_no_schedule_title": "No schedule yet",
+  "HomeView_no_schedule_body":
+      "Pull down to refresh. If it stays empty, check your connection.",
+  "HomeView_progress_title": "Schedule progress",
+  "HomeView_progress_body": "@done of @total doses given",
+  "HomeView_measurements_title": "Latest measurements",
+  "HomeView_profile_title": "Profile",
+  "HomeView_no_profile_title": "We could not find your profile",
+  "HomeView_no_profile_body": "Check your connection and try again.",
+  "Schedule_filter_all": "All",
+  "Schedule_empty_filter_title": "No doses here",
+  "Schedule_empty_filter_body": "Try another filter.",
+  "Schedule_empty_title": "No schedule yet",
+  "Schedule_empty_body":
+      "Your baby's schedule appears here once the account is set up.",
+  "Schedule_filter_label": "Show",
 };

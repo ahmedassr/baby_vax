@@ -72,7 +72,7 @@ Map<String, String> ar = {
 
   // MainMenu → Controller
   "MainMenuController_home_title": "الرئيسية",
-  "MainMenuController_medical_dates_title": "المواعيد الطبية",
+  "MainMenuController_medical_dates_title": "الجدول",
   "MainMenuController_tips_title": "النصائح",
   "MainMenuController_settings_title": "الإعدادات",
 
@@ -377,4 +377,43 @@ Map<String, String> ar = {
   "reminders_off_label": "متوقفة",
   "edit_label": "تعديل",
   "edit_section_label": "تعديل @section",
+  // v1.1 schedule age groups
+  "age_at_birth": "عند الولادة",
+  "age_other": "مواعيد أخرى",
+  "age_months_one": "شهر واحد",
+  "age_months_other": "@count شهر",
+  "age_years_one": "سنة واحدة",
+  "age_years_other": "@count سنة",
+  // Age headings: one key per CLDR plural category, picked by ageLabel().
+  "age_months_zero": "@count شهر",
+  "age_months_two": "شهران",
+  "age_months_few": "@count أشهر",
+  "age_months_many": "@count شهرًا",
+  "age_years_zero": "@count سنة",
+  "age_years_two": "سنتان",
+  "age_years_few": "@count سنوات",
+  "age_years_many": "@count سنةً",
+  // v1.1 home and schedule
+  "HomeView_overline": "جدول تطعيمات",
+  "HomeView_next_dose": "الجرعة القادمة",
+  "HomeView_overdue_dose": "جرعة متأخرة",
+  "HomeView_open_dose": "عرض الجرعة",
+  "HomeView_more_overdue": "متأخرة أيضاً: @count",
+  "HomeView_all_done_title": "تم تسجيل كل الجرعات",
+  "HomeView_all_done_body": "كل جرعة في الجدول محددة كمُعطاة أو متجاوزة.",
+  "HomeView_no_schedule_title": "لا يوجد جدول بعد",
+  "HomeView_no_schedule_body":
+      "اسحب للأسفل للتحديث. إذا بقي فارغاً فتحقّق من الاتصال.",
+  "HomeView_progress_title": "التقدّم في الجدول",
+  "HomeView_progress_body": "الجرعات المُعطاة: @done من @total",
+  "HomeView_measurements_title": "آخر القياسات",
+  "HomeView_profile_title": "الملف الشخصي",
+  "HomeView_no_profile_title": "لم نعثر على ملفك",
+  "HomeView_no_profile_body": "تحقّق من الاتصال وحاول مرة أخرى.",
+  "Schedule_filter_all": "الكل",
+  "Schedule_empty_filter_title": "لا توجد جرعات هنا",
+  "Schedule_empty_filter_body": "جرّب تصفية أخرى.",
+  "Schedule_empty_title": "لا يوجد جدول بعد",
+  "Schedule_empty_body": "سيظهر جدول طفلك هنا بعد إعداد الحساب.",
+  "Schedule_filter_label": "عرض",
 };
