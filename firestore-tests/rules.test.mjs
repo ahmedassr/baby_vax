@@ -141,6 +141,49 @@ describe('users/{userId}', () => {
     );
   });
 
+  // v1.1: optional `sex` for the growth charts.
+  it('accepts a v1.0 profile with no sex field (existing users stay valid)', async () => {
+    await assertSucceeds(
+      setDoc(doc(asUser(ALICE), `users/${ALICE}`), validUser(ALICE)),
+    );
+    await seed((db) => setDoc(doc(db, `users/${ALICE}`), validUser(ALICE)));
+    // And an edit that does not touch it still passes.
+    await assertSucceeds(
+      updateDoc(doc(asUser(ALICE), `users/${ALICE}`), { name: 'Lina M.' }),
+    );
+  });
+
+  for (const sex of ['female', 'male']) {
+    it(`accepts sex "${sex}"`, async () => {
+      await assertSucceeds(
+        setDoc(doc(asUser(ALICE), `users/${ALICE}`), {
+          ...validUser(ALICE),
+          sex,
+        }),
+      );
+    });
+  }
+
+  it('accepts sex set back to null', async () => {
+    await seed((db) =>
+      setDoc(doc(db, `users/${ALICE}`), { ...validUser(ALICE), sex: 'female' }),
+    );
+    await assertSucceeds(
+      updateDoc(doc(asUser(ALICE), `users/${ALICE}`), { sex: null }),
+    );
+  });
+
+  for (const sex of ['F', 'other', '', 1, true]) {
+    it(`denies sex ${JSON.stringify(sex)}`, async () => {
+      await assertFails(
+        setDoc(doc(asUser(ALICE), `users/${ALICE}`), {
+          ...validUser(ALICE),
+          sex,
+        }),
+      );
+    });
+  }
+
   it('lets the owner delete their profile, as account deletion needs', async () => {
     await seed((db) => setDoc(doc(db, `users/${ALICE}`), validUser(ALICE)));
     await assertSucceeds(deleteDoc(doc(asUser(ALICE), `users/${ALICE}`)));

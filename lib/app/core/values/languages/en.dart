@@ -299,4 +299,48 @@ Map<String, String> en = {
   "ForgotPassword_sent_body":
       "If an account exists for @email, a link to reset the password is on its way. It can take a few minutes, so check your spam folder too.",
   "ForgotPassword_back_to_login": "Back to log in",
+  // v1.1 sign-up stepper
+  "Signup_step_account": "Your account",
+  "Signup_step_baby": "Your baby",
+  "Signup_step_measurements": "Measurements",
+  "Signup_step_reminders": "Reminders",
+  "Signup_step_summary": "Check and create",
+  "Signup_step_account_hint":
+      "You will use this email and password to sign in on any phone.",
+  "Signup_password_helper": "At least @min characters.",
+  "Signup_step_baby_hint":
+      "The vaccination schedule is built from your baby's date of birth.",
+  "Signup_baby_name_label": "Baby's name",
+  "Signup_birthday_hint": "Tap to choose a date",
+  "Signup_birthday_helper": "Used to work out when each dose is due.",
+  "Signup_sex_label": "Sex",
+  "Signup_sex_helper": "Growth charts are different for girls and boys.",
+  "sex_female": "Girl",
+  "sex_male": "Boy",
+  "empty_sex_error_msg": "Please choose one.",
+  "Signup_step_measurements_hint":
+      "If you have them from the birth or a recent check-up, add them here. You can skip this step and add them later.",
+  "unit_kg": "kg",
+  "unit_cm": "cm",
+  "unit_g_dl": "g/dL",
+  "Signup_skip_for_now": "Skip for now",
+  "Signup_reminders_title": "Reminders that work offline",
+  "Signup_reminders_body":
+      "Baby Vax reminds you at @evening the evening before each dose and at @morning on the day. The reminders are set on this phone, so they work without internet.",
+  "Signup_reminders_why":
+      "Your phone will ask whether Baby Vax may send notifications. Without them the reminders cannot appear.",
+  "Signup_reminders_turn_on": "Turn on reminders",
+  "Signup_reminders_not_now": "Not now",
+  "Signup_reminders_granted": "Reminders are on.",
+  "Signup_reminders_denied":
+      "Reminders are off for now. You can turn them on later in your phone's settings.",
+  "Signup_step_summary_hint":
+      "Check the details below. You can change anything before creating the account.",
+  "Signup_create_account": "Create account",
+  "Signup_schedule_note":
+      "Baby Vax will build the vaccination schedule from this date of birth.",
+  "reminders_on_label": "On",
+  "reminders_off_label": "Off",
+  "edit_label": "Edit",
+  "edit_section_label": "Edit @section",
 };

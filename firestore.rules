@@ -43,12 +43,22 @@ service cloud.firestore {
              isShortString(data[field], maxLen);
     }
 
+    // Absent, null, or one of [values].
+    function isOptionalOneOf(data, field, values) {
+      return !data.keys().hasAny([field]) ||
+             data[field] == null ||
+             data[field] in values;
+    }
+
     // ---- users ------------------------------------------------------------
 
     function isValidUser(data) {
       return data.keys().hasOnly([
                'uid', 'email', 'birthday', 'name',
-               'height', 'weight', 'bloodPercentage', 'headSize'
+               'height', 'weight', 'bloodPercentage', 'headSize',
+               // v1.1, optional: the baby's sex, for the WHO growth charts.
+               // A v1.0 profile without it is still valid.
+               'sex'
              ])
              // uid must match the document id, so a profile cannot claim to be
              // someone else's.
@@ -59,7 +69,8 @@ service cloud.firestore {
              && isOptionalShortString(data, 'height', 20)
              && isOptionalShortString(data, 'weight', 20)
              && isOptionalShortString(data, 'bloodPercentage', 20)
-             && isOptionalShortString(data, 'headSize', 20);
+             && isOptionalShortString(data, 'headSize', 20)
+             && isOptionalOneOf(data, 'sex', ['female', 'male']);
     }
 
     match /users/{userId} {

@@ -334,4 +334,47 @@ Map<String, String> ar = {
   "ForgotPassword_sent_body":
       "إذا كان هناك حساب مرتبط بـ @email فسيصلك رابط لإعادة تعيين كلمة المرور. قد يستغرق ذلك بضع دقائق، لذا تحقّق من مجلد الرسائل غير المرغوب فيها أيضاً.",
   "ForgotPassword_back_to_login": "العودة لتسجيل الدخول",
+  // v1.1 sign-up stepper
+  "Signup_step_account": "حسابك",
+  "Signup_step_baby": "طفلك",
+  "Signup_step_measurements": "القياسات",
+  "Signup_step_reminders": "التذكيرات",
+  "Signup_step_summary": "المراجعة والإنشاء",
+  "Signup_step_account_hint":
+      "ستستخدم هذا البريد الإلكتروني وكلمة المرور لتسجيل الدخول من أي هاتف.",
+  "Signup_password_helper": "@min أحرف على الأقل.",
+  "Signup_step_baby_hint": "يُبنى جدول التطعيمات من تاريخ ميلاد طفلك.",
+  "Signup_baby_name_label": "اسم الطفل",
+  "Signup_birthday_hint": "اضغط لاختيار التاريخ",
+  "Signup_birthday_helper": "يُستخدم لحساب موعد كل جرعة.",
+  "Signup_sex_label": "الجنس",
+  "Signup_sex_helper": "تختلف منحنيات النمو بين البنات والأولاد.",
+  "sex_female": "بنت",
+  "sex_male": "ولد",
+  "empty_sex_error_msg": "الرجاء اختيار أحد الخيارين.",
+  "Signup_step_measurements_hint":
+      "إذا كانت لديك من الولادة أو من فحص حديث فأضفها هنا. يمكنك تخطي هذه الخطوة وإضافتها لاحقاً.",
+  "unit_kg": "كغ",
+  "unit_cm": "سم",
+  "unit_g_dl": "غم/دل",
+  "Signup_skip_for_now": "تخطٍّ الآن",
+  "Signup_reminders_title": "تذكيرات تعمل دون إنترنت",
+  "Signup_reminders_body":
+      "يذكّرك بيبي فاكس الساعة @evening مساء اليوم السابق لكل جرعة، والساعة @morning صباح يومها. تُضبط التذكيرات على هذا الهاتف، فتعمل دون إنترنت.",
+  "Signup_reminders_why":
+      "سيسألك هاتفك إن كان مسموحاً لبيبي فاكس بإرسال الإشعارات. من دونها لا يمكن أن تظهر التذكيرات.",
+  "Signup_reminders_turn_on": "تفعيل التذكيرات",
+  "Signup_reminders_not_now": "ليس الآن",
+  "Signup_reminders_granted": "التذكيرات مفعّلة.",
+  "Signup_reminders_denied":
+      "التذكيرات متوقفة حالياً. يمكنك تفعيلها لاحقاً من إعدادات هاتفك.",
+  "Signup_step_summary_hint":
+      "راجع التفاصيل أدناه. يمكنك تعديل أي شيء قبل إنشاء الحساب.",
+  "Signup_create_account": "إنشاء الحساب",
+  "Signup_schedule_note":
+      "سيُنشئ بيبي فاكس جدول التطعيمات من تاريخ الميلاد هذا.",
+  "reminders_on_label": "مفعّلة",
+  "reminders_off_label": "متوقفة",
+  "edit_label": "تعديل",
+  "edit_section_label": "تعديل @section",
 };
