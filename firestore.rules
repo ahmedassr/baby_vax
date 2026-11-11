@@ -43,6 +43,13 @@ service cloud.firestore {
              isShortString(data[field], maxLen);
     }
 
+    // Absent, null, or a timestamp.
+    function isOptionalTimestamp(data, field) {
+      return !data.keys().hasAny([field]) ||
+             data[field] == null ||
+             data[field] is timestamp;
+    }
+
     // Absent, null, or one of [values].
     function isOptionalOneOf(data, field, values) {
       return !data.keys().hasAny([field]) ||
@@ -82,7 +89,12 @@ service cloud.firestore {
       // ---- medical_dates (the vaccination schedule) ----------------------
 
       function isValidMedicalDate(data) {
-        return data.keys().hasOnly(['name', 'description', 'date', 'state', 'code'])
+        return data.keys().hasOnly([
+                 'name', 'description', 'date', 'state', 'code',
+                 // v1.1, optional: what was recorded when the dose was
+                 // given. A v1.0 dose without them is still valid.
+                 'givenDate', 'clinic', 'lot', 'note'
+               ])
                && data.keys().hasAll(['name', 'date', 'state'])
                && isShortString(data.name, 200)
                && isOptionalShortString(data, 'description', 1000)
@@ -91,7 +103,15 @@ service cloud.firestore {
                // Only the three states the app understands. Anything else
                // would make the schedule screen and the reminder sync behave
                // unpredictably.
-               && data.state in ['Pending', 'Completed', 'Skipped'];
+               && data.state in ['Pending', 'Completed', 'Skipped']
+               && isOptionalTimestamp(data, 'givenDate')
+               && isOptionalShortString(data, 'clinic', 120)
+               && isOptionalShortString(data, 'lot', 60)
+               && isOptionalShortString(data, 'note', 500);
+               // Not enforced: "a record only on a Completed dose". v1.1
+               // removes the record when undoing, but a v1.0 build still on
+               // someone's phone writes only { state }, and that must not be
+               // rejected.
       }
 
       match /medical_dates/{medicalDateId} {

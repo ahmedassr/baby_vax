@@ -14,6 +14,7 @@ import {
 import {
   collection,
   deleteDoc,
+  deleteField,
   doc,
   getDoc,
   getDocs,
@@ -338,6 +339,121 @@ describe('users/{userId}/medical_dates/{id}', () => {
     );
     await assertFails(
       updateDoc(doc(asUser(BOB), `${path(ALICE)}/v1`), { state: 'Skipped' }),
+    );
+  });
+});
+
+describe('users/{userId}/medical_dates/{id} — v1.1 dose record', () => {
+  const path = (uid) => `users/${uid}/medical_dates`;
+  const record = {
+    givenDate: Timestamp.fromDate(new Date('2026-03-16T00:00:00Z')),
+    clinic: 'Ramallah MCH clinic',
+    lot: 'AB1234',
+    note: 'Slight fever that evening.',
+  };
+
+  it('existing v1.0 doses (no record fields) still pass an update', async () => {
+    await seed((db) =>
+      setDoc(doc(db, `${path(ALICE)}/v1`), validMedicalDate()),
+    );
+    await assertSucceeds(
+      updateDoc(doc(asUser(ALICE), `${path(ALICE)}/v1`), { state: 'Skipped' }),
+    );
+  });
+
+  it('marking given with a full record passes', async () => {
+    await seed((db) =>
+      setDoc(doc(db, `${path(ALICE)}/v1`), validMedicalDate()),
+    );
+    await assertSucceeds(
+      updateDoc(doc(asUser(ALICE), `${path(ALICE)}/v1`), {
+        state: 'Completed',
+        ...record,
+      }),
+    );
+  });
+
+  for (const field of Object.keys(record)) {
+    it(`a record with only ${field} passes`, async () => {
+      await assertSucceeds(
+        setDoc(
+          doc(asUser(ALICE), `${path(ALICE)}/v1`),
+          validMedicalDate({ state: 'Completed', [field]: record[field] }),
+        ),
+      );
+    });
+  }
+
+  it('undo removes the record in the same write', async () => {
+    await seed((db) =>
+      setDoc(
+        doc(db, `${path(ALICE)}/v1`),
+        validMedicalDate({ state: 'Completed', ...record }),
+      ),
+    );
+    await assertSucceeds(
+      updateDoc(doc(asUser(ALICE), `${path(ALICE)}/v1`), {
+        state: 'Pending',
+        givenDate: deleteField(),
+        clinic: deleteField(),
+        lot: deleteField(),
+        note: deleteField(),
+      }),
+    );
+  });
+
+  it('a v1.0 client undoing a recorded dose (state only) is not rejected', async () => {
+    // v1.0 builds write only { state }. The record stays behind on the
+    // document; v1.1 ignores it on a pending dose and clears it next time.
+    await seed((db) =>
+      setDoc(
+        doc(db, `${path(ALICE)}/v1`),
+        validMedicalDate({ state: 'Completed', ...record }),
+      ),
+    );
+    await assertSucceeds(
+      updateDoc(doc(asUser(ALICE), `${path(ALICE)}/v1`), { state: 'Pending' }),
+    );
+  });
+
+  it('denies a givenDate that is not a timestamp', async () => {
+    await assertFails(
+      setDoc(
+        doc(asUser(ALICE), `${path(ALICE)}/v1`),
+        validMedicalDate({ state: 'Completed', givenDate: '2026-03-16' }),
+      ),
+    );
+  });
+
+  for (const [field, max] of [['clinic', 120], ['lot', 60], ['note', 500]]) {
+    it(`denies an oversized ${field}`, async () => {
+      await assertFails(
+        setDoc(
+          doc(asUser(ALICE), `${path(ALICE)}/v1`),
+          validMedicalDate({ state: 'Completed', [field]: 'x'.repeat(max + 1) }),
+        ),
+      );
+    });
+
+    it(`denies a non-string ${field}`, async () => {
+      await assertFails(
+        setDoc(
+          doc(asUser(ALICE), `${path(ALICE)}/v1`),
+          validMedicalDate({ state: 'Completed', [field]: 42 }),
+        ),
+      );
+    });
+  }
+
+  it("denies writing a record on another user's dose", async () => {
+    await seed((db) =>
+      setDoc(doc(db, `${path(ALICE)}/v1`), validMedicalDate()),
+    );
+    await assertFails(
+      updateDoc(doc(asUser(BOB), `${path(ALICE)}/v1`), {
+        state: 'Completed',
+        ...record,
+      }),
     );
   });
 });
