@@ -119,6 +119,14 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
     }
   }
 
+  /// Forgets the signed-out parent's data.
+  void clearSession() {
+    userDetails.value = null;
+    doses.clear();
+    nextVaccination.value = null;
+    notificationsOff.value = false;
+  }
+
   void openDose(MedicalDatesModel dose) {
     AppConstant.argumentService
         .setArgument(InternalScreenArgs(medicalDate: dose));

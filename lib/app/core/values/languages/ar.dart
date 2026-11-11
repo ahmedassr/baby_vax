@@ -61,7 +61,7 @@ Map<String, String> ar = {
   "EditUserController_update_user_failed": "فشل تحديث بيانات المستخدم.",
 
   // View
-  "EditUserView_edit_user_title": "تعديل البيانات",
+  "EditUserView_edit_user_title": "تعديل الملف",
   "EditUserView_edit_label": "تعديل",
 
   // Home → Controller
@@ -119,8 +119,8 @@ Map<String, String> ar = {
   "SettingsView_select_language": "اختر اللغة",
 
   // Widgets
-  "AppSettingDarkModeSwitch_dark_mode_label": "الوضع الداكن",
-  "AppSettingDarkModeSwitch_light_mode_label": "الوضع الفاتح",
+  "AppSettingDarkModeSwitch_dark_mode_label": "داكن",
+  "AppSettingDarkModeSwitch_light_mode_label": "فاتح",
 
   // Tip Details → Controller
   "TipDetailsController_missing_tip_msg": "النصيحة المطلوبة غير متوفرة.",
@@ -424,4 +424,19 @@ Map<String, String> ar = {
   "MedicalDateDetails_about_title": "عن هذه الجرعة",
   // v1.1 tips
   "TipsView_empty_title": "لا توجد نصائح بعد",
+  // v1.1 edit profile
+  "EditUser_save": "حفظ التغييرات",
+  "EditUser_saved_msg": "تم حفظ الملف.",
+  "EditUser_email_readonly": "بريد تسجيل الدخول. لا يمكن تغييره من هنا.",
+  "EditUser_birthday_helper": "تغييره ينقل كل جرعات الجدول لتتوافق معه.",
+  "EditUser_birthday_change_confirm":
+      "تغيّر تاريخ الميلاد، لذلك ستنتقل كل جرعات الجدول لتتوافق معه. تحتفظ الجرعات التي حددتها كمُعطاة أو متجاوزة بحالتها، وتُعاد جدولة التذكيرات.",
+  "EditUser_birthday_change_yes": "نقل الجدول",
+  // v1.1 settings
+  "Settings_appearance": "المظهر",
+  "Settings_theme_system": "النظام",
+  "Settings_notifications": "الإشعارات",
+  "Settings_notifications_hint": "يفتح إعدادات هاتفك الخاصة ببيبي فاكس.",
+  "Settings_about": "حول التطبيق",
+  "Settings_about_app": "عن بيبي فاكس",
 };

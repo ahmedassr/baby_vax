@@ -55,7 +55,7 @@ Map<String, String> en = {
   // Edit User → Controller:
   "EditUserController_update_user_failed": "Failed to update user.",
   // View
-  "EditUserView_edit_user_title": "Edit User",
+  "EditUserView_edit_user_title": "Edit profile",
   "EditUserView_edit_label": "Edit",
 
   // Home → Controller:
@@ -106,8 +106,8 @@ Map<String, String> en = {
   "SettingsView_logout_label": "Log Out",
   "SettingsView_select_language": "Select Language",
   // Widgets
-  "AppSettingDarkModeSwitch_dark_mode_label": "Dark Mode",
-  "AppSettingDarkModeSwitch_light_mode_label": "Light Mode",
+  "AppSettingDarkModeSwitch_dark_mode_label": "Dark",
+  "AppSettingDarkModeSwitch_light_mode_label": "Light",
 
   // Tip Details → Controller:
   "TipDetailsController_missing_tip_msg": "The current tip is missing",
@@ -383,4 +383,20 @@ Map<String, String> en = {
   "MedicalDateDetails_about_title": "About this dose",
   // v1.1 tips
   "TipsView_empty_title": "No tips yet",
+  // v1.1 edit profile
+  "EditUser_save": "Save changes",
+  "EditUser_saved_msg": "Profile saved.",
+  "EditUser_email_readonly": "Your sign-in email. It cannot be changed here.",
+  "EditUser_birthday_helper":
+      "Changing it moves every dose in the schedule to match.",
+  "EditUser_birthday_change_confirm":
+      "The date of birth changed, so every dose in the schedule will move to match it. Doses you marked as given or skipped keep their status, and reminders are rebuilt.",
+  "EditUser_birthday_change_yes": "Move the schedule",
+  // v1.1 settings
+  "Settings_appearance": "Appearance",
+  "Settings_theme_system": "System",
+  "Settings_notifications": "Notifications",
+  "Settings_notifications_hint": "Opens your phone's settings for Baby Vax.",
+  "Settings_about": "About",
+  "Settings_about_app": "About Baby Vax",
 };
