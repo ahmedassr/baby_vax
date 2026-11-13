@@ -504,4 +504,6 @@ Map<String, String> ar = {
   "Growth_attribution":
       "منحنيات المرجع: معايير نمو الطفل لمنظمة الصحة العالمية (2006). الترخيص: CC BY-NC-SA 3.0 IGO.",
   "Growth_chart_semantic": "مخطط @metric، عدد القياسات: @count",
+  // v1.1 custom reminders
+  "Reminder_custom_default_body": "تذكير ضبطته في بيبي فاكس.",
 };

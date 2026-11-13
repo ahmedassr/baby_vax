@@ -464,4 +464,6 @@ Map<String, String> en = {
   "Growth_attribution":
       "Reference curves: WHO Child Growth Standards (2006). Licence: CC BY-NC-SA 3.0 IGO.",
   "Growth_chart_semantic": "@metric chart, measurements: @count",
+  // v1.1 custom reminders
+  "Reminder_custom_default_body": "A reminder you set in Baby Vax.",
 };
