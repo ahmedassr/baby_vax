@@ -5,25 +5,18 @@ Map<String, String> ar = {
   // Labels
   "email_label": "البريد الإلكتروني",
   "password_label": "كلمة المرور",
-  "name_label": "الاسم",
   "weight_label": "الوزن",
   "height_label": "الطول",
   "blood_percentage_label": "نسبة الدم",
   "head_size_label": "محيط الرأس",
-  "full_name_label": "الاسم الكامل",
   "date_of_birth_label": "تاريخ الميلاد",
 
   // Messages
-  "unexpected_error": "حدث خطأ غير متوقع.",
   "no_description": "لا يوجد وصف متاح حاليًا.",
   "empty_email_error_msg": "يرجى إدخال البريد الإلكتروني.",
   "empty_password_error_msg": "يرجى إدخال كلمة المرور.",
   "empty_name_error_msg": "يرجى إدخال الاسم.",
   "empty_date_of_birth_error_msg": "يرجى إدخال تاريخ الميلاد.",
-  "empty_blood_percentage_error_msg": "يرجى إدخال نسبة الدم.",
-  "empty_weight_error_msg": "يرجى إدخال الوزن.",
-  "empty_head_size_error_msg": "يرجى إدخال محيط الرأس.",
-  "empty_height_error_msg": "يرجى إدخال الطول.",
   // Alert Title
   "attention": "تحذير",
   "error": "خطأ",
@@ -44,32 +37,14 @@ Map<String, String> ar = {
   // Auth - SignUp → Controller
   "SignupController_create_user_failed_msg":
       "تعذّر إنشاء ملف المستخدم. يرجى المحاولة لاحقًا.",
-  "SignupController_create_user_success_msg": "تم إنشاء الحساب بنجاح.",
-  "SignupController_updated_user_success_msg": "تم تحديث المستخدم بنجاح.",
-
   // View
-  "SignupView_sign_up_title": "إنشاء حساب",
-  "SignupView_sign_up_hint": "أنشئ حسابًا لمتابعة رعاية طفلك بكل سهولة",
-  "SignupView_baby_information_label": "معلومات الطفل",
-  "SignupView_baby_measurements_label": "قياسات الطفل",
-  "SignupView_weight_label": "الوزن (كغ)",
-  "SignupView_height_label": "الطول (سم)",
-  "SignupView_head_size_label": "محيط الرأس (سم)",
-  "SignupView_blood_label": "نسبة الدم (غم/دل)",
-
   // Edit User → Controller
   "EditUserController_update_user_failed": "فشل تحديث بيانات المستخدم.",
 
   // View
   "EditUserView_edit_user_title": "تعديل الملف",
-  "EditUserView_edit_label": "تعديل",
-
   // Home → Controller
-  "HomeController_id_missing_msg": "تعذّر العثور على معرّف المستخدم.",
-
   // Widgets
-  "NextVaccinationCard_next_vaccination_title": "التطعيم القادم",
-
   // MainMenu → Controller
   "MainMenuController_home_title": "الرئيسية",
   "MainMenuController_medical_dates_title": "الجدول",
@@ -79,52 +54,28 @@ Map<String, String> ar = {
   // MedicalDateDetails → Controller
   "MedicalDateDetailsController_missing_medical_dates_msg":
       "بيانات الموعد الطبي غير متوفرة.",
-  "MedicalDateDetailsController_fetch_failed_msg":
-      "تعذّر جلب تفاصيل الموعد الطبي.",
   "MedicalDateDetailsController_state_update_failed_msg":
       "تعذّر تحديث حالة الموعد الطبي.",
 
   // View
   "MedicalDateDetailsView_title": "تفاصيل الموعد الطبي",
-  "MedicalDateDetailsView_details_and_notes": "تفاصيل التطعيم والملاحظات",
-
   // Widgets
-  "MedicalDateDetailCard_medical_date_label": "الموعد الطبي",
-  "MedicalDateDetailCard_date_fallback_label": "التاريخ غير متوفر",
-  "MedicalDateDetailCard_notes_label": "ملاحظات",
-
   // MedicalDates → Controller
   "MedicalDatesController_fetch_failed": "تعذّر جلب المواعيد الطبية.",
 
   // View
-  "SearchOnMedicalDates_title": "البحث في المواعيد الطبية",
-  "SearchOnMedicalDates_search_field_label":
-      "ما المواعيد الطبية التي تبحث عنها؟",
-
   // Widgets
-  "MedicalDatesHeader_medical_dates_label": "المواعيد الطبية",
-  "MedicalDatesHeader_upcoming_appointments_label":
-      "تابع مواعيد طفلك القادمة والسابقة بسهولة.",
-  "MedicalDatesHeader_no_upcoming_appointments_label":
-      "لا توجد مواعيد قادمة حاليًا. أضف مواعيد طبية للمتابعة.",
-
   // Settings → Controller
   "SettingsController_logout_alert_msg": "هل أنت متأكد من تسجيل الخروج؟",
 
   // View
   "SettingsView_language_label": "اللغة",
-  "SettingsView_terms_and_conditions_label": "الشروط والأحكام",
-  "SettingsView_about_us_label": "من نحن",
   "SettingsView_logout_label": "تسجيل الخروج",
-  "SettingsView_select_language": "اختر اللغة",
-
   // Widgets
   "AppSettingDarkModeSwitch_dark_mode_label": "داكن",
   "AppSettingDarkModeSwitch_light_mode_label": "فاتح",
 
   // Tip Details → Controller
-  "TipDetailsController_missing_tip_msg": "النصيحة المطلوبة غير متوفرة.",
-
   // View
   "TipDetailsView_tip_details_title": "تفاصيل النصيحة",
   "TipDetailsView_empty_state_text": "لا تتوفر تفاصيل لهذه النصيحة.",
@@ -133,12 +84,9 @@ Map<String, String> ar = {
   "TipsController_fetch_failed_msg": "تعذّر جلب النصائح.",
 
   // View
-  "SearchOnTips_title": "البحث في النصائح",
-  "SearchOnTips_search_field_label": "ما النصائح التي تبحث عنها؟",
   "TipsView_empty_state_text": "لا توجد نصائح حاليًا. يرجى المحاولة لاحقًا.",
 
   // Widgets
-  "TipsHeader_tips_title": "النصائح",
   "TipsHeader_tips_hint": "إرشادات مفيدة للعناية بصحة طفلك ونموه.",
 
   // Enum → → →
@@ -215,7 +163,6 @@ Map<String, String> ar = {
 
   // Dose state actions:
   "LoginView_welcome_back": "مرحباً بعودتك",
-  "MedicalDatesView_add_custom_date": "إضافة موعد خاص",
   "SplashView_tagline": "رعاية • حماية • نمو",
   "AlertModel_field_required_msg": "حقل @field مطلوب.",
   // Countdown badge: one key per CLDR plural category (zero, one, two, few,
@@ -300,7 +247,6 @@ Map<String, String> ar = {
   "optional_suffix": "(اختياري)",
   "status_semantic_label": "الحالة: @status",
   "state_error_title": "حدث خطأ ما",
-  "state_empty_title": "لا يوجد شيء هنا بعد",
   "retry_label": "حاول مرة أخرى",
   "close_label": "إغلاق",
   "progress_semantic_label": "الجرعات المُعطاة: @done من @total",
@@ -469,7 +415,6 @@ Map<String, String> ar = {
   "Card_share": "مشاركة",
   "Card_print": "طباعة",
   "Card_failed": "تعذّر إنشاء البطاقة. الرجاء المحاولة مرة أخرى.",
-  "Card_preparing": "جارٍ تجهيز البطاقة…",
   // v1.1 home quick actions
   "HomeView_quick_actions": "اختصارات",
   // v1.1 growth tracker

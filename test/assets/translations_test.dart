@@ -1,6 +1,8 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/values/app_enum/vaccination_time_status_enum.dart';
 import 'package:baby_vax/app/core/values/languages/app_translations.dart';
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -38,6 +40,31 @@ void main() {
     expect(keys['ar']!['Pending'], 'قيد الانتظار');
     expect(keys['ar']!['MedicalDateActions_undo'], contains('قيد الانتظار'));
     expect(keys['ar']!['MedicalDateActions_undo'], isNot(contains('قادم')));
+  });
+
+  test('every key is used somewhere in lib/ (no dead translations)', () {
+    final String source = Directory('lib')
+        .listSync(recursive: true)
+        .whereType<File>()
+        .where(
+            (f) => f.path.endsWith('.dart') && !f.path.contains('/languages/'))
+        .map((f) => f.readAsStringSync())
+        .join('\n');
+    // Keys built at run time from a code or a plural category.
+    const List<String> dynamicPrefixes = <String>[
+      'Vaccine_',
+      'VaccinationTimeStatus_',
+      'age_months_',
+      'age_years_',
+    ];
+    final List<String> unused = keys['en']!
+        .keys
+        .where((k) =>
+            !dynamicPrefixes.any(k.startsWith) &&
+            !source.contains('"$k"') &&
+            !source.contains("'$k'"))
+        .toList();
+    expect(unused, isEmpty);
   });
 
   test('no empty translations', () {
