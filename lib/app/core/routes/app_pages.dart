@@ -5,6 +5,8 @@ import 'package:baby_vax/app/modules/home/view/home_view.dart';
 import 'package:baby_vax/app/modules/medical_date_details/binding/medical_date_details_binding.dart';
 import 'package:baby_vax/app/modules/medical_date_details/view/medical_date_details_view.dart';
 import 'package:baby_vax/app/modules/medical_dates/binding/medical_dates_binding.dart';
+import 'package:baby_vax/app/modules/growth/binding/growth_binding.dart';
+import 'package:baby_vax/app/modules/growth/view/growth_view.dart';
 import 'package:baby_vax/app/modules/onboarding/binding/onboarding_binding.dart';
 import 'package:baby_vax/app/modules/onboarding/view/onboarding_view.dart';
 import 'package:baby_vax/app/modules/setting/binding/setting_binding.dart';
@@ -79,5 +81,9 @@ class AppPages {
         route: AppRoutes.onboarding,
         page: () => const OnboardingView(),
         binding: OnboardingBinding()),
+    build(
+        route: AppRoutes.growth,
+        page: () => const GrowthView(),
+        binding: GrowthBinding()),
   ];
 }

@@ -12,4 +12,5 @@ class AppRoutes {
   static const String editUser = "/edit_user";
   static const String splash = "/splash";
   static const String onboarding = "/onboarding";
+  static const String growth = "/growth";
 }

@@ -79,13 +79,19 @@ class HomeView extends GetView<HomeController> {
             label: "Card_export".tr,
             onTap: controller.openVaccinationCard,
           ),
+          QuickAction(
+            key: const Key('home_action_growth'),
+            icon: Icons.show_chart_rounded,
+            label: "Growth_title".tr,
+            onTap: controller.openGrowth,
+          ),
         ]),
         AppSectionHeader(
           title: "HomeView_measurements_title".tr,
-          actionLabel: "edit_label".tr,
-          onAction: controller.openEditProfile,
+          actionLabel: "Growth_title".tr,
+          onAction: controller.openGrowth,
         ),
-        _Measurements(user: user, onTap: controller.openEditProfile),
+        _Measurements(user: user, onTap: controller.openGrowth),
         AppSectionHeader(title: "HomeView_profile_title".tr),
         AppListGroup(children: <Widget>[
           AppListRow(

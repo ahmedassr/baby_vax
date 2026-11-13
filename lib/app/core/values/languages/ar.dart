@@ -472,4 +472,36 @@ Map<String, String> ar = {
   "Card_preparing": "جارٍ تجهيز البطاقة…",
   // v1.1 home quick actions
   "HomeView_quick_actions": "اختصارات",
+  // v1.1 growth tracker
+  "Growth_title": "النمو",
+  "Growth_add": "إضافة قياس",
+  "Growth_add_title": "إضافة قياس",
+  "Growth_edit_title": "تعديل القياس",
+  "Growth_sheet_hint":
+      "أدخل أيّاً من القياسات الثلاثة، من العيادة أو من ميزانك الخاص.",
+  "Growth_date": "تاريخ القياس",
+  "Growth_need_one_value": "أدخل قياساً واحداً على الأقل.",
+  "Growth_delete": "حذف القياس",
+  "Growth_delete_confirm": "هل تريد حذف هذا القياس؟",
+  "Growth_save_failed": "تعذّر حفظ القياس. الرجاء المحاولة مرة أخرى.",
+  "Growth_history": "السجل",
+  "Growth_empty_title": "لا توجد قياسات بعد",
+  "Growth_empty_body":
+      "أضف الوزن أو الطول أو محيط الرأس من زيارة العيادة لبدء المخطط.",
+  "Growth_axis_months": "العمر (أشهر)",
+  "Growth_no_value_for_metric": "لا يوجد قياس من هذا النوع بعد.",
+  "Growth_reading_around": "حول المئين @ord",
+  "Growth_reading_below": "أقل من المئين 3",
+  "Growth_reading_above": "أعلى من المئين 97",
+  "Growth_reading_note":
+      "المئينات تقارن طفلك بأطفال مرجعيين من منظمة الصحة العالمية بنفس العمر والجنس. وهي ليست تشخيصاً: قراءة واحدة لا تعني الكثير وحدها، لذا تحدّث مع طبيبك عن أي قلق.",
+  "Growth_over_five":
+      "معايير النمو المستخدمة هنا من منظمة الصحة العالمية تغطي من الولادة حتى 5 سنوات، لذلك لا يظهر مئين لهذا القياس.",
+  "Growth_no_sex":
+      "أضف جنس طفلك في الملف للمقارنة مع معايير النمو لمنظمة الصحة العالمية.",
+  "Growth_legend":
+      "الخطوط: المئينات 3 و15 و50 و85 و97 لمنظمة الصحة العالمية. النقاط: قياساتك.",
+  "Growth_attribution":
+      "منحنيات المرجع: معايير نمو الطفل لمنظمة الصحة العالمية (2006). الترخيص: CC BY-NC-SA 3.0 IGO.",
+  "Growth_chart_semantic": "مخطط @metric، عدد القياسات: @count",
 };

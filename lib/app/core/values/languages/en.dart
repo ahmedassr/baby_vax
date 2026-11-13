@@ -432,4 +432,36 @@ Map<String, String> en = {
   "Card_preparing": "Preparing the card…",
   // v1.1 home quick actions
   "HomeView_quick_actions": "Quick actions",
+  // v1.1 growth tracker
+  "Growth_title": "Growth",
+  "Growth_add": "Add measurement",
+  "Growth_add_title": "Add a measurement",
+  "Growth_edit_title": "Edit measurement",
+  "Growth_sheet_hint":
+      "Fill in any of the three, from the clinic or your own scale.",
+  "Growth_date": "Date measured",
+  "Growth_need_one_value": "Enter at least one measurement.",
+  "Growth_delete": "Delete measurement",
+  "Growth_delete_confirm": "Delete this measurement?",
+  "Growth_save_failed": "The measurement could not be saved. Please try again.",
+  "Growth_history": "History",
+  "Growth_empty_title": "No measurements yet",
+  "Growth_empty_body":
+      "Add the weight, height or head size from a clinic visit to start the chart.",
+  "Growth_axis_months": "Age (months)",
+  "Growth_no_value_for_metric": "No measurement of this kind yet.",
+  "Growth_reading_around": "Around the @ord percentile",
+  "Growth_reading_below": "Below the 3rd percentile",
+  "Growth_reading_above": "Above the 97th percentile",
+  "Growth_reading_note":
+      "Percentiles compare your baby with WHO reference children of the same age and sex. They are not a diagnosis: one reading means little on its own, so talk to your doctor about any concern.",
+  "Growth_over_five":
+      "The WHO growth standards used here cover birth to 5 years, so no percentile is shown for this measurement.",
+  "Growth_no_sex":
+      "Add your baby's sex in the profile to compare with the WHO growth standards.",
+  "Growth_legend":
+      "Lines: WHO 3rd, 15th, 50th, 85th and 97th percentiles. Dots: your measurements.",
+  "Growth_attribution":
+      "Reference curves: WHO Child Growth Standards (2006). Licence: CC BY-NC-SA 3.0 IGO.",
+  "Growth_chart_semantic": "@metric chart, measurements: @count",
 };

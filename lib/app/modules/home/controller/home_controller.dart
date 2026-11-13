@@ -145,6 +145,9 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
     Get.toNamed(AppRoutes.editUser);
   }
 
+  /// Opens the growth tracker.
+  void openGrowth() => Get.toNamed(AppRoutes.growth);
+
   /// Opens the vaccination card sheet (share or print the PDF).
   void openVaccinationCard() => VaccinationCardSheet.show();
 

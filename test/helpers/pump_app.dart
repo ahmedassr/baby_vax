@@ -97,6 +97,7 @@ const List<String> stubRoutes = <String>[
   AppRoutes.editUser,
   AppRoutes.splash,
   AppRoutes.onboarding,
+  AppRoutes.growth,
 ];
 
 /// The stub page a navigation in a test lands on.
