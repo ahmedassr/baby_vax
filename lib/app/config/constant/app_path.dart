@@ -32,5 +32,6 @@ class AppPath {
   static List<String> userSubcollections(String uid) => <String>[
         userMedicalDates(uid),
         userMeasurements(uid),
+        userReminders(uid),
       ];
 }

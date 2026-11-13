@@ -6,6 +6,7 @@ rules_version = '2';
 //   users/{userId}                      - the child's profile
 //   users/{userId}/medical_dates/{id}   - that child's vaccination schedule
 //   users/{userId}/measurements/{id}    - dated growth measurements (v1.1)
+//   users/{userId}/reminders/{id}       - the parent's own reminders (v1.1)
 //   tips/{id}, tips_en/{id}             - app content, read-only for clients
 //
 // Default is deny: the final catch-all rejects every path not named here, so a
@@ -154,6 +155,29 @@ service cloud.firestore {
       allow get, list: if isOwner(userId);
       allow create, update: if isOwner(userId)
                             && isValidMeasurement(incoming());
+      allow delete: if isOwner(userId);
+    }
+
+    // ---- reminders (v1.1 custom reminders and appointments) -------------
+    //
+    // users/{userId}/reminders/{id}: scheduled on the device only; the
+    // document is the source the phone rebuilds its notifications from.
+
+    function isValidReminder(data) {
+      return data.keys().hasOnly(['title', 'note', 'dateTime', 'repeat', 'enabled'])
+             && data.keys().hasAll(['title', 'dateTime', 'repeat', 'enabled'])
+             && isShortString(data.title, 100)
+             && data.title.size() > 0
+             && isOptionalShortString(data, 'note', 500)
+             && data.dateTime is timestamp
+             && data.repeat in ['none', 'daily', 'weekly', 'monthly']
+             && data.enabled is bool;
+    }
+
+    match /users/{userId}/reminders/{reminderId} {
+      allow get, list: if isOwner(userId);
+      allow create, update: if isOwner(userId)
+                            && isValidReminder(incoming());
       allow delete: if isOwner(userId);
     }
 

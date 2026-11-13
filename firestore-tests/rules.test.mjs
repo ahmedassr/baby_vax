@@ -546,6 +546,81 @@ describe('users/{userId}/measurements/{id} — v1.1 growth', () => {
   });
 });
 
+describe('users/{userId}/reminders/{id} — v1.1 custom reminders', () => {
+  const path = (uid) => `users/${uid}/reminders`;
+  const valid = (overrides = {}) => ({
+    title: 'Vitamin D drops',
+    note: '1 drop with the morning feed',
+    dateTime: Timestamp.fromDate(new Date('2026-12-01T08:30:00Z')),
+    repeat: 'daily',
+    enabled: true,
+    ...overrides,
+  });
+
+  it('lets the owner add, read, list, edit and delete', async () => {
+    const db = asUser(ALICE);
+    await assertSucceeds(setDoc(doc(db, `${path(ALICE)}/r1`), valid()));
+    await assertSucceeds(getDoc(doc(db, `${path(ALICE)}/r1`)));
+    await assertSucceeds(getDocs(collection(db, path(ALICE))));
+    await assertSucceeds(updateDoc(doc(db, `${path(ALICE)}/r1`), { enabled: false }));
+    await assertSucceeds(deleteDoc(doc(db, `${path(ALICE)}/r1`)));
+  });
+
+  for (const repeat of ['none', 'daily', 'weekly', 'monthly']) {
+    it(`accepts repeat "${repeat}"`, async () => {
+      await assertSucceeds(
+        setDoc(doc(asUser(ALICE), `${path(ALICE)}/r1`), valid({ repeat })),
+      );
+    });
+  }
+
+  it('accepts a reminder without a note', async () => {
+    await assertSucceeds(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/r1`), without(valid(), 'note')),
+    );
+  });
+
+  for (const field of ['title', 'dateTime', 'repeat', 'enabled']) {
+    it(`denies a reminder without ${field}`, async () => {
+      await assertFails(
+        setDoc(doc(asUser(ALICE), `${path(ALICE)}/r1`), without(valid(), field)),
+      );
+    });
+  }
+
+  for (const [field, bad] of [
+    ['title', ''], ['title', 'x'.repeat(101)], ['title', 7],
+    ['note', 'x'.repeat(501)],
+    ['dateTime', '2026-12-01'],
+    ['repeat', 'yearly'], ['repeat', 1],
+    ['enabled', 'yes'],
+  ]) {
+    it(`denies ${field} = ${JSON.stringify(bad).slice(0, 20)}`, async () => {
+      await assertFails(
+        setDoc(doc(asUser(ALICE), `${path(ALICE)}/r1`), valid({ [field]: bad })),
+      );
+    });
+  }
+
+  it('denies unknown fields', async () => {
+    await assertFails(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/r1`), valid({ sound: 'loud' })),
+    );
+  });
+
+  it("denies reading or writing another user's reminders", async () => {
+    await seed((db) => setDoc(doc(db, `${path(ALICE)}/r1`), valid()));
+    await assertFails(getDoc(doc(asUser(BOB), `${path(ALICE)}/r1`)));
+    await assertFails(getDocs(collection(asUser(BOB), path(ALICE))));
+    await assertFails(setDoc(doc(asUser(BOB), `${path(ALICE)}/r2`), valid()));
+    await assertFails(deleteDoc(doc(asUser(BOB), `${path(ALICE)}/r1`)));
+  });
+
+  it('denies a signed-out client', async () => {
+    await assertFails(setDoc(doc(asAnon(), `${path(ALICE)}/r1`), valid()));
+  });
+});
+
 describe('sign-up batch', () => {
   // Sign-up writes the profile and the whole generated schedule in one
   // batch with client-generated ids (FireStoreHelperService.commitSets).
