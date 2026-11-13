@@ -1,7 +1,7 @@
 class AppImage {
-  /// The app icon, as shown on the splash and login screens. A lossless WebP
-  /// of assets/appIcon.png, which stays as the launcher-icon source.
-  static const String appIcon = "assets/appIcon.webp";
+  /// The Baby Vax mark, as shown on the splash, onboarding and login
+  /// screens. A lossless WebP export of `assets/branding/logo.svg`.
+  static const String appLogo = "assets/app_logo.webp";
 }
 
 class AppAnimations {

@@ -1,33 +1,109 @@
 import 'package:baby_vax/app/core/service/account_deletion_service.dart';
 
 import '../../../core/imports/import_manger.dart';
+import '../../../core/notification/data/notification_settings_opener.dart';
+import '../../../core/utils/app_haptics.dart';
+import '../../home/controller/home_controller.dart';
+import '../../tips/controller/tips_controller.dart';
 import '../widget/delete_account_dialog.dart';
 
+/// Appearance, language, reminders, about, and the account actions.
 class SettingsController extends GetxController {
-  var isDarkMode = false.obs;
+  SettingsController({
+    Future<void> Function(String key, dynamic value)? write,
+    void Function(String key)? remove,
+    Future<bool> Function()? notificationsEnabled,
+    NotificationSettingsOpener settingsOpener =
+        const NotificationSettingsOpener(),
+    Future<void> Function(Locale locale)? applyLocale,
+  })  : _write = write ?? _storageWrite,
+        _applyLocale = applyLocale ?? Get.updateLocale,
+        _remove = remove ?? _storageRemove,
+        _notificationsEnabled =
+            notificationsEnabled ?? _coordinatorNotificationsEnabled,
+        _settingsOpener = settingsOpener;
+
+  final Future<void> Function(String key, dynamic value) _write;
+  final void Function(String key) _remove;
+  final Future<bool> Function() _notificationsEnabled;
+  final NotificationSettingsOpener _settingsOpener;
+  final Future<void> Function(Locale locale) _applyLocale;
+
+  static Future<void> _storageWrite(String key, dynamic value) =>
+      AppConstant.getStorage.write(key, value);
+  static void _storageRemove(String key) => AppConstant.getStorage.remove(key);
+
+  static Future<bool> _coordinatorNotificationsEnabled() async {
+    if (!Get.isRegistered<NotificationCoordinator>()) return true;
+    return Get.find<NotificationCoordinator>().notificationsEnabled();
+  }
+
+  /// System, light or dark. v1.0 had only a light/dark switch, so a parent
+  /// who had once touched it could never go back to following the system.
+  final Rx<ThemeMode> themeMode = ThemeMode.system.obs;
+
   final RxBool isDeletingAccount = false.obs;
-  var currentLanguage = (Get.locale?.languageCode ?? 'en').obs;
-  var locale = Get.locale?.languageCode;
+
+  /// "en" or "ar".
+  final RxString currentLanguage = (Get.locale?.languageCode ?? 'en').obs;
+
+  /// Whether reminders can be shown (OS notification setting).
+  final RxBool notificationsOn = true.obs;
 
   @override
   void onInit() {
     super.onInit();
-    loadThemePreference();
-    currentLanguage.value = AppConstant.getStorage.read("language") ?? 'en';
+    final bool? saved = _readDarkMode();
+    themeMode.value = AppTheme.themeModeFor(saved);
+    currentLanguage.value = Get.locale?.languageCode ?? 'en';
+    refreshNotificationStatus();
   }
 
-  /// Until the user picks a theme the app follows the system, and the
-  /// switch shows what the system is using.
-  Future<void> loadThemePreference() async {
-    final bool? saved = AppConstant.getStorage.read(StorageKey.isDarkModeKey);
-    isDarkMode.value = saved ?? Get.isPlatformDarkMode;
-    Get.changeThemeMode(AppTheme.themeModeFor(saved));
+  static bool? _readDarkMode() {
+    try {
+      return AppConstant.getStorage.read(StorageKey.isDarkModeKey) as bool?;
+    } catch (_) {
+      // Storage not registered (widget tests).
+      return null;
+    }
   }
 
-  Future<void> toggleDarkMode(bool value) async {
-    isDarkMode(value);
-    Get.changeThemeMode(value ? ThemeMode.dark : ThemeMode.light);
-    await AppConstant.getStorage.write(StorageKey.isDarkModeKey, value);
+  Future<void> refreshNotificationStatus() async {
+    try {
+      notificationsOn.value = await _notificationsEnabled();
+    } catch (_) {
+      notificationsOn.value = true;
+    }
+  }
+
+  Future<void> openNotificationSettings() async {
+    await _settingsOpener.open();
+  }
+
+  /// Stores the choice: nothing for "system", so the app keeps following
+  /// the phone; a bool for light or dark.
+  Future<void> setThemeMode(ThemeMode mode) async {
+    themeMode.value = mode;
+    Get.changeThemeMode(mode);
+    AppHaptics.selection();
+    if (mode == ThemeMode.system) {
+      _remove(StorageKey.isDarkModeKey);
+    } else {
+      await _write(StorageKey.isDarkModeKey, mode == ThemeMode.dark);
+    }
+  }
+
+  /// Switches to [lang] ("en" or "ar"). v1.0's version toggled whatever
+  /// was current, so tapping "English" while in English switched to Arabic.
+  Future<void> changeLanguage(String lang) async {
+    if (lang == currentLanguage.value) return;
+    currentLanguage.value = lang;
+    await _applyLocale(Locale(lang));
+    await _write(StorageKey.languageKey, lang);
+    // Tips come from a per-language collection.
+    if (Get.isRegistered<TipsController>()) {
+      Get.find<TipsController>().fetchTips();
+    }
   }
 
   void onLogout() {
@@ -40,10 +116,21 @@ class SettingsController extends GetxController {
           await Get.find<NotificationCoordinator>().cancelAllReminders();
           await FirebaseAuth.instance.signOut();
           SessionManager.uId = "";
-          AppConstant.getStorage.clear();
-          Get.toNamed(AppRoutes.login);
+          await AppConstant.getStorage.clearUserData();
+          // The tabs' controllers are permanent; drop the signed-out
+          // parent's data so the next account never sees it, even briefly.
+          if (Get.isRegistered<HomeController>()) {
+            Get.find<HomeController>().clearSession();
+          }
+          if (Get.isRegistered<MedicalDatesController>()) {
+            Get.find<MedicalDatesController>().doses.clear();
+          }
+          // Replace the stack, so Back cannot return to the signed-in tabs.
+          Get.offAllNamed(AppRoutes.login);
         },
-        noAction: () => Get.back()));
+        // The dialog closes itself. v1.0 also called Get.back() here, which
+        // closed the screen behind the dialog as well.
+        noAction: () {}));
   }
 
   /// Play policy requires an in-app way to delete the account and its data.
@@ -67,7 +154,12 @@ class SettingsController extends GetxController {
 
       AppConstant.alertService.showAlert(AlertModel.success(
         message: "DeleteAccount_success_msg".tr,
-        yesAction: () => Get.offAllNamed(AppRoutes.login),
+        yesAction: () {
+          if (Get.isRegistered<HomeController>()) {
+            Get.find<HomeController>().clearSession();
+          }
+          Get.offAllNamed(AppRoutes.login);
+        },
       ));
     } on AccountDeletionException catch (e) {
       logger.w('Account deletion failed: ${e.error}', error: e.cause);
@@ -97,14 +189,5 @@ class SettingsController extends GetxController {
       case AccountDeletionError.unknown:
         return "DeleteAccount_unknown_error_msg".tr;
     }
-  }
-
-  Future changeLanguage() async {
-    String newLang = currentLanguage.value == "ar" ? "en" : "ar";
-    Locale newLocale =
-        newLang == "ar" ? const Locale('ar', 'SA') : const Locale('en', 'US');
-    Get.updateLocale(newLocale);
-    currentLanguage.value = newLang;
-    await AppConstant.getStorage.write(StorageKey.languageKey, newLang);
   }
 }

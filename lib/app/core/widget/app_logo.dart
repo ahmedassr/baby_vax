@@ -1,27 +1,21 @@
 import 'package:baby_vax/app/core/imports/import_core.dart';
 import 'package:baby_vax/app/core/imports/import_library.dart';
 
-import '../../config/themes/app_colors.dart';
-
+/// The Baby Vax mark, read by TalkBack as the app name.
 class AppLogo extends StatelessWidget {
-  const AppLogo({super.key});
+  const AppLogo({super.key, this.size = 88});
+
+  /// Height of the mark. Its width follows the artwork's 5:6 aspect.
+  final double size;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: AppColors.primary.withValues(alpha: 0.08),
-        ),
-        padding: const EdgeInsets.all(18),
-        // The real icon in its own colours. This was an ImageIcon pointed at
-        // a Lottie JSON file, which cannot decode as an image, so the login
-        // screen showed an empty circle.
-        child: Image.asset(
-          AppImage.appIcon,
-          width: 100,
-          height: 100,
-          semanticLabel: 'Baby Vax',
-        ));
+    return Image.asset(
+      AppImage.appLogo,
+      height: size,
+      width: size * 5 / 6,
+      fit: BoxFit.contain,
+      semanticLabel: 'Baby Vax',
+    );
   }
 }

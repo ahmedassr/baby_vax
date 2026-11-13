@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Android adaptive-icon foreground layer. flutter_launcher_icons draws this
+  with a 16% inset, i.e. into the central 68% of the 108dp canvas, so the
+  mark is scaled up here (1.09) to land inside the 66dp safe zone once inset;
+  no launcher mask can clip it. Drawn over a solid #2E7324 background layer
+  (adaptive_icon_background in pubspec.yaml).
+  Same artwork as app-icon.svg, scaled to the safe zone.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="432" height="432">
+  <g transform="translate(54 54.5) scale(1.09) translate(-54 -54.5)">
+    <path d="M54 22 C62.5 27.5 71 29.5 79 29.5 L79 51 C79 68.5 68.5 80.5 54 87 C39.5 80.5 29 68.5 29 51 L29 29.5 C37 29.5 45.5 27.5 54 22 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M41 70 C40 51.5 50.5 40 69 38.5 C70 57 59 68.5 41 70 Z" fill="#42A332"/>
+    <path d="M41 70 C40 51.5 50.5 40 69 38.5 C58 47 48.5 57.5 41 70 Z" fill="#2E7324"/>
+    <path d="M43.5 67.5 C50 58 57.5 50 66.5 41.5" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
+  </g>
+</svg>

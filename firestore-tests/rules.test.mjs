@@ -14,6 +14,7 @@ import {
 import {
   collection,
   deleteDoc,
+  deleteField,
   doc,
   getDoc,
   getDocs,
@@ -140,6 +141,49 @@ describe('users/{userId}', () => {
       }),
     );
   });
+
+  // v1.1: optional `sex` for the growth charts.
+  it('accepts a v1.0 profile with no sex field (existing users stay valid)', async () => {
+    await assertSucceeds(
+      setDoc(doc(asUser(ALICE), `users/${ALICE}`), validUser(ALICE)),
+    );
+    await seed((db) => setDoc(doc(db, `users/${ALICE}`), validUser(ALICE)));
+    // And an edit that does not touch it still passes.
+    await assertSucceeds(
+      updateDoc(doc(asUser(ALICE), `users/${ALICE}`), { name: 'Lina M.' }),
+    );
+  });
+
+  for (const sex of ['female', 'male']) {
+    it(`accepts sex "${sex}"`, async () => {
+      await assertSucceeds(
+        setDoc(doc(asUser(ALICE), `users/${ALICE}`), {
+          ...validUser(ALICE),
+          sex,
+        }),
+      );
+    });
+  }
+
+  it('accepts sex set back to null', async () => {
+    await seed((db) =>
+      setDoc(doc(db, `users/${ALICE}`), { ...validUser(ALICE), sex: 'female' }),
+    );
+    await assertSucceeds(
+      updateDoc(doc(asUser(ALICE), `users/${ALICE}`), { sex: null }),
+    );
+  });
+
+  for (const sex of ['F', 'other', '', 1, true]) {
+    it(`denies sex ${JSON.stringify(sex)}`, async () => {
+      await assertFails(
+        setDoc(doc(asUser(ALICE), `users/${ALICE}`), {
+          ...validUser(ALICE),
+          sex,
+        }),
+      );
+    });
+  }
 
   it('lets the owner delete their profile, as account deletion needs', async () => {
     await seed((db) => setDoc(doc(db, `users/${ALICE}`), validUser(ALICE)));
@@ -296,6 +340,284 @@ describe('users/{userId}/medical_dates/{id}', () => {
     await assertFails(
       updateDoc(doc(asUser(BOB), `${path(ALICE)}/v1`), { state: 'Skipped' }),
     );
+  });
+});
+
+describe('users/{userId}/medical_dates/{id} — v1.1 dose record', () => {
+  const path = (uid) => `users/${uid}/medical_dates`;
+  const record = {
+    givenDate: Timestamp.fromDate(new Date('2026-03-16T00:00:00Z')),
+    clinic: 'Ramallah MCH clinic',
+    lot: 'AB1234',
+    note: 'Slight fever that evening.',
+  };
+
+  it('existing v1.0 doses (no record fields) still pass an update', async () => {
+    await seed((db) =>
+      setDoc(doc(db, `${path(ALICE)}/v1`), validMedicalDate()),
+    );
+    await assertSucceeds(
+      updateDoc(doc(asUser(ALICE), `${path(ALICE)}/v1`), { state: 'Skipped' }),
+    );
+  });
+
+  it('marking given with a full record passes', async () => {
+    await seed((db) =>
+      setDoc(doc(db, `${path(ALICE)}/v1`), validMedicalDate()),
+    );
+    await assertSucceeds(
+      updateDoc(doc(asUser(ALICE), `${path(ALICE)}/v1`), {
+        state: 'Completed',
+        ...record,
+      }),
+    );
+  });
+
+  for (const field of Object.keys(record)) {
+    it(`a record with only ${field} passes`, async () => {
+      await assertSucceeds(
+        setDoc(
+          doc(asUser(ALICE), `${path(ALICE)}/v1`),
+          validMedicalDate({ state: 'Completed', [field]: record[field] }),
+        ),
+      );
+    });
+  }
+
+  it('undo removes the record in the same write', async () => {
+    await seed((db) =>
+      setDoc(
+        doc(db, `${path(ALICE)}/v1`),
+        validMedicalDate({ state: 'Completed', ...record }),
+      ),
+    );
+    await assertSucceeds(
+      updateDoc(doc(asUser(ALICE), `${path(ALICE)}/v1`), {
+        state: 'Pending',
+        givenDate: deleteField(),
+        clinic: deleteField(),
+        lot: deleteField(),
+        note: deleteField(),
+      }),
+    );
+  });
+
+  it('a v1.0 client undoing a recorded dose (state only) is not rejected', async () => {
+    // v1.0 builds write only { state }. The record stays behind on the
+    // document; v1.1 ignores it on a pending dose and clears it next time.
+    await seed((db) =>
+      setDoc(
+        doc(db, `${path(ALICE)}/v1`),
+        validMedicalDate({ state: 'Completed', ...record }),
+      ),
+    );
+    await assertSucceeds(
+      updateDoc(doc(asUser(ALICE), `${path(ALICE)}/v1`), { state: 'Pending' }),
+    );
+  });
+
+  it('denies a givenDate that is not a timestamp', async () => {
+    await assertFails(
+      setDoc(
+        doc(asUser(ALICE), `${path(ALICE)}/v1`),
+        validMedicalDate({ state: 'Completed', givenDate: '2026-03-16' }),
+      ),
+    );
+  });
+
+  for (const [field, max] of [['clinic', 120], ['lot', 60], ['note', 500]]) {
+    it(`denies an oversized ${field}`, async () => {
+      await assertFails(
+        setDoc(
+          doc(asUser(ALICE), `${path(ALICE)}/v1`),
+          validMedicalDate({ state: 'Completed', [field]: 'x'.repeat(max + 1) }),
+        ),
+      );
+    });
+
+    it(`denies a non-string ${field}`, async () => {
+      await assertFails(
+        setDoc(
+          doc(asUser(ALICE), `${path(ALICE)}/v1`),
+          validMedicalDate({ state: 'Completed', [field]: 42 }),
+        ),
+      );
+    });
+  }
+
+  it("denies writing a record on another user's dose", async () => {
+    await seed((db) =>
+      setDoc(doc(db, `${path(ALICE)}/v1`), validMedicalDate()),
+    );
+    await assertFails(
+      updateDoc(doc(asUser(BOB), `${path(ALICE)}/v1`), {
+        state: 'Completed',
+        ...record,
+      }),
+    );
+  });
+});
+
+describe('users/{userId}/measurements/{id} — v1.1 growth', () => {
+  const path = (uid) => `users/${uid}/measurements`;
+  const valid = (overrides = {}) => ({
+    date: Timestamp.fromDate(new Date('2026-03-16T00:00:00Z')),
+    weightKg: 4.2,
+    heightCm: 55.5,
+    headCm: 38,
+    note: 'Clinic visit',
+    ...overrides,
+  });
+
+  it('lets the owner add, read, list, edit and delete', async () => {
+    const db = asUser(ALICE);
+    await assertSucceeds(setDoc(doc(db, `${path(ALICE)}/m1`), valid()));
+    await assertSucceeds(getDoc(doc(db, `${path(ALICE)}/m1`)));
+    await assertSucceeds(getDocs(collection(db, path(ALICE))));
+    await assertSucceeds(updateDoc(doc(db, `${path(ALICE)}/m1`), { weightKg: 4.3 }));
+    await assertSucceeds(deleteDoc(doc(db, `${path(ALICE)}/m1`)));
+  });
+
+  for (const only of ['weightKg', 'heightCm', 'headCm']) {
+    it(`accepts a measurement with only ${only}`, async () => {
+      const m = { date: valid().date, [only]: valid()[only] };
+      await assertSucceeds(setDoc(doc(asUser(ALICE), `${path(ALICE)}/m1`), m));
+    });
+  }
+
+  it('accepts whole numbers (Firestore integers)', async () => {
+    await assertSucceeds(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/m1`), valid({ weightKg: 4 })),
+    );
+  });
+
+  it('denies a measurement with no values', async () => {
+    await assertFails(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/m1`), { date: valid().date }),
+    );
+  });
+
+  it('denies a measurement with no date', async () => {
+    await assertFails(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/m1`), without(valid(), 'date')),
+    );
+  });
+
+  it('denies a date that is not a timestamp', async () => {
+    await assertFails(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/m1`), valid({ date: '2026-03-16' })),
+    );
+  });
+
+  for (const [field, bad] of [
+    ['weightKg', 3400], ['weightKg', 0], ['weightKg', '4.2'],
+    ['heightCm', 2000], ['heightCm', 5],
+    ['headCm', 100], ['headCm', -1],
+  ]) {
+    it(`denies ${field} = ${JSON.stringify(bad)}`, async () => {
+      await assertFails(
+        setDoc(doc(asUser(ALICE), `${path(ALICE)}/m1`), valid({ [field]: bad })),
+      );
+    });
+  }
+
+  it('denies an oversized note', async () => {
+    await assertFails(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/m1`), valid({ note: 'x'.repeat(501) })),
+    );
+  });
+
+  it('denies unknown fields', async () => {
+    await assertFails(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/m1`), valid({ bmi: 14 })),
+    );
+  });
+
+  it("denies reading or writing another user's measurements", async () => {
+    await seed((db) => setDoc(doc(db, `${path(ALICE)}/m1`), valid()));
+    await assertFails(getDoc(doc(asUser(BOB), `${path(ALICE)}/m1`)));
+    await assertFails(getDocs(collection(asUser(BOB), path(ALICE))));
+    await assertFails(setDoc(doc(asUser(BOB), `${path(ALICE)}/m2`), valid()));
+    await assertFails(deleteDoc(doc(asUser(BOB), `${path(ALICE)}/m1`)));
+  });
+
+  it('denies a signed-out client', async () => {
+    await assertFails(setDoc(doc(asAnon(), `${path(ALICE)}/m1`), valid()));
+  });
+});
+
+describe('users/{userId}/reminders/{id} — v1.1 custom reminders', () => {
+  const path = (uid) => `users/${uid}/reminders`;
+  const valid = (overrides = {}) => ({
+    title: 'Vitamin D drops',
+    note: '1 drop with the morning feed',
+    dateTime: Timestamp.fromDate(new Date('2026-12-01T08:30:00Z')),
+    repeat: 'daily',
+    enabled: true,
+    ...overrides,
+  });
+
+  it('lets the owner add, read, list, edit and delete', async () => {
+    const db = asUser(ALICE);
+    await assertSucceeds(setDoc(doc(db, `${path(ALICE)}/r1`), valid()));
+    await assertSucceeds(getDoc(doc(db, `${path(ALICE)}/r1`)));
+    await assertSucceeds(getDocs(collection(db, path(ALICE))));
+    await assertSucceeds(updateDoc(doc(db, `${path(ALICE)}/r1`), { enabled: false }));
+    await assertSucceeds(deleteDoc(doc(db, `${path(ALICE)}/r1`)));
+  });
+
+  for (const repeat of ['none', 'daily', 'weekly', 'monthly']) {
+    it(`accepts repeat "${repeat}"`, async () => {
+      await assertSucceeds(
+        setDoc(doc(asUser(ALICE), `${path(ALICE)}/r1`), valid({ repeat })),
+      );
+    });
+  }
+
+  it('accepts a reminder without a note', async () => {
+    await assertSucceeds(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/r1`), without(valid(), 'note')),
+    );
+  });
+
+  for (const field of ['title', 'dateTime', 'repeat', 'enabled']) {
+    it(`denies a reminder without ${field}`, async () => {
+      await assertFails(
+        setDoc(doc(asUser(ALICE), `${path(ALICE)}/r1`), without(valid(), field)),
+      );
+    });
+  }
+
+  for (const [field, bad] of [
+    ['title', ''], ['title', 'x'.repeat(101)], ['title', 7],
+    ['note', 'x'.repeat(501)],
+    ['dateTime', '2026-12-01'],
+    ['repeat', 'yearly'], ['repeat', 1],
+    ['enabled', 'yes'],
+  ]) {
+    it(`denies ${field} = ${JSON.stringify(bad).slice(0, 20)}`, async () => {
+      await assertFails(
+        setDoc(doc(asUser(ALICE), `${path(ALICE)}/r1`), valid({ [field]: bad })),
+      );
+    });
+  }
+
+  it('denies unknown fields', async () => {
+    await assertFails(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/r1`), valid({ sound: 'loud' })),
+    );
+  });
+
+  it("denies reading or writing another user's reminders", async () => {
+    await seed((db) => setDoc(doc(db, `${path(ALICE)}/r1`), valid()));
+    await assertFails(getDoc(doc(asUser(BOB), `${path(ALICE)}/r1`)));
+    await assertFails(getDocs(collection(asUser(BOB), path(ALICE))));
+    await assertFails(setDoc(doc(asUser(BOB), `${path(ALICE)}/r2`), valid()));
+    await assertFails(deleteDoc(doc(asUser(BOB), `${path(ALICE)}/r1`)));
+  });
+
+  it('denies a signed-out client', async () => {
+    await assertFails(setDoc(doc(asAnon(), `${path(ALICE)}/r1`), valid()));
   });
 });
 

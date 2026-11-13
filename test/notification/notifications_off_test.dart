@@ -75,14 +75,11 @@ void main() {
   testWidgets('banner shows the message and opens settings', (tester) async {
     Get.addTranslations(AppTranslations().keys);
     int taps = 0;
-    await tester.pumpWidget(ScreenUtilInit(
-      designSize: const Size(390, 844),
-      builder: (_, __) => GetMaterialApp(
-        locale: const Locale('en'),
-        translationsKeys: AppTranslations().keys,
-        home: Scaffold(
-          body: NotificationsOffBanner(onOpenSettings: () => taps++),
-        ),
+    await tester.pumpWidget(GetMaterialApp(
+      locale: const Locale('en'),
+      translationsKeys: AppTranslations().keys,
+      home: Scaffold(
+        body: NotificationsOffBanner(onOpenSettings: () => taps++),
       ),
     ));
     await tester.pump();

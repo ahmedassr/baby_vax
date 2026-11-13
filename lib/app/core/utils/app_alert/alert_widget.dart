@@ -1,5 +1,13 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
+import 'package:baby_vax/app/core/utils/app_alert/alert_type_enum.dart';
 
+/// The app's alert dialog, drawn from the theme.
+///
+/// v1.0 stacked up to three full-width filled buttons (all the same style,
+/// so "Cancel" looked as important as "Yes") and coloured the title by
+/// reading `Get.context?.isDarkMode`. Now: an icon for the alert type, the
+/// title, the message, and Material dialog actions — the confirming action
+/// filled, the others as text buttons.
 class AlertWidget extends StatelessWidget {
   final AlertModel alert;
 
@@ -7,80 +15,69 @@ class AlertWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Get.theme;
-    return Center(
-        child: AlertDialog(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      title: _buildTitle(theme),
-      content: _buildContent(theme),
-      actions: _buildActionButton(theme),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
+    final (IconData? icon, Color color) = switch (alert.type) {
+      AlertType.error || AlertType.fieldRequired => (
+          Icons.error_outline_rounded,
+          scheme.error
+        ),
+      AlertType.success => (Icons.check_circle_outline_rounded, scheme.primary),
+      AlertType.attention => (Icons.help_outline_rounded, scheme.secondary),
+      _ => (null, scheme.primary),
+    };
+
+    return AlertDialog(
+      icon: icon == null ? null : Icon(icon, color: color, size: 32),
+      title: (alert.title == null || alert.title!.isEmpty)
+          ? null
+          : Text(alert.title!, textAlign: TextAlign.center),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            if (alert.imagePath != null) ...<Widget>[
+              Image.asset(alert.imagePath!),
+              const SizedBox(height: AppSpacing.lg),
+            ],
+            Text(alert.message ?? "",
+                style: theme.textTheme.bodyLarge, textAlign: TextAlign.center),
+          ],
+        ),
       ),
-    ));
-  }
-
-  Widget? _buildTitle(ThemeData theme) {
-    if (alert.title == null || (alert.title?.isEmpty ?? true)) return null;
-    return AppText(
-      text: alert.title ?? "",
-      style: AppTextStyles.bodyMedium.copyWith(
-          color: (Get.context?.isDarkMode ?? false)
-              ? AppColors.backgroundLight
-              : AppColors.backgroundDark),
-      textAlign: TextAlign.center,
-    );
-  }
-
-  Widget? _buildContent(ThemeData theme) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (alert.imagePath != null) ...[
-          Image.asset(alert.imagePath ?? ""),
-          16.sbh
-        ],
-        AppText(
-          text: alert.message ?? "",
-          style: AppTextStyles.bodyLarge.copyWith(
-            color: theme.textTheme.bodyLarge?.color,
+      actionsAlignment: MainAxisAlignment.end,
+      actions: <Widget>[
+        if (alert.noAction != null)
+          TextButton(
+            key: const Key('alert_no'),
+            onPressed: () {
+              Get.back();
+              alert.noAction?.call();
+            },
+            child: Text(alert.noButtonText ?? "cancel".tr),
           ),
-          textAlign: TextAlign.center,
-          overflow: TextOverflow.visible,
+        if (alert.additionalAction != null)
+          TextButton(
+            onPressed: () {
+              Get.back();
+              alert.additionalAction?.call();
+            },
+            child: Text(alert.additionalButtonText ?? "cancel".tr),
+          ),
+        FilledButton(
+          key: const Key('alert_yes'),
+          style: FilledButton.styleFrom(
+            backgroundColor: scheme.primary,
+            foregroundColor: scheme.onPrimary,
+            minimumSize: const Size(88, AppSpacing.minTouchTarget),
+          ),
+          onPressed: () {
+            Get.back();
+            alert.yesAction?.call();
+          },
+          child: Text(alert.yesButtonText ?? "ok_label".tr),
         ),
       ],
     );
-  }
-
-  List<Widget> _buildActionButton(ThemeData theme) {
-    return [
-      AppButton(
-        text: alert.yesButtonText ?? 'OK',
-        onPressed: () {
-          Get.back();
-          alert.yesAction?.call();
-        },
-      ),
-      if (alert.additionalAction != null) ...[
-        16.sbh,
-        AppButton(
-          text: alert.additionalButtonText ?? 'Cancel',
-          onPressed: () {
-            Get.back();
-            alert.additionalAction?.call();
-          },
-        ),
-      ],
-      if (alert.noAction != null) ...[
-        16.sbh,
-        AppButton(
-          text: alert.noButtonText ?? 'Cancel',
-          onPressed: () {
-            Get.back();
-            alert.noAction?.call();
-          },
-        ),
-      ],
-    ];
   }
 }

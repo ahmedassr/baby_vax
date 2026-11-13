@@ -63,75 +63,35 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(414, 896),
-      builder: (context, _) {
-        return GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          initialBinding: AppBinding(),
-          title: "Baby Vax",
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: AppTheme.themeModeFor(isDarkMode),
-          initialRoute: AppRoutes.splash,
-          getPages: AppPages.routes,
-          locale: Locale(currentLanguage),
-          fallbackLocale: Locale(currentLanguage),
-          supportedLocales: const [
-            Locale("en"),
-            Locale("ar"),
-          ],
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          translations: AppTranslations(),
-        );
-      },
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialBinding: AppBinding(),
+      title: "Baby Vax",
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: AppTheme.themeModeFor(isDarkMode),
+      initialRoute: AppRoutes.splash,
+      getPages: AppPages.routes,
+      locale: Locale(currentLanguage),
+      fallbackLocale: Locale(currentLanguage),
+      supportedLocales: const [
+        Locale("en"),
+        Locale("ar"),
+      ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      translations: AppTranslations(),
+      // Every screen honours the phone's font size up to 1.3x, the largest
+      // the layouts are tested at; beyond that text is clamped rather than
+      // overflowing (the OS default range on most phones tops out near 1.3).
+      builder: (BuildContext context, Widget? child) =>
+          MediaQuery.withClampedTextScaling(
+        maxScaleFactor: AppTheme.maxTextScale,
+        child: child ?? const SizedBox.shrink(),
+      ),
     );
-
-    /*return FutureBuilder<bool>(
-        future: _checkLoginState(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          final bool isLoggedIn = snapshot.data ?? false;
-          return ScreenUtilInit(
-            designSize: const Size(414, 896),
-            builder: (context, _) {
-              return GetMaterialApp(
-                debugShowCheckedModeBanner: false,
-                initialBinding: AppBinding(),
-                title: "Baby Vax",
-                theme: AppTheme.lightTheme,
-                darkTheme: AppTheme.darkTheme,
-                themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-                initialRoute: AppRoutes.splash,
-                getPages: AppPages.routes,
-                locale: Locale(currentLanguage),
-                fallbackLocale: Locale(currentLanguage),
-                supportedLocales: const [
-                  Locale("en"),
-                  Locale("ar"),
-                ],
-                localizationsDelegates: const [
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                ],
-                translations: AppTranslations(),
-              );
-            },
-          );
-        });*/
   }
-
-  // Future<bool> _checkLoginState() {
-  //   return Future.value(
-  //       AppConstant.getStorage.read(AppConstant.isLoginKey) ?? false);
-  // }
 }

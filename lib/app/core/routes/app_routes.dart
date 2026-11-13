@@ -1,6 +1,7 @@
 class AppRoutes {
   static const String login = "/login";
   static const String signup = "/signup";
+  static const String forgotPassword = "/forgot_password";
   static const String mainMenu = "/main_menu";
   static const String main = "/main";
   static const String medicalDates = "/medical_dates";
@@ -10,4 +11,7 @@ class AppRoutes {
   static const String tipDetails = "/medical_dates_details";
   static const String editUser = "/edit_user";
   static const String splash = "/splash";
+  static const String onboarding = "/onboarding";
+  static const String growth = "/growth";
+  static const String reminders = "/reminders";
 }

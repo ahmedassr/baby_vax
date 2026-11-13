@@ -5,25 +5,18 @@ Map<String, String> ar = {
   // Labels
   "email_label": "البريد الإلكتروني",
   "password_label": "كلمة المرور",
-  "name_label": "الاسم",
   "weight_label": "الوزن",
   "height_label": "الطول",
   "blood_percentage_label": "نسبة الدم",
   "head_size_label": "محيط الرأس",
-  "full_name_label": "الاسم الكامل",
   "date_of_birth_label": "تاريخ الميلاد",
 
   // Messages
-  "unexpected_error": "حدث خطأ غير متوقع.",
   "no_description": "لا يوجد وصف متاح حاليًا.",
   "empty_email_error_msg": "يرجى إدخال البريد الإلكتروني.",
   "empty_password_error_msg": "يرجى إدخال كلمة المرور.",
   "empty_name_error_msg": "يرجى إدخال الاسم.",
   "empty_date_of_birth_error_msg": "يرجى إدخال تاريخ الميلاد.",
-  "empty_blood_percentage_error_msg": "يرجى إدخال نسبة الدم.",
-  "empty_weight_error_msg": "يرجى إدخال الوزن.",
-  "empty_head_size_error_msg": "يرجى إدخال محيط الرأس.",
-  "empty_height_error_msg": "يرجى إدخال الطول.",
   // Alert Title
   "attention": "تحذير",
   "error": "خطأ",
@@ -44,87 +37,45 @@ Map<String, String> ar = {
   // Auth - SignUp → Controller
   "SignupController_create_user_failed_msg":
       "تعذّر إنشاء ملف المستخدم. يرجى المحاولة لاحقًا.",
-  "SignupController_create_user_success_msg": "تم إنشاء الحساب بنجاح.",
-  "SignupController_updated_user_success_msg": "تم تحديث المستخدم بنجاح.",
-
   // View
-  "SignupView_sign_up_title": "إنشاء حساب",
-  "SignupView_sign_up_hint": "أنشئ حسابًا لمتابعة رعاية طفلك بكل سهولة",
-  "SignupView_baby_information_label": "معلومات الطفل",
-  "SignupView_baby_measurements_label": "قياسات الطفل",
-  "SignupView_weight_label": "الوزن (كغ)",
-  "SignupView_height_label": "الطول (سم)",
-  "SignupView_head_size_label": "محيط الرأس (سم)",
-  "SignupView_blood_label": "نسبة الدم (غم/دل)",
-
   // Edit User → Controller
   "EditUserController_update_user_failed": "فشل تحديث بيانات المستخدم.",
 
   // View
-  "EditUserView_edit_user_title": "تعديل البيانات",
-  "EditUserView_edit_label": "تعديل",
-
+  "EditUserView_edit_user_title": "تعديل الملف",
   // Home → Controller
-  "HomeController_id_missing_msg": "تعذّر العثور على معرّف المستخدم.",
-
   // Widgets
-  "NextVaccinationCard_next_vaccination_title": "التطعيم القادم",
-
   // MainMenu → Controller
   "MainMenuController_home_title": "الرئيسية",
-  "MainMenuController_medical_dates_title": "المواعيد الطبية",
+  "MainMenuController_medical_dates_title": "الجدول",
   "MainMenuController_tips_title": "النصائح",
   "MainMenuController_settings_title": "الإعدادات",
 
   // MedicalDateDetails → Controller
   "MedicalDateDetailsController_missing_medical_dates_msg":
       "بيانات الموعد الطبي غير متوفرة.",
-  "MedicalDateDetailsController_fetch_failed_msg":
-      "تعذّر جلب تفاصيل الموعد الطبي.",
   "MedicalDateDetailsController_state_update_failed_msg":
       "تعذّر تحديث حالة الموعد الطبي.",
 
   // View
   "MedicalDateDetailsView_title": "تفاصيل الموعد الطبي",
-  "MedicalDateDetailsView_details_and_notes": "تفاصيل التطعيم والملاحظات",
-
   // Widgets
-  "MedicalDateDetailCard_medical_date_label": "الموعد الطبي",
-  "MedicalDateDetailCard_date_fallback_label": "التاريخ غير متوفر",
-  "MedicalDateDetailCard_notes_label": "ملاحظات",
-
   // MedicalDates → Controller
   "MedicalDatesController_fetch_failed": "تعذّر جلب المواعيد الطبية.",
 
   // View
-  "SearchOnMedicalDates_title": "البحث في المواعيد الطبية",
-  "SearchOnMedicalDates_search_field_label":
-      "ما المواعيد الطبية التي تبحث عنها؟",
-
   // Widgets
-  "MedicalDatesHeader_medical_dates_label": "المواعيد الطبية",
-  "MedicalDatesHeader_upcoming_appointments_label":
-      "تابع مواعيد طفلك القادمة والسابقة بسهولة.",
-  "MedicalDatesHeader_no_upcoming_appointments_label":
-      "لا توجد مواعيد قادمة حاليًا. أضف مواعيد طبية للمتابعة.",
-
   // Settings → Controller
   "SettingsController_logout_alert_msg": "هل أنت متأكد من تسجيل الخروج؟",
 
   // View
   "SettingsView_language_label": "اللغة",
-  "SettingsView_terms_and_conditions_label": "الشروط والأحكام",
-  "SettingsView_about_us_label": "من نحن",
   "SettingsView_logout_label": "تسجيل الخروج",
-  "SettingsView_select_language": "اختر اللغة",
-
   // Widgets
-  "AppSettingDarkModeSwitch_dark_mode_label": "الوضع الداكن",
-  "AppSettingDarkModeSwitch_light_mode_label": "الوضع الفاتح",
+  "AppSettingDarkModeSwitch_dark_mode_label": "داكن",
+  "AppSettingDarkModeSwitch_light_mode_label": "فاتح",
 
   // Tip Details → Controller
-  "TipDetailsController_missing_tip_msg": "النصيحة المطلوبة غير متوفرة.",
-
   // View
   "TipDetailsView_tip_details_title": "تفاصيل النصيحة",
   "TipDetailsView_empty_state_text": "لا تتوفر تفاصيل لهذه النصيحة.",
@@ -133,12 +84,9 @@ Map<String, String> ar = {
   "TipsController_fetch_failed_msg": "تعذّر جلب النصائح.",
 
   // View
-  "SearchOnTips_title": "البحث في النصائح",
-  "SearchOnTips_search_field_label": "ما النصائح التي تبحث عنها؟",
   "TipsView_empty_state_text": "لا توجد نصائح حاليًا. يرجى المحاولة لاحقًا.",
 
   // Widgets
-  "TipsHeader_tips_title": "النصائح",
   "TipsHeader_tips_hint": "إرشادات مفيدة للعناية بصحة طفلك ونموه.",
 
   // Enum → → →
@@ -215,7 +163,6 @@ Map<String, String> ar = {
 
   // Dose state actions:
   "LoginView_welcome_back": "مرحباً بعودتك",
-  "MedicalDatesView_add_custom_date": "إضافة موعد خاص",
   "SplashView_tagline": "رعاية • حماية • نمو",
   "AlertModel_field_required_msg": "حقل @field مطلوب.",
   // Countdown badge: one key per CLDR plural category (zero, one, two, few,
@@ -294,5 +241,242 @@ Map<String, String> ar = {
   "MedicalDateActions_mark_skipped": "تحديد كمتجاوزة",
   "MedicalDateActions_undo": "تراجع (إرجاع إلى قيد الانتظار)",
   "MedicalDateDetails_confirm_future_completion_msg":
-      "موعد هذه الجرعة @date. هل تريد تحديدها كمُعطاة؟"
+      "موعد هذه الجرعة @date. هل تريد تحديدها كمُعطاة؟",
+  // v1.1 design system
+  "loading_label": "جارٍ التحميل",
+  "optional_suffix": "(اختياري)",
+  "status_semantic_label": "الحالة: @status",
+  "state_error_title": "حدث خطأ ما",
+  "retry_label": "حاول مرة أخرى",
+  "close_label": "إغلاق",
+  "progress_semantic_label": "الجرعات المُعطاة: @done من @total",
+  "step_counter": "الخطوة @current من @total",
+  "not_recorded_label": "غير مسجّل",
+  // v1.1 onboarding
+  "Onboarding_skip": "تخطٍّ",
+  "Onboarding_get_started": "ابدأ الآن",
+  "next_label": "التالي",
+  "back_label": "رجوع",
+  "Onboarding_schedule_title": "كل الجرعات في مكان واحد",
+  "Onboarding_schedule_body":
+      "أدخل تاريخ ميلاد طفلك ويُنشئ بيبي فاكس جدول التطعيمات كاملاً مرتّباً حسب العمر، لتعرف دائماً ما هو الموعد القادم.",
+  "Onboarding_reminders_title": "تذكيرات لطيفة",
+  "Onboarding_reminders_body":
+      "تذكير مساء اليوم السابق وصباح يوم كل جرعة. تُضبط التذكيرات على هذا الهاتف، فتعمل دون إنترنت.",
+  "Onboarding_record_title": "سجلّ يمكنك مشاركته",
+  "Onboarding_record_body":
+      "سجّل متى وأين أُعطيت كل جرعة، وتابع نمو طفلك، وشارك بطاقة التطعيم مع عيادتك.",
+  // v1.1 sign-in and password reset
+  "LoginView_forgot_password": "نسيت كلمة المرور؟",
+  "LoginView_no_account": "جديد في بيبي فاكس؟",
+  "short_password_error_msg": "استخدم @min أحرف على الأقل.",
+  "invalid_number_error_msg": "الرجاء إدخال رقم.",
+  "out_of_range_error_msg": "الرجاء إدخال قيمة بين @min و@max.",
+  "ForgotPassword_title": "إعادة تعيين كلمة المرور",
+  "ForgotPassword_hint":
+      "أدخل البريد الإلكتروني الذي سجّلت به وسنرسل لك رابطاً لاختيار كلمة مرور جديدة.",
+  "ForgotPassword_send": "إرسال رابط إعادة التعيين",
+  "ForgotPassword_sent_title": "تحقّق من بريدك الإلكتروني",
+  "ForgotPassword_sent_body":
+      "إذا كان هناك حساب مرتبط بـ @email فسيصلك رابط لإعادة تعيين كلمة المرور. قد يستغرق ذلك بضع دقائق، لذا تحقّق من مجلد الرسائل غير المرغوب فيها أيضاً.",
+  "ForgotPassword_back_to_login": "العودة لتسجيل الدخول",
+  // v1.1 sign-up stepper
+  "Signup_step_account": "حسابك",
+  "Signup_step_baby": "طفلك",
+  "Signup_step_measurements": "القياسات",
+  "Signup_step_reminders": "التذكيرات",
+  "Signup_step_summary": "المراجعة والإنشاء",
+  "Signup_step_account_hint":
+      "ستستخدم هذا البريد الإلكتروني وكلمة المرور لتسجيل الدخول من أي هاتف.",
+  "Signup_password_helper": "@min أحرف على الأقل.",
+  "Signup_step_baby_hint": "يُبنى جدول التطعيمات من تاريخ ميلاد طفلك.",
+  "Signup_baby_name_label": "اسم الطفل",
+  "Signup_birthday_hint": "اضغط لاختيار التاريخ",
+  "Signup_birthday_helper": "يُستخدم لحساب موعد كل جرعة.",
+  "Signup_sex_label": "الجنس",
+  "Signup_sex_helper": "تختلف منحنيات النمو بين البنات والأولاد.",
+  "sex_female": "بنت",
+  "sex_male": "ولد",
+  "empty_sex_error_msg": "الرجاء اختيار أحد الخيارين.",
+  "Signup_step_measurements_hint":
+      "إذا كانت لديك من الولادة أو من فحص حديث فأضفها هنا. يمكنك تخطي هذه الخطوة وإضافتها لاحقاً.",
+  "unit_kg": "كغ",
+  "unit_cm": "سم",
+  "unit_g_dl": "غم/دل",
+  "Signup_skip_for_now": "تخطٍّ الآن",
+  "Signup_reminders_title": "تذكيرات تعمل دون إنترنت",
+  "Signup_reminders_body":
+      "يذكّرك بيبي فاكس الساعة @evening مساء اليوم السابق لكل جرعة، والساعة @morning صباح يومها. تُضبط التذكيرات على هذا الهاتف، فتعمل دون إنترنت.",
+  "Signup_reminders_why":
+      "سيسألك هاتفك إن كان مسموحاً لبيبي فاكس بإرسال الإشعارات. من دونها لا يمكن أن تظهر التذكيرات.",
+  "Signup_reminders_turn_on": "تفعيل التذكيرات",
+  "Signup_reminders_not_now": "ليس الآن",
+  "Signup_reminders_granted": "التذكيرات مفعّلة.",
+  "Signup_reminders_denied":
+      "التذكيرات متوقفة حالياً. يمكنك تفعيلها لاحقاً من إعدادات هاتفك.",
+  "Signup_step_summary_hint":
+      "راجع التفاصيل أدناه. يمكنك تعديل أي شيء قبل إنشاء الحساب.",
+  "Signup_create_account": "إنشاء الحساب",
+  "Signup_schedule_note":
+      "سيُنشئ بيبي فاكس جدول التطعيمات من تاريخ الميلاد هذا.",
+  "reminders_on_label": "مفعّلة",
+  "reminders_off_label": "متوقفة",
+  "edit_label": "تعديل",
+  "edit_section_label": "تعديل @section",
+  // v1.1 schedule age groups
+  "age_at_birth": "عند الولادة",
+  "age_other": "مواعيد أخرى",
+  "age_months_one": "شهر واحد",
+  "age_months_other": "@count شهر",
+  "age_years_one": "سنة واحدة",
+  "age_years_other": "@count سنة",
+  // Age headings: one key per CLDR plural category, picked by ageLabel().
+  "age_months_zero": "@count شهر",
+  "age_months_two": "شهران",
+  "age_months_few": "@count أشهر",
+  "age_months_many": "@count شهرًا",
+  "age_years_zero": "@count سنة",
+  "age_years_two": "سنتان",
+  "age_years_few": "@count سنوات",
+  "age_years_many": "@count سنةً",
+  // v1.1 home and schedule
+  "HomeView_overline": "جدول تطعيمات",
+  "HomeView_next_dose": "الجرعة القادمة",
+  "HomeView_overdue_dose": "جرعة متأخرة",
+  "HomeView_open_dose": "عرض الجرعة",
+  "HomeView_more_overdue": "متأخرة أيضاً: @count",
+  "HomeView_all_done_title": "تم تسجيل كل الجرعات",
+  "HomeView_all_done_body": "كل جرعة في الجدول محددة كمُعطاة أو متجاوزة.",
+  "HomeView_no_schedule_title": "لا يوجد جدول بعد",
+  "HomeView_no_schedule_body":
+      "اسحب للأسفل للتحديث. إذا بقي فارغاً فتحقّق من الاتصال.",
+  "HomeView_progress_title": "التقدّم في الجدول",
+  "HomeView_progress_body": "الجرعات المُعطاة: @done من @total",
+  "HomeView_measurements_title": "آخر القياسات",
+  "HomeView_profile_title": "الملف الشخصي",
+  "HomeView_no_profile_title": "لم نعثر على ملفك",
+  "HomeView_no_profile_body": "تحقّق من الاتصال وحاول مرة أخرى.",
+  "Schedule_filter_all": "الكل",
+  "Schedule_empty_filter_title": "لا توجد جرعات هنا",
+  "Schedule_empty_filter_body": "جرّب تصفية أخرى.",
+  "Schedule_empty_title": "لا يوجد جدول بعد",
+  "Schedule_empty_body": "سيظهر جدول طفلك هنا بعد إعداد الحساب.",
+  "Schedule_filter_label": "عرض",
+  // v1.1 alerts
+  "ok_label": "حسناً",
+  // v1.1 dose details
+  "MedicalDateDetails_scheduled_label": "الموعد",
+  "MedicalDateDetails_age_label": "العمر",
+  "MedicalDateDetails_about_title": "عن هذه الجرعة",
+  // v1.1 tips
+  "TipsView_empty_title": "لا توجد نصائح بعد",
+  // v1.1 edit profile
+  "EditUser_save": "حفظ التغييرات",
+  "EditUser_saved_msg": "تم حفظ الملف.",
+  "EditUser_email_readonly": "بريد تسجيل الدخول. لا يمكن تغييره من هنا.",
+  "EditUser_birthday_helper": "تغييره ينقل كل جرعات الجدول لتتوافق معه.",
+  "EditUser_birthday_change_confirm":
+      "تغيّر تاريخ الميلاد، لذلك ستنتقل كل جرعات الجدول لتتوافق معه. تحتفظ الجرعات التي حددتها كمُعطاة أو متجاوزة بحالتها، وتُعاد جدولة التذكيرات.",
+  "EditUser_birthday_change_yes": "نقل الجدول",
+  // v1.1 settings
+  "Settings_appearance": "المظهر",
+  "Settings_theme_system": "النظام",
+  "Settings_notifications": "الإشعارات",
+  "Settings_notifications_hint": "يفتح إعدادات هاتفك الخاصة ببيبي فاكس.",
+  "Settings_about": "حول التطبيق",
+  "Settings_about_app": "عن بيبي فاكس",
+  // v1.1 vaccination record
+  "Record_sheet_title": "تسجيل هذه الجرعة",
+  "Record_sheet_hint":
+      "كل ما هنا اختياري، لكنه يجعل بطاقة التطعيم أكثر فائدة في العيادة.",
+  "Record_given_date": "تاريخ الإعطاء",
+  "Record_clinic": "العيادة أو المكان",
+  "Record_lot": "رقم التشغيلة",
+  "Record_lot_hint": "مطبوع على العبوة أو على بطاقة العيادة",
+  "Record_note": "ملاحظة",
+  "Record_save": "حفظ",
+  "Record_skip_details": "تحديد كمُعطاة دون تفاصيل",
+  "Record_section_title": "سجل التطعيم",
+  "Record_add_details": "إضافة تفاصيل",
+  "Record_edit": "تعديل التفاصيل",
+  "Record_none": "لا توجد تفاصيل مسجّلة بعد.",
+  // v1.1 vaccination card
+  "Card_title": "بطاقة التطعيم",
+  "Card_col_vaccine": "اللقاح",
+  "Card_col_status": "الحالة",
+  "Card_col_scheduled": "الموعد",
+  "Card_col_given": "تاريخ الإعطاء",
+  "Card_col_clinic": "العيادة",
+  "Card_col_lot": "التشغيلة",
+  "Card_generated": "أُنشئت بواسطة بيبي فاكس على هذا الهاتف بتاريخ",
+  "Card_export": "بطاقة التطعيم",
+  "Card_export_hint":
+      "ملف PDF بالعربية والإنجليزية لمشاركته مع عيادتك أو طباعته.",
+  "Card_share": "مشاركة",
+  "Card_print": "طباعة",
+  "Card_failed": "تعذّر إنشاء البطاقة. الرجاء المحاولة مرة أخرى.",
+  // v1.1 home quick actions
+  "HomeView_quick_actions": "اختصارات",
+  // v1.1 growth tracker
+  "Growth_title": "النمو",
+  "Growth_add": "إضافة قياس",
+  "Growth_add_title": "إضافة قياس",
+  "Growth_edit_title": "تعديل القياس",
+  "Growth_sheet_hint":
+      "أدخل أيّاً من القياسات الثلاثة، من العيادة أو من ميزانك الخاص.",
+  "Growth_date": "تاريخ القياس",
+  "Growth_need_one_value": "أدخل قياساً واحداً على الأقل.",
+  "Growth_delete": "حذف القياس",
+  "Growth_delete_confirm": "هل تريد حذف هذا القياس؟",
+  "Growth_save_failed": "تعذّر حفظ القياس. الرجاء المحاولة مرة أخرى.",
+  "Growth_history": "السجل",
+  "Growth_empty_title": "لا توجد قياسات بعد",
+  "Growth_empty_body":
+      "أضف الوزن أو الطول أو محيط الرأس من زيارة العيادة لبدء المخطط.",
+  "Growth_axis_months": "العمر (أشهر)",
+  "Growth_no_value_for_metric": "لا يوجد قياس من هذا النوع بعد.",
+  "Growth_reading_around": "حول المئين @ord",
+  "Growth_reading_below": "أقل من المئين 3",
+  "Growth_reading_above": "أعلى من المئين 97",
+  "Growth_reading_note":
+      "المئينات تقارن طفلك بأطفال مرجعيين من منظمة الصحة العالمية بنفس العمر والجنس. وهي ليست تشخيصاً: قراءة واحدة لا تعني الكثير وحدها، لذا تحدّث مع طبيبك عن أي قلق.",
+  "Growth_over_five":
+      "معايير النمو المستخدمة هنا من منظمة الصحة العالمية تغطي من الولادة حتى 5 سنوات، لذلك لا يظهر مئين لهذا القياس.",
+  "Growth_no_sex":
+      "أضف جنس طفلك في الملف للمقارنة مع معايير النمو لمنظمة الصحة العالمية.",
+  "Growth_legend":
+      "الخطوط: المئينات 3 و15 و50 و85 و97 لمنظمة الصحة العالمية. النقاط: قياساتك.",
+  "Growth_attribution":
+      "منحنيات المرجع: معايير نمو الطفل لمنظمة الصحة العالمية (2006). الترخيص: CC BY-NC-SA 3.0 IGO.",
+  "Growth_chart_semantic": "مخطط @metric، عدد القياسات: @count",
+  // v1.1 custom reminders
+  "Reminder_custom_default_body": "تذكير ضبطته في بيبي فاكس.",
+  // v1.1 reminders screens
+  "Reminders_title": "التذكيرات",
+  "Reminders_add": "إضافة تذكير",
+  "Reminders_add_title": "تذكير جديد",
+  "Reminders_edit_title": "تعديل التذكير",
+  "Reminders_hint":
+      "تذكيراتك ومواعيدك الخاصة، إلى جانب تذكيرات التطعيم. تُضبط على هذا الهاتف وتعمل دون إنترنت.",
+  "Reminders_title_label": "ماذا تريد أن تتذكر",
+  "Reminders_title_required": "الرجاء إعطاء التذكير اسماً.",
+  "Reminders_suggest_doctor": "زيارة الطبيب",
+  "Reminders_suggest_vitamin_d": "قطرات فيتامين د",
+  "Reminders_suggest_follow_up": "مراجعة",
+  "Reminders_date": "التاريخ",
+  "Reminders_time": "الوقت",
+  "Reminders_past_error": "هذا الوقت مضى. اختر وقتاً لاحقاً أو اجعله متكرراً.",
+  "Reminders_repeat": "التكرار",
+  "Reminders_repeat_none": "مرة واحدة",
+  "Reminders_repeat_daily": "كل يوم",
+  "Reminders_repeat_weekly": "كل أسبوع",
+  "Reminders_repeat_monthly": "كل شهر",
+  "Reminders_delete": "حذف التذكير",
+  "Reminders_delete_confirm": "هل تريد حذف هذا التذكير؟ لن يظهر مجدداً.",
+  "Reminders_save_failed": "تعذّر حفظ التذكير. الرجاء المحاولة مرة أخرى.",
+  "Reminders_empty_title": "لا توجد تذكيرات بعد",
+  "Reminders_empty_body":
+      "أضف زيارة طبيب أو قطرات يومية أو مراجعة، وسيذكّرك بيبي فاكس.",
+  "Reminders_past": "كان في @date",
+  "Reminders_toggle_label": "التذكير مفعّل لـ @title",
 };

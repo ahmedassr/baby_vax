@@ -1,18 +1,10 @@
 import '../imports/import_manger.dart';
 
+/// v1.0's labelled field, now a thin wrapper over [AppField].
+///
+/// Kept so screens can move to [AppField] one at a time; removed once the
+/// last caller is gone.
 class LabeledTextField extends StatelessWidget {
-  final String label;
-  final TextEditingController controller;
-  final TextInputType? keyboardType;
-  final bool readOnly;
-  final bool obscureText;
-  final Function(String)? onChanged;
-  final VoidCallback? onTap;
-  final String? errorText;
-  final double? fontSize;
-  final double? borderRadius;
-  final TextStyle? labelStyle;
-
   const LabeledTextField({
     super.key,
     required this.label,
@@ -23,37 +15,31 @@ class LabeledTextField extends StatelessWidget {
     this.onChanged,
     this.onTap,
     this.errorText,
-    this.fontSize,
-    this.borderRadius,
-    this.labelStyle,
   });
+
+  final String label;
+  final TextEditingController controller;
+  final TextInputType? keyboardType;
+  final bool readOnly;
+  final bool obscureText;
+  final ValueChanged<String>? onChanged;
+  final VoidCallback? onTap;
+  final String? errorText;
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AppText(
-          text: label.tr,
-          style: AppTextStyles.bodyMedium.copyWith(fontSize: fontSize),
-          maxLines: 3,
-        ),
-        8.sbh,
-        AppTextField(
-          controller: controller,
-          keyboardType: keyboardType,
-          fillColor: context.theme.scaffoldBackgroundColor,
-          readOnly: readOnly,
-          onChanged: (value) => onChanged?.call(value),
-          onTap: onTap,
-          errorText: errorText,
-          radius: borderRadius,
-          obscureText: obscureText,
-          labelStyle: labelStyle,
-        ),
-        8.sbh,
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+      child: AppField(
+        label: label.tr,
+        controller: controller,
+        keyboardType: keyboardType,
+        readOnly: readOnly,
+        obscureText: obscureText,
+        onChanged: onChanged,
+        onTap: onTap,
+        errorText: errorText,
+      ),
     );
   }
 }

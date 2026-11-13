@@ -137,8 +137,9 @@ class FirebaseAccountDeletionSteps implements AccountDeletionSteps {
     try {
       // Subcollections first: deleting the parent document does not remove
       // them, and after the parent is gone they are much harder to find.
-      await AppConstant.fireStoreHelper1
-          .deleteCollection(path: AppPath.userMedicalDates(uid));
+      for (final String path in AppPath.userSubcollections(uid)) {
+        await AppConstant.fireStoreHelper1.deleteCollection(path: path);
+      }
       await AppConstant.fireStoreHelper1.deleteDocument(AppPath.userDoc(uid));
     } on FirebaseException catch (e) {
       throw AccountDeletionException(AccountDeletionError.network, e);
@@ -167,9 +168,10 @@ class FirebaseAccountDeletionSteps implements AccountDeletionSteps {
   Future<void> signOutAndClearLocalState() async {
     await FirebaseAuth.instance.signOut();
     SessionManager.uId = "";
-    // clear() erases the whole box, which is what we want here: no cached uid,
-    // child name, or login flag may survive a deletion.
-    AppConstant.getStorage.clear();
+    // No cached uid, child name or login flag may survive a deletion. Device
+    // preferences (language, theme, onboarding seen) are not about the
+    // account and are kept.
+    await AppConstant.getStorage.clearUserData();
   }
 
   static AccountDeletionError _mapAuthError(FirebaseAuthException e) {
