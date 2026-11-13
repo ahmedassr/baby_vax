@@ -145,6 +145,9 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
     Get.toNamed(AppRoutes.editUser);
   }
 
+  /// Opens the parent's own reminders.
+  void openReminders() => Get.toNamed(AppRoutes.reminders);
+
   /// Opens the growth tracker.
   void openGrowth() => Get.toNamed(AppRoutes.growth);
 

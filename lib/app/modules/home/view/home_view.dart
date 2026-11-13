@@ -85,6 +85,12 @@ class HomeView extends GetView<HomeController> {
             label: "Growth_title".tr,
             onTap: controller.openGrowth,
           ),
+          QuickAction(
+            key: const Key('home_action_reminders'),
+            icon: Icons.alarm_rounded,
+            label: "Reminders_title".tr,
+            onTap: controller.openReminders,
+          ),
         ]),
         AppSectionHeader(
           title: "HomeView_measurements_title".tr,

@@ -105,9 +105,10 @@ class GrowthController extends GetxController {
         .setData(path: '$coll/$id', data: m.toMap(), merge: false);
   }
 
-  static Future<void> _firestoreDelete(String uid, String id) =>
-      AppConstant.fireStoreHelper1
-          .deleteDocument('${AppPath.userMeasurements(uid)}/$id');
+  static Future<void> _firestoreDelete(String uid, String id) async {
+    await AppConstant.fireStoreHelper1
+        .removeData(path: '${AppPath.userMeasurements(uid)}/$id');
+  }
 
   static Future<void> _firestoreProfile(
           String uid, Map<String, String> fields) =>

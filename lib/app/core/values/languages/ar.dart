@@ -506,4 +506,32 @@ Map<String, String> ar = {
   "Growth_chart_semantic": "مخطط @metric، عدد القياسات: @count",
   // v1.1 custom reminders
   "Reminder_custom_default_body": "تذكير ضبطته في بيبي فاكس.",
+  // v1.1 reminders screens
+  "Reminders_title": "التذكيرات",
+  "Reminders_add": "إضافة تذكير",
+  "Reminders_add_title": "تذكير جديد",
+  "Reminders_edit_title": "تعديل التذكير",
+  "Reminders_hint":
+      "تذكيراتك ومواعيدك الخاصة، إلى جانب تذكيرات التطعيم. تُضبط على هذا الهاتف وتعمل دون إنترنت.",
+  "Reminders_title_label": "ماذا تريد أن تتذكر",
+  "Reminders_title_required": "الرجاء إعطاء التذكير اسماً.",
+  "Reminders_suggest_doctor": "زيارة الطبيب",
+  "Reminders_suggest_vitamin_d": "قطرات فيتامين د",
+  "Reminders_suggest_follow_up": "مراجعة",
+  "Reminders_date": "التاريخ",
+  "Reminders_time": "الوقت",
+  "Reminders_past_error": "هذا الوقت مضى. اختر وقتاً لاحقاً أو اجعله متكرراً.",
+  "Reminders_repeat": "التكرار",
+  "Reminders_repeat_none": "مرة واحدة",
+  "Reminders_repeat_daily": "كل يوم",
+  "Reminders_repeat_weekly": "كل أسبوع",
+  "Reminders_repeat_monthly": "كل شهر",
+  "Reminders_delete": "حذف التذكير",
+  "Reminders_delete_confirm": "هل تريد حذف هذا التذكير؟ لن يظهر مجدداً.",
+  "Reminders_save_failed": "تعذّر حفظ التذكير. الرجاء المحاولة مرة أخرى.",
+  "Reminders_empty_title": "لا توجد تذكيرات بعد",
+  "Reminders_empty_body":
+      "أضف زيارة طبيب أو قطرات يومية أو مراجعة، وسيذكّرك بيبي فاكس.",
+  "Reminders_past": "كان في @date",
+  "Reminders_toggle_label": "التذكير مفعّل لـ @title",
 };

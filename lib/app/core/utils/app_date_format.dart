@@ -32,4 +32,13 @@ class AppDateFormat {
   static String date(DateTime value, {String? locale}) =>
       (DateFormat.yMMMd(locale ?? currentLocale)..useNativeDigits = false)
           .format(value);
+
+  /// Clock time, e.g. "9:00 AM" / "9:00 ص", Western digits.
+  static String time(DateTime value, {String? locale}) =>
+      (DateFormat.jm(locale ?? currentLocale)..useNativeDigits = false)
+          .format(value);
+
+  /// Date and time, e.g. "Jan 15, 2027 · 9:00 AM".
+  static String dateTime(DateTime value, {String? locale}) =>
+      '${date(value, locale: locale)} · ${time(value, locale: locale)}';
 }

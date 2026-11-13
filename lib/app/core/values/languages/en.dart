@@ -466,4 +466,33 @@ Map<String, String> en = {
   "Growth_chart_semantic": "@metric chart, measurements: @count",
   // v1.1 custom reminders
   "Reminder_custom_default_body": "A reminder you set in Baby Vax.",
+  // v1.1 reminders screens
+  "Reminders_title": "Reminders",
+  "Reminders_add": "Add reminder",
+  "Reminders_add_title": "New reminder",
+  "Reminders_edit_title": "Edit reminder",
+  "Reminders_hint":
+      "Your own reminders and appointments, alongside the vaccine reminders. They are set on this phone and work without internet.",
+  "Reminders_title_label": "What to remember",
+  "Reminders_title_required": "Please give the reminder a name.",
+  "Reminders_suggest_doctor": "Doctor visit",
+  "Reminders_suggest_vitamin_d": "Vitamin D drops",
+  "Reminders_suggest_follow_up": "Follow-up",
+  "Reminders_date": "Date",
+  "Reminders_time": "Time",
+  "Reminders_past_error":
+      "This time has passed. Pick a later time, or make it repeat.",
+  "Reminders_repeat": "Repeat",
+  "Reminders_repeat_none": "Once",
+  "Reminders_repeat_daily": "Every day",
+  "Reminders_repeat_weekly": "Every week",
+  "Reminders_repeat_monthly": "Every month",
+  "Reminders_delete": "Delete reminder",
+  "Reminders_delete_confirm": "Delete this reminder? It will not appear again.",
+  "Reminders_save_failed": "The reminder could not be saved. Please try again.",
+  "Reminders_empty_title": "No reminders yet",
+  "Reminders_empty_body":
+      "Add a doctor visit, daily drops or a follow-up, and Baby Vax will remind you.",
+  "Reminders_past": "Was on @date",
+  "Reminders_toggle_label": "Reminder on for @title",
 };
