@@ -2,6 +2,7 @@ import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/service/schedule_summary.dart';
 import 'package:baby_vax/app/core/service/vaccine_state_service.dart';
 import 'package:baby_vax/app/modules/home/widgets/notifications_off_banner.dart';
+import 'package:baby_vax/app/modules/home/widgets/quick_actions.dart';
 
 import '../controller/home_controller.dart';
 
@@ -70,6 +71,15 @@ class HomeView extends GetView<HomeController> {
         ),
         const SizedBox(height: AppSpacing.md),
         _ProgressCard(summary: summary, onSchedule: controller.openSchedule),
+        AppSectionHeader(title: "HomeView_quick_actions".tr),
+        QuickActions(actions: <QuickAction>[
+          QuickAction(
+            key: const Key('home_action_card'),
+            icon: Icons.picture_as_pdf_rounded,
+            label: "Card_export".tr,
+            onTap: controller.openVaccinationCard,
+          ),
+        ]),
         AppSectionHeader(
           title: "HomeView_measurements_title".tr,
           actionLabel: "edit_label".tr,

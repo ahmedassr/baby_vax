@@ -454,4 +454,22 @@ Map<String, String> ar = {
   "Record_add_details": "إضافة تفاصيل",
   "Record_edit": "تعديل التفاصيل",
   "Record_none": "لا توجد تفاصيل مسجّلة بعد.",
+  // v1.1 vaccination card
+  "Card_title": "بطاقة التطعيم",
+  "Card_col_vaccine": "اللقاح",
+  "Card_col_status": "الحالة",
+  "Card_col_scheduled": "الموعد",
+  "Card_col_given": "تاريخ الإعطاء",
+  "Card_col_clinic": "العيادة",
+  "Card_col_lot": "التشغيلة",
+  "Card_generated": "أُنشئت بواسطة بيبي فاكس على هذا الهاتف بتاريخ",
+  "Card_export": "بطاقة التطعيم",
+  "Card_export_hint":
+      "ملف PDF بالعربية والإنجليزية لمشاركته مع عيادتك أو طباعته.",
+  "Card_share": "مشاركة",
+  "Card_print": "طباعة",
+  "Card_failed": "تعذّر إنشاء البطاقة. الرجاء المحاولة مرة أخرى.",
+  "Card_preparing": "جارٍ تجهيز البطاقة…",
+  // v1.1 home quick actions
+  "HomeView_quick_actions": "اختصارات",
 };

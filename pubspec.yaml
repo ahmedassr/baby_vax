@@ -58,6 +58,11 @@ dependencies:
   flutter_timezone: ^5.1.1
   firebase_crashlytics: ^6.0.1
   firebase_app_check: ^0.5.1
+  # v1.1 vaccination card: the PDF is drawn on the device (pdf, pure Dart)
+  # and handed to Android's share / print sheet (printing). No network, no
+  # server. Both Apache-2.0, 160/160 pub points.
+  pdf: ^3.13.1
+  printing: ^5.15.1
 
 
 

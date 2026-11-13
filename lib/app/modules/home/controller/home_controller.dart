@@ -2,6 +2,7 @@ import 'package:baby_vax/app/config/constant/app_path.dart';
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/notification/data/notification_settings_opener.dart';
 import 'package:baby_vax/app/core/service/schedule_summary.dart';
+import 'package:baby_vax/app/modules/vaccination_card/vaccination_card_sheet.dart';
 
 /// The home screen: who the schedule is for, the next dose, overall
 /// progress and the latest measurements.
@@ -143,6 +144,9 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
         .setArgument(InternalScreenArgs(user: userDetails.value));
     Get.toNamed(AppRoutes.editUser);
   }
+
+  /// Opens the vaccination card sheet (share or print the PDF).
+  void openVaccinationCard() => VaccinationCardSheet.show();
 
   /// Switches the bottom navigation to the schedule tab.
   void openSchedule() {
