@@ -458,6 +458,94 @@ describe('users/{userId}/medical_dates/{id} — v1.1 dose record', () => {
   });
 });
 
+describe('users/{userId}/measurements/{id} — v1.1 growth', () => {
+  const path = (uid) => `users/${uid}/measurements`;
+  const valid = (overrides = {}) => ({
+    date: Timestamp.fromDate(new Date('2026-03-16T00:00:00Z')),
+    weightKg: 4.2,
+    heightCm: 55.5,
+    headCm: 38,
+    note: 'Clinic visit',
+    ...overrides,
+  });
+
+  it('lets the owner add, read, list, edit and delete', async () => {
+    const db = asUser(ALICE);
+    await assertSucceeds(setDoc(doc(db, `${path(ALICE)}/m1`), valid()));
+    await assertSucceeds(getDoc(doc(db, `${path(ALICE)}/m1`)));
+    await assertSucceeds(getDocs(collection(db, path(ALICE))));
+    await assertSucceeds(updateDoc(doc(db, `${path(ALICE)}/m1`), { weightKg: 4.3 }));
+    await assertSucceeds(deleteDoc(doc(db, `${path(ALICE)}/m1`)));
+  });
+
+  for (const only of ['weightKg', 'heightCm', 'headCm']) {
+    it(`accepts a measurement with only ${only}`, async () => {
+      const m = { date: valid().date, [only]: valid()[only] };
+      await assertSucceeds(setDoc(doc(asUser(ALICE), `${path(ALICE)}/m1`), m));
+    });
+  }
+
+  it('accepts whole numbers (Firestore integers)', async () => {
+    await assertSucceeds(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/m1`), valid({ weightKg: 4 })),
+    );
+  });
+
+  it('denies a measurement with no values', async () => {
+    await assertFails(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/m1`), { date: valid().date }),
+    );
+  });
+
+  it('denies a measurement with no date', async () => {
+    await assertFails(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/m1`), without(valid(), 'date')),
+    );
+  });
+
+  it('denies a date that is not a timestamp', async () => {
+    await assertFails(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/m1`), valid({ date: '2026-03-16' })),
+    );
+  });
+
+  for (const [field, bad] of [
+    ['weightKg', 3400], ['weightKg', 0], ['weightKg', '4.2'],
+    ['heightCm', 2000], ['heightCm', 5],
+    ['headCm', 100], ['headCm', -1],
+  ]) {
+    it(`denies ${field} = ${JSON.stringify(bad)}`, async () => {
+      await assertFails(
+        setDoc(doc(asUser(ALICE), `${path(ALICE)}/m1`), valid({ [field]: bad })),
+      );
+    });
+  }
+
+  it('denies an oversized note', async () => {
+    await assertFails(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/m1`), valid({ note: 'x'.repeat(501) })),
+    );
+  });
+
+  it('denies unknown fields', async () => {
+    await assertFails(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/m1`), valid({ bmi: 14 })),
+    );
+  });
+
+  it("denies reading or writing another user's measurements", async () => {
+    await seed((db) => setDoc(doc(db, `${path(ALICE)}/m1`), valid()));
+    await assertFails(getDoc(doc(asUser(BOB), `${path(ALICE)}/m1`)));
+    await assertFails(getDocs(collection(asUser(BOB), path(ALICE))));
+    await assertFails(setDoc(doc(asUser(BOB), `${path(ALICE)}/m2`), valid()));
+    await assertFails(deleteDoc(doc(asUser(BOB), `${path(ALICE)}/m1`)));
+  });
+
+  it('denies a signed-out client', async () => {
+    await assertFails(setDoc(doc(asAnon(), `${path(ALICE)}/m1`), valid()));
+  });
+});
+
 describe('sign-up batch', () => {
   // Sign-up writes the profile and the whole generated schedule in one
   // batch with client-generated ids (FireStoreHelperService.commitSets).

@@ -137,8 +137,9 @@ class FirebaseAccountDeletionSteps implements AccountDeletionSteps {
     try {
       // Subcollections first: deleting the parent document does not remove
       // them, and after the parent is gone they are much harder to find.
-      await AppConstant.fireStoreHelper1
-          .deleteCollection(path: AppPath.userMedicalDates(uid));
+      for (final String path in AppPath.userSubcollections(uid)) {
+        await AppConstant.fireStoreHelper1.deleteCollection(path: path);
+      }
       await AppConstant.fireStoreHelper1.deleteDocument(AppPath.userDoc(uid));
     } on FirebaseException catch (e) {
       throw AccountDeletionException(AccountDeletionError.network, e);

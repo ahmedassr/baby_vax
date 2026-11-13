@@ -5,6 +5,7 @@ rules_version = '2';
 // Model: one Firebase Auth user == one child profile.
 //   users/{userId}                      - the child's profile
 //   users/{userId}/medical_dates/{id}   - that child's vaccination schedule
+//   users/{userId}/measurements/{id}    - dated growth measurements (v1.1)
 //   tips/{id}, tips_en/{id}             - app content, read-only for clients
 //
 // Default is deny: the final catch-all rejects every path not named here, so a
@@ -48,6 +49,13 @@ service cloud.firestore {
       return !data.keys().hasAny([field]) ||
              data[field] == null ||
              data[field] is timestamp;
+    }
+
+    // Absent, null, or a number in [min, max].
+    function isOptionalNumberIn(data, field, min, max) {
+      return !data.keys().hasAny([field]) ||
+             data[field] == null ||
+             (data[field] is number && data[field] >= min && data[field] <= max);
     }
 
     // Absent, null, or one of [values].
@@ -120,6 +128,33 @@ service cloud.firestore {
                               && isValidMedicalDate(incoming());
         allow delete: if isOwner(userId);
       }
+    }
+
+    // ---- measurements (v1.1 growth tracker) -----------------------------
+    //
+    // users/{userId}/measurements/{id}: one dated set of measurements.
+    // Bounds are wide plausibility checks (the schedule covers ages up to
+    // 18); they catch a weight typed in grams, not unusual children.
+
+    function isValidMeasurement(data) {
+      return data.keys().hasOnly(['date', 'weightKg', 'heightCm', 'headCm', 'note'])
+             && data.keys().hasAll(['date'])
+             && data.date is timestamp
+             && isOptionalNumberIn(data, 'weightKg', 0.3, 150)
+             && isOptionalNumberIn(data, 'heightCm', 20, 220)
+             && isOptionalNumberIn(data, 'headCm', 20, 70)
+             && isOptionalShortString(data, 'note', 500)
+             // At least one value: an empty measurement means nothing.
+             && (data.get('weightKg', null) != null
+                 || data.get('heightCm', null) != null
+                 || data.get('headCm', null) != null);
+    }
+
+    match /users/{userId}/measurements/{measurementId} {
+      allow get, list: if isOwner(userId);
+      allow create, update: if isOwner(userId)
+                            && isValidMeasurement(incoming());
+      allow delete: if isOwner(userId);
     }
 
     // ---- app content ------------------------------------------------------
