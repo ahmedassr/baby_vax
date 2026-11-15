@@ -73,6 +73,17 @@ void main() {
         isEmpty);
   });
 
+  test('feedback goes through AppSnackbar, never a plain snackbar', () {
+    // One look for every snackbar or toast (phone review R4).
+    final List<String> hits = offenders(
+            <String>['lib'],
+            RegExp(r'Get\.snackbar|showSnackbar|GetSnackBar|\bSnackBar\(|toast',
+                caseSensitive: false))
+        .where((h) => !h.startsWith('lib/app/core/widget/app_snackbar.dart'))
+        .toList();
+    expect(hits, isEmpty);
+  });
+
   test('no ScreenUtil units anywhere', () {
     expect(
         offenders(<String>['lib'],

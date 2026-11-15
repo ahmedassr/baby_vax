@@ -89,8 +89,7 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
   Future<void> openNotificationSettings() async {
     final bool opened = await _settingsOpener.open();
     if (!opened) {
-      AppConstant.alertService
-          .showError(message: "Notification_permission_denied_msg".tr);
+      AppSnackbar.error("Notification_permission_denied_msg".tr);
     }
   }
 

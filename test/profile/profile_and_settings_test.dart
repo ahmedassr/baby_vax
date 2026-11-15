@@ -57,6 +57,7 @@ void main() {
         rebaseSchedule: (b) async => rebased.add(b),
         confirm: (_) async => confirm,
         clock: () => fixedNow,
+        storeName: (_) async {},
       );
       Get.put<EditUserController>(c);
       return c;
@@ -104,6 +105,30 @@ void main() {
       expect(saved.single.sex, 'male');
       expect(saved.single.email, 'parent@example.com');
       expect(rebased, isEmpty, reason: 'birthday unchanged');
+    });
+
+    testWidgets('saving goes back and confirms with the app snackbar',
+        (tester) async {
+      put(user: sampleUser(sex: 'female'));
+      await pumpApp(
+          tester,
+          Scaffold(
+            body: Center(
+              child: TextButton(
+                  onPressed: () => Get.to<void>(() => const EditUserView()),
+                  child: const Text('profile')),
+            ),
+          ));
+      await tester.tap(find.text('profile'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('edit_save')));
+      await tester.pumpAndSettle();
+      expect(saved, hasLength(1));
+      expect(find.byType(EditUserView), findsNothing);
+      // The app's own snackbar, not get's plain default bar.
+      expect(find.byKey(const Key('app_snackbar_success')), findsOneWidget);
+      expect(find.text('Profile saved.'), findsOneWidget);
+      expect(find.byIcon(Icons.check_circle_rounded), findsOneWidget);
     });
 
     testWidgets('changing the birth date asks, then moves the schedule',

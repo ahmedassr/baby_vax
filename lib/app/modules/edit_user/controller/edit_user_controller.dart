@@ -21,17 +21,25 @@ class EditUserController extends GetxController {
     Future<void> Function(DateTime birthday)? rebaseSchedule,
     Future<bool> Function(String message)? confirm,
     DateTime Function()? clock,
+    Future<void> Function(String name)? storeName,
   })  : _original = user ?? InternalScreenArgs.fromArgs.user,
         _save = save ?? _firestoreSave,
         _rebaseSchedule = rebaseSchedule ?? _firestoreRebase,
         _confirm = confirm ?? _dialogConfirm,
-        _now = clock ?? DateTime.now;
+        _now = clock ?? DateTime.now,
+        _storeName = storeName ?? _storageStoreName;
 
   final UserModel? _original;
   final Future<WriteOutcome> Function(UserModel) _save;
   final Future<void> Function(DateTime) _rebaseSchedule;
   final Future<bool> Function(String) _confirm;
   final DateTime Function() _now;
+
+  /// Keeps the child's name on the device for reminder texts.
+  final Future<void> Function(String) _storeName;
+
+  static Future<void> _storageStoreName(String name) =>
+      AppConstant.getStorage.write(StorageKey.userNameKey, name);
 
   final TextEditingController name = TextEditingController();
   final TextEditingController birthday = TextEditingController();
@@ -179,8 +187,7 @@ class EditUserController extends GetxController {
       final UserModel updated = buildUser();
       final WriteOutcome outcome = await _save(updated);
       if (rebase) await _rebaseSchedule(selectedBirthday.value!);
-      await AppConstant.getStorage
-          .write(StorageKey.userNameKey, updated.name ?? '');
+      await _storeName(updated.name ?? '');
       AppHaptics.confirm();
       if (Get.isRegistered<HomeController>()) {
         Get.find<HomeController>().fetchUserData();
@@ -189,12 +196,11 @@ class EditUserController extends GetxController {
         Get.find<MedicalDatesController>().fetchMedicalDates();
       }
       Get.back(result: outcome);
-      Get.showSnackbar(GetSnackBar(
-        message: outcome == WriteOutcome.pendingSync
-            ? "saved_offline_msg".tr
-            : "EditUser_saved_msg".tr,
-        duration: const Duration(seconds: 3),
-      ));
+      if (outcome == WriteOutcome.pendingSync) {
+        AppSnackbar.info("saved_offline_msg".tr);
+      } else {
+        AppSnackbar.success("EditUser_saved_msg".tr);
+      }
     } catch (e, s) {
       logger.w('Profile update failed', error: e, stackTrace: s);
       saveError.value = "EditUserController_update_user_failed".tr;

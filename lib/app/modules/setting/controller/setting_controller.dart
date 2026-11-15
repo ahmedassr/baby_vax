@@ -77,7 +77,9 @@ class SettingsController extends GetxController {
   }
 
   Future<void> openNotificationSettings() async {
-    await _settingsOpener.open();
+    if (!await _settingsOpener.open()) {
+      AppSnackbar.error("Notification_permission_denied_msg".tr);
+    }
   }
 
   /// Stores the choice: nothing for "system", so the app keeps following
