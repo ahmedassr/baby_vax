@@ -23,6 +23,15 @@ class UserModel {
   /// Needed only for the WHO growth percentiles.
   final String? sex;
 
+  /// v1.1 health profile, all optional, shown in the Health tab and on the
+  /// vaccination card. Free text as the parent writes it.
+  final String? allergies;
+  final String? conditions;
+
+  /// One of [bloodTypes], or null when not known.
+  final String? bloodType;
+  final String? emergencyContact;
+
   UserModel({
     required this.uid,
     required this.email,
@@ -33,7 +42,31 @@ class UserModel {
     this.bloodPercentage,
     this.headSize,
     this.sex,
+    this.allergies,
+    this.conditions,
+    this.bloodType,
+    this.emergencyContact,
   });
+
+  /// The blood types the rules accept.
+  static const List<String> bloodTypes = <String>[
+    'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-' //
+  ];
+
+  /// Health-profile field names, as stored.
+  static const List<String> healthFields = <String>[
+    'allergies', 'conditions', 'bloodType', 'emergencyContact' //
+  ];
+
+  static String? _text(Object? v) =>
+      v is String && v.trim().isNotEmpty ? v.trim() : null;
+
+  /// Whether any health-profile field is filled in.
+  bool get hasHealthProfile =>
+      allergies != null ||
+      conditions != null ||
+      bloodType != null ||
+      emergencyContact != null;
 
   /// The two values the rules accept.
   static const Set<String> allowedSexes = <String>{'female', 'male'};
@@ -52,6 +85,11 @@ class UserModel {
       bloodPercentage: json?["bloodPercentage"] ?? "",
       headSize: json?["headSize"] ?? "",
       sex: _sex(json?["sex"]),
+      allergies: _text(json?["allergies"]),
+      conditions: _text(json?["conditions"]),
+      bloodType:
+          bloodTypes.contains(json?["bloodType"]) ? json!["bloodType"] : null,
+      emergencyContact: _text(json?["emergencyContact"]),
     );
   }
 
@@ -71,6 +109,10 @@ class UserModel {
     String? bloodPercentage,
     String? headSize,
     String? sex,
+    String? allergies,
+    String? conditions,
+    String? bloodType,
+    String? emergencyContact,
   }) {
     return UserModel(
       uid: uid,
@@ -82,11 +124,16 @@ class UserModel {
       bloodPercentage: bloodPercentage ?? this.bloodPercentage,
       headSize: headSize ?? this.headSize,
       sex: sex ?? this.sex,
+      allergies: allergies ?? this.allergies,
+      conditions: conditions ?? this.conditions,
+      bloodType: bloodType ?? this.bloodType,
+      emergencyContact: emergencyContact ?? this.emergencyContact,
     );
   }
 
-  /// The Firestore document. `sex` is only written when known, so an edit
-  /// from a build that does not know about it never clears it.
+  /// The Firestore document. `sex` and the health profile are only written
+  /// when known, so a profile edit never clears them (the health profile is
+  /// changed, and cleared, by its own sheet).
   Map<String, dynamic> toMap() {
     return {
       "uid": uid,
@@ -98,6 +145,10 @@ class UserModel {
       "bloodPercentage": bloodPercentage,
       "headSize": headSize,
       if (sex != null) "sex": sex,
+      if (allergies != null) "allergies": allergies,
+      if (conditions != null) "conditions": conditions,
+      if (bloodType != null) "bloodType": bloodType,
+      if (emergencyContact != null) "emergencyContact": emergencyContact,
     };
   }
 }

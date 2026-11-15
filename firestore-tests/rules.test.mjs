@@ -621,6 +621,144 @@ describe('users/{userId}/reminders/{id} — v1.1 custom reminders', () => {
   });
 });
 
+describe('users/{userId} — v1.1 health profile', () => {
+  it('accepts the four health fields, each optional', async () => {
+    await assertSucceeds(
+      setDoc(doc(asUser(ALICE), `users/${ALICE}`), {
+        ...validUser(ALICE),
+        allergies: 'Penicillin',
+        conditions: 'None known',
+        bloodType: 'O+',
+        emergencyContact: 'Mum 0599 000 000',
+      }),
+    );
+    await assertSucceeds(
+      updateDoc(doc(asUser(ALICE), `users/${ALICE}`), { allergies: null }),
+    );
+  });
+
+  for (const bloodType of ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']) {
+    it(`accepts blood type ${bloodType}`, async () => {
+      await assertSucceeds(
+        setDoc(doc(asUser(ALICE), `users/${ALICE}`), { ...validUser(ALICE), bloodType }),
+      );
+    });
+  }
+
+  for (const [field, bad] of [
+    ['allergies', 'x'.repeat(301)], ['conditions', 'x'.repeat(301)],
+    ['bloodType', 'O'], ['bloodType', 'o+'], ['bloodType', 1],
+    ['emergencyContact', 'x'.repeat(101)], ['allergies', 5],
+  ]) {
+    it(`denies ${field} = ${JSON.stringify(bad).slice(0, 20)}`, async () => {
+      await assertFails(
+        setDoc(doc(asUser(ALICE), `users/${ALICE}`), { ...validUser(ALICE), [field]: bad }),
+      );
+    });
+  }
+});
+
+describe('users/{userId}/health_log/{id} — v1.1 Health tab', () => {
+  const path = (uid) => `users/${uid}/health_log`;
+  const at = Timestamp.fromDate(new Date('2027-03-10T09:20:00Z'));
+  const valid = {
+    temperature: { kind: 'temperature', at, tempC: 38.4, method: 'armpit', note: 'after the bath' },
+    symptoms: { kind: 'symptoms', at, symptoms: ['feelsHot', 'feedingPoorly'], doseId: 'dose1' },
+    medicine: { kind: 'medicine', at, medicine: 'Paracetamol', amount: '2.5 ml' },
+    note: { kind: 'note', at, note: 'Slept well after the vaccine' },
+  };
+
+  it('lets the owner add, read, list, edit and delete', async () => {
+    const db = asUser(ALICE);
+    await assertSucceeds(setDoc(doc(db, `${path(ALICE)}/e1`), valid.temperature));
+    await assertSucceeds(getDoc(doc(db, `${path(ALICE)}/e1`)));
+    await assertSucceeds(getDocs(collection(db, path(ALICE))));
+    await assertSucceeds(updateDoc(doc(db, `${path(ALICE)}/e1`), { tempC: 37.9 }));
+    await assertSucceeds(deleteDoc(doc(db, `${path(ALICE)}/e1`)));
+  });
+
+  for (const [kind, data] of Object.entries(valid)) {
+    it(`accepts a ${kind} entry`, async () => {
+      await assertSucceeds(setDoc(doc(asUser(ALICE), `${path(ALICE)}/e1`), data));
+    });
+  }
+
+  it('accepts every sign the app offers, together', async () => {
+    const all = ['feelsHot', 'feedingPoorly', 'unableToFeed', 'vomiting',
+      'vomitsEverything', 'diarrhoea', 'bloodInStool', 'cough', 'runnyNose',
+      'fastBreathing', 'difficultBreathing', 'convulsions', 'lethargic',
+      'lessActive', 'feelsCold', 'yellowSkin', 'rash', 'injectionSite', 'crying'];
+    await assertSucceeds(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/e1`), { kind: 'symptoms', at, symptoms: all }),
+    );
+  });
+
+  for (const method of ['armpit', 'rectal', 'other']) {
+    it(`accepts method "${method}"`, async () => {
+      await assertSucceeds(
+        setDoc(doc(asUser(ALICE), `${path(ALICE)}/e1`), { ...valid.temperature, method }),
+      );
+    });
+  }
+
+  for (const [kind, field] of [
+    ['temperature', 'tempC'], ['symptoms', 'symptoms'],
+    ['medicine', 'medicine'], ['note', 'note'],
+  ]) {
+    it(`denies a ${kind} entry without ${field}`, async () => {
+      await assertFails(
+        setDoc(doc(asUser(ALICE), `${path(ALICE)}/e1`), without(valid[kind], field)),
+      );
+    });
+  }
+
+  for (const field of ['kind', 'at']) {
+    it(`denies an entry without ${field}`, async () => {
+      await assertFails(
+        setDoc(doc(asUser(ALICE), `${path(ALICE)}/e1`), without(valid.note, field)),
+      );
+    });
+  }
+
+  for (const [base, field, bad] of [
+    ['note', 'kind', 'diaper'],
+    ['note', 'at', '2027-03-10'],
+    ['temperature', 'tempC', 31.9], ['temperature', 'tempC', 44.1],
+    ['temperature', 'tempC', '38'],
+    ['temperature', 'method', 'forehead'],
+    ['symptoms', 'symptoms', []], ['symptoms', 'symptoms', ['sneezing']],
+    ['symptoms', 'symptoms', 'feelsHot'],
+    ['medicine', 'medicine', ''], ['medicine', 'medicine', 'x'.repeat(81)],
+    ['medicine', 'amount', 'x'.repeat(41)],
+    ['note', 'note', ''], ['note', 'note', 'x'.repeat(501)],
+    ['note', 'doseId', 'x'.repeat(129)],
+  ]) {
+    it(`denies ${base}.${field} = ${JSON.stringify(bad).slice(0, 20)}`, async () => {
+      await assertFails(
+        setDoc(doc(asUser(ALICE), `${path(ALICE)}/e1`), { ...valid[base], [field]: bad }),
+      );
+    });
+  }
+
+  it('denies unknown fields', async () => {
+    await assertFails(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/e1`), { ...valid.note, dose: '5 ml' }),
+    );
+  });
+
+  it("denies reading or writing another user's log", async () => {
+    await seed((db) => setDoc(doc(db, `${path(ALICE)}/e1`), valid.note));
+    await assertFails(getDoc(doc(asUser(BOB), `${path(ALICE)}/e1`)));
+    await assertFails(getDocs(collection(asUser(BOB), path(ALICE))));
+    await assertFails(setDoc(doc(asUser(BOB), `${path(ALICE)}/e2`), valid.note));
+    await assertFails(deleteDoc(doc(asUser(BOB), `${path(ALICE)}/e1`)));
+  });
+
+  it('denies a signed-out client', async () => {
+    await assertFails(setDoc(doc(asAnon(), `${path(ALICE)}/e1`), valid.note));
+  });
+});
+
 describe('sign-up batch', () => {
   // Sign-up writes the profile and the whole generated schedule in one
   // batch with client-generated ids (FireStoreHelperService.commitSets).

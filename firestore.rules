@@ -7,6 +7,7 @@ rules_version = '2';
 //   users/{userId}/medical_dates/{id}   - that child's vaccination schedule
 //   users/{userId}/measurements/{id}    - dated growth measurements (v1.1)
 //   users/{userId}/reminders/{id}       - the parent's own reminders (v1.1)
+//   users/{userId}/health_log/{id}      - temperatures, signs, medicines (v1.1)
 //   tips/{id}, tips_en/{id}             - app content, read-only for clients
 //
 // Default is deny: the final catch-all rejects every path not named here, so a
@@ -74,7 +75,10 @@ service cloud.firestore {
                'height', 'weight', 'bloodPercentage', 'headSize',
                // v1.1, optional: the baby's sex, for the WHO growth charts.
                // A v1.0 profile without it is still valid.
-               'sex'
+               'sex',
+               // v1.1, optional: the health profile shown in the Health tab
+               // and on the vaccination card.
+               'allergies', 'conditions', 'bloodType', 'emergencyContact'
              ])
              // uid must match the document id, so a profile cannot claim to be
              // someone else's.
@@ -86,7 +90,12 @@ service cloud.firestore {
              && isOptionalShortString(data, 'weight', 20)
              && isOptionalShortString(data, 'bloodPercentage', 20)
              && isOptionalShortString(data, 'headSize', 20)
-             && isOptionalOneOf(data, 'sex', ['female', 'male']);
+             && isOptionalOneOf(data, 'sex', ['female', 'male'])
+             && isOptionalShortString(data, 'allergies', 300)
+             && isOptionalShortString(data, 'conditions', 300)
+             && isOptionalOneOf(data, 'bloodType',
+                  ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
+             && isOptionalShortString(data, 'emergencyContact', 100);
     }
 
     match /users/{userId} {
@@ -178,6 +187,60 @@ service cloud.firestore {
       allow get, list: if isOwner(userId);
       allow create, update: if isOwner(userId)
                             && isValidReminder(incoming());
+      allow delete: if isOwner(userId);
+    }
+
+    // ---- health log (v1.1 Health tab) -----------------------------------
+    //
+    // users/{userId}/health_log/{id}: one dated entry — a temperature, a set
+    // of signs, a medicine given, or a note. The value its kind needs is
+    // required; the rest are optional. Temperature bounds are plausibility
+    // checks for a typed reading, not medical limits.
+
+    function isValidHealthEntry(data) {
+      return data.keys().hasOnly([
+               'kind', 'at', 'tempC', 'method', 'symptoms',
+               'medicine', 'amount', 'note', 'doseId'
+             ])
+             && data.keys().hasAll(['kind', 'at'])
+             && data.kind in ['temperature', 'symptoms', 'medicine', 'note']
+             && data.at is timestamp
+             && isOptionalNumberIn(data, 'tempC', 32, 44)
+             && isOptionalOneOf(data, 'method', ['armpit', 'rectal', 'other'])
+             && (!data.keys().hasAny(['symptoms'])
+                 || data.symptoms == null
+                 || (data.symptoms is list
+                     && data.symptoms.size() <= 19
+                     // The names of HealthSymptom in the app.
+                     && data.symptoms.hasOnly([
+                          'feelsHot', 'feedingPoorly', 'unableToFeed',
+                          'vomiting', 'vomitsEverything', 'diarrhoea',
+                          'bloodInStool', 'cough', 'runnyNose',
+                          'fastBreathing', 'difficultBreathing',
+                          'convulsions', 'lethargic', 'lessActive',
+                          'feelsCold', 'yellowSkin', 'rash',
+                          'injectionSite', 'crying'
+                        ])))
+             && isOptionalShortString(data, 'medicine', 80)
+             && isOptionalShortString(data, 'amount', 40)
+             && isOptionalShortString(data, 'note', 500)
+             && isOptionalShortString(data, 'doseId', 128)
+             // What each kind is about must be there.
+             && (data.kind != 'temperature' || data.get('tempC', null) != null)
+             && (data.kind != 'symptoms'
+                 || (data.get('symptoms', null) != null
+                     && data.symptoms.size() > 0))
+             && (data.kind != 'medicine'
+                 || (data.get('medicine', null) != null
+                     && data.medicine.size() > 0))
+             && (data.kind != 'note'
+                 || (data.get('note', null) != null && data.note.size() > 0));
+    }
+
+    match /users/{userId}/health_log/{entryId} {
+      allow get, list: if isOwner(userId);
+      allow create, update: if isOwner(userId)
+                            && isValidHealthEntry(incoming());
       allow delete: if isOwner(userId);
     }
 

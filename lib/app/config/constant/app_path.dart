@@ -13,6 +13,9 @@ class AppPath {
   /// v1.1: the parent's own reminders and appointments.
   static const String remindersColl = 'reminders';
 
+  /// v1.1: the Health tab's log (temperatures, signs, medicines, notes).
+  static const String healthLogColl = 'health_log';
+
   // Documents
   static String userDoc(String uid) => '$usersColl/$uid';
 
@@ -26,6 +29,7 @@ class AppPath {
   static String userMeasurements(String uid) =>
       '${userDoc(uid)}/$measurementsColl';
   static String userReminders(String uid) => '${userDoc(uid)}/$remindersColl';
+  static String userHealthLog(String uid) => '${userDoc(uid)}/$healthLogColl';
 
   /// Every subcollection under a user's document. Account deletion walks
   /// this list, since deleting the parent document leaves them behind.
@@ -33,5 +37,6 @@ class AppPath {
         userMedicalDates(uid),
         userMeasurements(uid),
         userReminders(uid),
+        userHealthLog(uid),
       ];
 }
