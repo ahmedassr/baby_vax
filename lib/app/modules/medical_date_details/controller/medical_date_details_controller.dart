@@ -65,6 +65,17 @@ class MedicalDateDetailsController extends GetxController {
   bool get canMarkSkipped =>
       dose.value != null && VaccineStatePolicy.canMarkSkipped(dose.value!);
 
+  /// "Mark as skipped" among the main actions: for a pending dose that is
+  /// overdue or due today, where skipping is a real decision to record.
+  bool get skipInMainActions =>
+      canMarkSkipped && !VaccineStatePolicy.isInFuture(dose.value!, _now());
+
+  /// For a dose not yet due, skipping is tucked into the "More options"
+  /// menu and asks first (phone review R7): it is rarely meant, and it
+  /// cancels the dose's reminders.
+  bool get skipInMenu =>
+      canMarkSkipped && VaccineStatePolicy.isInFuture(dose.value!, _now());
+
   bool get canUndo =>
       dose.value != null && VaccineStatePolicy.canUndo(dose.value!);
 
@@ -136,6 +147,16 @@ class MedicalDateDetailsController extends GetxController {
   }
 
   Future<void> onMarkSkipped() => _change(_stateService.markSkipped);
+
+  /// Skips a dose that is not yet due, after the parent confirms that its
+  /// reminders will be cancelled and that they have checked with their
+  /// doctor or national schedule. Undo brings it and its reminders back.
+  Future<void> onMarkSkippedFromMenu() async {
+    if (!skipInMenu) return;
+    final bool yes = await _confirm("MedicalDateDetails_confirm_skip_msg".tr);
+    if (!yes) return;
+    await onMarkSkipped();
+  }
 
   Future<void> onUndo() => _change(_stateService.undo);
 

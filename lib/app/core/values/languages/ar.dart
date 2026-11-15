@@ -628,4 +628,7 @@ Map<String, String> ar = {
   "Health_chart_legend":
       "رقم الحمى حسب منظمة الصحة العالمية: 37.5 درجة مئوية (تحت الإبط)",
   "Settings_licenses": "تراخيص البرمجيات مفتوحة المصدر",
+  "MedicalDateDetails_more_options": "خيارات أخرى",
+  "MedicalDateDetails_confirm_skip_msg":
+      "تخطّي هذه الجرعة؟ ستُلغى تذكيراتها. راجِع طبيبك أو جدول التطعيم الوطني قبل تخطّي أي جرعة. يمكنك التراجع عن ذلك لاحقًا.",
 };

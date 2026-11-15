@@ -99,12 +99,85 @@ void main() {
     expect(find.byKey(const Key('mark_completed_button')), findsOneWidget);
   });
 
-  testWidgets('skip is offered for a pending dose', (tester) async {
-    put(pendingFuture());
-    await pumpApp(tester, const MedicalDateDetailsView());
-    await tap(tester, 'mark_skipped_button');
-    expect(writer.writes.single.$2, MedicalDateStateEnum.skipped);
-  });
+  // Phone review R7: "Mark as skipped" stays among the main actions for a
+  // dose that is overdue or due today; for a future dose it moves to the
+  // "More options" menu and asks first.
+  final MedicalDatesModel overdue =
+      sampleSchedule(states: const <String, String>{})[0]; // 15 Jan, pending
+  final MedicalDatesModel dueToday =
+      sampleSchedule()[1].copyWith(date: DateTime(2027, 3, 10));
+
+  for (final Variant v in const <Variant>[
+    Variant('en', Brightness.light, 1.0),
+    Variant('ar', Brightness.dark, 1.3),
+  ]) {
+    for (final (String name, MedicalDatesModel dose) in <(
+      String,
+      MedicalDatesModel
+    )>[('overdue', overdue), ('due today', dueToday)]) {
+      testWidgets('$name: skip stays a main action, no menu ($v)',
+          (tester) async {
+        put(dose);
+        await pumpApp(tester, const MedicalDateDetailsView(), variant: v);
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key('mark_skipped_button')), findsOneWidget);
+        expect(find.byKey(const Key('dose_more_options')), findsNothing);
+        expectNoOverflow(tester);
+        await tap(tester, 'mark_skipped_button');
+        expect(writer.writes.single.$2, MedicalDateStateEnum.skipped);
+        expect(confirmations, isEmpty, reason: 'unchanged: no extra question');
+      });
+    }
+
+    testWidgets('future: skip only in More options, confirmed, undoable ($v)',
+        (tester) async {
+      final c = put(pendingFuture());
+      await pumpApp(tester, const MedicalDateDetailsView(), variant: v);
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('mark_skipped_button')), findsNothing);
+      expect(find.byKey(const Key('mark_completed_button')), findsOneWidget);
+      expect(
+          find.byTooltip("MedicalDateDetails_more_options".tr), findsOneWidget);
+      expectNoOverflow(tester);
+
+      await tap(tester, 'dose_more_options');
+      expect(find.text("MedicalDateActions_mark_skipped".tr), findsOneWidget);
+      await tap(tester, 'menu_mark_skipped');
+
+      // Asked first: reminders cancelled; check with the doctor or the
+      // national schedule.
+      expect(confirmations.single, "MedicalDateDetails_confirm_skip_msg".tr);
+      expect(
+          confirmations.single,
+          contains(
+              v.rtl ? 'جدول التطعيم الوطني' : 'national vaccination schedule'));
+      expect(confirmations.single,
+          contains(v.rtl ? 'ستُلغى تذكيراتها' : 'reminders will be cancelled'));
+      expect(writer.writes.single.$2, MedicalDateStateEnum.skipped);
+      expect(reminders.cancelled, <String>['dose1']);
+      expect(c.dose.value!.state, 'Skipped');
+      expect(find.byKey(const Key('dose_more_options')), findsNothing);
+
+      // Undo brings the dose and its reminders back.
+      await tap(tester, 'undo_button');
+      expect(writer.writes.last.$2, MedicalDateStateEnum.pending);
+      expect(reminders.scheduled.single.id, 'dose1');
+      expect(find.byKey(const Key('dose_more_options')), findsOneWidget);
+    });
+
+    testWidgets('future: declining the question changes nothing ($v)',
+        (tester) async {
+      final c = put(pendingFuture(), confirmAnswer: false);
+      await pumpApp(tester, const MedicalDateDetailsView(), variant: v);
+      await tester.pumpAndSettle();
+      await tap(tester, 'dose_more_options');
+      await tap(tester, 'menu_mark_skipped');
+      expect(confirmations, hasLength(1));
+      expect(writer.writes, isEmpty);
+      expect(reminders.cancelled, isEmpty);
+      expect(c.dose.value!.state, 'Pending');
+    });
+  }
 
   testWidgets('offline shows "Saved on this phone"', (tester) async {
     put(completed());

@@ -18,6 +18,23 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
               ? "MedicalDateDetailsView_title".tr
               : bidiIsolate(dose.displayName),
           titleMaxLines: 2,
+          action: controller.skipInMenu
+              ? <Widget>[
+                  PopupMenuButton<String>(
+                    key: const Key('dose_more_options'),
+                    tooltip: "MedicalDateDetails_more_options".tr,
+                    icon: const Icon(Icons.more_vert_rounded),
+                    onSelected: (_) => controller.onMarkSkippedFromMenu(),
+                    itemBuilder: (_) => <PopupMenuEntry<String>>[
+                      PopupMenuItem<String>(
+                        key: const Key('menu_mark_skipped'),
+                        value: 'skip',
+                        child: Text("MedicalDateActions_mark_skipped".tr),
+                      ),
+                    ],
+                  ),
+                ]
+              : null,
         ),
         body: dose == null
             ? AppEmptyState(
@@ -134,7 +151,7 @@ class MedicalDateDetailsView extends GetView<MedicalDateDetailsController> {
             controller.dose.value;
             return MedicalDateActions(
               canMarkCompleted: controller.canMarkCompleted,
-              canMarkSkipped: controller.canMarkSkipped,
+              canMarkSkipped: controller.skipInMainActions,
               canUndo: controller.canUndo,
               busy: controller.isSaving.value,
               onMarkCompleted: controller.onMarkCompleted,

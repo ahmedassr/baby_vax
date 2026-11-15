@@ -2,8 +2,10 @@ import 'package:baby_vax/app/core/imports/import_manger.dart';
 
 /// The state actions for one dose.
 ///
-///   Pending             -> "Mark as given" (primary), "Mark as skipped"
-///                          (danger outline)
+///   Pending             -> "Mark as given" (primary), and "Mark as
+///                          skipped" (danger outline) when the dose is
+///                          overdue or due today; for a future dose it is
+///                          in the screen's "More options" menu instead
 ///   Completed / Skipped -> "Undo (mark as pending)" (outline)
 class MedicalDateActions extends StatelessWidget {
   final bool canMarkCompleted;

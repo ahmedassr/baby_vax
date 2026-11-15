@@ -587,4 +587,7 @@ Map<String, String> en = {
       "Sources: World Health Organization — Integrated Management of Childhood Illness, Chart Booklet (2014); Vaccines and immunization: Vaccine safety (questions and answers).",
   "Health_chart_legend": "WHO's fever figure: 37.5 °C (armpit)",
   "Settings_licenses": "Open-source licences",
+  "MedicalDateDetails_more_options": "More options",
+  "MedicalDateDetails_confirm_skip_msg":
+      "Skip this dose? Its reminders will be cancelled. Check with your doctor or your national vaccination schedule before skipping a dose. You can undo this later.",
 };
