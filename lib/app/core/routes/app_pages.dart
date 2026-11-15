@@ -1,6 +1,7 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/modules/auth/forgot_password/binding/forgot_password_binding.dart';
 import 'package:baby_vax/app/modules/auth/forgot_password/view/forgot_password_view.dart';
+import 'package:baby_vax/app/modules/health/view/health_guide_view.dart';
 import 'package:baby_vax/app/modules/home/view/home_view.dart';
 import 'package:baby_vax/app/modules/medical_date_details/binding/medical_date_details_binding.dart';
 import 'package:baby_vax/app/modules/medical_date_details/view/medical_date_details_view.dart';
@@ -91,5 +92,6 @@ class AppPages {
         route: AppRoutes.reminders,
         page: () => const RemindersView(),
         binding: RemindersBinding()),
+    build(route: AppRoutes.healthGuide, page: () => const HealthGuideView()),
   ];
 }

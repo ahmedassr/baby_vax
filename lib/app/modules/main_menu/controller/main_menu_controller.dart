@@ -2,13 +2,15 @@ import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/utils/app_haptics.dart';
 import 'package:baby_vax/app/modules/home/controller/home_controller.dart';
 import 'package:baby_vax/app/modules/setting/view/setting_view.dart';
-import 'package:baby_vax/app/modules/tips/controller/tips_controller.dart';
-import 'package:baby_vax/app/modules/tips/view/tips_view.dart';
+import 'package:baby_vax/app/modules/health/controller/health_controller.dart';
+import 'package:baby_vax/app/modules/health/view/health_view.dart';
 
 import '../../home/view/home_view.dart';
 
-/// The four tabs. v1.0 also had search/add/edit app-bar actions whose
-/// handlers were empty; they are gone.
+/// The four tabs: Home, Schedule, Health, Settings. Health replaced Tips
+/// (phone review): tips are Home's "Tip of the day" and a row in Settings.
+/// v1.0 also had search/add/edit app-bar actions whose handlers were
+/// empty; they are gone.
 class MainMenuController extends GetxController {
   final currentIndex = 0.obs;
 
@@ -24,10 +26,10 @@ class MainMenuController extends GetxController {
         icon: Icons.event_note_outlined,
         selectedIcon: Icons.event_note_rounded),
     BottomNavBarModel(
-        title: "MainMenuController_tips_title",
-        view: TipsView(),
-        icon: Icons.lightbulb_outline_rounded,
-        selectedIcon: Icons.lightbulb_rounded),
+        title: "Health_title",
+        view: HealthView(),
+        icon: Icons.monitor_heart_outlined,
+        selectedIcon: Icons.monitor_heart_rounded),
     BottomNavBarModel(
         title: "MainMenuController_settings_title",
         view: SettingsView(),
@@ -48,8 +50,8 @@ class MainMenuController extends GetxController {
           Get.find<MedicalDatesController>().fetchMedicalDates();
         }
       case 2:
-        if (Get.isRegistered<TipsController>()) {
-          Get.find<TipsController>().fetchTips();
+        if (Get.isRegistered<HealthController>()) {
+          Get.find<HealthController>().fetch();
         }
     }
   }

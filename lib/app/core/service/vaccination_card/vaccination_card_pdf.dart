@@ -137,8 +137,7 @@ class VaccinationCardPdf {
                 arText(data.sex!.ar, 11),
               ])),
       // The health profile, only the parts that are filled in.
-      if (data.bloodType != null)
-        fact('Health_blood_type', data.bloodType!),
+      if (data.bloodType != null) fact('Health_blood_type', data.bloodType!),
       if (data.allergies != null) fact('Health_allergies', data.allergies!),
       if (data.conditions != null) fact('Health_conditions', data.conditions!),
       if (data.emergencyContact != null)

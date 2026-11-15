@@ -44,8 +44,10 @@ class HealthLabels {
         HealthEntryKind.note => Icons.sticky_note_2_outlined,
       };
 
-  /// "38.4 °C", always with Western digits and one decimal.
-  static String temperature(double c) => '${c.toStringAsFixed(1)} °C';
+  /// "38.4 °C", always with Western digits and one decimal, kept left to
+  /// right inside Arabic text (unisolated it reads "C° 38.4").
+  static String temperature(double c) =>
+      bidiIsolate('${c.toStringAsFixed(1)} °C');
 
   /// A one-line summary of [e] for the timeline.
   static String summary(HealthEntry e) => switch (e.kind) {

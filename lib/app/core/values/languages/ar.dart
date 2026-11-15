@@ -502,7 +502,7 @@ Map<String, String> ar = {
   "Health_method_rectal": "شرجية",
   "Health_method_other": "طريقة أخرى",
   "Health_method_hint":
-      "رقم منظمة الصحة العالمية لقياس الإبط: الحمى 37.5 °C فأكثر. القراءة الشرجية أعلى بنحو 0.5 °C.",
+      "رقم منظمة الصحة العالمية لقياس الإبط: الحمى 37.5 درجة مئوية فأكثر. القراءة الشرجية أعلى بنحو 0.5 درجة.",
   "Health_method_other_hint":
       "تعطي منظمة الصحة العالمية أرقامًا لقياس الإبط والقياس الشرجي فقط، لذا لا يحكم Baby Vax على هذه القراءة.",
   "Health_fever_label": "حمى حسب رقم منظمة الصحة العالمية",
@@ -549,4 +549,82 @@ Map<String, String> ar = {
   "Health_blood_unknown": "غير معروفة",
   "Health_emergency": "جهة اتصال للطوارئ",
   "Health_emergency_helper": "الاسم ورقم الهاتف",
+  "Health_title": "الصحة",
+  "Health_intro": "سجّل الحرارة والأعراض والأدوية لتعرضها على الطبيب.",
+  "Health_add_section": "أضف إلى السجل",
+  "Health_temperature_section": "آخر قراءة حرارة",
+  "Health_chart_title": "آخر 72 ساعة",
+  "Health_chart_semantic":
+      "عدد القراءات في آخر 72 ساعة: @count. أعلاها: @max درجة مئوية.",
+  "Health_last_medicine": "آخر دواء: @name",
+  "Health_log_section": "السجل الصحي",
+  "Health_empty_title": "لا توجد تسجيلات بعد",
+  "Health_empty_body":
+      "استخدم الأزرار في الأعلى لتسجيل الحرارة أو الأعراض أو دواء أو ملاحظة.",
+  "Health_delete_confirm": "حذف هذا التسجيل من السجل الصحي؟",
+  "Health_profile_empty": "أضف الحساسية وفصيلة الدم وجهة اتصال للطوارئ.",
+  "Health_profile_edit": "تعديل",
+  "Health_profile_saved": "تم حفظ الملف الصحي.",
+  "Health_after_vaccine_title": "بعد @vaccine",
+  "Health_after_vaccine_day": "اليوم @day بعد التطعيم",
+  "Health_after_vaccine_body":
+      "منظمة الصحة العالمية: عادة ما تكون الآثار الجانبية للقاحات طفيفة جداً وقصيرة الأمد، مثل الألم في الذراع أو الحمى الخفيفة.",
+  "Health_flag_urgent": "علامة خطر حسب منظمة الصحة العالمية",
+  "Health_flag_see": "راجِع عاملًا صحيًا",
+  "Health_today": "اليوم",
+  "Health_yesterday": "أمس",
+  "Health_ago_now": "الآن",
+  "Health_ago_minutes_one": "منذ دقيقة",
+  "Health_ago_minutes_two": "منذ دقيقتين",
+  "Health_ago_minutes_few": "منذ @count دقائق",
+  "Health_ago_minutes_many": "منذ @count دقيقة",
+  "Health_ago_minutes_other": "منذ @count دقيقة",
+  "Health_ago_hours_one": "منذ ساعة",
+  "Health_ago_hours_two": "منذ ساعتين",
+  "Health_ago_hours_few": "منذ @count ساعات",
+  "Health_ago_hours_many": "منذ @count ساعة",
+  "Health_ago_hours_other": "منذ @count ساعة",
+  "Health_ago_days_one": "منذ يوم",
+  "Health_ago_days_two": "منذ يومين",
+  "Health_ago_days_few": "منذ @count أيام",
+  "Health_ago_days_many": "منذ @count يومًا",
+  "Health_ago_days_other": "منذ @count يوم",
+  "Health_guide_title": "متى تطلب المساعدة الطبية",
+  "Health_guide_row_hint":
+      "علامات الخطر حسب منظمة الصحة العالمية، وما هو معتاد بعد التطعيم",
+  "Health_guide_intro":
+      "العلامات التي تذكرها منظمة الصحة العالمية لطلب المساعدة. إذا كنت قلقًا على طفلك فلا تنتظر: تواصل مع عامل صحي.",
+  "Health_guide_urgent_title": "علامات الخطر: اطلب المساعدة الطبية الآن",
+  "Health_guide_urgent_1": "لا يستطيع الشرب أو الرضاعة",
+  "Health_guide_urgent_2": "يتقيأ كل شيء",
+  "Health_guide_urgent_3": "أصيب بتشنجات، أو يتشنج الآن",
+  "Health_guide_urgent_4": "خامل (نعاس شديد وصعوبة في الإيقاظ) أو فاقد للوعي",
+  "Health_guide_young_title":
+      "الرضّع حتى عمر شهرين: اطلب المساعدة الطبية الآن إذا",
+  "Health_guide_young_1": "لا يرضع جيدًا",
+  "Health_guide_young_2": "أصيب بتشنجات",
+  "Health_guide_young_3":
+      "تنفس سريع (60 نفسًا في الدقيقة أو أكثر) أو صعوبة في التنفس",
+  "Health_guide_young_4":
+      "حمى 37.5 درجة مئوية فأكثر (تحت الإبط)، أو برودة غير معتادة: أقل من 35.5 درجة مئوية",
+  "Health_guide_young_5":
+      "لا يتحرك إلا عند تنبيهه أو لا يتحرك أبدًا، أو أقل نشاطًا من المعتاد",
+  "Health_guide_young_6": "اصفرار الكفين وباطن القدمين",
+  "Health_guide_see_title": "طفل مريض: راجِع عاملًا صحيًا على الفور إذا",
+  "Health_guide_see_1": "ازداد مرضه",
+  "Health_guide_see_2": "أصيب بالحمى",
+  "Health_guide_see_3": "تنفّس بسرعة أو بصعوبة",
+  "Health_guide_see_4": "ظهر دم في البراز، أو صار يشرب بشكل ضعيف",
+  "Health_guide_vaccine_title": "بعد التطعيم",
+  "Health_guide_vaccine_2":
+      "وقد تحدث آثار جانبية أشد خطورة ولكنها نادرة للغاية. إذا ظهرت على طفلك أعراض غير متوقعة بعد التطعيم، فاستشر أخصائيًا في الرعاية الصحية.",
+  "Health_guide_fever_title": "عن الحمى",
+  "Health_guide_fever_1":
+      "تعدّ منظمة الصحة العالمية الحرارة 37.5 درجة مئوية فأكثر تحت الإبط حمّى.",
+  "Health_guide_fever_2":
+      "القراءة الشرجية أعلى بنحو 0.5 درجة. لموازين الحرارة الأخرى اتّبع تعليماتها.",
+  "Health_guide_source":
+      "المصادر: منظمة الصحة العالمية — التدبير المتكامل لأمراض الطفولة، كتيّب المخططات (2014)؛ اللقاحات والتمنيع: مأمونية اللقاحات (أسئلة وأجوبة). ترجمة علامات الخطر إلى العربية من إعداد Baby Vax.",
+  "Health_chart_legend":
+      "رقم الحمى حسب منظمة الصحة العالمية: 37.5 درجة مئوية (تحت الإبط)",
 };

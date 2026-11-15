@@ -1,4 +1,7 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
+import 'package:baby_vax/app/modules/health/controller/health_controller.dart';
+import 'package:baby_vax/app/modules/health/model/health_entry.dart';
+import 'package:baby_vax/app/modules/health/view/health_view.dart';
 import 'package:baby_vax/app/modules/home/controller/home_controller.dart';
 import 'package:baby_vax/app/modules/setting/controller/setting_controller.dart';
 import 'package:baby_vax/app/modules/tips/controller/tips_controller.dart';
@@ -27,6 +30,14 @@ void main() {
       clock: () => fixedNow,
     ));
     Get.put<TipsController>(TipsController(load: (_) async => <TipsModel>[]));
+    Get.put<HealthController>(HealthController(
+      load: (_) async => <HealthEntry>[],
+      save: (_, e) async => ('x', WriteOutcome.synced),
+      delete: (_, __) async {},
+      user: () => sampleUser(),
+      doses: () => sampleSchedule(),
+      clock: () => fixedNow,
+    ));
     Get.put<SettingsController>(SettingsController(
       write: (_, __) async {},
       remove: (_) {},
@@ -50,6 +61,28 @@ void main() {
       }
     });
   }
+
+  testWidgets('tabs: Home, Schedule, Health, Settings (Tips moved)',
+      (tester) async {
+    putAll();
+    await pumpApp(tester, const MainMenuView(),
+        variant: const Variant('ar', Brightness.dark, 1.3));
+    await tester.pumpAndSettle();
+    final NavigationBar bar = tester.widget(find.byType(NavigationBar));
+    expect(
+        bar.destinations.map((d) => (d as NavigationDestination).label),
+        <String>[
+          "MainMenuController_home_title".tr,
+          "MainMenuController_medical_dates_title".tr,
+          "Health_title".tr,
+          "MainMenuController_settings_title".tr,
+        ]);
+    await tester.tap(find.text("Health_title".tr).last);
+    await tester.pumpAndSettle();
+    expect(find.byType(HealthView), findsOneWidget);
+    expect(find.byType(AppBar), findsOneWidget);
+    expectNoOverflow(tester);
+  });
 
   testWidgets('navigation labels are always visible', (tester) async {
     putAll();

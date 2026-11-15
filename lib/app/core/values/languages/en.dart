@@ -516,4 +516,74 @@ Map<String, String> en = {
   "Health_blood_unknown": "Not known",
   "Health_emergency": "Emergency contact",
   "Health_emergency_helper": "A name and a phone number",
+  "Health_title": "Health",
+  "Health_intro":
+      "Keep a record of temperatures, signs and medicines to show the doctor.",
+  "Health_add_section": "Add to the log",
+  "Health_temperature_section": "Latest temperature",
+  "Health_chart_title": "Last 72 hours",
+  "Health_chart_semantic":
+      "Readings in the last 72 hours: @count. Highest: @max °C.",
+  "Health_last_medicine": "Last medicine: @name",
+  "Health_log_section": "Health log",
+  "Health_empty_title": "Nothing logged yet",
+  "Health_empty_body":
+      "Use the buttons above to log a temperature, signs, a medicine or a note.",
+  "Health_delete_confirm": "Delete this entry from the health log?",
+  "Health_profile_empty": "Add allergies, blood type and an emergency contact.",
+  "Health_profile_edit": "Edit",
+  "Health_profile_saved": "Health profile saved.",
+  "Health_after_vaccine_title": "After @vaccine",
+  "Health_after_vaccine_day": "Day @day since the vaccine",
+  "Health_after_vaccine_body":
+      "WHO: side effects of vaccines are usually very minor and of short duration, such as a sore arm or a mild fever.",
+  "Health_flag_urgent": "WHO danger sign",
+  "Health_flag_see": "See a health worker",
+  "Health_today": "Today",
+  "Health_yesterday": "Yesterday",
+  "Health_ago_now": "Just now",
+  "Health_ago_minutes_one": "1 minute ago",
+  "Health_ago_minutes_other": "@count minutes ago",
+  "Health_ago_hours_one": "1 hour ago",
+  "Health_ago_hours_other": "@count hours ago",
+  "Health_ago_days_one": "1 day ago",
+  "Health_ago_days_other": "@count days ago",
+  "Health_guide_title": "When to get medical help",
+  "Health_guide_row_hint":
+      "WHO's danger signs, and what is usual after a vaccine",
+  "Health_guide_intro":
+      "The signs WHO lists for getting help. If you are worried about your baby, don't wait: contact a health worker.",
+  "Health_guide_urgent_title": "Danger signs: get medical help now",
+  "Health_guide_urgent_1": "Not able to drink or breastfeed",
+  "Health_guide_urgent_2": "Vomits everything",
+  "Health_guide_urgent_3": "Has had convulsions (fits), or is convulsing now",
+  "Health_guide_urgent_4":
+      "Lethargic (very sleepy, hard to wake) or unconscious",
+  "Health_guide_young_title": "Babies up to 2 months: get medical help now if",
+  "Health_guide_young_1": "Not feeding well",
+  "Health_guide_young_2": "Convulsions (fits)",
+  "Health_guide_young_3":
+      "Fast breathing (60 breaths a minute or more) or difficult breathing",
+  "Health_guide_young_4":
+      "Fever of 37.5 °C or above (armpit), or feels unusually cold: below 35.5 °C",
+  "Health_guide_young_5":
+      "Moves only when stimulated or not at all, or is less active than usual",
+  "Health_guide_young_6": "Palms and soles look yellow",
+  "Health_guide_see_title":
+      "A sick child: go back to a health worker straight away if the child",
+  "Health_guide_see_1": "Becomes sicker",
+  "Health_guide_see_2": "Develops a fever",
+  "Health_guide_see_3": "Has fast or difficult breathing",
+  "Health_guide_see_4": "Has blood in the stool, or is drinking poorly",
+  "Health_guide_vaccine_title": "After a vaccine",
+  "Health_guide_vaccine_2":
+      "More serious side effects are possible but extremely rare. After an unexpected reaction, talk to a health worker.",
+  "Health_guide_fever_title": "About fever",
+  "Health_guide_fever_1":
+      "WHO counts a temperature of 37.5 °C or above, taken under the arm, as a fever.",
+  "Health_guide_fever_2":
+      "A rectal reading is about 0.5 °C higher. For other thermometers, follow their instructions.",
+  "Health_guide_source":
+      "Sources: World Health Organization — Integrated Management of Childhood Illness, Chart Booklet (2014); Vaccines and immunization: Vaccine safety (questions and answers).",
+  "Health_chart_legend": "WHO's fever figure: 37.5 °C (armpit)",
 };
