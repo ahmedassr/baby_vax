@@ -56,6 +56,10 @@ void main() {
       'VaccinationTimeStatus_',
       'age_months_',
       'age_years_',
+      'Health_symptom_',
+      'Health_method_',
+      'Health_kind_',
+      'Health_add_',
     ];
     final List<String> unused = keys['en']!
         .keys
