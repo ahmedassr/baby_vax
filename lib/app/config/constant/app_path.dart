@@ -7,6 +7,15 @@ class AppPath {
   static const String tipsColl = 'tips';
   static const String tipsEnColl = 'tips_en';
 
+  /// v1.1: dated growth measurements.
+  static const String measurementsColl = 'measurements';
+
+  /// v1.1: the parent's own reminders and appointments.
+  static const String remindersColl = 'reminders';
+
+  /// v1.1: the Health tab's log (temperatures, signs, medicines, notes).
+  static const String healthLogColl = 'health_log';
+
   // Documents
   static String userDoc(String uid) => '$usersColl/$uid';
 
@@ -16,4 +25,18 @@ class AppPath {
       '$usersColl/${SessionManager.signedInUid ?? ''}';
   static String userMedicalDates(String uid) =>
       '${userDoc(uid)}/$medicalDatesColl';
+
+  static String userMeasurements(String uid) =>
+      '${userDoc(uid)}/$measurementsColl';
+  static String userReminders(String uid) => '${userDoc(uid)}/$remindersColl';
+  static String userHealthLog(String uid) => '${userDoc(uid)}/$healthLogColl';
+
+  /// Every subcollection under a user's document. Account deletion walks
+  /// this list, since deleting the parent document leaves them behind.
+  static List<String> userSubcollections(String uid) => <String>[
+        userMedicalDates(uid),
+        userMeasurements(uid),
+        userReminders(uid),
+        userHealthLog(uid),
+      ];
 }

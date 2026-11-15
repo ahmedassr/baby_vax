@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The Baby Vax mark on a transparent background, cropped tight. Source of
+  assets/app_logo.webp (shown on the splash, onboarding and login screens)
+  and of the pre-Android-12 native splash image.
+  Same artwork as app-icon.svg.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="24 18 60 72" width="500" height="600">
+  <path d="M54 22 C62.5 27.5 71 29.5 79 29.5 L79 51 C79 68.5 68.5 80.5 54 87 C39.5 80.5 29 68.5 29 51 L29 29.5 C37 29.5 45.5 27.5 54 22 Z" fill="#2E7324" stroke="#2E7324" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M41 70 C40 51.5 50.5 40 69 38.5 C70 57 59 68.5 41 70 Z" fill="#8ED97C"/>
+  <path d="M41 70 C40 51.5 50.5 40 69 38.5 C58 47 48.5 57.5 41 70 Z" fill="#FFFFFF"/>
+  <path d="M43.5 67.5 C50 58 57.5 50 66.5 41.5" fill="none" stroke="#2E7324" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

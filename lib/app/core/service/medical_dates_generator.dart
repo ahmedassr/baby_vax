@@ -188,6 +188,32 @@ class MedicalDatesGenerator {
 
   static DateTime _atMidnight(DateTime d) => DateTime(d.year, d.month, d.day);
 
+  /// [doses] moved to a corrected birth date.
+  ///
+  /// Used when a parent fixes a wrong date of birth in the profile. Each
+  /// generated dose (one with a known schedule `code`) gets the date it
+  /// would have had from [birthDate]; its state and everything else it
+  /// carries are kept. Doses without a known code are returned unchanged,
+  /// since there is no rule for where they belong.
+  ///
+  /// Only doses whose date actually changes are returned, so the caller
+  /// writes nothing for a no-op edit.
+  static List<MedicalDatesModel> rebase(
+      Iterable<MedicalDatesModel> doses, DateTime birthDate) {
+    final DateTime birth = _atMidnight(birthDate);
+    final Map<String, int> months = <String, int>{
+      for (final VaccineScheduleEntry e in schedule) e.code: e.months,
+    };
+    final List<MedicalDatesModel> moved = <MedicalDatesModel>[];
+    for (final MedicalDatesModel d in doses) {
+      final int? m = d.code == null ? null : months[d.code];
+      if (m == null) continue;
+      final DateTime date = addMonths(birth, m);
+      if (date != _atMidnight(d.date)) moved.add(d.copyWith(date: date));
+    }
+    return moved;
+  }
+
   /// Adds [months] calendar months to [from], clamping the day to the target
   /// month's length.
   ///

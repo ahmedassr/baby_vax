@@ -11,7 +11,8 @@ class InternalScreenArgs {
     this.user,
   });
 
-  static InternalScreenArgs get fromArgs {
-    return AppConstant.argumentService.getArguments<InternalScreenArgs>();
-  }
+  /// The arguments the previous screen set, or empty ones.
+  static InternalScreenArgs get fromArgs =>
+      AppConstant.argumentService.getArguments<InternalScreenArgs>() ??
+      InternalScreenArgs();
 }

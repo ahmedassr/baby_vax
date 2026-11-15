@@ -1,4 +1,5 @@
 export 'package:baby_vax/app/core/utils/app_shared_model/user_model.dart';
+export 'package:baby_vax/app/core/utils/app_shared_model/emergency_contact.dart';
 export 'package:baby_vax/app/core/utils/app_alert/app_alert_model.dart';
 
 // App Shared Model

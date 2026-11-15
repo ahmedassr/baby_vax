@@ -105,6 +105,14 @@ class LocalNotificationProvider implements NotificationService {
       // calling apps. Inexact delivery lets Android batch the wake-up, which
       // is also easier on the battery.
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      // Custom reminders can repeat: the plugin re-arms the alarm itself
+      // at the same time each day / week / month.
+      matchDateTimeComponents: switch (payload.repeat) {
+        NotificationRepeat.none => null,
+        NotificationRepeat.daily => DateTimeComponents.time,
+        NotificationRepeat.weekly => DateTimeComponents.dayOfWeekAndTime,
+        NotificationRepeat.monthly => DateTimeComponents.dayOfMonthAndTime,
+      },
     );
 
     logger.i('Scheduled [${payload.id}] for $scheduledDate');

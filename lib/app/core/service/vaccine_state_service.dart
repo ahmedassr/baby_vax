@@ -43,6 +43,21 @@ class VaccineStatePolicy {
   static bool completionNeedsConfirmation(
           MedicalDatesModel dose, DateTime now) =>
       canMarkCompleted(dose) && isInFuture(dose, now);
+
+  /// What the UI shows for [dose] on [now]'s day: the stored state, except
+  /// that a pending dose whose day has passed shows as overdue.
+  static DoseDisplayStatus displayStatus(MedicalDatesModel dose, DateTime now) {
+    switch (stateOf(dose)) {
+      case MedicalDateStateEnum.completed:
+        return DoseDisplayStatus.completed;
+      case MedicalDateStateEnum.skipped:
+        return DoseDisplayStatus.skipped;
+      case MedicalDateStateEnum.pending:
+        return isOverdue(dose, now)
+            ? DoseDisplayStatus.overdue
+            : DoseDisplayStatus.pending;
+    }
+  }
 }
 
 /// Thrown when an action is not allowed from the dose's current state.
@@ -57,9 +72,21 @@ class InvalidStateTransition implements Exception {
       'InvalidStateTransition: ${from.label} -> ${to.label} is not allowed';
 }
 
-/// Persists a dose's state. Only the `state` field is written.
+/// Persists a dose's state and its record.
 abstract class DoseStateWriter {
-  Future<WriteOutcome> writeState(String doseId, MedicalDateStateEnum state);
+  /// Writes `state`. With [record], also writes its non-empty fields; with
+  /// [clearRecord], deletes every record field (undoing a given dose: it
+  /// was not given after all).
+  Future<WriteOutcome> writeState(
+    String doseId,
+    MedicalDateStateEnum state, {
+    DoseRecord? record,
+    bool clearRecord = false,
+  });
+
+  /// Replaces the record of a dose that stays given (editing the clinic or
+  /// batch later). Fields left blank are deleted.
+  Future<WriteOutcome> writeRecord(String doseId, DoseRecord record);
 }
 
 /// The dose after a state change, and whether the change reached the
@@ -95,9 +122,27 @@ class VaccineStateService {
   final DoseStateWriter _writer;
   final DoseReminders _reminders;
 
-  Future<StateChange> markCompleted(MedicalDatesModel dose) =>
+  /// Marks [dose] as given, with an optional [record] of when and where.
+  Future<StateChange> markCompleted(MedicalDatesModel dose,
+          {DoseRecord record = const DoseRecord()}) =>
       _apply(dose, MedicalDateStateEnum.completed,
-          allowed: VaccineStatePolicy.canMarkCompleted(dose));
+          allowed: VaccineStatePolicy.canMarkCompleted(dose), record: record);
+
+  /// Updates the record of a dose that is already given.
+  Future<StateChange> updateRecord(
+      MedicalDatesModel dose, DoseRecord record) async {
+    final String? id = dose.id;
+    if (id == null || id.isEmpty) {
+      throw ArgumentError.value(dose.id, 'dose.id', 'must be a saved record');
+    }
+    if (VaccineStatePolicy.stateOf(dose) != MedicalDateStateEnum.completed) {
+      throw InvalidStateTransition(
+          VaccineStatePolicy.stateOf(dose), MedicalDateStateEnum.completed);
+    }
+    final DoseRecord clean = record.normalised();
+    final WriteOutcome outcome = await _writer.writeRecord(id, clean);
+    return StateChange(dose.copyWith(record: clean), outcome);
+  }
 
   Future<StateChange> markSkipped(MedicalDatesModel dose) =>
       _apply(dose, MedicalDateStateEnum.skipped,
@@ -111,6 +156,7 @@ class VaccineStateService {
     MedicalDatesModel dose,
     MedicalDateStateEnum to, {
     required bool allowed,
+    DoseRecord record = const DoseRecord(),
   }) async {
     final String? id = dose.id;
     if (id == null || id.isEmpty) {
@@ -120,11 +166,26 @@ class VaccineStateService {
       throw InvalidStateTransition(VaccineStatePolicy.stateOf(dose), to);
     }
 
+    // A dose that goes back to pending was not given after all, so whatever
+    // was recorded about giving it is removed with it.
+    final bool clearRecord = to == MedicalDateStateEnum.pending;
+    final DoseRecord written = to == MedicalDateStateEnum.completed
+        ? record.normalised()
+        : const DoseRecord();
+
     // Returns once the change is stored on the device; offline it does not
     // wait for the server (see awaitAck).
-    final WriteOutcome outcome = await _writer.writeState(id, to);
+    final WriteOutcome outcome = await _writer.writeState(
+      id,
+      to,
+      record: written.isEmpty ? null : written,
+      clearRecord: clearRecord,
+    );
 
-    final MedicalDatesModel updated = dose.copyWith(state: to.label);
+    final MedicalDatesModel updated = dose.copyWith(
+      state: to.label,
+      record: clearRecord ? const DoseRecord() : written,
+    );
     if (to == MedicalDateStateEnum.pending) {
       await _reminders.schedule(updated);
     } else {
@@ -136,12 +197,38 @@ class VaccineStateService {
 
 /// [DoseStateWriter] backed by the signed-in user's schedule in Firestore.
 class FirestoreDoseStateWriter implements DoseStateWriter {
+  String _path(String doseId) =>
+      '${AppPath.userMedicalDates(SessionManager.signedInUid ?? '')}/$doseId';
+
+  /// Every record field set to "delete".
+  static Map<String, dynamic> get _deleteRecord => <String, dynamic>{
+        for (final String f in DoseRecord.fields) f: FieldValue.delete(),
+      };
+
   @override
-  Future<WriteOutcome> writeState(String doseId, MedicalDateStateEnum state) {
+  Future<WriteOutcome> writeState(
+    String doseId,
+    MedicalDateStateEnum state, {
+    DoseRecord? record,
+    bool clearRecord = false,
+  }) {
     return AppConstant.fireStoreHelper1.updateData(
-      path:
-          '${AppPath.userMedicalDates(SessionManager.signedInUid ?? '')}/$doseId',
-      data: <String, dynamic>{'state': state.label},
+      path: _path(doseId),
+      data: <String, dynamic>{
+        'state': state.label,
+        if (clearRecord) ..._deleteRecord,
+        if (record != null) ...record.toMap(),
+      },
+    );
+  }
+
+  @override
+  Future<WriteOutcome> writeRecord(String doseId, DoseRecord record) {
+    return AppConstant.fireStoreHelper1.updateData(
+      path: _path(doseId),
+      // Delete first, then set what is filled in: a field cleared in the
+      // form is removed rather than left behind.
+      data: <String, dynamic>{..._deleteRecord, ...record.toMap()},
     );
   }
 }

@@ -1,28 +1,29 @@
 import '../../core/imports/import_library.dart';
+import 'app_palette.dart';
 
+/// Brand colours for the few places that are illustration, not interface:
+/// the logo, the splash and the onboarding art.
+///
+/// Interface colour comes from `Theme.of(context).colorScheme` and the
+/// `AppStatusColors` / `AppElevation` theme extensions, which already know
+/// whether the app is light or dark. v1.0 kept a parallel palette here
+/// (`backgroundDark`, `cardDark`, `buttonLight`, `textGrey`, …) that widgets
+/// picked from with `isDark ? … : …`; those are gone, and
+/// `test/assets/design_system_test.dart` fails if a screen reintroduces a
+/// raw colour.
 class AppColors {
-  static const Color primary = Color(0xFF42A332);
-  static const Color secondPrimary = Color(0xFFE9F3E8);
-  static const Color white = Color(0xFFFFFFFF);
-  static const Color black = Color(0xFF000000);
-  static const Color textHint = Color(0xFF999999);
-  static const Color textWhite = Color(0xFFFFFFFF);
-  static const Color textBlack = Color(0xFF000000);
-  static const Color textGrey = Color(0xFF6B7280);
-  static const Color backgroundLight = Color(0xFFF8F9FA);
-  static const Color backgroundDark = Color(0xFF121212);
-  static const Color buttonDark = Color(0x894F4F4F);
-  static const Color buttonLight = Color(0xFFE9F3E8);
-  static const Color cardDark = Color(0x454F4F4F);
-  static const Color greyMedium = Color(0xFFB0B0B0);
-  static const Color greyDark = Color(0xFF707070);
-  static const Color greyLight = Color(0xFFE0E0E0);
-  static const Color accent = Color(0xFFFFC107);
+  const AppColors._();
 
-  // Status Colors
-  static const Color error = Color(0xFFE10000);
-  static const Color warning = accent; // uses accent color
-  static const Color success = Color(0xFF28A745);
-  static const Color info = Color(0xFF17A2B8);
+  /// The Baby Vax green. Illustration only: 3.22:1 on white, never text.
+  static const Color brand = AppPalette.brand;
+
+  /// The light theme's `primary`: the brand green darkened to 5.84:1 on
+  /// white. Equal to `AppTheme.lightTheme.colorScheme.primary`.
+  static const Color primary = AppPalette.brandDark;
+
+  /// Pure white, for text on the brand fill in illustrations.
+  static const Color white = Color(0xFFFFFFFF);
+
+  /// Fully transparent.
   static const Color transparent = Colors.transparent;
 }

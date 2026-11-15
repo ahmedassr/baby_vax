@@ -1,18 +1,21 @@
 import 'package:baby_vax/app/core/imports/import_library.dart';
 
+/// One tab of the main menu.
 class BottomNavBarModel {
+  /// Translation key for the tab label and the app bar title.
   final String title;
   final Widget view;
-  final IconData icon;
-  final bool showSearch;
-  final bool showAdd;
-  final bool showEdit;
 
-  BottomNavBarModel(
-      {required this.title,
-      required this.view,
-      required this.icon,
-      this.showAdd = false,
-      this.showSearch = false,
-      this.showEdit = false});
+  /// Outlined icon for an unselected tab.
+  final IconData icon;
+
+  /// Filled icon for the selected tab.
+  final IconData selectedIcon;
+
+  const BottomNavBarModel({
+    required this.title,
+    required this.view,
+    required this.icon,
+    required this.selectedIcon,
+  });
 }
