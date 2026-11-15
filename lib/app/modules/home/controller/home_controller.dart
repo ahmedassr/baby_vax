@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:baby_vax/app/config/constant/app_path.dart';
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/notification/data/notification_settings_opener.dart';
 import 'package:baby_vax/app/core/service/schedule_summary.dart';
+import 'package:baby_vax/app/modules/tips/controller/tips_controller.dart';
 import 'package:baby_vax/app/modules/vaccination_card/vaccination_card_sheet.dart';
 
 /// The home screen: who the schedule is for, the next dose, overall
@@ -44,6 +47,9 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
 
   /// Counts and the hero dose for today.
   ScheduleSummary get summary => ScheduleSummary(doses, _now());
+
+  /// Now, by the controller's clock (picks the tip of the day).
+  DateTime get now => _now();
 
   static Future<bool> _coordinatorNotificationsEnabled() async {
     if (!Get.isRegistered<NotificationCoordinator>()) return true;
@@ -112,6 +118,10 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
       doses.assignAll(await _loadDoses(uid));
       nextVaccination.value = summary.hero;
       setSuccess();
+      // Home shows a tip of the day; refresh the tips with the rest.
+      if (Get.isRegistered<TipsController>()) {
+        unawaited(Get.find<TipsController>().fetchTips());
+      }
       await refreshNotificationStatus();
     } catch (e, s) {
       logger.w('Loading the home screen failed', error: e, stackTrace: s);
@@ -147,8 +157,15 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
   /// Opens the parent's own reminders.
   void openReminders() => Get.toNamed(AppRoutes.reminders);
 
-  /// Opens the growth tracker.
-  void openGrowth() => Get.toNamed(AppRoutes.growth);
+  /// Opens the growth tracker: the Growth tab of the shell, or its own
+  /// screen outside it.
+  void openGrowth() {
+    if (Get.isRegistered<MainMenuController>()) {
+      Get.find<MainMenuController>().changeValue(MainMenuController.growthTab);
+    } else {
+      Get.toNamed(AppRoutes.growth);
+    }
+  }
 
   /// Opens the vaccination card sheet (share or print the PDF).
   void openVaccinationCard() => VaccinationCardSheet.show();

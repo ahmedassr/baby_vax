@@ -5,6 +5,9 @@ import '../controller/growth_controller.dart';
 class GrowthBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<GrowthController>(() => GrowthController());
+    // The Growth tab keeps one GrowthController; reuse it.
+    if (!Get.isRegistered<GrowthController>()) {
+      Get.lazyPut<GrowthController>(() => GrowthController());
+    }
   }
 }

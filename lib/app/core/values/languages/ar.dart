@@ -418,6 +418,8 @@ Map<String, String> ar = {
   // v1.1 home quick actions
   "HomeView_quick_actions": "اختصارات",
   // v1.1 growth tracker
+  "Home_tip_of_day": "نصيحة اليوم",
+  "Home_see_all_tips": "عرض كل النصائح",
   "Growth_title": "النمو",
   "Growth_add": "إضافة قياس",
   "Growth_add_title": "إضافة قياس",

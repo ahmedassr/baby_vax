@@ -18,7 +18,7 @@ import 'package:baby_vax/app/modules/splash/splash_view.dart';
 import 'package:baby_vax/app/modules/tip_details/binding/tip_details_binding.dart';
 import 'package:baby_vax/app/modules/tip_details/view/tip_details_view.dart';
 import 'package:baby_vax/app/modules/tips/binding/tips_binding.dart';
-import 'package:baby_vax/app/modules/tips/view/tips_view.dart';
+import 'package:baby_vax/app/modules/tips/view/tips_screen.dart';
 
 class AppPages {
   static const String initial = AppRoutes.login;
@@ -61,7 +61,7 @@ class AppPages {
         binding: SettingsBinding()),
     build(
         route: AppRoutes.tips,
-        page: () => const TipsView(),
+        page: () => const TipsScreen(),
         binding: TipsBinding()),
     build(
         route: AppRoutes.medicalDateDetails,

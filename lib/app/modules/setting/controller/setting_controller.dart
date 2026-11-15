@@ -3,6 +3,7 @@ import 'package:baby_vax/app/core/service/account_deletion_service.dart';
 import '../../../core/imports/import_manger.dart';
 import '../../../core/notification/data/notification_settings_opener.dart';
 import '../../../core/utils/app_haptics.dart';
+import '../../growth/controller/growth_controller.dart';
 import '../../home/controller/home_controller.dart';
 import '../../tips/controller/tips_controller.dart';
 import '../widget/delete_account_dialog.dart';
@@ -127,6 +128,9 @@ class SettingsController extends GetxController {
           if (Get.isRegistered<MedicalDatesController>()) {
             Get.find<MedicalDatesController>().doses.clear();
           }
+          if (Get.isRegistered<GrowthController>()) {
+            Get.find<GrowthController>().clearSession();
+          }
           // Replace the stack, so Back cannot return to the signed-in tabs.
           Get.offAllNamed(AppRoutes.login);
         },
@@ -159,6 +163,9 @@ class SettingsController extends GetxController {
         yesAction: () {
           if (Get.isRegistered<HomeController>()) {
             Get.find<HomeController>().clearSession();
+          }
+          if (Get.isRegistered<GrowthController>()) {
+            Get.find<GrowthController>().clearSession();
           }
           Get.offAllNamed(AppRoutes.login);
         },

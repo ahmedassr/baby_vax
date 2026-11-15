@@ -384,6 +384,8 @@ Map<String, String> en = {
   // v1.1 home quick actions
   "HomeView_quick_actions": "Quick actions",
   // v1.1 growth tracker
+  "Home_tip_of_day": "Tip of the day",
+  "Home_see_all_tips": "See all tips",
   "Growth_title": "Growth",
   "Growth_add": "Add measurement",
   "Growth_add_title": "Add a measurement",

@@ -3,6 +3,7 @@ import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/service/medical_dates_generator.dart';
 import 'package:baby_vax/app/core/utils/app_haptics.dart';
 import 'package:baby_vax/app/core/utils/validators.dart';
+import 'package:baby_vax/app/modules/growth/controller/growth_controller.dart';
 import 'package:baby_vax/app/modules/home/controller/home_controller.dart';
 
 /// Edits the baby's profile: name, date of birth, sex and measurements.
@@ -194,6 +195,10 @@ class EditUserController extends GetxController {
       }
       if (Get.isRegistered<MedicalDatesController>()) {
         Get.find<MedicalDatesController>().fetchMedicalDates();
+      }
+      // Growth reads the sex and birth date from the profile.
+      if (Get.isRegistered<GrowthController>()) {
+        Get.find<GrowthController>().fetch();
       }
       Get.back(result: outcome);
       if (outcome == WriteOutcome.pendingSync) {
