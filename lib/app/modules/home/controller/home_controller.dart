@@ -148,12 +148,6 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
     if (dose != null) openDose(dose);
   }
 
-  void openEditProfile() {
-    AppConstant.argumentService
-        .setArgument(InternalScreenArgs(user: userDetails.value));
-    Get.toNamed(AppRoutes.editUser);
-  }
-
   /// Opens the parent's own reminders.
   void openReminders() => Get.toNamed(AppRoutes.reminders);
 

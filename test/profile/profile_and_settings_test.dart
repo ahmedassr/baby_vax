@@ -1,5 +1,6 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/service/medical_dates_generator.dart';
+import 'package:baby_vax/app/modules/home/controller/home_controller.dart';
 import 'package:baby_vax/app/modules/setting/controller/setting_controller.dart';
 import 'package:baby_vax/app/modules/setting/view/setting_view.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -224,6 +225,41 @@ void main() {
       await pumpApp(tester, const Scaffold(body: SettingsView()));
       await tester.pumpAndSettle();
       expect(find.text('Off'), findsOneWidget);
+    });
+
+    testWidgets('the baby profile is the first thing in Settings',
+        (tester) async {
+      SessionManager.authUid = () => 'alice';
+      addTearDown(() => SessionManager.authUid = () => null);
+      put();
+      Get.put<HomeController>(HomeController(
+        notificationsEnabled: () async => true,
+        loadUser: (_) async => sampleUser(),
+        loadDoses: (_) async => <MedicalDatesModel>[],
+        clock: () => fixedNow,
+      ));
+      await Get.find<HomeController>().fetchUserData();
+      await pumpApp(tester, const Scaffold(body: SettingsView()),
+          variant: const Variant('ar', Brightness.dark, 1.3));
+      await tester.pumpAndSettle();
+      final Finder row = find.byKey(const Key('settings_profile'));
+      expect(row, findsOneWidget);
+      expect(find.descendant(of: row, matching: find.textContaining('Lina')),
+          findsOneWidget);
+      expect(
+          tester.getTopLeft(row).dy,
+          lessThan(
+              tester.getTopLeft(find.byKey(const Key('theme_system'))).dy));
+      expectNoOverflow(tester);
+      await tester.tap(row);
+      await tester.pumpAndSettle();
+      expect(routeStub(AppRoutes.editUser), findsOneWidget);
+      expect(
+          AppConstant.argumentService
+              .getArguments<InternalScreenArgs>()
+              ?.user
+              ?.name,
+          'Lina');
     });
 
     testWidgets('Tips are reached from Settings, next to About',

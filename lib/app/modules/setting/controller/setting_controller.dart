@@ -108,6 +108,15 @@ class SettingsController extends GetxController {
     }
   }
 
+  /// The baby's profile (edit screen), with the profile Home loaded.
+  void openProfile() {
+    AppConstant.argumentService.setArgument(InternalScreenArgs(
+        user: Get.isRegistered<HomeController>()
+            ? Get.find<HomeController>().userDetails.value
+            : null));
+    Get.toNamed(AppRoutes.editUser);
+  }
+
   void onLogout() {
     AppConstant.alertService.showAlert(AlertModel.attention(
         message: "SettingsController_logout_alert_msg".tr,

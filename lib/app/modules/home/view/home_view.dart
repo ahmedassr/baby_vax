@@ -7,8 +7,9 @@ import 'package:baby_vax/app/modules/home/widgets/tip_of_the_day_card.dart';
 
 import '../controller/home_controller.dart';
 
-/// Home: the next dose first, then how far along the schedule is, then the
-/// latest measurements, then the profile.
+/// Home: the next dose first, then how far along the schedule is, quick
+/// actions, the tip of the day and the latest measurements. The profile
+/// is reached from Settings.
 ///
 /// v1.0 led with a profile card (name and email) and put the next dose
 /// last, below the fold on a small phone.
@@ -100,16 +101,6 @@ class HomeView extends GetView<HomeController> {
           onAction: controller.openGrowth,
         ),
         _Measurements(user: user, onTap: controller.openGrowth),
-        AppSectionHeader(title: "HomeView_profile_title".tr),
-        AppListGroup(children: <Widget>[
-          AppListRow(
-            key: const Key('home_profile_row'),
-            icon: Icons.child_care_rounded,
-            title: name.isEmpty ? '—' : bidiIsolate(name),
-            subtitle: bidiIsolate(user?.email ?? ''),
-            onTap: controller.openEditProfile,
-          ),
-        ]),
         const SizedBox(height: AppSpacing.xxl),
         const MedicalDisclaimer(compact: true),
       ],

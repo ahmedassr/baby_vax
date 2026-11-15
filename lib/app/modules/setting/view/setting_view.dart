@@ -1,5 +1,6 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/widget/app_logo.dart';
+import 'package:baby_vax/app/modules/home/controller/home_controller.dart';
 import 'package:baby_vax/app/modules/setting/controller/setting_controller.dart';
 
 /// Settings, grouped: appearance, language, reminders, about, account.
@@ -9,12 +10,35 @@ import 'package:baby_vax/app/modules/setting/controller/setting_controller.dart'
 class SettingsView extends GetView<SettingsController> {
   const SettingsView({super.key});
 
+  /// The baby's name, the parent's email, and the way into the profile.
+  Widget _profileRow(UserModel? user) {
+    final String name = (user?.name ?? '').trim();
+    final String email = (user?.email ?? '').trim();
+    return AppListGroup(children: <Widget>[
+      AppListRow(
+        key: const Key('settings_profile'),
+        icon: Icons.child_care_rounded,
+        title: name.isEmpty
+            ? "EditUserView_edit_user_title".tr
+            : bidiIsolate(name),
+        subtitle: email.isEmpty ? null : bidiIsolate(email),
+        onTap: controller.openProfile,
+      ),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.fromLTRB(
           AppSpacing.lg, 0, AppSpacing.lg, AppSpacing.xxxl),
       children: <Widget>[
+        // The baby's profile lives in Settings (phone review R5c).
+        AppSectionHeader(title: "HomeView_profile_title".tr),
+        Get.isRegistered<HomeController>()
+            ? Obx(
+                () => _profileRow(Get.find<HomeController>().userDetails.value))
+            : _profileRow(null),
         AppSectionHeader(title: "Settings_appearance".tr),
         Obx(() => AppChoiceGroup<ThemeMode>(
               selected: controller.themeMode.value,

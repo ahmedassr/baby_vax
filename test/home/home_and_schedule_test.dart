@@ -144,9 +144,10 @@ void main() {
         expect(find.byKey(const Key('home_progress')), findsOneWidget);
         expect(find.text('HomeView_next_dose'.tr), findsOneWidget);
         expectNoOverflow(tester);
-        await tester.scrollUntilVisible(
-            find.byKey(const Key('home_profile_row')), 200);
+        await tester.scrollUntilVisible(find.byType(MedicalDisclaimer), 200);
         expectNoOverflow(tester);
+        // The profile is reached from Settings now.
+        expect(find.byKey(const Key('home_profile_row')), findsNothing);
       });
     }
 
