@@ -586,4 +586,5 @@ Map<String, String> en = {
   "Health_guide_source":
       "Sources: World Health Organization — Integrated Management of Childhood Illness, Chart Booklet (2014); Vaccines and immunization: Vaccine safety (questions and answers).",
   "Health_chart_legend": "WHO's fever figure: 37.5 °C (armpit)",
+  "Settings_licenses": "Open-source licences",
 };

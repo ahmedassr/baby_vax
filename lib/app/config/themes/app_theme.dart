@@ -37,6 +37,24 @@ class AppTheme {
   static Color sheetScrim(ColorScheme scheme) => scheme.scrim
       .withValues(alpha: scheme.brightness == Brightness.dark ? 0.6 : 0.32);
 
+  /// Flutter's own licence page, in [base] (the app's light or dark theme).
+  ///
+  /// The page reads three things the rest of the app does not use: it lays
+  /// its text on a `cardColor` sheet raised at elevation 4 (a white slab on
+  /// our off-white background), sets each package's two-line title in the
+  /// app bar's title style (sized for one short line), and sets licence
+  /// text in `bodySmall`. Here the sheet is the page's own background, the
+  /// title uses `titleLarge`, and licences are read at body size in the
+  /// app's font and colours.
+  static ThemeData licenseTheme(ThemeData base) => base.copyWith(
+        cardColor: base.scaffoldBackgroundColor,
+        shadowColor: Colors.transparent,
+        appBarTheme: base.appBarTheme
+            .copyWith(titleTextStyle: base.textTheme.titleLarge),
+        textTheme:
+            base.textTheme.copyWith(bodySmall: base.textTheme.bodyMedium),
+      );
+
   /// The light theme.
   static ThemeData lightTheme = _build(AppColorSchemes.light);
 

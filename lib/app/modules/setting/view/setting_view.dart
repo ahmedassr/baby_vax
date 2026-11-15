@@ -1,7 +1,7 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
-import 'package:baby_vax/app/core/widget/app_logo.dart';
 import 'package:baby_vax/app/modules/home/controller/home_controller.dart';
 import 'package:baby_vax/app/modules/setting/controller/setting_controller.dart';
+import 'package:baby_vax/app/modules/setting/widget/about_baby_vax.dart';
 
 /// Settings, grouped: appearance, language, reminders, about, account.
 ///
@@ -120,17 +120,7 @@ class SettingsView extends GetView<SettingsController> {
             key: const Key('settings_about'),
             icon: Icons.info_outline_rounded,
             title: "Settings_about_app".tr,
-            onTap: () => showAboutDialog(
-              context: context,
-              applicationName: 'Baby Vax',
-              applicationIcon: const AppLogo(size: 48),
-              children: <Widget>[
-                const SizedBox(height: AppSpacing.md),
-                Text("MedicalDisclaimer_body".tr),
-                const SizedBox(height: AppSpacing.sm),
-                Text("MedicalDisclaimer_source".tr),
-              ],
-            ),
+            onTap: AboutBabyVax.show,
           ),
         ]),
         AppSectionHeader(title: "Signup_step_account".tr),
