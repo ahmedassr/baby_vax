@@ -133,6 +133,7 @@ Used for the UI and embedded in the vaccination-card PDF.
 | --- | --- | --- | --- |
 | [`pdf`](https://pub.dev/packages/pdf) | 3.13.1 | Apache-2.0 | Draws the bilingual vaccination card on the device. Pure Dart; shapes Arabic. |
 | [`printing`](https://pub.dev/packages/printing) | 5.15.1 | Apache-2.0 | Hands the PDF to Android's share and print sheets. |
+| [`url_launcher`](https://pub.dev/packages/url_launcher) | 6.3.3 | BSD-3-Clause | Opens the phone's dialer for the emergency contact. Published by the Flutter team. |
 
 Both were at 160/160 pub points, null-safe and Dart-3 compatible, last
 published September 2026.
