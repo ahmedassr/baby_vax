@@ -16,9 +16,8 @@ class QuickAction {
 }
 
 /// Shortcuts to the things a parent does between appointments: share the
-/// vaccination card, add a reminder. (Growth is a tab of its own.)
-/// Equal-width tiles whose labels may wrap to two lines at large text
-/// sizes.
+/// vaccination card, add a measurement, add a reminder. Equal-width tiles
+/// whose labels may wrap to two lines at large text sizes.
 class QuickActions extends StatelessWidget {
   const QuickActions({super.key, required this.actions});
 

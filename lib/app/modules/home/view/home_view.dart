@@ -3,7 +3,6 @@ import 'package:baby_vax/app/core/service/schedule_summary.dart';
 import 'package:baby_vax/app/core/service/vaccine_state_service.dart';
 import 'package:baby_vax/app/modules/home/widgets/notifications_off_banner.dart';
 import 'package:baby_vax/app/modules/home/widgets/quick_actions.dart';
-import 'package:baby_vax/app/modules/home/widgets/tip_of_the_day_card.dart';
 
 import '../controller/home_controller.dart';
 
@@ -81,13 +80,18 @@ class HomeView extends GetView<HomeController> {
             onTap: controller.openVaccinationCard,
           ),
           QuickAction(
+            key: const Key('home_action_growth'),
+            icon: Icons.show_chart_rounded,
+            label: "Growth_title".tr,
+            onTap: controller.openGrowth,
+          ),
+          QuickAction(
             key: const Key('home_action_reminders'),
             icon: Icons.alarm_rounded,
             label: "Reminders_title".tr,
             onTap: controller.openReminders,
           ),
         ]),
-        const TipOfTheDayCard(),
         AppSectionHeader(
           title: "HomeView_measurements_title".tr,
           actionLabel: "Growth_title".tr,

@@ -35,18 +35,9 @@ class TipsController extends GetxController
         setSuccess(tips);
       }
     } catch (_) {
-      // Offline or a failed refresh: keep the tips already shown (the list
-      // and Home's tip of the day) rather than replacing them with an error.
-      if (state != null && state!.isNotEmpty) {
-        setSuccess(state!);
-      } else {
-        setError("TipsController_fetch_failed_msg".tr);
-      }
+      setError("TipsController_fetch_failed_msg".tr);
     }
   }
-
-  /// The full list, from Home's "See all tips".
-  void openAll() => Get.toNamed(AppRoutes.tips);
 
   void onTipPressed(TipsModel tip) {
     AppConstant.argumentService.setArgument(InternalScreenArgs(tip: tip));

@@ -13,10 +13,7 @@ import '../widgets/measurement_sheet.dart';
 /// the WHO percentile curves with a plain-language reading; the history
 /// below.
 class GrowthView extends GetView<GrowthController> {
-  const GrowthView({super.key, this.inTab = false});
-
-  /// In the bottom navigation the shell's app bar already says "Growth".
-  final bool inTab;
+  const GrowthView({super.key});
 
   static String unitOf(GrowthMetric m) =>
       m == GrowthMetric.weight ? "unit_kg".tr : "unit_cm".tr;
@@ -87,7 +84,7 @@ class GrowthView extends GetView<GrowthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: inTab ? null : CustomAppBar(title: "Growth_title".tr),
+      appBar: CustomAppBar(title: "Growth_title".tr),
       // Only once there are measurements; until then the empty state's
       // button is the one way to add.
       floatingActionButton: Obx(() => AppAddFab(

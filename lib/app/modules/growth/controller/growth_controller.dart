@@ -125,16 +125,6 @@ class GrowthController extends GetxController {
     fetch();
   }
 
-  /// Forgets the signed-out parent's measurements (the Growth tab's
-  /// controller lives as long as the app).
-  void clearSession() {
-    items.clear();
-    metric.value = GrowthMetric.weight;
-    loadError.value = null;
-    actionError.value = null;
-    savedOffline.value = false;
-  }
-
   void setMetric(GrowthMetric m) {
     if (metric.value == m) return;
     metric.value = m;
