@@ -63,6 +63,7 @@ dependencies:
   # server. Both Apache-2.0, 160/160 pub points.
   pdf: ^3.13.1
   printing: ^5.15.1
+  url_launcher: ^6.3.3
 
 
 

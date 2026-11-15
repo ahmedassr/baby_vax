@@ -61,6 +61,7 @@ void main() {
       'Health_kind_',
       'Health_add_',
       'Health_ago_',
+      'Health_relation_',
     ];
     final List<String> unused = keys['en']!
         .keys

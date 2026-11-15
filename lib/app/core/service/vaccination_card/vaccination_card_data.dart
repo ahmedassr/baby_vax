@@ -4,6 +4,7 @@ import 'package:baby_vax/app/core/values/languages/app_translations.dart';
 import '../../../config/themes/app_status_colors.dart';
 import '../../../modules/medical_dates/controller/medical_dates_controller.dart';
 import '../../../modules/medical_dates/model/medical_dates_model.dart';
+import '../../utils/app_shared_model/emergency_contact.dart';
 import '../../utils/app_shared_model/user_model.dart';
 
 /// A string in both of the app's languages.
@@ -12,6 +13,16 @@ class Bilingual {
 
   final String en;
   final String ar;
+}
+
+/// The emergency contact as printed: the name and phone as written, the
+/// relation in both languages.
+class CardContact {
+  const CardContact({required this.name, required this.phone, this.relation});
+
+  final String name;
+  final String phone;
+  final Bilingual? relation;
 }
 
 /// One row of the card.
@@ -118,7 +129,15 @@ class VaccinationCardData {
       bloodType: user.bloodType,
       allergies: user.allergies,
       conditions: user.conditions,
-      emergencyContact: user.emergencyContact,
+      emergencyContact: switch (user.emergencyContact) {
+        null => null,
+        final EmergencyContact c => CardContact(
+            name: c.name,
+            phone: c.phone,
+            relation:
+                c.relation == null ? null : tr('Health_relation_${c.relation}'),
+          ),
+      },
     );
   }
 
@@ -132,7 +151,7 @@ class VaccinationCardData {
   final String? bloodType;
   final String? allergies;
   final String? conditions;
-  final String? emergencyContact;
+  final CardContact? emergencyContact;
 
   bool get hasHealthProfile =>
       bloodType != null ||

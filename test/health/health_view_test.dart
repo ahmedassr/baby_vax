@@ -1,11 +1,13 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/service/health/health_guidance.dart';
+import 'package:baby_vax/app/core/service/phone_dialer.dart';
 import 'package:baby_vax/app/modules/health/controller/health_controller.dart';
 import 'package:baby_vax/app/modules/health/model/health_entry.dart';
 import 'package:baby_vax/app/modules/health/view/health_guide_view.dart';
 import 'package:baby_vax/app/modules/health/view/health_view.dart';
 import 'package:baby_vax/app/modules/health/widgets/health_entry_sheet.dart';
 import 'package:baby_vax/app/modules/health/widgets/health_labels.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -100,7 +102,8 @@ void main() {
               allergies: 'Penicillin',
               conditions: null,
               bloodType: 'O+',
-              emergencyContact: 'Mum 0599 000 000'));
+              emergencyContact: const EmergencyContact(
+                  name: 'Mum', phone: '0599000000', relation: 'mother')));
       await pump(tester, variant: v);
       expect(find.byKey(const Key('health_after_vaccine')), findsOneWidget);
       expect(find.byKey(const Key('health_add_temperature')), findsOneWidget);
@@ -150,7 +153,13 @@ void main() {
       (tester) async {
     put();
     await pump(tester);
-    expect(find.text('Day 2 since the vaccine'), findsOneWidget);
+    expect(find.text('Day 2 of 3 after the vaccine'), findsOneWidget);
+    expect(
+        find.byWidgetPredicate((w) =>
+            w is Semantics &&
+            w.properties.label == 'Day 2 of 3 after the vaccine'),
+        findsOneWidget,
+        reason: 'the progress bar is read as words');
     expect(find.textContaining('a sore arm or a mild fever'), findsOneWidget);
     await tester.tap(find.byKey(const Key('health_after_temperature')));
     await tester.pumpAndSettle();
@@ -275,5 +284,127 @@ void main() {
     await expectTapTargets(tester);
     await expectLabelledTargets(tester);
     handle.dispose();
+  });
+
+  group('medical ID', () {
+    const EmergencyContact sara = EmergencyContact(
+        name: 'Sara', phone: '+970599000000', relation: 'mother');
+    UserModel withContact(EmergencyContact? c) => sampleUser().withHealth(
+        allergies: 'Penicillin',
+        conditions: null,
+        bloodType: 'O+',
+        emergencyContact: c);
+
+    for (final Variant v in mainVariants) {
+      testWidgets('shows the contact with Call and Copy ($v)', (tester) async {
+        put(user: withContact(sara));
+        await pump(tester, variant: v);
+        await scrollTo(tester, find.byKey(const Key('health_contact_call')));
+        expectNoOverflow(tester);
+        expectNoBrokenWords(tester,
+            within: find.byKey(const Key('health_medical_id')));
+        expect(
+            find.text(v.rtl ? 'Sara (الأم)' : 'Sara (Mother)',
+                findRichText: true),
+            findsNothing,
+            reason: 'the name is isolated, so match on parts');
+        expect(find.textContaining(v.rtl ? 'الأم' : 'Mother'), findsOneWidget);
+        final Text phone = tester
+            .widget<Text>(find.byKey(const Key('health_contact_phone_text')));
+        expect(phone.textDirection, TextDirection.ltr);
+        expect(phone.data, contains('+970599000000'));
+        expect(
+            tester.getSize(find.byKey(const Key('health_contact_copy'))).height,
+            greaterThanOrEqualTo(48));
+      });
+    }
+
+    testWidgets('Call opens the dialer with the number', (tester) async {
+      final List<String> dialled = <String>[];
+      PhoneDialer.dial = (p) async {
+        dialled.add(p);
+        return true;
+      };
+      addTearDown(() => PhoneDialer.dial = (_) async => false);
+      put(user: withContact(sara));
+      await pump(tester);
+      await scrollTo(tester, find.byKey(const Key('health_contact_call')));
+      await tester.tap(find.byKey(const Key('health_contact_call')));
+      await tester.pumpAndSettle();
+      expect(dialled, <String>['+970599000000']);
+      expect(find.byKey(const Key('app_snackbar_error')), findsNothing);
+    });
+
+    testWidgets('no dialer: says so and offers Copy', (tester) async {
+      PhoneDialer.dial = (_) async => false;
+      put(user: withContact(sara));
+      await pump(tester);
+      await scrollTo(tester, find.byKey(const Key('health_contact_call')));
+      await tester.tap(find.byKey(const Key('health_contact_call')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('app_snackbar_error')), findsOneWidget);
+      expect(find.text("Health_call_failed".tr), findsOneWidget);
+    });
+
+    testWidgets('Copy puts the number on the clipboard', (tester) async {
+      String? copied;
+      tester.binding.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.platform, (call) async {
+        if (call.method == 'Clipboard.setData') {
+          copied = (call.arguments as Map)['text'] as String?;
+        }
+        return null;
+      });
+      addTearDown(() => tester.binding.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.platform, null));
+      put(user: withContact(sara));
+      await pump(tester);
+      await scrollTo(tester, find.byKey(const Key('health_contact_copy')));
+      await tester.tap(find.byKey(const Key('health_contact_copy')));
+      await tester.pumpAndSettle();
+      expect(copied, '+970599000000');
+      expect(find.byKey(const Key('app_snackbar_success')), findsOneWidget);
+    });
+
+    testWidgets('without a contact: a row to add one', (tester) async {
+      put(user: withContact(null));
+      await pump(tester);
+      await scrollTo(tester, find.byKey(const Key('health_contact_add')));
+      expect(find.byKey(const Key('health_contact_call')), findsNothing);
+    });
+
+    testWidgets('no profile: one button to fill it in, no Edit link',
+        (tester) async {
+      put();
+      await pump(tester);
+      await scrollTo(tester, find.byKey(const Key('health_profile_add')));
+      expect(find.text("Health_profile_edit".tr), findsNothing);
+    });
+  });
+
+  testWidgets('the log shows the 3 latest days, then "Show earlier days"',
+      (tester) async {
+    put(entries: <HealthEntry>[
+      for (int d = 0; d < 5; d++)
+        HealthEntry(
+            id: 'n$d',
+            kind: HealthEntryKind.note,
+            at: fixedNow.subtract(Duration(days: d, hours: 1)),
+            note: 'Day $d'),
+    ]);
+    await pump(tester);
+    await scrollTo(tester, find.byKey(const Key('health_log_toggle')));
+    expect(find.byKey(const Key('health_entry_n2')), findsOneWidget);
+    expect(find.byKey(const Key('health_entry_n3')), findsNothing);
+    await tester.tap(find.byKey(const Key('health_log_toggle')));
+    await tester.pumpAndSettle();
+    await scrollTo(tester, find.byKey(const Key('health_entry_n4')));
+    expect(find.text("Health_log_show_less".tr), findsOneWidget);
+  });
+
+  testWidgets('few days: no toggle', (tester) async {
+    put();
+    await pump(tester);
+    expect(find.byKey(const Key('health_log_toggle')), findsNothing);
   });
 }

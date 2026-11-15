@@ -1,4 +1,5 @@
 import 'package:baby_vax/app/core/imports/import_library.dart';
+import 'package:baby_vax/app/core/utils/app_shared_model/emergency_contact.dart';
 
 /// The signed-in parent's profile, which in this app is also the child's
 /// profile (one account, one child).
@@ -24,13 +25,16 @@ class UserModel {
   final String? sex;
 
   /// v1.1 health profile, all optional, shown in the Health tab and on the
-  /// vaccination card. Free text as the parent writes it.
+  /// vaccination card. Allergies and conditions are free text as the parent
+  /// writes them.
   final String? allergies;
   final String? conditions;
 
   /// One of [bloodTypes], or null when not known.
   final String? bloodType;
-  final String? emergencyContact;
+
+  /// Who to call: name, phone and relation to the child.
+  final EmergencyContact? emergencyContact;
 
   UserModel({
     required this.uid,
@@ -89,7 +93,7 @@ class UserModel {
       conditions: _text(json?["conditions"]),
       bloodType:
           bloodTypes.contains(json?["bloodType"]) ? json!["bloodType"] : null,
-      emergencyContact: _text(json?["emergencyContact"]),
+      emergencyContact: EmergencyContact.fromJson(json?["emergencyContact"]),
     );
   }
 
@@ -112,7 +116,7 @@ class UserModel {
     String? allergies,
     String? conditions,
     String? bloodType,
-    String? emergencyContact,
+    EmergencyContact? emergencyContact,
   }) {
     return UserModel(
       uid: uid,
@@ -137,7 +141,7 @@ class UserModel {
     required String? allergies,
     required String? conditions,
     required String? bloodType,
-    required String? emergencyContact,
+    required EmergencyContact? emergencyContact,
   }) =>
       UserModel(
         uid: uid,
@@ -152,7 +156,7 @@ class UserModel {
         allergies: _text(allergies),
         conditions: _text(conditions),
         bloodType: bloodTypes.contains(bloodType) ? bloodType : null,
-        emergencyContact: _text(emergencyContact),
+        emergencyContact: emergencyContact,
       );
 
   /// The Firestore document. `sex` and the health profile are only written
@@ -172,7 +176,8 @@ class UserModel {
       if (allergies != null) "allergies": allergies,
       if (conditions != null) "conditions": conditions,
       if (bloodType != null) "bloodType": bloodType,
-      if (emergencyContact != null) "emergencyContact": emergencyContact,
+      if (emergencyContact != null)
+        "emergencyContact": emergencyContact!.toMap(),
     };
   }
 }

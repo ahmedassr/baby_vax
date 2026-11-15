@@ -163,7 +163,7 @@ class HealthController extends GetxController {
       'allergies': updated.allergies,
       'conditions': updated.conditions,
       'bloodType': updated.bloodType,
-      'emergencyContact': updated.emergencyContact,
+      'emergencyContact': updated.emergencyContact?.toMap(),
     };
     try {
       await _updateProfile(uid, <String, dynamic>{

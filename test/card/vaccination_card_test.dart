@@ -102,13 +102,18 @@ void main() {
         allergies: 'حساسية من البنسلين',
         conditions: null,
         bloodType: 'O+',
-        emergencyContact: 'Mum 0599 000 000');
+        emergencyContact: const EmergencyContact(
+            name: 'Mum', phone: '0599000000', relation: 'mother'));
     final d = VaccinationCardData.build(
         user: withHealth, doses: doses(), now: fixedNow);
     expect(d.hasHealthProfile, isTrue);
     expect(d.bloodType, 'O+');
     expect(d.allergies, 'حساسية من البنسلين');
     expect(d.conditions, isNull);
+    expect(d.emergencyContact!.name, 'Mum');
+    expect(d.emergencyContact!.phone, '0599000000');
+    expect(d.emergencyContact!.relation!.en, 'Mother');
+    expect(d.emergencyContact!.relation!.ar, 'الأم');
     expect(
         VaccinationCardData.build(
                 user: sampleUser(), doses: doses(), now: fixedNow)
@@ -122,7 +127,8 @@ void main() {
             allergies: 'حساسية من البنسلين',
             conditions: 'Asthma',
             bloodType: 'AB-',
-            emergencyContact: 'Mum 0599 000 000'),
+            emergencyContact: const EmergencyContact(
+                name: 'Mum', phone: '0599000000', relation: 'mother')),
         doses: doses(),
         now: fixedNow);
     final Uint8List bytes = await VaccinationCardPdf.build(data, font: cairo());

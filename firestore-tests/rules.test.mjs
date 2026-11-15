@@ -629,11 +629,35 @@ describe('users/{userId} — v1.1 health profile', () => {
         allergies: 'Penicillin',
         conditions: 'None known',
         bloodType: 'O+',
-        emergencyContact: 'Mum 0599 000 000',
+        emergencyContact: { name: 'Mum', phone: '0599000000', relation: 'mother' },
       }),
     );
     await assertSucceeds(
       updateDoc(doc(asUser(ALICE), `users/${ALICE}`), { allergies: null }),
+    );
+  });
+
+  for (const contact of [
+    { name: 'Mum', phone: '0599000000' },
+    { name: 'جدة سارة', phone: '+970599000000', relation: 'grandparent' },
+    { name: 'Omar', phone: '123456', relation: 'other' },
+    { name: 'x'.repeat(60), phone: '1'.repeat(15), relation: 'guardian' },
+  ]) {
+    it(`accepts emergency contact ${JSON.stringify(contact).slice(0, 40)}`, async () => {
+      await assertSucceeds(
+        setDoc(doc(asUser(ALICE), `users/${ALICE}`), {
+          ...validUser(ALICE), emergencyContact: contact,
+        }),
+      );
+    });
+  }
+
+  it('clears the emergency contact with null', async () => {
+    await seed((db) => setDoc(doc(db, `users/${ALICE}`), {
+      ...validUser(ALICE), emergencyContact: { name: 'Mum', phone: '0599000000' },
+    }));
+    await assertSucceeds(
+      updateDoc(doc(asUser(ALICE), `users/${ALICE}`), { emergencyContact: null }),
     );
   });
 
@@ -648,7 +672,20 @@ describe('users/{userId} — v1.1 health profile', () => {
   for (const [field, bad] of [
     ['allergies', 'x'.repeat(301)], ['conditions', 'x'.repeat(301)],
     ['bloodType', 'O'], ['bloodType', 'o+'], ['bloodType', 1],
-    ['emergencyContact', 'x'.repeat(101)], ['allergies', 5],
+    ['allergies', 5],
+    // The emergency contact is a map, not free text.
+    ['emergencyContact', 'Mum 0599 000 000'],
+    ['emergencyContact', { name: 'Mum' }],
+    ['emergencyContact', { phone: '0599000000' }],
+    ['emergencyContact', { name: '', phone: '0599000000' }],
+    ['emergencyContact', { name: 'x'.repeat(61), phone: '0599000000' }],
+    ['emergencyContact', { name: 'Mum', phone: '0599 000 000' }],
+    ['emergencyContact', { name: 'Mum', phone: '12345' }],
+    ['emergencyContact', { name: 'Mum', phone: '1'.repeat(16) }],
+    ['emergencyContact', { name: 'Mum', phone: '05990000+0' }],
+    ['emergencyContact', { name: 'Mum', phone: 599000000 }],
+    ['emergencyContact', { name: 'Mum', phone: '0599000000', relation: 'aunt' }],
+    ['emergencyContact', { name: 'Mum', phone: '0599000000', email: 'a@b.c' }],
   ]) {
     it(`denies ${field} = ${JSON.stringify(bad).slice(0, 20)}`, async () => {
       await assertFails(

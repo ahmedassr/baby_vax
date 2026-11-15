@@ -140,8 +140,21 @@ class VaccinationCardPdf {
       if (data.bloodType != null) fact('Health_blood_type', data.bloodType!),
       if (data.allergies != null) fact('Health_allergies', data.allergies!),
       if (data.conditions != null) fact('Health_conditions', data.conditions!),
-      if (data.emergencyContact != null)
-        fact('Health_emergency', data.emergencyContact!),
+      if (data.emergencyContact case final CardContact c)
+        factWidget(
+            'Health_emergency',
+            pw.Wrap(children: <pw.Widget>[
+              pw.Text(c.name,
+                  style: style(11),
+                  textDirection:
+                      _hasArabic(c.name) ? pw.TextDirection.rtl : null),
+              if (c.relation case final Bilingual r) ...<pw.Widget>[
+                pw.Text(' (${r.en} / ', style: style(11, color: muted)),
+                arText(r.ar, 11, color: muted),
+                pw.Text(')', style: style(11, color: muted)),
+              ],
+              pw.Text('  ${c.phone}', style: style(11)),
+            ])),
       pw.SizedBox(height: 12),
     ];
 

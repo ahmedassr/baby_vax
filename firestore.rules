@@ -95,7 +95,26 @@ service cloud.firestore {
              && isOptionalShortString(data, 'conditions', 300)
              && isOptionalOneOf(data, 'bloodType',
                   ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
-             && isOptionalShortString(data, 'emergencyContact', 100);
+             && isOptionalEmergencyContact(data);
+    }
+
+    // Absent, null, or {name, phone, relation?}: a name, 6-15 digits with an
+    // optional leading "+" (the app strips spaces and dashes before saving),
+    // and one of the relations the app offers.
+    function isOptionalEmergencyContact(data) {
+      return !data.keys().hasAny(['emergencyContact']) ||
+             data.emergencyContact == null ||
+             (data.emergencyContact is map
+               && data.emergencyContact.keys().hasOnly(['name', 'phone', 'relation'])
+               && data.emergencyContact.keys().hasAll(['name', 'phone'])
+               && isShortString(data.emergencyContact.name, 60)
+               && data.emergencyContact.name.size() > 0
+               && data.emergencyContact.phone is string
+               && data.emergencyContact.phone.matches('[+]?[0-9]{6,15}')
+               && isOptionalOneOf(data.emergencyContact, 'relation', [
+                    'mother', 'father', 'grandparent', 'sibling', 'relative',
+                    'guardian', 'other'
+                  ]));
     }
 
     match /users/{userId} {

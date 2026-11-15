@@ -38,6 +38,7 @@ class AppField extends StatefulWidget {
     this.focusNode,
     this.textCapitalization = TextCapitalization.none,
     this.optional = false,
+    this.textDirection,
   });
 
   /// Visible label, read by TalkBack as the field's name.
@@ -85,6 +86,10 @@ class AppField extends StatefulWidget {
 
   /// Appends "(optional)" to the label.
   final bool optional;
+
+  /// The typed text's direction, when it is not the app's: a phone number
+  /// reads left to right in Arabic too.
+  final TextDirection? textDirection;
 
   @override
   State<AppField> createState() => _AppFieldState();
@@ -150,6 +155,7 @@ class _AppFieldState extends State<AppField> {
             inputFormatters: widget.inputFormatters,
             autofillHints: widget.autofillHints,
             textCapitalization: widget.textCapitalization,
+            textDirection: widget.textDirection,
             style: theme.textTheme.bodyLarge,
             decoration: InputDecoration(
               hintText: widget.hint,

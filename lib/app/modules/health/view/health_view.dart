@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:flutter/services.dart';
+
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/service/health/health_guidance.dart';
+import 'package:baby_vax/app/core/service/phone_dialer.dart';
 import 'package:baby_vax/app/core/values/app_enum/vaccination_time_status_enum.dart'
     show pluralCategory;
 import 'package:baby_vax/app/modules/home/widgets/quick_actions.dart';
@@ -109,12 +112,11 @@ class HealthView extends GetView<HealthController> {
   }
 
   Widget _content(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
     final DateTime now = controller.now;
     final MedicalDatesModel? dose = controller.recentDose;
     final HealthEntry? latest = controller.latestTemperature;
-    final List<HealthEntry> chart = controller.recentTemperatures;
     final HealthEntry? medicine = controller.lastMedicine;
+    final UserModel? profile = controller.profile;
 
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
@@ -134,7 +136,7 @@ class HealthView extends GetView<HealthController> {
               message: "saved_offline_msg".tr),
           const SizedBox(height: AppSpacing.md),
         ],
-        if (dose != null) ...<Widget>[
+        if (dose != null)
           _AfterVaccineCard(
             dose: dose,
             day: controller.dayAfter(dose),
@@ -142,12 +144,10 @@ class HealthView extends GetView<HealthController> {
                 _add(HealthEntryKind.temperature, doseId: dose.id),
             onSigns: () => _add(HealthEntryKind.symptoms, doseId: dose.id),
           ),
-          const SizedBox(height: AppSpacing.md),
-        ],
-        Text("Health_intro".tr,
-            style: theme.textTheme.bodyMedium
-                ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
-        AppSectionHeader(title: "Health_add_section".tr),
+
+        // ---- log something -------------------------------------------
+        AppSectionHeader(
+            title: "Health_add_section".tr, subtitle: "Health_intro".tr),
         for (final List<HealthEntryKind> row in <List<HealthEntryKind>>[
           <HealthEntryKind>[
             HealthEntryKind.temperature,
@@ -166,64 +166,23 @@ class HealthView extends GetView<HealthController> {
           ]),
           const SizedBox(height: AppSpacing.md),
         ],
-        if (latest != null) ...<Widget>[
-          AppSectionHeader(title: "Health_temperature_section".tr),
-          AppCard(
-            key: const Key('health_latest_temp'),
-            onTap: () => _edit(latest),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Text(HealthLabels.temperature(latest.tempC!),
-                        style: theme.textTheme.headlineMedium),
-                    const SizedBox(width: AppSpacing.md),
-                    Expanded(
-                      child: Text(
-                        <String>[
-                          if (latest.method != null)
-                            HealthLabels.method(latest.method!),
-                          ago(latest.at, now),
-                        ].join(' · '),
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                CareMessage(
-                    level: controller.careLevelOf(latest),
-                    onLearnMore: openGuide),
-                if (chart.length >= 2) ...<Widget>[
-                  const SizedBox(height: AppSpacing.md),
-                  Text("Health_chart_title".tr,
-                      style: theme.textTheme.labelLarge),
-                  const SizedBox(height: AppSpacing.sm),
-                  TemperatureChart(readings: chart, now: now),
-                ],
-              ],
-            ),
+
+        // ---- the last 72 hours ---------------------------------------
+        if (latest != null || medicine != null) ...<Widget>[
+          AppSectionHeader(title: "Health_chart_title".tr),
+          _RecentCard(
+            latest: latest,
+            level: latest == null
+                ? CareLevel.none
+                : controller.careLevelOf(latest),
+            chart: controller.recentTemperatures,
+            medicine: medicine,
+            now: now,
+            onEdit: _edit,
           ),
         ],
-        if (medicine != null) ...<Widget>[
-          const SizedBox(height: AppSpacing.md),
-          AppListGroup(children: <Widget>[
-            AppListRow(
-              key: const Key('health_last_medicine'),
-              icon: Icons.medication_outlined,
-              title: "Health_last_medicine".trParams(<String, String>{
-                'name': bidiIsolate(medicine.medicine ?? ''),
-              }),
-              subtitle: <String>[
-                ago(medicine.at, now),
-                if (medicine.amount != null) bidiIsolate(medicine.amount!),
-              ].join(' · '),
-              onTap: () => _edit(medicine),
-            ),
-          ]),
-        ],
+
+        // ---- the log -------------------------------------------------
         AppSectionHeader(title: "Health_log_section".tr),
         if (controller.items.isEmpty)
           AppEmptyState(
@@ -234,29 +193,22 @@ class HealthView extends GetView<HealthController> {
             message: "Health_empty_body".tr,
           )
         else
-          for (final (DateTime day, List<HealthEntry> entries)
-              in controller.byDay) ...<Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: AppSpacing.sm, bottom: AppSpacing.xs),
-              child: Text(dayLabel(day, now),
-                  style: theme.textTheme.titleSmall
-                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
-            ),
-            for (final HealthEntry e in entries) ...<Widget>[
-              _EntryTile(
-                  entry: e,
-                  level: controller.careLevelOf(e),
-                  onTap: () => _edit(e)),
-              const SizedBox(height: AppSpacing.sm),
-            ],
-          ],
+          _HealthLog(
+            days: controller.byDay,
+            now: now,
+            levelOf: controller.careLevelOf,
+            onTap: _edit,
+          ),
+
+        // ---- medical ID ----------------------------------------------
         AppSectionHeader(
           title: "Health_profile_title".tr,
-          actionLabel: "Health_profile_edit".tr,
+          actionLabel: profile?.hasHealthProfile ?? false
+              ? "Health_profile_edit".tr
+              : null,
           onAction: _editProfile,
         ),
-        _ProfileCard(user: controller.profile, onEdit: _editProfile),
+        _MedicalIdCard(user: profile, onEdit: _editProfile),
         const SizedBox(height: AppSpacing.md),
         AppListGroup(children: <Widget>[
           AppListRow(
@@ -274,8 +226,8 @@ class HealthView extends GetView<HealthController> {
   }
 }
 
-/// "After (vaccine) · day N", WHO's word on what is usual, and two ways to
-/// log how the baby is.
+/// "After (vaccine)", which of the three days this is, WHO's word on what
+/// is usual, and two ways to log how the baby is.
 class _AfterVaccineCard extends StatelessWidget {
   const _AfterVaccineCard({
     required this.dose,
@@ -293,6 +245,7 @@ class _AfterVaccineCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme scheme = theme.colorScheme;
+    const int total = HealthController.afterVaccineDays;
     return AppCard(
       key: const Key('health_after_vaccine'),
       level: AppCardLevel.raised,
@@ -310,66 +263,283 @@ class _AfterVaccineCard extends StatelessWidget {
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Health_after_vaccine_title".trParams(<String, String>{
-                        'vaccine': bidiIsolate(dose.displayName),
-                      }),
-                      style: theme.textTheme.titleMedium
-                          ?.copyWith(color: scheme.onPrimaryContainer),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      "Health_after_vaccine_day"
-                          .trParams(<String, String>{'day': '$day'}),
-                      style: theme.textTheme.bodySmall
-                          ?.copyWith(color: scheme.onPrimaryContainer),
-                    ),
-                  ],
+                child: Text(
+                  "Health_after_vaccine_title".trParams(<String, String>{
+                    'vaccine': bidiIsolate(dose.displayName),
+                  }),
+                  style: theme.textTheme.titleMedium
+                      ?.copyWith(color: scheme.onPrimaryContainer),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.sm),
+          const SizedBox(height: AppSpacing.md),
+          // Day 1, 2 or 3 of the three days the card is shown, as words and
+          // as three segments.
+          Semantics(
+            excludeSemantics: true,
+            label: "Health_after_vaccine_day"
+                .trParams(<String, String>{'day': '$day', 'total': '$total'}),
+            child: Row(
+              children: <Widget>[
+                for (int i = 1; i <= total; i++) ...<Widget>[
+                  Expanded(
+                    child: Container(
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: i <= day
+                            ? scheme.primary
+                            : scheme.onPrimaryContainer.withValues(alpha: 0.15),
+                        borderRadius: AppRadius.pillAll,
+                      ),
+                    ),
+                  ),
+                  if (i < total) const SizedBox(width: AppSpacing.xs),
+                ],
+                const SizedBox(width: AppSpacing.md),
+                Text(
+                  "Health_after_vaccine_day".trParams(
+                      <String, String>{'day': '$day', 'total': '$total'}),
+                  style: theme.textTheme.labelMedium
+                      ?.copyWith(color: scheme.onPrimaryContainer),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
           Text("Health_after_vaccine_body".tr,
               style: theme.textTheme.bodyMedium
                   ?.copyWith(color: scheme.onPrimaryContainer)),
-          const SizedBox(height: AppSpacing.md),
-          Wrap(
-            spacing: AppSpacing.sm,
-            runSpacing: AppSpacing.sm,
-            children: <Widget>[
+          const SizedBox(height: AppSpacing.lg),
+          // Both buttons share the row; they stack when the labels need
+          // more room (large text).
+          LayoutBuilder(builder: (context, c) {
+            final List<Widget> buttons = <Widget>[
               AppButton(
                 key: const Key('health_after_temperature'),
                 text: "Health_add_temperature".tr,
                 icon: Icons.thermostat_rounded,
-                variant: AppButtonVariant.secondary,
-                expand: false,
                 onPressed: onTemperature,
               ),
               AppButton(
                 key: const Key('health_after_signs'),
                 text: "Health_add_symptoms".tr,
                 icon: Icons.sick_outlined,
-                variant: AppButtonVariant.secondary,
-                expand: false,
+                variant: AppButtonVariant.outline,
                 onPressed: onSigns,
               ),
-            ],
-          ),
+            ];
+            final bool side = c.maxWidth >= 280 &&
+                MediaQuery.textScalerOf(context).scale(14) <= 15;
+            return side
+                ? Row(children: <Widget>[
+                    Expanded(child: buttons[0]),
+                    const SizedBox(width: AppSpacing.sm),
+                    Expanded(child: buttons[1]),
+                  ])
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      buttons[0],
+                      const SizedBox(height: AppSpacing.sm),
+                      buttons[1],
+                    ],
+                  );
+          }),
         ],
       ),
     );
   }
 }
 
-/// One entry in the log: what, when, the note, and WHO's message for it
-/// as an icon and words (never colour alone).
-class _EntryTile extends StatelessWidget {
-  const _EntryTile({
+/// The last 72 hours in one card: the latest temperature, WHO's message
+/// for it, the chart, and the last medicine given.
+class _RecentCard extends StatelessWidget {
+  const _RecentCard({
+    required this.latest,
+    required this.level,
+    required this.chart,
+    required this.medicine,
+    required this.now,
+    required this.onEdit,
+  });
+
+  final HealthEntry? latest;
+  final CareLevel level;
+  final List<HealthEntry> chart;
+  final HealthEntry? medicine;
+  final DateTime now;
+  final ValueChanged<HealthEntry> onEdit;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
+    final HealthEntry? t = latest;
+    final HealthEntry? m = medicine;
+    return AppCard(
+      key: const Key('health_recent'),
+      padding: EdgeInsets.zero,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          if (t != null)
+            InkWell(
+              key: const Key('health_latest_temp'),
+              onTap: () => onEdit(t),
+              child: Padding(
+                padding: AppSpacing.card,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Text("Health_temperature_section".tr,
+                        style: theme.textTheme.labelLarge
+                            ?.copyWith(color: scheme.onSurfaceVariant)),
+                    const SizedBox(height: AppSpacing.xs),
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: AppSpacing.md,
+                      runSpacing: AppSpacing.xs,
+                      children: <Widget>[
+                        Text(HealthLabels.temperature(t.tempC!),
+                            style: theme.textTheme.displaySmall?.copyWith(
+                                color: level == CareLevel.urgent
+                                    ? scheme.error
+                                    : scheme.onSurface)),
+                        Text(
+                          <String>[
+                            if (t.method != null)
+                              HealthLabels.method(t.method!),
+                            HealthView.ago(t.at, now),
+                          ].join(' · '),
+                          style: theme.textTheme.bodyMedium
+                              ?.copyWith(color: scheme.onSurfaceVariant),
+                        ),
+                      ],
+                    ),
+                    if (level != CareLevel.none) ...<Widget>[
+                      const SizedBox(height: AppSpacing.md),
+                      CareMessage(
+                          level: level, onLearnMore: HealthView.openGuide),
+                    ],
+                    if (chart.length >= 2) ...<Widget>[
+                      const SizedBox(height: AppSpacing.lg),
+                      TemperatureChart(readings: chart, now: now),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          if (t != null && m != null)
+            const Divider(indent: AppSpacing.lg, endIndent: AppSpacing.lg),
+          if (m != null)
+            AppListRow(
+              key: const Key('health_last_medicine'),
+              icon: Icons.medication_outlined,
+              title: "Health_last_medicine".trParams(<String, String>{
+                'name': bidiIsolate(m.medicine ?? ''),
+              }),
+              subtitle: <String>[
+                HealthView.ago(m.at, now),
+                if (m.amount != null) bidiIsolate(m.amount!),
+              ].join(' · '),
+              onTap: () => onEdit(m),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The log by day, each day one card of entries. The three most recent
+/// days are shown; the rest open with "Show all".
+class _HealthLog extends StatefulWidget {
+  const _HealthLog({
+    required this.days,
+    required this.now,
+    required this.levelOf,
+    required this.onTap,
+  });
+
+  final List<(DateTime, List<HealthEntry>)> days;
+  final DateTime now;
+  final CareLevel Function(HealthEntry) levelOf;
+  final ValueChanged<HealthEntry> onTap;
+
+  static const int recentDays = 3;
+
+  @override
+  State<_HealthLog> createState() => _HealthLogState();
+}
+
+class _HealthLogState extends State<_HealthLog> {
+  bool _all = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final int hidden = widget.days.length - _HealthLog.recentDays;
+    final Iterable<(DateTime, List<HealthEntry>)> shown = _all || hidden <= 0
+        ? widget.days
+        : widget.days.take(_HealthLog.recentDays);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        for (final (DateTime day, List<HealthEntry> entries)
+            in shown) ...<Widget>[
+          Padding(
+            padding: const EdgeInsetsDirectional.only(
+                start: AppSpacing.xs,
+                top: AppSpacing.sm,
+                bottom: AppSpacing.sm),
+            child: Semantics(
+              header: true,
+              child: Text(HealthView.dayLabel(day, widget.now),
+                  style: theme.textTheme.titleSmall
+                      ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+            ),
+          ),
+          AppCard(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: <Widget>[
+                for (int i = 0; i < entries.length; i++) ...<Widget>[
+                  if (i > 0)
+                    const Divider(
+                        indent: AppSpacing.lg + 40 + AppSpacing.md,
+                        endIndent: AppSpacing.lg),
+                  _EntryRow(
+                    entry: entries[i],
+                    level: widget.levelOf(entries[i]),
+                    onTap: () => widget.onTap(entries[i]),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+        ],
+        if (hidden > 0)
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TextButton.icon(
+              key: const Key('health_log_toggle'),
+              onPressed: () => setState(() => _all = !_all),
+              icon: Icon(
+                  _all ? Icons.expand_less_rounded : Icons.expand_more_rounded),
+              label: Text(
+                  _all ? "Health_log_show_less".tr : "Health_log_show_all".tr),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// One entry: what (as the title), when and what kind, any note, and WHO's
+/// message for it as an icon and words (never colour alone).
+class _EntryRow extends StatelessWidget {
+  const _EntryRow({
     required this.entry,
     required this.level,
     required this.onTap,
@@ -389,10 +559,12 @@ class _EntryTile extends StatelessWidget {
       CareLevel.seeHealthWorker => "Health_flag_see".tr,
       CareLevel.none => null,
     };
-    return AppCard(
-      key: Key('health_entry_${entry.id}'),
+    final bool urgent = level == CareLevel.urgent;
+    return Semantics(
+      button: true,
       onTap: onTap,
-      semanticLabel: <String>[
+      excludeSemantics: true,
+      label: <String>[
         HealthLabels.kind(entry.kind),
         AppDateFormat.time(entry.at),
         summary,
@@ -400,56 +572,87 @@ class _EntryTile extends StatelessWidget {
         if (entry.kind != HealthEntryKind.note && entry.note != null)
           entry.note!,
       ].join('. '),
-      padding: const EdgeInsets.all(AppSpacing.md),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          AppIconBadge(icon: HealthLabels.icon(entry.kind), size: 36),
-          const SizedBox(width: AppSpacing.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                    '${AppDateFormat.time(entry.at)} · '
-                    '${HealthLabels.kind(entry.kind)}',
-                    style: theme.textTheme.labelMedium
-                        ?.copyWith(color: scheme.onSurfaceVariant)),
-                Text(summary,
-                    style: theme.textTheme.bodyLarge,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis),
-                if (entry.kind != HealthEntryKind.note && entry.note != null)
-                  Text(bidiIsolate(entry.note!),
-                      style: theme.textTheme.bodySmall
-                          ?.copyWith(color: scheme.onSurfaceVariant),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis),
-                if (flag != null) ...<Widget>[
-                  const SizedBox(height: AppSpacing.xs),
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                          level == CareLevel.urgent
-                              ? Icons.emergency_rounded
-                              : Icons.warning_amber_rounded,
-                          size: 16,
-                          color: level == CareLevel.urgent
-                              ? scheme.error
-                              : scheme.secondary),
-                      const SizedBox(width: AppSpacing.xs),
-                      Expanded(
-                        child: Text(flag,
-                            style: theme.textTheme.labelMedium?.copyWith(
-                                color: level == CareLevel.urgent
-                                    ? scheme.error
-                                    : scheme.onSurface)),
-                      ),
+      child: InkWell(
+        key: Key('health_entry_${entry.id}'),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              AppIconBadge(
+                icon: HealthLabels.icon(entry.kind),
+                size: 40,
+                background: urgent ? scheme.errorContainer : null,
+                foreground: urgent ? scheme.onErrorContainer : null,
+              ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(summary,
+                        style: theme.textTheme.bodyLarge,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis),
+                    const SizedBox(height: AppSpacing.xxs),
+                    Text(
+                        '${AppDateFormat.time(entry.at)} · '
+                        '${HealthLabels.kind(entry.kind)}',
+                        style: theme.textTheme.bodySmall
+                            ?.copyWith(color: scheme.onSurfaceVariant)),
+                    if (entry.kind != HealthEntryKind.note &&
+                        entry.note != null) ...<Widget>[
+                      const SizedBox(height: AppSpacing.xs),
+                      Text(bidiIsolate(entry.note!),
+                          style: theme.textTheme.bodySmall
+                              ?.copyWith(color: scheme.onSurfaceVariant),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis),
                     ],
-                  ),
-                ],
-              ],
-            ),
+                    if (flag != null) ...<Widget>[
+                      const SizedBox(height: AppSpacing.sm),
+                      _FlagPill(text: flag, urgent: urgent),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// WHO's flag on an entry as a small pill with an icon.
+class _FlagPill extends StatelessWidget {
+  const _FlagPill({required this.text, required this.urgent});
+
+  final String text;
+  final bool urgent;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
+    final Color bg = urgent ? scheme.errorContainer : scheme.secondaryContainer;
+    final Color fg =
+        urgent ? scheme.onErrorContainer : scheme.onSecondaryContainer;
+    return Container(
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.sm, vertical: AppSpacing.xxs),
+      decoration: BoxDecoration(color: bg, borderRadius: AppRadius.pillAll),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Icon(urgent ? Icons.emergency_rounded : Icons.warning_amber_rounded,
+              size: 14, color: fg),
+          const SizedBox(width: AppSpacing.xs),
+          Flexible(
+            child: Text(text,
+                style: theme.textTheme.labelMedium?.copyWith(color: fg)),
           ),
         ],
       ),
@@ -457,49 +660,198 @@ class _EntryTile extends StatelessWidget {
   }
 }
 
-/// The health profile, or an invitation to fill it in.
-class _ProfileCard extends StatelessWidget {
-  const _ProfileCard({required this.user, required this.onEdit});
+/// The health profile as a medical ID: blood type, allergies, conditions,
+/// and the emergency contact with Call and Copy. Without a profile, an
+/// invitation to fill it in.
+class _MedicalIdCard extends StatelessWidget {
+  const _MedicalIdCard({required this.user, required this.onEdit});
 
   final UserModel? user;
   final VoidCallback onEdit;
 
+  Future<void> _call(String phone) async {
+    if (!await PhoneDialer.dial(phone)) {
+      AppSnackbar.error("Health_call_failed".tr);
+    }
+  }
+
+  Future<void> _copy(String phone) async {
+    await Clipboard.setData(ClipboardData(text: phone));
+    AppSnackbar.success("Health_phone_copied".tr);
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
     final UserModel? u = user;
     if (u == null || !u.hasHealthProfile) {
       return AppCard(
         key: const Key('health_profile_empty'),
-        onTap: onEdit,
-        semanticLabel: "Health_profile_empty".tr,
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            const AppIconBadge(icon: Icons.badge_outlined),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-                child: Text("Health_profile_empty".tr,
-                    style: theme.textTheme.bodyMedium)),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const AppIconBadge(icon: Icons.medical_information_outlined),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                    child: Text("Health_profile_empty".tr,
+                        style: theme.textTheme.bodyMedium)),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.md),
+            AppButton(
+              key: const Key('health_profile_add'),
+              text: "Health_profile_add".tr,
+              icon: Icons.add_rounded,
+              variant: AppButtonVariant.secondary,
+              onPressed: onEdit,
+            ),
           ],
         ),
       );
     }
-    return AppListGroup(children: <Widget>[
-      for (final (String key, String? value, IconData icon)
-          in <(String, String?, IconData)>[
-        ("Health_blood_type", u.bloodType, Icons.bloodtype_outlined),
-        ("Health_allergies", u.allergies, Icons.no_food_outlined),
-        ("Health_conditions", u.conditions, Icons.healing_outlined),
-        ("Health_emergency", u.emergencyContact, Icons.call_outlined),
-      ])
-        if (value != null)
-          AppListRow(
-            key: Key('health_profile_$key'),
-            icon: icon,
-            title: key.tr,
-            subtitle: bidiIsolate(value),
+    final EmergencyContact? c = u.emergencyContact;
+    final List<(String, String?, IconData)> facts =
+        <(String, String?, IconData)>[
+      ("Health_allergies", u.allergies, Icons.no_food_outlined),
+      ("Health_conditions", u.conditions, Icons.healing_outlined),
+    ];
+    return AppCard(
+      key: const Key('health_medical_id'),
+      padding: EdgeInsets.zero,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          // Blood type, large, as on a medical ID.
+          InkWell(
+            key: const Key('health_profile_Health_blood_type'),
             onTap: onEdit,
+            child: Padding(
+              padding: AppSpacing.card,
+              child: Row(
+                children: <Widget>[
+                  AppIconBadge(
+                    icon: Icons.bloodtype_outlined,
+                    background: scheme.errorContainer,
+                    foreground: scheme.onErrorContainer,
+                  ),
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Text("Health_blood_type".tr,
+                        style: theme.textTheme.titleSmall),
+                  ),
+                  Text(
+                    u.bloodType == null
+                        ? "Health_blood_unknown".tr
+                        : bidiIsolate(u.bloodType!),
+                    style: u.bloodType == null
+                        ? theme.textTheme.bodyMedium
+                            ?.copyWith(color: scheme.onSurfaceVariant)
+                        : theme.textTheme.headlineSmall
+                            ?.copyWith(color: scheme.error),
+                  ),
+                ],
+              ),
+            ),
           ),
-    ]);
+          for (final (String key, String? value, IconData icon) in facts)
+            if (value != null) ...<Widget>[
+              const Divider(indent: AppSpacing.lg, endIndent: AppSpacing.lg),
+              AppListRow(
+                key: Key('health_profile_$key'),
+                icon: icon,
+                title: key.tr,
+                subtitle: bidiIsolate(value),
+                onTap: onEdit,
+              ),
+            ],
+          const Divider(indent: AppSpacing.lg, endIndent: AppSpacing.lg),
+          if (c == null)
+            AppListRow(
+              key: const Key('health_contact_add'),
+              icon: Icons.contact_phone_outlined,
+              title: "Health_emergency".tr,
+              subtitle: "Health_contact_add".tr,
+              onTap: onEdit,
+            )
+          else
+            Padding(
+              key: const Key('health_contact'),
+              padding: AppSpacing.card,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Text("Health_emergency".tr,
+                      style: theme.textTheme.labelLarge
+                          ?.copyWith(color: scheme.onSurfaceVariant)),
+                  const SizedBox(height: AppSpacing.sm),
+                  Row(
+                    children: <Widget>[
+                      CircleAvatar(
+                        radius: 22,
+                        backgroundColor: scheme.primaryContainer,
+                        foregroundColor: scheme.onPrimaryContainer,
+                        child: Text(c.name.characters.first.toUpperCase(),
+                            style: theme.textTheme.titleMedium
+                                ?.copyWith(color: scheme.onPrimaryContainer)),
+                      ),
+                      const SizedBox(width: AppSpacing.md),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              c.relation == null
+                                  ? bidiIsolate(c.name)
+                                  : "Health_contact_with_relation"
+                                      .trParams(<String, String>{
+                                      'name': bidiIsolate(c.name),
+                                      'relation':
+                                          "Health_relation_${c.relation}".tr,
+                                    }),
+                              style: theme.textTheme.titleMedium,
+                            ),
+                            Text(bidiIsolate(c.phone),
+                                key: const Key('health_contact_phone_text'),
+                                textDirection: TextDirection.ltr,
+                                style: theme.textTheme.bodyMedium
+                                    ?.copyWith(color: scheme.onSurfaceVariant)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: AppButton(
+                          key: const Key('health_contact_call'),
+                          text: "Health_call".tr,
+                          icon: Icons.call_rounded,
+                          onPressed: () => _call(c.phone),
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      IconButton.outlined(
+                        key: const Key('health_contact_copy'),
+                        tooltip: "Health_copy_phone".tr,
+                        constraints: const BoxConstraints(
+                            minWidth: AppSpacing.minTouchTarget,
+                            minHeight: AppSpacing.minTouchTarget),
+                        onPressed: () => _copy(c.phone),
+                        icon: const Icon(Icons.copy_rounded),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }
