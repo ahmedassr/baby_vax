@@ -97,6 +97,40 @@ void main() {
     expect(bytes.length, greaterThan(10000), reason: 'font is embedded');
   });
 
+  test('the health profile is carried to the card only when filled in', () {
+    final UserModel withHealth = sampleUser().withHealth(
+        allergies: 'حساسية من البنسلين',
+        conditions: null,
+        bloodType: 'O+',
+        emergencyContact: 'Mum 0599 000 000');
+    final d = VaccinationCardData.build(
+        user: withHealth, doses: doses(), now: fixedNow);
+    expect(d.hasHealthProfile, isTrue);
+    expect(d.bloodType, 'O+');
+    expect(d.allergies, 'حساسية من البنسلين');
+    expect(d.conditions, isNull);
+    expect(
+        VaccinationCardData.build(
+                user: sampleUser(), doses: doses(), now: fixedNow)
+            .hasHealthProfile,
+        isFalse);
+  });
+
+  test('builds the PDF with the health profile (Arabic text)', () async {
+    final data = VaccinationCardData.build(
+        user: sampleUser().withHealth(
+            allergies: 'حساسية من البنسلين',
+            conditions: 'Asthma',
+            bloodType: 'AB-',
+            emergencyContact: 'Mum 0599 000 000'),
+        doses: doses(),
+        now: fixedNow);
+    final Uint8List bytes = await VaccinationCardPdf.build(data, font: cairo());
+    expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
+    final String? out = Platform.environment['CARD_PDF_OUT'];
+    if (out != null) File(out).writeAsBytesSync(bytes);
+  });
+
   group('VaccinationCardSheet', () {
     late List<String> shared;
     late List<String> printed;

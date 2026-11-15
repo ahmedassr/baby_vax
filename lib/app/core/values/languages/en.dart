@@ -507,4 +507,13 @@ Map<String, String> en = {
   "Health_symptom_rash": "Rash",
   "Health_symptom_injectionSite": "Sore or swollen where the vaccine was given",
   "Health_symptom_crying": "Crying more than usual",
+  "Health_profile_title": "Health profile",
+  "Health_profile_hint":
+      "Useful for a clinic or whoever looks after your baby. Printed on the vaccination card.",
+  "Health_allergies": "Allergies",
+  "Health_conditions": "Long-term conditions",
+  "Health_blood_type": "Blood type",
+  "Health_blood_unknown": "Not known",
+  "Health_emergency": "Emergency contact",
+  "Health_emergency_helper": "A name and a phone number",
 };

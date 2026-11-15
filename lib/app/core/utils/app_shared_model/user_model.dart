@@ -131,6 +131,30 @@ class UserModel {
     );
   }
 
+  /// This profile with its health fields replaced (null clears one), which
+  /// [copyWith] cannot express.
+  UserModel withHealth({
+    required String? allergies,
+    required String? conditions,
+    required String? bloodType,
+    required String? emergencyContact,
+  }) =>
+      UserModel(
+        uid: uid,
+        email: email,
+        birthday: birthday,
+        name: name,
+        height: height,
+        weight: weight,
+        bloodPercentage: bloodPercentage,
+        headSize: headSize,
+        sex: sex,
+        allergies: _text(allergies),
+        conditions: _text(conditions),
+        bloodType: bloodTypes.contains(bloodType) ? bloodType : null,
+        emergencyContact: _text(emergencyContact),
+      );
+
   /// The Firestore document. `sex` and the health profile are only written
   /// when known, so a profile edit never clears them (the health profile is
   /// changed, and cleared, by its own sheet).

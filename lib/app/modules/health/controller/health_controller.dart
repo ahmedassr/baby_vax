@@ -17,12 +17,15 @@ class HealthController extends GetxController {
     Future<(String, WriteOutcome)> Function(String uid, HealthEntry e)? save,
     Future<void> Function(String uid, String id)? delete,
     UserModel? Function()? user,
+    Future<void> Function(String uid, Map<String, dynamic> fields)?
+        updateProfile,
     List<MedicalDatesModel> Function()? doses,
     DateTime Function()? clock,
   })  : _load = load ?? _firestoreLoad,
         _save = save ?? _firestoreSave,
         _delete = delete ?? _firestoreDelete,
         _user = user ?? _homeUser,
+        _updateProfile = updateProfile ?? _firestoreProfile,
         _doses = doses ?? _homeDoses,
         _now = clock ?? DateTime.now;
 
@@ -30,6 +33,7 @@ class HealthController extends GetxController {
   final Future<(String, WriteOutcome)> Function(String, HealthEntry) _save;
   final Future<void> Function(String, String) _delete;
   final UserModel? Function() _user;
+  final Future<void> Function(String, Map<String, dynamic>) _updateProfile;
   final List<MedicalDatesModel> Function() _doses;
   final DateTime Function() _now;
 
@@ -77,6 +81,11 @@ class HealthController extends GetxController {
     await AppConstant.fireStoreHelper1
         .removeData(path: '${AppPath.userHealthLog(uid)}/$id');
   }
+
+  static Future<void> _firestoreProfile(
+          String uid, Map<String, dynamic> fields) =>
+      AppConstant.fireStoreHelper1
+          .updateData(path: AppPath.userDoc(uid), data: fields);
 
   static UserModel? _homeUser() => Get.isRegistered<HomeController>()
       ? Get.find<HomeController>().userDetails.value
@@ -143,10 +152,48 @@ class HealthController extends GetxController {
     }
   }
 
+  /// Saves the health profile. A blank field is removed from the
+  /// document (not left behind as an empty string), and Home's copy of the
+  /// profile is updated at once, so the tab and the card show it offline.
+  Future<bool> saveProfile(UserModel updated) async {
+    final String? uid = SessionManager.signedInUid;
+    if (uid == null) return false;
+    actionError.value = null;
+    final Map<String, Object?> values = <String, Object?>{
+      'allergies': updated.allergies,
+      'conditions': updated.conditions,
+      'bloodType': updated.bloodType,
+      'emergencyContact': updated.emergencyContact,
+    };
+    try {
+      await _updateProfile(uid, <String, dynamic>{
+        for (final MapEntry<String, Object?> e in values.entries)
+          e.key: e.value ?? FieldValue.delete(),
+      });
+      if (Get.isRegistered<HomeController>()) {
+        Get.find<HomeController>().userDetails.value = updated;
+      }
+      profileOverride.value = updated;
+      AppHaptics.confirm();
+      return true;
+    } catch (err, s) {
+      logger.w('Saving the health profile failed', error: err, stackTrace: s);
+      actionError.value = "Health_save_failed".tr;
+      return false;
+    }
+  }
+
+  /// The profile as last saved here, until Home reloads it.
+  final Rxn<UserModel> profileOverride = Rxn<UserModel>();
+
+  /// The profile the tab shows.
+  UserModel? get profile => profileOverride.value ?? user;
+
   /// Forgets the signed-out parent's log (the tab's controller lives as
   /// long as the app).
   void clearSession() {
     items.clear();
+    profileOverride.value = null;
     loadError.value = null;
     actionError.value = null;
     savedOffline.value = false;

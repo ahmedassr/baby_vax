@@ -64,13 +64,16 @@ class VaccinationCardPdf {
           child: pw.Row(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: <pw.Widget>[
+              // Wide enough for "Long-term conditions / حالات صحية مزمنة";
+              // a longer label wraps rather than running into the value.
               pw.SizedBox(
-                width: 150,
-                child: pw.Row(children: <pw.Widget>[
+                width: 200,
+                child: pw.Wrap(children: <pw.Widget>[
                   pw.Text('${en(key)} / ', style: style(9, color: muted)),
                   arText(ar(key), 9, color: muted),
                 ]),
               ),
+              pw.SizedBox(width: 8),
               pw.Expanded(child: value),
             ],
           ),
@@ -133,6 +136,13 @@ class VaccinationCardPdf {
                 pw.Text('${data.sex!.en} / ', style: style(11)),
                 arText(data.sex!.ar, 11),
               ])),
+      // The health profile, only the parts that are filled in.
+      if (data.bloodType != null)
+        fact('Health_blood_type', data.bloodType!),
+      if (data.allergies != null) fact('Health_allergies', data.allergies!),
+      if (data.conditions != null) fact('Health_conditions', data.conditions!),
+      if (data.emergencyContact != null)
+        fact('Health_emergency', data.emergencyContact!),
       pw.SizedBox(height: 12),
     ];
 

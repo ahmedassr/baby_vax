@@ -52,6 +52,10 @@ class VaccinationCardData {
     required this.rows,
     required this.generatedOn,
     required this.counts,
+    this.bloodType,
+    this.allergies,
+    this.conditions,
+    this.emergencyContact,
   });
 
   /// The card for [user] and [doses] on [now], with text from the app's own
@@ -111,6 +115,10 @@ class VaccinationCardData {
       rows: rows,
       generatedOn: formatDate(now),
       counts: counts,
+      bloodType: user.bloodType,
+      allergies: user.allergies,
+      conditions: user.conditions,
+      emergencyContact: user.emergencyContact,
     );
   }
 
@@ -119,6 +127,18 @@ class VaccinationCardData {
   final Bilingual? sex;
   final List<CardRow> rows;
   final String generatedOn;
+
+  /// The v1.1 health profile, printed only when filled in.
+  final String? bloodType;
+  final String? allergies;
+  final String? conditions;
+  final String? emergencyContact;
+
+  bool get hasHealthProfile =>
+      bloodType != null ||
+      allergies != null ||
+      conditions != null ||
+      emergencyContact != null;
 
   /// How many doses are in each display status.
   final Map<DoseDisplayStatus, int> counts;

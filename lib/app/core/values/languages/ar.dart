@@ -540,4 +540,13 @@ Map<String, String> ar = {
   "Health_symptom_rash": "طفح جلدي",
   "Health_symptom_injectionSite": "ألم أو تورم مكان الحقنة",
   "Health_symptom_crying": "بكاء أكثر من المعتاد",
+  "Health_profile_title": "الملف الصحي",
+  "Health_profile_hint":
+      "مفيد للعيادة أو لمن يرعى طفلك. يُطبع في بطاقة التطعيم.",
+  "Health_allergies": "الحساسية",
+  "Health_conditions": "حالات صحية مزمنة",
+  "Health_blood_type": "فصيلة الدم",
+  "Health_blood_unknown": "غير معروفة",
+  "Health_emergency": "جهة اتصال للطوارئ",
+  "Health_emergency_helper": "الاسم ورقم الهاتف",
 };
