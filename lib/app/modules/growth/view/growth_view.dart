@@ -85,12 +85,15 @@ class GrowthView extends GetView<GrowthController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: "Growth_title".tr),
-      floatingActionButton: FloatingActionButton.extended(
-        key: const Key('growth_add'),
-        onPressed: _add,
-        icon: const Icon(Icons.add_rounded),
-        label: Text("Growth_add".tr),
-      ),
+      // Only once there are measurements; until then the empty state's
+      // button is the one way to add.
+      floatingActionButton: Obx(() => AppAddFab(
+            key: const Key('growth_add'),
+            visible: !controller.isLoading.value && controller.items.isNotEmpty,
+            label: "Growth_add".tr,
+            icon: Icons.add_rounded,
+            onPressed: _add,
+          )),
       body: Obx(() {
         if (controller.isLoading.value) return const AppLoading(showHero: true);
         if (controller.loadError.value != null && controller.items.isEmpty) {
@@ -163,6 +166,7 @@ class GrowthView extends GetView<GrowthController> {
         const SizedBox(height: AppSpacing.md),
         if (!hasItems)
           AppEmptyState(
+            key: const Key('growth_empty'),
             scrollable: false,
             icon: Icons.show_chart_rounded,
             title: "Growth_empty_title".tr,

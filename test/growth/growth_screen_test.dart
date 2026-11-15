@@ -158,6 +158,35 @@ void main() {
       expect(find.byKey(const Key('growth_reading_text')), findsNothing);
     });
 
+    for (final Variant v in mainVariants) {
+      testWidgets('empty: only the empty-state button, no FAB ($v)',
+          (tester) async {
+        put(items: <MeasurementModel>[]);
+        await pumpApp(tester, const GrowthView(), variant: v);
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key('growth_empty')), findsOneWidget);
+        expect(find.byType(FloatingActionButton), findsNothing);
+        expect(find.widgetWithText(AppButton, "Growth_add".tr), findsOneWidget);
+        expectNoOverflow(tester);
+        await tester.tap(find.widgetWithText(AppButton, "Growth_add".tr));
+        await tester.pumpAndSettle();
+        expect(find.byType(MeasurementSheet), findsOneWidget);
+      });
+
+      testWidgets('with items: only the FAB ($v)', (tester) async {
+        put();
+        await pumpApp(tester, const GrowthView(), variant: v);
+        await tester.pumpAndSettle();
+        expect(find.byType(FloatingActionButton), findsOneWidget);
+        expect(find.byKey(const Key('growth_empty')), findsNothing);
+        expect(find.widgetWithText(AppButton, "Growth_add".tr), findsNothing);
+        expectNoOverflow(tester);
+        await tester.tap(find.byKey(const Key('growth_add')));
+        await tester.pumpAndSettle();
+        expect(find.byType(MeasurementSheet), findsOneWidget);
+      });
+    }
+
     testWidgets('empty state offers to add', (tester) async {
       put(items: <MeasurementModel>[]);
       await pumpApp(tester, const GrowthView());

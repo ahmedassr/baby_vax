@@ -134,6 +134,37 @@ void main() {
       expect(s.onChanged, isNull);
     });
 
+    for (final Variant v in mainVariants) {
+      testWidgets('empty: only the empty-state button, no FAB ($v)',
+          (tester) async {
+        put(items: <ReminderModel>[]);
+        await pumpApp(tester, const RemindersView(), variant: v);
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key('reminders_empty')), findsOneWidget);
+        expect(find.byType(FloatingActionButton), findsNothing);
+        expect(
+            find.widgetWithText(AppButton, "Reminders_add".tr), findsOneWidget);
+        expectNoOverflow(tester);
+        await tester.tap(find.widgetWithText(AppButton, "Reminders_add".tr));
+        await tester.pumpAndSettle();
+        expect(find.byType(ReminderSheet), findsOneWidget);
+      });
+
+      testWidgets('with items: only the FAB ($v)', (tester) async {
+        put();
+        await pumpApp(tester, const RemindersView(), variant: v);
+        await tester.pumpAndSettle();
+        expect(find.byType(FloatingActionButton), findsOneWidget);
+        expect(find.byKey(const Key('reminders_empty')), findsNothing);
+        expect(
+            find.widgetWithText(AppButton, "Reminders_add".tr), findsNothing);
+        expectNoOverflow(tester);
+        await tester.tap(find.byKey(const Key('reminders_add')));
+        await tester.pumpAndSettle();
+        expect(find.byType(ReminderSheet), findsOneWidget);
+      });
+    }
+
     testWidgets('empty state offers to add', (tester) async {
       put(items: <ReminderModel>[]);
       await pumpApp(tester, const RemindersView());

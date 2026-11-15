@@ -42,12 +42,15 @@ class RemindersView extends GetView<RemindersController> {
     controller.onOpenAdd ??= () => addFlow(controller);
     return Scaffold(
       appBar: CustomAppBar(title: "Reminders_title".tr),
-      floatingActionButton: FloatingActionButton.extended(
-        key: const Key('reminders_add'),
-        onPressed: () => addFlow(controller),
-        icon: const Icon(Icons.add_alarm_rounded),
-        label: Text("Reminders_add".tr),
-      ),
+      // Only once there are reminders; until then the empty state's
+      // button is the one way to add.
+      floatingActionButton: Obx(() => AppAddFab(
+            key: const Key('reminders_add'),
+            visible: !controller.isLoading.value && controller.items.isNotEmpty,
+            label: "Reminders_add".tr,
+            icon: Icons.add_alarm_rounded,
+            onPressed: () => addFlow(controller),
+          )),
       body: Obx(() {
         if (controller.isLoading.value) return const AppLoading();
         if (controller.loadError.value != null && controller.items.isEmpty) {
@@ -81,6 +84,7 @@ class RemindersView extends GetView<RemindersController> {
               ],
               if (list.isEmpty)
                 AppEmptyState(
+                  key: const Key('reminders_empty'),
                   scrollable: false,
                   icon: Icons.alarm_add_rounded,
                   title: "Reminders_empty_title".tr,

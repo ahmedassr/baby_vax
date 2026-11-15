@@ -10,6 +10,7 @@ export 'package:baby_vax/app/core/widget/app_dose_tile.dart';
 export 'package:baby_vax/app/core/widget/app_loading.dart';
 export 'package:baby_vax/app/core/widget/app_banner.dart';
 export 'package:baby_vax/app/core/widget/app_sheet.dart';
+export 'package:baby_vax/app/core/widget/app_add_fab.dart';
 export 'package:baby_vax/app/core/widget/app_progress_ring.dart';
 export 'package:baby_vax/app/core/widget/app_list_row.dart';
 export 'package:baby_vax/app/core/widget/app_metric_tile.dart';

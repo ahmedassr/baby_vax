@@ -65,6 +65,14 @@ void main() {
     expect(offenders(<String>['lib'], RegExp(r'Get\.bottomSheet')), isEmpty);
   });
 
+  test('screens add through AppAddFab, never their own FAB', () {
+    // One add action at a time: the empty state's button while a list is
+    // empty, the FAB once it has items (phone review R3).
+    expect(
+        offenders(<String>['lib/app/modules'], RegExp(r'FloatingActionButton')),
+        isEmpty);
+  });
+
   test('no ScreenUtil units anywhere', () {
     expect(
         offenders(<String>['lib'],

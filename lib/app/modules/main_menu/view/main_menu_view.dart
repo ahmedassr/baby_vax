@@ -16,16 +16,17 @@ class MainMenuView extends GetView<MainMenuController> {
           showBackButton: false,
         ),
         // On the schedule tab: add a reminder or appointment of the
-        // parent's own (v1.0 had a FAB here whose handler was a TODO).
-        floatingActionButton: index == 1
-            ? FloatingActionButton.extended(
-                key: const Key('schedule_add_reminder'),
-                onPressed: () => Get.toNamed(AppRoutes.reminders,
-                    arguments: RemindersController.openAddArgument),
-                icon: const Icon(Icons.add_alarm_rounded),
-                label: Text("Reminders_add".tr),
-              )
-            : null,
+        // parent's own (v1.0 had a FAB here whose handler was a TODO). Not
+        // an "add" for the schedule's own list, whose empty states offer
+        // Retry / Show all, so it never duplicates one.
+        floatingActionButton: AppAddFab(
+          key: const Key('schedule_add_reminder'),
+          visible: index == 1,
+          label: "Reminders_add".tr,
+          icon: Icons.add_alarm_rounded,
+          onPressed: () => Get.toNamed(AppRoutes.reminders,
+              arguments: RemindersController.openAddArgument),
+        ),
         bottomNavigationBar: NavigationBar(
           selectedIndex: index,
           onDestinationSelected: controller.changeValue,
