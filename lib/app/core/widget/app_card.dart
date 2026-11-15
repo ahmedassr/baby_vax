@@ -8,7 +8,7 @@ enum AppCardLevel { flat, resting, raised }
 ///
 /// Replaces eight hand-rolled `Container(decoration: BoxDecoration(...))`
 /// cards from v1.0, each with its own colour pair, radius and shadow.
-class AppCard extends StatelessWidget {
+class AppCard extends StatefulWidget {
   const AppCard({
     super.key,
     required this.child,
@@ -38,20 +38,37 @@ class AppCard extends StatelessWidget {
   final String? semanticLabel;
 
   @override
+  State<AppCard> createState() => _AppCardState();
+}
+
+class _AppCardState extends State<AppCard> {
+  bool _focused = false;
+
+  @override
   Widget build(BuildContext context) {
     final ColorScheme scheme = Theme.of(context).colorScheme;
     final AppElevation elevation = AppElevation.of(context);
-    final AppElevationLevel l = switch (level) {
+    // Keyboard focus (which Android can switch on with the Back key) is
+    // shown as a ring, never as a fill: a card's background is the same in
+    // every state, so one card in a list can never look different from
+    // the rest (phone review R5a).
+    final bool ring = _focused &&
+        FocusManager.instance.highlightMode == FocusHighlightMode.traditional;
+    final AppElevationLevel l = switch (widget.level) {
       AppCardLevel.flat => elevation.level0,
       AppCardLevel.resting => elevation.level1,
       AppCardLevel.raised => elevation.level2,
     };
 
-    Widget content = Padding(padding: padding, child: child);
-    if (onTap != null) {
+    Widget content = Padding(padding: widget.padding, child: widget.child);
+    if (widget.onTap != null) {
       content = InkWell(
-        onTap: onTap,
-        borderRadius: borderRadius,
+        onTap: widget.onTap,
+        borderRadius: widget.borderRadius,
+        focusColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        onFocusChange: (bool f) => setState(() => _focused = f),
         child: ConstrainedBox(
           constraints:
               const BoxConstraints(minHeight: AppSpacing.minTouchTarget),
@@ -62,25 +79,26 @@ class AppCard extends StatelessWidget {
 
     Widget card = DecoratedBox(
       decoration: BoxDecoration(
-        borderRadius: borderRadius,
+        borderRadius: widget.borderRadius,
         boxShadow: l.shadows,
       ),
       child: Material(
-        color: color ?? scheme.surface,
+        color: widget.color ?? scheme.surface,
         shape: RoundedRectangleBorder(
-          borderRadius: borderRadius,
-          side: l.borderSide,
+          borderRadius: widget.borderRadius,
+          side:
+              ring ? BorderSide(color: scheme.primary, width: 2) : l.borderSide,
         ),
         clipBehavior: Clip.antiAlias,
         child: content,
       ),
     );
 
-    if (semanticLabel != null) {
+    if (widget.semanticLabel != null) {
       card = Semantics(
         container: true,
-        button: onTap != null,
-        label: semanticLabel,
+        button: widget.onTap != null,
+        label: widget.semanticLabel,
         child: ExcludeSemantics(child: card),
       );
     }
