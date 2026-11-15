@@ -26,10 +26,8 @@ class DoseRecordSheet extends StatefulWidget {
     required DateTime today,
     bool editing = false,
   }) {
-    return Get.bottomSheet<DoseRecord>(
+    return AppSheet.show<DoseRecord>(
       DoseRecordSheet(initial: initial, today: today, editing: editing),
-      isScrollControlled: true,
-      ignoreSafeArea: false,
     );
   }
 

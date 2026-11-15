@@ -31,6 +31,12 @@ class AppTheme {
         null => ThemeMode.system,
       };
 
+  /// What dims the screen behind a sheet: the scheme's scrim at 32% in
+  /// light (Material 3's value) and 60% in dark, where 32% of black over a
+  /// dark screen barely shows.
+  static Color sheetScrim(ColorScheme scheme) => scheme.scrim
+      .withValues(alpha: scheme.brightness == Brightness.dark ? 0.6 : 0.32);
+
   /// The light theme.
   static ThemeData lightTheme = _build(AppColorSchemes.light);
 
@@ -225,12 +231,19 @@ class AppTheme {
         shape: const RoundedRectangleBorder(borderRadius: AppRadius.xlAll),
       ),
 
+      // Every sheet opens through AppSheet.show, so this is all of them:
+      // an opaque surface (never see-through), a drag handle and a scrim
+      // that dims the screen behind.
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: scheme.surface,
         surfaceTintColor: Colors.transparent,
         modalBackgroundColor: scheme.surface,
+        modalBarrierColor: sheetScrim(scheme),
+        elevation: 1,
+        modalElevation: 1,
         showDragHandle: true,
-        dragHandleColor: scheme.outlineVariant,
+        dragHandleColor: scheme.onSurfaceVariant.withValues(alpha: 0.4),
+        clipBehavior: Clip.antiAlias,
         shape: const RoundedRectangleBorder(borderRadius: AppRadius.sheetTop),
       ),
 

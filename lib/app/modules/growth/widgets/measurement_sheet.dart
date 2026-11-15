@@ -43,9 +43,8 @@ class MeasurementSheet extends StatefulWidget {
     MeasurementModel? initial,
     DateTime? birthDate,
   }) =>
-      Get.bottomSheet<MeasurementSheetResult>(
+      AppSheet.show<MeasurementSheetResult>(
         MeasurementSheet(today: today, initial: initial, birthDate: birthDate),
-        isScrollControlled: true,
       );
 
   @override

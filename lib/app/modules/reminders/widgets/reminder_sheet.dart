@@ -36,9 +36,8 @@ class ReminderSheet extends StatefulWidget {
 
   static Future<ReminderSheetResult?> show(
           {required DateTime now, ReminderModel? initial}) =>
-      Get.bottomSheet<ReminderSheetResult>(
-          ReminderSheet(now: now, initial: initial),
-          isScrollControlled: true);
+      AppSheet.show<ReminderSheetResult>(
+          ReminderSheet(now: now, initial: initial));
 
   @override
   State<ReminderSheet> createState() => _ReminderSheetState();

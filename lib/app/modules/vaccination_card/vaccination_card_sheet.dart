@@ -14,8 +14,7 @@ class VaccinationCardSheet extends StatefulWidget {
 
   /// Opens the sheet.
   static Future<void> show({VaccinationCardService? service}) =>
-      Get.bottomSheet<void>(VaccinationCardSheet(service: service),
-          isScrollControlled: true);
+      AppSheet.show<void>(VaccinationCardSheet(service: service));
 
   @override
   State<VaccinationCardSheet> createState() => _VaccinationCardSheetState();

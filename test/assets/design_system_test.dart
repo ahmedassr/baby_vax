@@ -59,6 +59,12 @@ void main() {
         isEmpty);
   });
 
+  test('sheets open through AppSheet.show, never Get.bottomSheet', () {
+    // get's bottomSheet forces a transparent background over the theme,
+    // which made every sheet see-through (phone review R2).
+    expect(offenders(<String>['lib'], RegExp(r'Get\.bottomSheet')), isEmpty);
+  });
+
   test('no ScreenUtil units anywhere', () {
     expect(
         offenders(<String>['lib'],
