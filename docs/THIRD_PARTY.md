@@ -50,6 +50,71 @@ screen's footer.
 > WHO's written permission is needed for this data (or the growth
 > percentiles must be removed).
 
+## WHO guidance used by the Health log
+
+**Used in:** `lib/app/core/service/health/health_guidance.dart` (the fever
+thresholds and which logged signs prompt "get medical help now" or "see a
+health worker"), the Health tab's "When to get medical help" screen and
+the after-vaccination card, through the `Health_guide_*` and
+`Health_after_vaccine_*` strings. The app quotes facts from these sources
+in short form; it gives no treatment or dosing advice.
+
+**Sources**, downloaded in the v1.1 development session on 15 November 2026:
+
+| What | URL | SHA-256 |
+| --- | --- | --- |
+| *Integrated Management of Childhood Illness (IMCI): Chart Booklet*, WHO, March 2014 (PDF, 76 pages) | <https://cdn.who.int/media/docs/default-source/mca-documents/child/imci-integrated-management-of-childhood-illness/imci-in-service-training/imci-chart-booklet.pdf> | `d10fd1d040bdbdb6db4254b8095e1d1722d0a3d2f80c3651b3003301a8a6959f` |
+| *Vaccines and immunization: Vaccine safety*, WHO Questions and answers (English) | <https://www.who.int/news-room/questions-and-answers/item/vaccines-and-immunization-vaccine-safety> | `25f1280921b6d93e96cbd0d36403dc842901151e326e26444ba553c3ca593e55` |
+| The same page in WHO's Arabic | <https://www.who.int/ar/news-room/questions-and-answers/item/vaccines-and-immunization-vaccine-safety> | `563eb497fdfcb09f18cf89efdce707d4322a13d348e664e9ab55c4095ac5ad2e` |
+
+(The HTML pages change with WHO's site template; their hashes identify the
+copies read, not the text alone. CDC pages were not reachable from the
+development environment — Akamai "Access Denied" — so none are used.)
+
+**Facts taken, with where:**
+
+- *Fever* is a temperature of **37.5 °C or above**; the figures are for
+  **armpit (axillary)** readings, and rectal readings are about **0.5 °C
+  higher** — IMCI chart booklet, "Does the child have fever?" (page 4 of
+  76, and its footnote; page numbers are the booklet's own "Page n of 76"), and "Check for very severe disease…" (page 41).
+- *Young infant, up to 2 months*: any of not feeding well, convulsions,
+  fast breathing (60 a minute or more), severe chest indrawing, **fever
+  37.5 °C or above**, **low body temperature below 35.5 °C**, or movement
+  only when stimulated / no movement → very severe disease, refer
+  **urgently** — page 41.
+- *General danger signs* (child 2 months to 5 years): not able to drink or
+  breastfeed, vomits everything, has had convulsions, lethargic or
+  unconscious, convulsing now → needs **urgent** attention — page 1 ("Check
+  for general danger signs").
+- *When to return immediately*, sick child: not able to drink or
+  breastfeed, becomes sicker, develops a fever; with cough or cold also
+  fast or difficult breathing; with diarrhoea also blood in stool or
+  drinking poorly — "When to return immediately", page 39. Young infant: breastfeeding
+  poorly, reduced activity, becomes sicker, develops a fever, feels
+  unusually cold, fast breathing, difficult breathing, palms and soles
+  appear yellow — "When to return immediately", page 51.
+- *After vaccination*: side effects are usually very minor and of short
+  duration, such as a sore arm or a mild fever; serious side effects are
+  possible but extremely rare; after an unexpected reaction, consult a
+  health-care worker — WHO vaccine-safety Q&A. The Arabic text in the app
+  follows WHO's own Arabic page.
+
+**Arabic:** the IMCI booklet was not available in Arabic in the session;
+those strings are our translation of the facts above. The vaccine-safety
+wording follows WHO's Arabic page.
+
+**Licence:** the IMCI chart booklet is © World Health Organization 2014,
+"all rights reserved", with reproduction or translation by permission; the
+app does not reproduce the booklet, it states a handful of its facts in
+its own words, with attribution, which the screen shows. WHO web pages are
+under WHO's website terms (<https://www.who.int/about/policies/terms-of-use>).
+
+> **Decision for the owner:** if you want certainty beyond attribution of
+> short facts, WHO Press grants permission for non-commercial use through
+> <https://www.who.int/about/policies/publishing/permissions>. The
+> guidance screen can also cite your national MoH material instead, if you
+> have it.
+
 ## Vaccination schedule
 
 `lib/app/core/service/medical_dates_generator.dart` — unchanged in v1.1.
