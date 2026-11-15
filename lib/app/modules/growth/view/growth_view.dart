@@ -142,26 +142,22 @@ class GrowthView extends GetView<GrowthController> {
           ),
           const SizedBox(height: AppSpacing.md),
         ],
-        Row(
-          children: <Widget>[
+        AppChoiceGroup<GrowthMetric>(
+          selected: metric,
+          onSelected: controller.setMetric,
+          options: <AppChoiceOption<GrowthMetric>>[
             for (final (GrowthMetric m, IconData icon)
                 in <(GrowthMetric, IconData)>[
               (GrowthMetric.weight, Icons.monitor_weight_outlined),
               (GrowthMetric.height, Icons.straighten_rounded),
               (GrowthMetric.head, Icons.face_rounded),
-            ]) ...<Widget>[
-              if (m != GrowthMetric.weight)
-                const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: AppChoiceTile(
-                  key: Key('growth_metric_${m.name}'),
-                  label: labelOf(m),
-                  icon: icon,
-                  selected: metric == m,
-                  onTap: () => controller.setMetric(m),
-                ),
+            ])
+              AppChoiceOption<GrowthMetric>(
+                key: Key('growth_metric_${m.name}'),
+                value: m,
+                label: labelOf(m),
+                icon: icon,
               ),
-            ],
           ],
         ),
         const SizedBox(height: AppSpacing.md),

@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/values/languages/app_translations.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,12 +26,15 @@ class Variant {
       '$locale ${brightness.name} x$textScale${rtl ? ' RTL' : ''}';
 }
 
-/// English light, Arabic RTL dark, and both at the 1.3 text scale.
+/// English light, Arabic RTL dark, both at the 1.3 text scale, and Arabic
+/// RTL dark at 1.3 (the hardest combination, asked for by the phone
+/// review).
 const List<Variant> mainVariants = <Variant>[
   Variant('en', Brightness.light, 1.0),
   Variant('ar', Brightness.dark, 1.0),
   Variant('en', Brightness.dark, 1.3),
   Variant('ar', Brightness.light, 1.3),
+  Variant('ar', Brightness.dark, 1.3),
 ];
 
 /// Pumps [child] inside a GetMaterialApp with the app's themes and
@@ -104,10 +111,12 @@ const List<String> stubRoutes = <String>[
 /// The stub page a navigation in a test lands on.
 Finder routeStub(String route) => find.text('route:$route');
 
-/// Fails if layout threw (a RenderFlex overflow, most often).
+/// Fails if layout threw (a RenderFlex overflow, most often), or if any
+/// word on screen is split across two lines (see [expectNoBrokenWords]).
 void expectNoOverflow(WidgetTester tester) {
   final Object? e = tester.takeException();
   expect(e, isNull, reason: 'layout error: $e');
+  expectNoBrokenWords(tester);
 }
 
 /// Every tappable widget with a semantic action is at least 48x48.
@@ -118,4 +127,47 @@ Future<void> expectTapTargets(WidgetTester tester) async {
 /// Every tappable widget has a label.
 Future<void> expectLabelledTargets(WidgetTester tester) async {
   await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+}
+
+/// Loads the app's real font (the bundled Cairo) under the theme's family,
+/// so text in the test has the widths it has on a phone. Without it every
+/// glyph of the test font is a 1em square, which wraps far earlier than
+/// Cairo. `flutter_test_config.dart` calls it before every test file.
+Future<void> loadAppFont() async {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  final Uint8List bytes =
+      File('assets/google_fonts/Cairo-Regular.ttf').readAsBytesSync();
+  await (FontLoader(AppTheme.fontFamily)
+        ..addFont(Future<ByteData>.value(ByteData.sublistView(bytes))))
+      .load();
+}
+
+/// Fails if any word on screen is split across two lines ("Syste / m"),
+/// which is what Flutter does with a word wider than its box.
+void expectNoBrokenWords(WidgetTester tester, {Finder? within}) {
+  final Finder texts = within == null
+      ? find.byType(RichText)
+      : find.descendant(of: within, matching: find.byType(RichText));
+  final List<String> broken = <String>[];
+  for (final Element e in texts.evaluate()) {
+    final RenderParagraph p = e.renderObject! as RenderParagraph;
+    final String text = p.text.toPlainText();
+    for (final RegExpMatch m in RegExp(r'\S+').allMatches(text)) {
+      final List<TextBox> boxes = p.getBoxesForSelection(
+          TextSelection(baseOffset: m.start, extentOffset: m.end));
+      if (spansLines(boxes)) broken.add('"${m[0]}" in "$text"');
+    }
+  }
+  expect(broken, isEmpty, reason: 'words split across lines');
+}
+
+/// Whether [boxes] lie on more than one line: two boxes that do not share
+/// any height. (Boxes of different font sizes on one line overlap.)
+bool spansLines(List<TextBox> boxes) {
+  final List<TextBox> sorted = List<TextBox>.of(boxes)
+    ..sort((a, b) => a.top.compareTo(b.top));
+  for (int i = 1; i < sorted.length; i++) {
+    if (sorted[i].top >= sorted[i - 1].bottom - 0.5) return true;
+  }
+  return false;
 }

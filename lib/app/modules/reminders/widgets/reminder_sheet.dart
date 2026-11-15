@@ -209,34 +209,26 @@ class _ReminderSheetState extends State<ReminderSheet> {
             const SizedBox(height: AppSpacing.lg),
             Text("Reminders_repeat".tr, style: theme.textTheme.titleSmall),
             const SizedBox(height: AppSpacing.sm),
-            for (final List<ReminderRepeat> row in <List<ReminderRepeat>>[
-              <ReminderRepeat>[ReminderRepeat.none, ReminderRepeat.daily],
-              <ReminderRepeat>[ReminderRepeat.weekly, ReminderRepeat.monthly],
-            ]) ...<Widget>[
-              Row(
-                children: <Widget>[
-                  for (final ReminderRepeat r in row) ...<Widget>[
-                    if (r != row.first) const SizedBox(width: AppSpacing.sm),
-                    Expanded(
-                      child: AppChoiceTile(
-                        key: Key('reminder_repeat_${r.name}'),
-                        label: repeatLabel(r),
-                        icon: r == ReminderRepeat.none
-                            ? Icons.looks_one_outlined
-                            : Icons.repeat_rounded,
-                        selected: _repeat == r,
-                        onTap: () => setState(() {
-                          _repeat = r;
-                          _whenError = null;
-                        }),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-              const SizedBox(height: AppSpacing.sm),
-            ],
-            const SizedBox(height: AppSpacing.sm),
+            AppChoiceGroup<ReminderRepeat>(
+              columns: 2,
+              selected: _repeat,
+              onSelected: (r) => setState(() {
+                _repeat = r;
+                _whenError = null;
+              }),
+              options: <AppChoiceOption<ReminderRepeat>>[
+                for (final ReminderRepeat r in ReminderRepeat.values)
+                  AppChoiceOption<ReminderRepeat>(
+                    key: Key('reminder_repeat_${r.name}'),
+                    value: r,
+                    label: repeatLabel(r),
+                    icon: r == ReminderRepeat.none
+                        ? Icons.looks_one_outlined
+                        : Icons.repeat_rounded,
+                  ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.lg),
             AppField(
               key: const Key('reminder_note'),
               label: "Record_note".tr,

@@ -16,8 +16,10 @@ class SettingsView extends GetView<SettingsController> {
           AppSpacing.lg, 0, AppSpacing.lg, AppSpacing.xxxl),
       children: <Widget>[
         AppSectionHeader(title: "Settings_appearance".tr),
-        Obx(() => Row(
-              children: <Widget>[
+        Obx(() => AppChoiceGroup<ThemeMode>(
+              selected: controller.themeMode.value,
+              onSelected: controller.setThemeMode,
+              options: <AppChoiceOption<ThemeMode>>[
                 for (final (ThemeMode mode, String key, IconData icon)
                     in <(ThemeMode, String, IconData)>[
                   (
@@ -35,19 +37,13 @@ class SettingsView extends GetView<SettingsController> {
                     "AppSettingDarkModeSwitch_dark_mode_label",
                     Icons.dark_mode_rounded
                   ),
-                ]) ...<Widget>[
-                  if (mode != ThemeMode.system)
-                    const SizedBox(width: AppSpacing.sm),
-                  Expanded(
-                    child: AppChoiceTile(
-                      key: Key('theme_${mode.name}'),
-                      label: key.tr,
-                      icon: icon,
-                      selected: controller.themeMode.value == mode,
-                      onTap: () => controller.setThemeMode(mode),
-                    ),
+                ])
+                  AppChoiceOption<ThemeMode>(
+                    key: Key('theme_${mode.name}'),
+                    value: mode,
+                    label: key.tr,
+                    icon: icon,
                   ),
-                ],
               ],
             )),
         AppSectionHeader(title: "SettingsView_language_label".tr),

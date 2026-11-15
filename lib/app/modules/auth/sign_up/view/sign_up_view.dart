@@ -214,26 +214,21 @@ class _BabyStep extends StatelessWidget {
         const SizedBox(height: AppSpacing.xs),
         Text("Signup_sex_helper".tr, style: theme.textTheme.bodySmall),
         const SizedBox(height: AppSpacing.sm),
-        Obx(() => Row(
-              children: <Widget>[
-                Expanded(
-                  child: AppChoiceTile(
-                    key: const Key('signup_sex_female'),
-                    label: "sex_female".tr,
-                    icon: Icons.female_rounded,
-                    selected: controller.sex.value == BabySex.female,
-                    onTap: () => controller.setSex(BabySex.female),
-                  ),
+        Obx(() => AppChoiceGroup<String>(
+              selected: controller.sex.value,
+              onSelected: controller.setSex,
+              options: <AppChoiceOption<String>>[
+                AppChoiceOption<String>(
+                  key: const Key('signup_sex_female'),
+                  value: BabySex.female,
+                  label: "sex_female".tr,
+                  icon: Icons.female_rounded,
                 ),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: AppChoiceTile(
-                    key: const Key('signup_sex_male'),
-                    label: "sex_male".tr,
-                    icon: Icons.male_rounded,
-                    selected: controller.sex.value == BabySex.male,
-                    onTap: () => controller.setSex(BabySex.male),
-                  ),
+                AppChoiceOption<String>(
+                  key: const Key('signup_sex_male'),
+                  value: BabySex.male,
+                  label: "sex_male".tr,
+                  icon: Icons.male_rounded,
                 ),
               ],
             )),
