@@ -226,6 +226,25 @@ void main() {
       expect(find.text('Off'), findsOneWidget);
     });
 
+    testWidgets('Tips are reached from Settings, next to About',
+        (tester) async {
+      put();
+      await pumpApp(tester, const Scaffold(body: SettingsView()));
+      await tester.pumpAndSettle();
+      final Finder tips = find.byKey(const Key('settings_tips'));
+      await tester.scrollUntilVisible(tips, 200);
+      await tester.ensureVisible(tips);
+      await tester.pumpAndSettle();
+      // In the About group, directly above "About Baby Vax".
+      expect(
+          tester.getTopLeft(tips).dy,
+          lessThan(
+              tester.getTopLeft(find.byKey(const Key('settings_about'))).dy));
+      await tester.tap(tips);
+      await tester.pumpAndSettle();
+      expect(routeStub(AppRoutes.tips), findsOneWidget);
+    });
+
     testWidgets('tap targets and labels', (tester) async {
       final handle = tester.ensureSemantics();
       put();

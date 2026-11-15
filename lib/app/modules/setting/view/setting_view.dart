@@ -84,6 +84,14 @@ class SettingsView extends GetView<SettingsController> {
             ])),
         AppSectionHeader(title: "Settings_about".tr),
         AppListGroup(children: <Widget>[
+          // Tips live here now; Home shows one a day.
+          AppListRow(
+            key: const Key('settings_tips'),
+            icon: Icons.lightbulb_outline_rounded,
+            title: "MainMenuController_tips_title".tr,
+            subtitle: "TipsHeader_tips_hint".tr,
+            onTap: () => Get.toNamed(AppRoutes.tips),
+          ),
           AppListRow(
             key: const Key('settings_about'),
             icon: Icons.info_outline_rounded,

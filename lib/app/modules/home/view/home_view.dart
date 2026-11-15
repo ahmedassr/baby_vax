@@ -3,6 +3,7 @@ import 'package:baby_vax/app/core/service/schedule_summary.dart';
 import 'package:baby_vax/app/core/service/vaccine_state_service.dart';
 import 'package:baby_vax/app/modules/home/widgets/notifications_off_banner.dart';
 import 'package:baby_vax/app/modules/home/widgets/quick_actions.dart';
+import 'package:baby_vax/app/modules/home/widgets/tip_of_the_day_card.dart';
 
 import '../controller/home_controller.dart';
 
@@ -92,6 +93,7 @@ class HomeView extends GetView<HomeController> {
             onTap: controller.openReminders,
           ),
         ]),
+        const TipOfTheDayCard(),
         AppSectionHeader(
           title: "HomeView_measurements_title".tr,
           actionLabel: "Growth_title".tr,
