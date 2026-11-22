@@ -546,6 +546,113 @@ describe('users/{userId}/measurements/{id} — v1.1 growth', () => {
   });
 });
 
+describe('users/{userId}/milestones/{id} — v1.1 motor milestones', () => {
+  const path = (uid) => `users/${uid}/milestones`;
+  const ids = [
+    'sitting', 'crawling', 'standingAssisted',
+    'walkingAssisted', 'standingAlone', 'walkingAlone',
+  ];
+  const valid = (overrides = {}) => ({
+    achievedAt: Timestamp.fromDate(new Date('2026-05-12T00:00:00Z')),
+    note: 'Sat for a whole song',
+    ...overrides,
+  });
+
+  it('lets the owner add, read, list, edit and delete', async () => {
+    const db = asUser(ALICE);
+    await assertSucceeds(setDoc(doc(db, `${path(ALICE)}/sitting`), valid()));
+    await assertSucceeds(getDoc(doc(db, `${path(ALICE)}/sitting`)));
+    await assertSucceeds(getDocs(collection(db, path(ALICE))));
+    await assertSucceeds(
+      updateDoc(doc(db, `${path(ALICE)}/sitting`), { note: 'Edited' }),
+    );
+    await assertSucceeds(
+      updateDoc(doc(db, `${path(ALICE)}/sitting`), { note: deleteField() }),
+    );
+    await assertSucceeds(deleteDoc(doc(db, `${path(ALICE)}/sitting`)));
+  });
+
+  for (const id of ids) {
+    it(`accepts the milestone id ${id}`, async () => {
+      await assertSucceeds(
+        setDoc(doc(asUser(ALICE), `${path(ALICE)}/${id}`), { achievedAt: valid().achievedAt }),
+      );
+    });
+  }
+
+  it('accepts a note for the doctor visit without a date', async () => {
+    await assertSucceeds(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/walkingAlone`), { note: 'Ask at the 18-month visit' }),
+    );
+  });
+
+  it('accepts a date of today (now)', async () => {
+    await assertSucceeds(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/sitting`), {
+        achievedAt: Timestamp.fromMillis(Date.now() - 60 * 1000),
+      }),
+    );
+  });
+
+  for (const id of ['running', 'Sitting', 'sitting2', 'm1']) {
+    it(`denies an unknown milestone id ${id}`, async () => {
+      await assertFails(setDoc(doc(asUser(ALICE), `${path(ALICE)}/${id}`), valid()));
+    });
+  }
+
+  it('denies a date in the future', async () => {
+    await assertFails(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/sitting`), {
+        achievedAt: Timestamp.fromMillis(Date.now() + 2 * 24 * 3600 * 1000),
+      }),
+    );
+  });
+
+  for (const bad of ['2026-05-12', 1715472000, null, true]) {
+    it(`denies achievedAt = ${JSON.stringify(bad)}`, async () => {
+      await assertFails(
+        setDoc(doc(asUser(ALICE), `${path(ALICE)}/sitting`), valid({ achievedAt: bad })),
+      );
+    });
+  }
+
+  it('denies an empty document, and an empty or non-text note alone', async () => {
+    const db = asUser(ALICE);
+    await assertFails(setDoc(doc(db, `${path(ALICE)}/sitting`), {}));
+    await assertFails(setDoc(doc(db, `${path(ALICE)}/sitting`), { note: '' }));
+    await assertFails(setDoc(doc(db, `${path(ALICE)}/sitting`), { note: null }));
+    await assertFails(setDoc(doc(db, `${path(ALICE)}/sitting`), { note: 42 }));
+  });
+
+  it('denies a note over 300 characters', async () => {
+    await assertSucceeds(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/sitting`), valid({ note: 'x'.repeat(300) })),
+    );
+    await assertFails(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/sitting`), valid({ note: 'x'.repeat(301) })),
+    );
+  });
+
+  it('denies unknown fields', async () => {
+    await assertFails(
+      setDoc(doc(asUser(ALICE), `${path(ALICE)}/sitting`), valid({ ageMonths: 6 })),
+    );
+  });
+
+  it("denies reading or writing another user's milestones", async () => {
+    await seed((db) => setDoc(doc(db, `${path(ALICE)}/sitting`), valid()));
+    await assertFails(getDoc(doc(asUser(BOB), `${path(ALICE)}/sitting`)));
+    await assertFails(getDocs(collection(asUser(BOB), path(ALICE))));
+    await assertFails(setDoc(doc(asUser(BOB), `${path(ALICE)}/crawling`), valid()));
+    await assertFails(deleteDoc(doc(asUser(BOB), `${path(ALICE)}/sitting`)));
+  });
+
+  it('denies a signed-out client', async () => {
+    await assertFails(setDoc(doc(asAnon(), `${path(ALICE)}/sitting`), valid()));
+    await assertFails(getDocs(collection(asAnon(), path(ALICE))));
+  });
+});
+
 describe('users/{userId}/reminders/{id} — v1.1 custom reminders', () => {
   const path = (uid) => `users/${uid}/reminders`;
   const valid = (overrides = {}) => ({

@@ -16,6 +16,9 @@ class AppPath {
   /// v1.1: the Health tab's log (temperatures, signs, medicines, notes).
   static const String healthLogColl = 'health_log';
 
+  /// v1.1: the WHO motor milestones the parent recorded.
+  static const String milestonesColl = 'milestones';
+
   // Documents
   static String userDoc(String uid) => '$usersColl/$uid';
 
@@ -30,6 +33,7 @@ class AppPath {
       '${userDoc(uid)}/$measurementsColl';
   static String userReminders(String uid) => '${userDoc(uid)}/$remindersColl';
   static String userHealthLog(String uid) => '${userDoc(uid)}/$healthLogColl';
+  static String userMilestones(String uid) => '${userDoc(uid)}/$milestonesColl';
 
   /// Every subcollection under a user's document. Account deletion walks
   /// this list, since deleting the parent document leaves them behind.
@@ -38,5 +42,6 @@ class AppPath {
         userMeasurements(uid),
         userReminders(uid),
         userHealthLog(uid),
+        userMilestones(uid),
       ];
 }

@@ -6,6 +6,7 @@ rules_version = '2';
 //   users/{userId}                      - the child's profile
 //   users/{userId}/medical_dates/{id}   - that child's vaccination schedule
 //   users/{userId}/measurements/{id}    - dated growth measurements (v1.1)
+//   users/{userId}/milestones/{id}      - WHO motor milestones (v1.1)
 //   users/{userId}/reminders/{id}       - the parent's own reminders (v1.1)
 //   users/{userId}/health_log/{id}      - temperatures, signs, medicines (v1.1)
 //   tips/{id}, tips_en/{id}             - app content, read-only for clients
@@ -260,6 +261,37 @@ service cloud.firestore {
       allow get, list: if isOwner(userId);
       allow create, update: if isOwner(userId)
                             && isValidHealthEntry(incoming());
+      allow delete: if isOwner(userId);
+    }
+
+    // ---- motor milestones (v1.1 Growth screen) ---------------------------
+    //
+    // users/{userId}/milestones/{milestoneId}: one document per WHO motor
+    // milestone, named by its id (MotorMilestone in the app). achievedAt is
+    // the day the baby did it and cannot be in the future. A document
+    // without achievedAt holds only a note for the doctor visit.
+
+    function isValidMilestone(data) {
+      return data.keys().hasOnly(['achievedAt', 'note'])
+             && (data.keys().hasAny(['achievedAt'])
+                 || (data.keys().hasAny(['note'])
+                     && data.note is string
+                     && data.note.size() > 0))
+             && (!data.keys().hasAny(['achievedAt'])
+                 || (data.achievedAt is timestamp
+                     && data.achievedAt <= request.time))
+             && isOptionalShortString(data, 'note', 300);
+    }
+
+    match /users/{userId}/milestones/{milestoneId} {
+      allow get, list: if isOwner(userId);
+      allow create, update: if isOwner(userId)
+                            && milestoneId in [
+                                 'sitting', 'crawling', 'standingAssisted',
+                                 'walkingAssisted', 'standingAlone',
+                                 'walkingAlone'
+                               ]
+                            && isValidMilestone(incoming());
       allow delete: if isOwner(userId);
     }
 

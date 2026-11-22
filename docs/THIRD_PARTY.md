@@ -50,6 +50,58 @@ screen's footer.
 > WHO's written permission is needed for this data (or the growth
 > percentiles must be removed).
 
+## WHO Motor Development Study (motor milestones)
+
+**Used in:** `lib/app/core/service/growth/motor_milestones.dart` (the six
+windows, pinned with a code comment) and the Milestones half of the Growth
+screen, its details screen and the vaccination card; the plain "what
+counts" texts are the `Milestone_<id>_criteria` strings in `en.dart` and
+`ar.dart`.
+
+**What:** the windows of achievement for six gross motor milestones,
+bounded by the 1st and 99th percentiles, in months: sitting without
+support 3.8–9.2, standing with assistance 4.8–11.4, hands-and-knees
+crawling 5.2–13.5, walking with assistance 5.9–13.7, standing alone
+6.9–16.9, walking alone 8.2–17.6. Crawling is optional in the app because
+the study excluded the 4.3% of children who never crawled on hands and
+knees ("All normal children will eventually reach these milestones within
+these windows (except for those few that will not crawl on hands and
+knees)").
+
+**Source (windows):** WHO Multicentre Growth Reference Study Group. *WHO
+Motor Development Study: Windows of achievement for six gross motor
+development milestones.* Acta Paediatrica 2006; Suppl 450: 86–95,
+doi:10.1080/08035320500495563, Table II ("Estimated percentiles and mean
+(SD) in days and months for the windows of milestone achievement"; months
+are days divided by 30.4375). Read in the v1.1 session on 22 November 2026
+from WHO's copy:
+<https://cdn.who.int/media/docs/default-source/child-growth/child-growth-standards/indicators/motor-development-milestones/who-motor-development-study-windows-of-achievement-for-six-gross-motor-development-milestones.pdf?sfvrsn=3425c1dc_0>.
+WHO's one-page table
+(<https://cdn.who.int/media/docs/default-source/child-growth/child-growth-standards/indicators/motor-development-milestones/mm_windows_table.pdf?sfvrsn=cb31ec78_5>)
+gives 6.0 instead of 5.9 for the start of walking with assistance; every
+other value matches. The paper's 5.9 is used.
+
+**Source (what counts):** the MGRS performance criteria, Table 1 of
+Wijnhoven TMA, de Onis M, Onyango AW, et al. *Assessment of gross motor
+development in the WHO Multicentre Growth Reference Study.* Food and
+Nutrition Bulletin 2004; 25(1 Suppl 1): S37–S45 (© 2004 The United Nations
+University), the paper the 2006 study cites for its criteria. Read on 22
+November 2026 from <https://journals.sagepub.com/doi/pdf/10.1177/15648265040251S106>.
+The app states each criterion in its own plain words in both languages,
+with attribution; it does not reproduce the table.
+
+**How it was obtained:** the cloud session's network blocked direct
+downloads from who.int and cdn.who.int, so the PDFs were read through the
+session's web-fetch tool (HTTP 200, `application/pdf`) and the values
+transcribed by hand from the text; no file hash could be recorded. The
+values are checked by `test/milestones/milestones_test.dart`.
+
+**Licence:** the 2006 paper is © Taylor & Francis on behalf of the Acta
+Paediatrica Foundation, published by WHO on its child growth standards
+pages; WHO's publications default to CC BY-NC-SA 3.0 IGO. The app uses six
+pairs of numbers (facts) with attribution in the app's footer line and
+here. The same non-commercial caveat as the growth standards applies.
+
 ## WHO guidance used by the Health log
 
 **Used in:** `lib/app/core/service/health/health_guidance.dart` (the fever
