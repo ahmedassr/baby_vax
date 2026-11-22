@@ -480,6 +480,11 @@ Map<String, String> ar = {
       "القيمة @value @unit أعلى بكثير من محيط الرأس المعتاد لطفل في هذا العمر. تحقّق من الرقم ومن الوحدة (سم).",
   "Growth_unusual_low_head":
       "القيمة @value @unit أقل بكثير من محيط الرأس المعتاد لطفل في هذا العمر. تحقّق من الرقم ومن الوحدة (سم، وليس بوصة).",
+  "Home_growth_change": "@change @unit منذ @date",
+  "Home_growth_no_change": "لا تغيير منذ @date",
+  "Home_growth_first": "أول قياس",
+  "Home_growth_none": "@metric: لا يوجد قياس بعد. اضغط لإضافة قياس.",
+  "Home_growth_open": "عرض النمو",
   // v1.1 custom reminders
   "Reminder_custom_default_body": "تذكير ضبطته في بيبي فاكس.",
   // v1.1 reminders screens

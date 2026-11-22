@@ -4,6 +4,7 @@ import 'package:baby_vax/app/config/constant/app_path.dart';
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/notification/data/notification_settings_opener.dart';
 import 'package:baby_vax/app/core/service/schedule_summary.dart';
+import 'package:baby_vax/app/modules/growth/model/measurement_model.dart';
 import 'package:baby_vax/app/modules/tips/controller/tips_controller.dart';
 import 'package:baby_vax/app/modules/vaccination_card/vaccination_card_sheet.dart';
 
@@ -16,24 +17,30 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
         const NotificationSettingsOpener(),
     Future<UserModel?> Function(String uid)? loadUser,
     Future<List<MedicalDatesModel>> Function(String uid)? loadDoses,
+    Future<List<MeasurementModel>> Function(String uid)? loadMeasurements,
     DateTime Function()? clock,
   })  : _notificationsEnabled =
             notificationsEnabled ?? _coordinatorNotificationsEnabled,
         _settingsOpener = settingsOpener,
         _loadUser = loadUser ?? _firestoreUser,
         _loadDoses = loadDoses ?? _firestoreDoses,
+        _loadMeasurements = loadMeasurements ?? _firestoreMeasurements,
         _now = clock ?? DateTime.now;
 
   final Future<bool> Function() _notificationsEnabled;
   final NotificationSettingsOpener _settingsOpener;
   final Future<UserModel?> Function(String uid) _loadUser;
   final Future<List<MedicalDatesModel>> Function(String uid) _loadDoses;
+  final Future<List<MeasurementModel>> Function(String uid) _loadMeasurements;
   final DateTime Function() _now;
 
   final Rxn<UserModel> userDetails = Rxn<UserModel>();
 
   /// The whole schedule, in date order.
   final RxList<MedicalDatesModel> doses = <MedicalDatesModel>[].obs;
+
+  /// The growth measurements, newest first, for Home's growth card.
+  final RxList<MeasurementModel> measurements = <MeasurementModel>[].obs;
 
   /// The dose the hero card shows. Kept as its own observable for callers
   /// from v1.0 (the details screen refreshes it after a change).
@@ -68,6 +75,11 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
           .getCollection(
               path: AppPath.userMedicalDates(uid),
               fromDoc: MedicalDatesModel.fromDocument));
+
+  static Future<List<MeasurementModel>> _firestoreMeasurements(String uid) =>
+      AppConstant.fireStoreHelper1.getCollection(
+          path: AppPath.userMeasurements(uid),
+          fromDoc: MeasurementModel.fromDocument);
 
   @override
   void onInit() {
@@ -117,6 +129,7 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
       userDetails.value = data;
       doses.assignAll(await _loadDoses(uid));
       nextVaccination.value = summary.hero;
+      await refreshMeasurements();
       setSuccess();
       // Home shows a tip of the day; refresh the tips with the rest.
       if (Get.isRegistered<TipsController>()) {
@@ -129,10 +142,24 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
     }
   }
 
+  /// Re-reads the measurements for the growth card. A failure leaves the
+  /// card as it was: the rest of Home does not depend on it.
+  Future<void> refreshMeasurements() async {
+    final String? uid = SessionManager.signedInUid;
+    if (uid == null) return;
+    try {
+      measurements.assignAll(
+          MeasurementModel.newestFirst(await _loadMeasurements(uid)));
+    } catch (e, s) {
+      logger.w('Loading measurements for Home failed', error: e, stackTrace: s);
+    }
+  }
+
   /// Forgets the signed-out parent's data.
   void clearSession() {
     userDetails.value = null;
     doses.clear();
+    measurements.clear();
     nextVaccination.value = null;
     notificationsOff.value = false;
   }
@@ -151,8 +178,16 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
   /// Opens the parent's own reminders.
   void openReminders() => Get.toNamed(AppRoutes.reminders);
 
-  /// Opens the growth tracker.
-  void openGrowth() => Get.toNamed(AppRoutes.growth);
+  /// Opens the growth tracker, on [metric] when given.
+  void openGrowth([GrowthMetric? metric]) =>
+      Get.toNamed(AppRoutes.growth, arguments: metric);
+
+  /// Opens the profile, where the haemoglobin figure is edited.
+  void openEditProfile() {
+    AppConstant.argumentService
+        .setArgument(InternalScreenArgs(user: userDetails.value));
+    Get.toNamed(AppRoutes.editUser);
+  }
 
   /// Opens the vaccination card sheet (share or print the PDF).
   void openVaccinationCard() => VaccinationCardSheet.show();

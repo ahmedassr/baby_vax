@@ -448,6 +448,11 @@ Map<String, String> en = {
       "@value @unit is far above the usual head size for a baby of this age. Check the number and the unit (cm).",
   "Growth_unusual_low_head":
       "@value @unit is far below the usual head size for a baby of this age. Check the number and the unit (cm, not inches).",
+  "Home_growth_change": "@change @unit since @date",
+  "Home_growth_no_change": "No change since @date",
+  "Home_growth_first": "First measurement",
+  "Home_growth_none": "@metric: no measurement yet. Tap to add one.",
+  "Home_growth_open": "Open growth",
   // v1.1 custom reminders
   "Reminder_custom_default_body": "A reminder you set in Baby Vax.",
   // v1.1 reminders screens

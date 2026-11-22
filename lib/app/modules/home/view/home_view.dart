@@ -1,6 +1,7 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/service/schedule_summary.dart';
 import 'package:baby_vax/app/core/service/vaccine_state_service.dart';
+import 'package:baby_vax/app/modules/home/widgets/home_growth_card.dart';
 import 'package:baby_vax/app/modules/home/widgets/notifications_off_banner.dart';
 import 'package:baby_vax/app/modules/home/widgets/quick_actions.dart';
 import 'package:baby_vax/app/modules/home/widgets/tip_of_the_day_card.dart';
@@ -100,7 +101,15 @@ class HomeView extends GetView<HomeController> {
           actionLabel: "Growth_title".tr,
           onAction: controller.openGrowth,
         ),
-        _Measurements(user: user, onTap: controller.openGrowth),
+        HomeGrowthCard(
+          measurements: controller.measurements.toList(),
+          birthDate: DateTime.tryParse(user?.birthday ?? ''),
+          sex: user?.sex,
+          now: controller.now,
+          onOpen: controller.openGrowth,
+        ),
+        const SizedBox(height: AppSpacing.md),
+        _Haemoglobin(user: user, onTap: controller.openEditProfile),
         const SizedBox(height: AppSpacing.xxl),
         const MedicalDisclaimer(compact: true),
       ],
@@ -339,61 +348,22 @@ class _CountChip extends StatelessWidget {
   }
 }
 
-/// Weight, height, head circumference and haemoglobin, two per row. The
-/// rows grow with the text scale instead of clipping (v1.0 fixed the tile
-/// aspect ratio).
-class _Measurements extends StatelessWidget {
-  const _Measurements({required this.user, required this.onTap});
+/// The haemoglobin figure from the profile: not a growth measure, so it
+/// stays a tile of its own under the growth card.
+class _Haemoglobin extends StatelessWidget {
+  const _Haemoglobin({required this.user, required this.onTap});
 
   final UserModel? user;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    String v(String? s) =>
-        (s ?? '').trim().isEmpty ? AppMetricTile.empty : s!.trim();
-    final List<Widget> tiles = <Widget>[
-      AppMetricTile(
-          icon: Icons.monitor_weight_outlined,
-          label: "weight_label".tr,
-          value: v(user?.weight),
-          unit: "unit_kg".tr,
-          onTap: onTap),
-      AppMetricTile(
-          icon: Icons.straighten_rounded,
-          label: "height_label".tr,
-          value: v(user?.height),
-          unit: "unit_cm".tr,
-          onTap: onTap),
-      AppMetricTile(
-          icon: Icons.face_rounded,
-          label: "head_size_label".tr,
-          value: v(user?.headSize),
-          unit: "unit_cm".tr,
-          onTap: onTap),
-      AppMetricTile(
-          icon: Icons.bloodtype_outlined,
-          label: "blood_percentage_label".tr,
-          value: v(user?.bloodPercentage),
-          unit: "unit_g_dl".tr,
-          onTap: onTap),
-    ];
-    return Column(
-      children: <Widget>[
-        for (int i = 0; i < tiles.length; i += 2) ...<Widget>[
-          if (i > 0) const SizedBox(height: AppSpacing.md),
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(child: tiles[i]),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(child: tiles[i + 1]),
-              ],
-            ),
-          ),
-        ],
-      ],
-    );
+    final String v = (user?.bloodPercentage ?? '').trim();
+    return AppMetricTile(
+        icon: Icons.bloodtype_outlined,
+        label: "blood_percentage_label".tr,
+        value: v.isEmpty ? AppMetricTile.empty : v,
+        unit: "unit_g_dl".tr,
+        onTap: onTap);
   }
 }
