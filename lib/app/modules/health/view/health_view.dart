@@ -16,9 +16,9 @@ import '../widgets/health_labels.dart';
 import '../widgets/health_profile_sheet.dart';
 import '../widgets/temperature_chart.dart';
 
-/// The Health tab: the days after a vaccine, a quick way to log a
-/// temperature, signs, a medicine or a note, the latest temperature on a
-/// 72-hour chart, the last medicine given, the log by day, the health
+/// The Health tab: the temperature chart (3 / 7 / 30 days), the days after
+/// a vaccine, a quick way to log a temperature, signs, a medicine or a
+/// note, the latest temperature, the last medicine given, the log by day, the health
 /// profile, and WHO's "when to get medical help".
 class HealthView extends GetView<HealthController> {
   const HealthView({super.key});
@@ -136,6 +136,12 @@ class HealthView extends GetView<HealthController> {
               message: "saved_offline_msg".tr),
           const SizedBox(height: AppSpacing.md),
         ],
+        _TemperatureCard(
+          controller: controller,
+          onAdd: () => _add(HealthEntryKind.temperature),
+          onOpenEntry: _edit,
+        ),
+        const SizedBox(height: AppSpacing.md),
         if (dose != null)
           _AfterVaccineCard(
             dose: dose,
@@ -175,7 +181,6 @@ class HealthView extends GetView<HealthController> {
             level: latest == null
                 ? CareLevel.none
                 : controller.careLevelOf(latest),
-            chart: controller.recentTemperatures,
             medicine: medicine,
             now: now,
             onEdit: _edit,
@@ -353,12 +358,12 @@ class _AfterVaccineCard extends StatelessWidget {
 }
 
 /// The last 72 hours in one card: the latest temperature, WHO's message
-/// for it, the chart, and the last medicine given.
+/// for it, and the last medicine given. (The chart is its own card at the
+/// top of the tab.)
 class _RecentCard extends StatelessWidget {
   const _RecentCard({
     required this.latest,
     required this.level,
-    required this.chart,
     required this.medicine,
     required this.now,
     required this.onEdit,
@@ -366,7 +371,6 @@ class _RecentCard extends StatelessWidget {
 
   final HealthEntry? latest;
   final CareLevel level;
-  final List<HealthEntry> chart;
   final HealthEntry? medicine;
   final DateTime now;
   final ValueChanged<HealthEntry> onEdit;
@@ -421,10 +425,6 @@ class _RecentCard extends StatelessWidget {
                       const SizedBox(height: AppSpacing.md),
                       CareMessage(
                           level: level, onLearnMore: HealthView.openGuide),
-                    ],
-                    if (chart.length >= 2) ...<Widget>[
-                      const SizedBox(height: AppSpacing.lg),
-                      TemperatureChart(readings: chart, now: now),
                     ],
                   ],
                 ),
@@ -849,6 +849,108 @@ class _MedicalIdCard extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// "Temperature" at the top of the tab: a 3 / 7 / 30-day switch and the
+/// chart, or a clear empty state with a way to log one.
+class _TemperatureCard extends StatelessWidget {
+  const _TemperatureCard({
+    required this.controller,
+    required this.onAdd,
+    required this.onOpenEntry,
+  });
+
+  final HealthController controller;
+  final VoidCallback onAdd;
+  final ValueChanged<HealthEntry> onOpenEntry;
+
+  /// [base] with the CLDR plural form of [n] in the current language.
+  static String counted(String base, int n) {
+    String key =
+        '${base}_${pluralCategory(n, Get.locale?.languageCode ?? 'en')}';
+    if (key.tr == key) key = '${base}_other';
+    return key.trParams(<String, String>{'n': '$n'});
+  }
+
+  static void openDose(MedicalDatesModel dose) {
+    AppConstant.argumentService
+        .setArgument(InternalScreenArgs(medicalDate: dose));
+    Get.toNamed(AppRoutes.medicalDateDetails);
+  }
+
+  @override
+  Widget build(BuildContext context) => Obx(() => _card(context));
+
+  Widget _card(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final int days = controller.chartDays.value;
+    final List<HealthEntry> readings = controller.chartTemperatures;
+    return AppCard(
+      key: const Key('health_temperature_card'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Semantics(
+            header: true,
+            child: Text("Health_chart_heading".tr,
+                style: theme.textTheme.titleMedium),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          SegmentedButton<int>(
+            key: const Key('health_chart_period'),
+            showSelectedIcon: false,
+            segments: <ButtonSegment<int>>[
+              for (final int d in HealthController.chartPeriods)
+                ButtonSegment<int>(
+                  value: d,
+                  label: Text(
+                    counted('Health_chart_days', d),
+                    key: Key('health_chart_days_$d'),
+                    maxLines: 1,
+                    softWrap: false,
+                  ),
+                ),
+            ],
+            selected: <int>{days},
+            onSelectionChanged: (Set<int> s) =>
+                controller.setChartDays(s.first),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          if (readings.isEmpty)
+            Column(
+              key: const Key('health_chart_empty'),
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Text(
+                  counted('Health_chart_empty', days),
+                  style: theme.textTheme.bodyMedium,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: TextButton.icon(
+                    key: const Key('health_chart_add'),
+                    onPressed: onAdd,
+                    icon: const Icon(Icons.thermostat_rounded),
+                    label: Text("Health_chart_add".tr),
+                  ),
+                ),
+              ],
+            )
+          else
+            TemperatureChart(
+              readings: readings,
+              medicines: controller.chartMedicines,
+              doses: controller.chartDoses,
+              now: controller.now,
+              days: days,
+              onOpenEntry: onOpenEntry,
+              onOpenDose: openDose,
             ),
         ],
       ),

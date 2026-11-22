@@ -105,11 +105,13 @@ void main() {
               emergencyContact: const EmergencyContact(
                   name: 'Mum', phone: '0599000000', relation: 'mother')));
       await pump(tester, variant: v);
-      expect(find.byKey(const Key('health_after_vaccine')), findsOneWidget);
-      expect(find.byKey(const Key('health_add_temperature')), findsOneWidget);
+      // The temperature chart leads the tab.
+      expect(find.byKey(const Key('health_temperature_card')), findsOneWidget);
       expectNoOverflow(tester);
       for (final String k in <String>[
         'health_chart',
+        'health_after_vaccine',
+        'health_add_temperature',
         'health_last_medicine',
         'health_entry_t2',
         'health_profile_Health_blood_type',
@@ -153,6 +155,7 @@ void main() {
       (tester) async {
     put();
     await pump(tester);
+    await scrollTo(tester, find.byKey(const Key('health_after_temperature')));
     expect(find.text('Day 2 of 3 after the vaccine'), findsOneWidget);
     expect(
         find.byWidgetPredicate((w) =>
@@ -197,6 +200,7 @@ void main() {
       (tester) async {
     put(entries: <HealthEntry>[], doses: sampleSchedule());
     await pump(tester);
+    await scrollTo(tester, find.byKey(const Key('health_add_temperature')));
     await tester.tap(find.byKey(const Key('health_add_temperature')));
     await tester.pumpAndSettle();
     await tester.enterText(
@@ -210,6 +214,7 @@ void main() {
     await tester.tap(find.byKey(const Key('health_save')));
     await tester.pumpAndSettle();
     expect(store.entries.single.tempC, 36.9);
+    await scrollTo(tester, find.byKey(const Key('health_latest_temp')));
     expect(find.byKey(const Key('health_latest_temp')), findsOneWidget);
     expect(find.text(HealthLabels.temperature(36.9)), findsOneWidget);
   });

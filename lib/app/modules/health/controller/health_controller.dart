@@ -5,6 +5,7 @@ import 'package:baby_vax/app/core/utils/app_haptics.dart';
 import 'package:baby_vax/app/modules/home/controller/home_controller.dart';
 
 import '../model/health_entry.dart';
+import '../widgets/temperature_chart.dart' show ChartDose;
 
 /// The Health tab: the child's log of temperatures, signs, medicines and
 /// notes, the days after a vaccine, and WHO's "when to get help".
@@ -49,8 +50,11 @@ class HealthController extends GetxController {
   /// not a medical period.
   static const int afterVaccineDays = 3;
 
-  /// The window the temperature chart covers.
-  static const Duration chartWindow = Duration(hours: 72);
+  /// The periods the temperature chart offers, in days.
+  static const List<int> chartPeriods = <int>[3, 7, 30];
+
+  /// The period the temperature chart shows.
+  final RxInt chartDays = 3.obs;
 
   DateTime get now => _now();
   UserModel? get user => _user();
@@ -214,13 +218,47 @@ class HealthController extends GetxController {
     };
   }
 
-  /// Temperatures in the last 72 hours, oldest first.
-  List<HealthEntry> get recentTemperatures {
-    final DateTime from = now.subtract(chartWindow);
-    return items.reversed
-        .where((HealthEntry e) =>
-            e.kind == HealthEntryKind.temperature && e.at.isAfter(from))
-        .toList();
+  /// The first moment the chart shows: midnight [chartDays] - 1 days ago,
+  /// so "3 days" is today and the two days before.
+  DateTime get chartFrom {
+    final DateTime n = now;
+    return DateTime(n.year, n.month, n.day - (chartDays.value - 1));
+  }
+
+  bool _inChart(DateTime t) => !t.isBefore(chartFrom) && !t.isAfter(now);
+
+  /// Temperatures in the chart's period, oldest first.
+  List<HealthEntry> get chartTemperatures => items.reversed
+      .where((HealthEntry e) =>
+          e.kind == HealthEntryKind.temperature && _inChart(e.at))
+      .toList();
+
+  /// Medicines logged in the chart's period, oldest first.
+  List<HealthEntry> get chartMedicines => items.reversed
+      .where((HealthEntry e) =>
+          e.kind == HealthEntryKind.medicine && _inChart(e.at))
+      .toList();
+
+  /// Vaccine doses given in the chart's period: the recorded date given,
+  /// or the scheduled day when none was recorded.
+  List<ChartDose> get chartDoses => <ChartDose>[
+        for (final MedicalDatesModel d in _doses())
+          if (MedicalDateStateEnum.fromLabel(d.state) ==
+              MedicalDateStateEnum.completed)
+            if (_doseDay(d) case final DateTime day when _inChart(day))
+              ChartDose(at: day, dose: d),
+      ]..sort((ChartDose a, ChartDose b) => a.at.compareTo(b.at));
+
+  /// Noon of the day [d] was given, so the marker sits mid-day.
+  static DateTime _doseDay(MedicalDatesModel d) {
+    final DateTime g = d.record.givenDate ?? d.date;
+    return DateTime(g.year, g.month, g.day, 12);
+  }
+
+  void setChartDays(int days) {
+    if (chartDays.value == days) return;
+    chartDays.value = days;
+    AppHaptics.selection();
   }
 
   HealthEntry? get latestTemperature => items

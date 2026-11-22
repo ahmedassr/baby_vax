@@ -33,6 +33,12 @@ class AppDateFormat {
       (DateFormat.yMMMd(locale ?? currentLocale)..useNativeDigits = false)
           .format(value);
 
+  /// Day and month for a chart axis, e.g. "Mar 9" / "9 مارس", Western
+  /// digits.
+  static String dayMonth(DateTime value, {String? locale}) =>
+      (DateFormat.MMMd(locale ?? currentLocale)..useNativeDigits = false)
+          .format(value);
+
   /// Clock time, e.g. "9:00 AM" / "9:00 ص", Western digits.
   static String time(DateTime value, {String? locale}) =>
       (DateFormat.jm(locale ?? currentLocale)..useNativeDigits = false)

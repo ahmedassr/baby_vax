@@ -107,7 +107,7 @@ void main() {
     ]);
     final HealthController c = store.controller();
     await c.fetch();
-    expect(c.recentTemperatures.map((e) => e.id), <String>['t1', 't2']);
+    expect(c.chartTemperatures.map((e) => e.id), <String>['t1', 't2']);
     expect(c.latestTemperature!.id, 't2');
     expect(c.lastMedicine!.id, 'm');
     expect(c.byDay.first.$1, DateTime(2027, 3, 10));

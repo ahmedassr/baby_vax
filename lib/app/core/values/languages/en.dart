@@ -453,6 +453,26 @@ Map<String, String> en = {
   "Home_growth_first": "First measurement",
   "Home_growth_none": "@metric: no measurement yet. Tap to add one.",
   "Home_growth_open": "Open growth",
+  "Health_chart_heading": "Temperature",
+  "Health_chart_days_other": "@n days",
+  "Health_chart_semantic":
+      "Temperature chart. Readings shown: @count. Highest: @max °C.",
+  "Health_chart_empty_other": "No temperatures logged in the last @n days.",
+  "Health_chart_add": "Log a temperature",
+  "Health_chart_one": "One reading in this period. Log more to see a line.",
+  "Health_chart_tap_hint": "Tap a reading or a marker to see it.",
+  "Health_chart_source":
+      "Dashed line: fever from @fever °C, armpit (WHO IMCI chart booklet). Rectal readings are about @rectal °C higher.",
+  "Health_axis_temperature": "Temperature (°C)",
+  "Health_axis_date": "Date",
+  "Health_legend_reading": "Temperature",
+  "Health_legend_fever": "Fever line",
+  "Health_legend_dose": "Vaccine given",
+  "Health_legend_medicine": "Medicine",
+  "Health_chart_dose_given": "Vaccine given: @vaccine",
+  "Health_chart_medicine": "Medicine: @name",
+  "Health_chart_open_entry": "Open entry",
+  "Health_chart_open_dose": "Open dose",
   // v1.1 custom reminders
   "Reminder_custom_default_body": "A reminder you set in Baby Vax.",
   // v1.1 reminders screens
@@ -583,8 +603,6 @@ Map<String, String> en = {
   "Health_add_section": "Add to the log",
   "Health_temperature_section": "Latest temperature",
   "Health_chart_title": "Last 72 hours",
-  "Health_chart_semantic":
-      "Readings in the last 72 hours: @count. Highest: @max °C.",
   "Health_last_medicine": "Last medicine: @name",
   "Health_log_section": "Health log",
   "Health_empty_title": "Nothing logged yet",
@@ -646,7 +664,6 @@ Map<String, String> en = {
       "A rectal reading is about 0.5 °C higher. For other thermometers, follow their instructions.",
   "Health_guide_source":
       "Sources: World Health Organization — Integrated Management of Childhood Illness, Chart Booklet (2014); Vaccines and immunization: Vaccine safety (questions and answers).",
-  "Health_chart_legend": "WHO's fever figure: 37.5 °C (armpit)",
   "Settings_licenses": "Open-source licences",
   "MedicalDateDetails_more_options": "More options",
   "MedicalDateDetails_confirm_skip_msg":

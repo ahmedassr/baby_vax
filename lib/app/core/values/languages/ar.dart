@@ -485,6 +485,30 @@ Map<String, String> ar = {
   "Home_growth_first": "أول قياس",
   "Home_growth_none": "@metric: لا يوجد قياس بعد. اضغط لإضافة قياس.",
   "Home_growth_open": "عرض النمو",
+  "Health_chart_heading": "الحرارة",
+  "Health_chart_days_few": "@n أيام",
+  "Health_chart_days_many": "@n يومًا",
+  "Health_chart_days_other": "@n يوم",
+  "Health_chart_semantic":
+      "مخطط الحرارة. عدد القراءات المعروضة: @count. أعلى قراءة: @max درجة مئوية.",
+  "Health_chart_empty_few": "لم تُسجَّل أي درجة حرارة في آخر @n أيام.",
+  "Health_chart_empty_many": "لم تُسجَّل أي درجة حرارة في آخر @n يومًا.",
+  "Health_chart_empty_other": "لم تُسجَّل أي درجة حرارة في آخر @n يوم.",
+  "Health_chart_add": "سجّل درجة الحرارة",
+  "Health_chart_one": "قراءة واحدة في هذه المدة. سجّل المزيد لترى الخط.",
+  "Health_chart_tap_hint": "اضغط على قراءة أو علامة لعرضها.",
+  "Health_chart_source":
+      "الخط المتقطع: الحمّى من @fever درجة مئوية تحت الإبط (كتيّب مخططات IMCI لمنظمة الصحة العالمية). قراءات الشرج أعلى بنحو @rectal درجة مئوية.",
+  "Health_axis_temperature": "الحرارة (درجة مئوية)",
+  "Health_axis_date": "التاريخ",
+  "Health_legend_reading": "الحرارة",
+  "Health_legend_fever": "خط الحمّى",
+  "Health_legend_dose": "لقاح أُعطي",
+  "Health_legend_medicine": "دواء",
+  "Health_chart_dose_given": "لقاح أُعطي: @vaccine",
+  "Health_chart_medicine": "دواء: @name",
+  "Health_chart_open_entry": "فتح السجل",
+  "Health_chart_open_dose": "فتح الجرعة",
   // v1.1 custom reminders
   "Reminder_custom_default_body": "تذكير ضبطته في بيبي فاكس.",
   // v1.1 reminders screens
@@ -613,8 +637,6 @@ Map<String, String> ar = {
   "Health_add_section": "أضف إلى السجل",
   "Health_temperature_section": "آخر قراءة حرارة",
   "Health_chart_title": "آخر 72 ساعة",
-  "Health_chart_semantic":
-      "عدد القراءات في آخر 72 ساعة: @count. أعلاها: @max درجة مئوية.",
   "Health_last_medicine": "آخر دواء: @name",
   "Health_log_section": "السجل الصحي",
   "Health_empty_title": "لا توجد تسجيلات بعد",
@@ -684,8 +706,6 @@ Map<String, String> ar = {
       "القراءة الشرجية أعلى بنحو 0.5 درجة. لموازين الحرارة الأخرى اتّبع تعليماتها.",
   "Health_guide_source":
       "المصادر: منظمة الصحة العالمية — التدبير المتكامل لأمراض الطفولة، كتيّب المخططات (2014)؛ اللقاحات والتمنيع: مأمونية اللقاحات (أسئلة وأجوبة). ترجمة علامات الخطر إلى العربية من إعداد Baby Vax.",
-  "Health_chart_legend":
-      "رقم الحمى حسب منظمة الصحة العالمية: 37.5 درجة مئوية (تحت الإبط)",
   "Settings_licenses": "تراخيص البرمجيات مفتوحة المصدر",
   "MedicalDateDetails_more_options": "خيارات أخرى",
   "MedicalDateDetails_confirm_skip_msg":

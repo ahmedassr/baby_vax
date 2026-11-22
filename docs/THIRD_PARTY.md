@@ -54,8 +54,10 @@ screen's footer.
 
 **Used in:** `lib/app/core/service/health/health_guidance.dart` (the fever
 thresholds and which logged signs prompt "get medical help now" or "see a
-health worker"), the Health tab's "When to get medical help" screen and
-the after-vaccination card, through the `Health_guide_*` and
+health worker"), the Health tab's "When to get medical help" screen, the
+after-vaccination card, the fever line on the Health tab's temperature
+chart (`feverArmpitC` and `rectalOffsetC`, cited under the chart; no new
+values were added for it), through the `Health_guide_*` and
 `Health_after_vaccine_*` strings. The app quotes facts from these sources
 in short form; it gives no treatment or dosing advice.
 
