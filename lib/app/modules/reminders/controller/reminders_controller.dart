@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:baby_vax/app/config/constant/app_path.dart';
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/utils/app_haptics.dart';
@@ -79,19 +81,40 @@ class RemindersController extends GetxController {
   /// (used by the schedule tab's "Add reminder" button).
   static const String openAddArgument = 'add';
 
+  /// Route argument that opens one reminder's edit sheet once the list is
+  /// loaded (used by the notifications screen).
+  static String openEditArgument(String id) => 'edit:$id';
+
   /// Set by the view: opens the add sheet.
   Future<void> Function()? onOpenAdd;
+
+  /// Set by the view: opens the edit sheet for a reminder.
+  Future<void> Function(ReminderModel r)? onOpenEdit;
+
+  Future<void>? _firstFetch;
 
   @override
   void onInit() {
     super.onInit();
-    fetch();
+    _firstFetch = fetch();
+    // Opened from a notification: edit that reminder once the list is in
+    // (the view has set [onOpenEdit] by then).
+    final Object? arg = Get.arguments;
+    if (arg is String && arg.startsWith('edit:')) {
+      unawaited(_openEdit(arg.substring(5)));
+    }
   }
 
   @override
   void onReady() {
     super.onReady();
     if (Get.arguments == openAddArgument) onOpenAdd?.call();
+  }
+
+  Future<void> _openEdit(String id) async {
+    await _firstFetch;
+    final ReminderModel? r = items.firstWhereOrNull((x) => x.id == id);
+    if (r != null) await onOpenEdit?.call(r);
   }
 
   Future<void> fetch() async {

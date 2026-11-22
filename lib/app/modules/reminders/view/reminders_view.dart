@@ -40,6 +40,7 @@ class RemindersView extends GetView<RemindersController> {
   @override
   Widget build(BuildContext context) {
     controller.onOpenAdd ??= () => addFlow(controller);
+    controller.onOpenEdit ??= _edit;
     return Scaffold(
       appBar: CustomAppBar(title: "Reminders_title".tr),
       // Only once there are reminders; until then the empty state's

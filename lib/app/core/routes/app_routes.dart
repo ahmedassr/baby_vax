@@ -15,4 +15,5 @@ class AppRoutes {
   static const String growth = "/growth";
   static const String reminders = "/reminders";
   static const String healthGuide = "/health_guide";
+  static const String notifications = "/notifications";
 }

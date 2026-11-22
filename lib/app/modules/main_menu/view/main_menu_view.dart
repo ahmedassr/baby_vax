@@ -1,4 +1,5 @@
 import '../../../core/imports/import_manger.dart';
+import '../../notifications/widgets/notification_bell.dart';
 import '../../reminders/controller/reminders_controller.dart';
 
 /// The signed-in shell: a title bar and four tabs with their labels always
@@ -14,6 +15,7 @@ class MainMenuView extends GetView<MainMenuController> {
         appBar: CustomAppBar(
           title: controller.item[index].title.tr,
           showBackButton: false,
+          action: const <Widget>[NotificationBell()],
         ),
         // On the schedule tab: add a reminder or appointment of the
         // parent's own (v1.0 had a FAB here whose handler was a TODO). Not

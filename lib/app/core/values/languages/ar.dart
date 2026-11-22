@@ -509,6 +509,18 @@ Map<String, String> ar = {
   "Health_chart_medicine": "دواء: @name",
   "Health_chart_open_entry": "فتح السجل",
   "Health_chart_open_dose": "فتح الجرعة",
+  "Notifications_title": "الإشعارات",
+  "Notifications_bell_unread": "الإشعارات، غير المقروءة: @n",
+  "Notifications_section_today": "اليوم",
+  "Notifications_section_upcoming": "القادمة",
+  "Notifications_section_earlier": "السابقة",
+  "Notifications_mark_all": "تعليم الكل كمقروء",
+  "Notifications_scheduled": "مجدول",
+  "Notifications_unread": "غير مقروء",
+  "Notifications_empty_title": "لا توجد إشعارات بعد",
+  "Notifications_empty_body":
+      "تظهر هنا تذكيرات اللقاحات وتذكيراتك الخاصة عندما يحين موعدها.",
+  "Notification_child_fallback": "طفلك",
   // v1.1 custom reminders
   "Reminder_custom_default_body": "تذكير ضبطته في بيبي فاكس.",
   // v1.1 reminders screens

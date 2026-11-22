@@ -65,6 +65,7 @@ void main() {
       'Growth_position_',
       'Health_chart_days_',
       'Health_chart_empty_',
+      'Notifications_section_',
       'Growth_unusual_low_',
       'Growth_unusual_high_',
     ];

@@ -473,6 +473,18 @@ Map<String, String> en = {
   "Health_chart_medicine": "Medicine: @name",
   "Health_chart_open_entry": "Open entry",
   "Health_chart_open_dose": "Open dose",
+  "Notifications_title": "Notifications",
+  "Notifications_bell_unread": "Notifications, @n unread",
+  "Notifications_section_today": "Today",
+  "Notifications_section_upcoming": "Upcoming",
+  "Notifications_section_earlier": "Earlier",
+  "Notifications_mark_all": "Mark all as read",
+  "Notifications_scheduled": "Scheduled",
+  "Notifications_unread": "Unread",
+  "Notifications_empty_title": "No notifications yet",
+  "Notifications_empty_body":
+      "Vaccine reminders and your own reminders appear here when they are due.",
+  "Notification_child_fallback": "Your baby",
   // v1.1 custom reminders
   "Reminder_custom_default_body": "A reminder you set in Baby Vax.",
   // v1.1 reminders screens

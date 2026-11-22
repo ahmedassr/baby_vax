@@ -5,6 +5,7 @@ import '../../../core/notification/data/notification_settings_opener.dart';
 import '../../../core/utils/app_haptics.dart';
 import '../../health/controller/health_controller.dart';
 import '../../home/controller/home_controller.dart';
+import '../../notifications/controller/notifications_controller.dart';
 import '../../tips/controller/tips_controller.dart';
 import '../widget/delete_account_dialog.dart';
 
@@ -140,6 +141,9 @@ class SettingsController extends GetxController {
           if (Get.isRegistered<HealthController>()) {
             Get.find<HealthController>().clearSession();
           }
+          if (Get.isRegistered<NotificationsController>()) {
+            Get.find<NotificationsController>().clearSession();
+          }
           // Replace the stack, so Back cannot return to the signed-in tabs.
           Get.offAllNamed(AppRoutes.login);
         },
@@ -175,6 +179,9 @@ class SettingsController extends GetxController {
           }
           if (Get.isRegistered<HealthController>()) {
             Get.find<HealthController>().clearSession();
+          }
+          if (Get.isRegistered<NotificationsController>()) {
+            Get.find<NotificationsController>().clearSession();
           }
           Get.offAllNamed(AppRoutes.login);
         },

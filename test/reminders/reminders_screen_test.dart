@@ -98,6 +98,17 @@ void main() {
     });
   });
 
+  testWidgets('a notification opens its reminder for editing', (tester) async {
+    await pumpApp(tester, const SizedBox());
+    Get.routing.args = RemindersController.openEditArgument('r2');
+    final c = put();
+    final List<String> opened = <String>[];
+    c.onOpenEdit = (ReminderModel r) async => opened.add(r.id!);
+    await tester.pumpAndSettle();
+    expect(opened, <String>['r2']);
+    Get.routing.args = null;
+  });
+
   group('RemindersView', () {
     for (final Variant v in mainVariants) {
       testWidgets('list fits ($v)', (tester) async {
