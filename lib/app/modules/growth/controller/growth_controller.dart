@@ -122,6 +122,9 @@ class GrowthController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // Home's growth card opens this screen on the measure it showed.
+    final Object? arg = Get.arguments;
+    if (arg is GrowthMetric) metric.value = arg;
     fetch();
   }
 

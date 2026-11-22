@@ -446,11 +446,40 @@ Map<String, String> ar = {
       "معايير النمو المستخدمة هنا من منظمة الصحة العالمية تغطي من الولادة حتى 5 سنوات، لذلك لا يظهر مئين لهذا القياس.",
   "Growth_no_sex":
       "أضف جنس طفلك في الملف للمقارنة مع معايير النمو لمنظمة الصحة العالمية.",
-  "Growth_legend":
-      "الخطوط: المئينات 3 و15 و50 و85 و97 لمنظمة الصحة العالمية. النقاط: قياساتك.",
   "Growth_attribution":
       "منحنيات المرجع: معايير نمو الطفل لمنظمة الصحة العالمية (2006). الترخيص: CC BY-NC-SA 3.0 IGO.",
   "Growth_chart_semantic": "مخطط @metric، عدد القياسات: @count",
+  "Growth_axis_value": "@metric (@unit)",
+  "Growth_legend_band": "معظم الأطفال",
+  "Growth_legend_average": "المتوسط",
+  "Growth_legend_baby": "طفلك",
+  "Growth_legend_outside": "خارج الرسم",
+  "Growth_band_caption":
+      "المنطقة المظللة: معظم الأطفال من العمر والجنس نفسيهما يقعون في هذه المنطقة.",
+  "Growth_tap_hint": "اضغط على نقطة لعرض تفاصيلها.",
+  "Growth_point_outside": "هذه القيمة خارج حدود الرسم، لذلك تظهر عند حافته.",
+  "Growth_position_belowMost": "أقل من معظم الأطفال في العمر نفسه",
+  "Growth_position_belowAverage": "أقل من المتوسط قليلًا",
+  "Growth_position_aroundAverage": "قريب من المتوسط",
+  "Growth_position_aboveAverage": "أعلى من المتوسط قليلًا",
+  "Growth_position_aboveMost": "أعلى من معظم الأطفال في العمر نفسه",
+  "Growth_chart_none": "@metric: لا توجد قياسات بعد. أضف قياسًا لعرض الرسم.",
+  "Growth_chart_one": "قياس واحد حتى الآن. أضف قياسًا آخر لترى الخط.",
+  "Growth_unusual_title": "هل أنت متأكد؟",
+  "Growth_unusual_save": "احفظ على أي حال",
+  "Growth_unusual_check": "راجع القيمة",
+  "Growth_unusual_high_weight":
+      "القيمة @value @unit أعلى بكثير من الوزن المعتاد لطفل في هذا العمر. تحقّق من الرقم ومن الوحدة (كغ، وليس غرامًا أو رطلًا).",
+  "Growth_unusual_low_weight":
+      "القيمة @value @unit أقل بكثير من الوزن المعتاد لطفل في هذا العمر. تحقّق من الرقم ومن الوحدة (كغ).",
+  "Growth_unusual_high_height":
+      "القيمة @value @unit أعلى بكثير من الطول المعتاد لطفل في هذا العمر. تحقّق من الرقم ومن الوحدة (سم).",
+  "Growth_unusual_low_height":
+      "القيمة @value @unit أقل بكثير من الطول المعتاد لطفل في هذا العمر. تحقّق من الرقم ومن الوحدة (سم، وليس بوصة).",
+  "Growth_unusual_high_head":
+      "القيمة @value @unit أعلى بكثير من محيط الرأس المعتاد لطفل في هذا العمر. تحقّق من الرقم ومن الوحدة (سم).",
+  "Growth_unusual_low_head":
+      "القيمة @value @unit أقل بكثير من محيط الرأس المعتاد لطفل في هذا العمر. تحقّق من الرقم ومن الوحدة (سم، وليس بوصة).",
   // v1.1 custom reminders
   "Reminder_custom_default_body": "تذكير ضبطته في بيبي فاكس.",
   // v1.1 reminders screens

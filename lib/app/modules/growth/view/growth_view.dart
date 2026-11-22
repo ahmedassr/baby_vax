@@ -10,7 +10,7 @@ import '../widgets/growth_chart.dart';
 import '../widgets/measurement_sheet.dart';
 
 /// The growth tracker: pick weight, height or head; see the measurements on
-/// the WHO percentile curves with a plain-language reading; the history
+/// the WHO band with a plain-language reading; the history
 /// below.
 class GrowthView extends GetView<GrowthController> {
   const GrowthView({super.key});
@@ -57,13 +57,18 @@ class GrowthView extends GetView<GrowthController> {
 
   Future<void> _add() async {
     final MeasurementSheetResult? r = await MeasurementSheet.show(
-        today: controller.now, birthDate: controller.birthDate);
+        today: controller.now,
+        birthDate: controller.birthDate,
+        sex: controller.sex);
     if (r is SaveMeasurement) await controller.saveMeasurement(r.measurement);
   }
 
   Future<void> _edit(MeasurementModel m) async {
     final MeasurementSheetResult? r = await MeasurementSheet.show(
-        today: controller.now, initial: m, birthDate: controller.birthDate);
+        today: controller.now,
+        initial: m,
+        birthDate: controller.birthDate,
+        sex: controller.sex);
     switch (r) {
       case SaveMeasurement(:final MeasurementModel measurement):
         await controller.saveMeasurement(measurement);
@@ -237,12 +242,30 @@ class GrowthView extends GetView<GrowthController> {
   Widget _chartCard(ThemeData theme, GrowthMetric metric) {
     final List<GrowthPoint> points = <GrowthPoint>[
       for (final MeasurementModel m in controller.series)
-        (age: controller.ageAt(m), value: m.valueOf(metric)!),
+        GrowthPoint(
+            age: controller.ageAt(m), value: m.valueOf(metric)!, date: m.date),
     ];
     final bool curves = controller.percentilesAvailable;
+    if (points.isEmpty) {
+      return AppCard(
+        key: const Key('growth_chart_empty'),
+        child: Row(
+          children: <Widget>[
+            const AppIconBadge(icon: Icons.show_chart_rounded, size: 36),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Text(
+                  "Growth_chart_none"
+                      .trParams(<String, String>{'metric': labelOf(metric)}),
+                  style: theme.textTheme.bodyMedium),
+            ),
+          ],
+        ),
+      );
+    }
     return AppCard(
       padding: const EdgeInsets.fromLTRB(
-          AppSpacing.sm, AppSpacing.md, AppSpacing.sm, AppSpacing.md),
+          AppSpacing.md, AppSpacing.md, AppSpacing.md, AppSpacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -252,17 +275,19 @@ class GrowthView extends GetView<GrowthController> {
             points: points,
             sex: curves ? controller.sex : null,
             unit: unitOf(metric),
+            metricLabel: labelOf(metric),
             ageNow: controller.ageNow,
             semanticLabel: "Growth_chart_semantic".trParams(<String, String>{
               'metric': labelOf(metric),
               'count': '${points.length}',
             }),
           ),
-          if (curves)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-              child: Text("Growth_legend".tr, style: theme.textTheme.bodySmall),
-            ),
+          if (points.length == 1) ...<Widget>[
+            const SizedBox(height: AppSpacing.sm),
+            Text("Growth_chart_one".tr,
+                key: const Key('growth_chart_one'),
+                style: theme.textTheme.bodySmall),
+          ],
         ],
       ),
     );

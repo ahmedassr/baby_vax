@@ -17,6 +17,48 @@ enum PercentileBand {
   above97,
 }
 
+/// Where a value sits against the WHO range, for the "Are you sure?"
+/// question before saving.
+enum UnusualValue {
+  /// Within the 0.1st-99.9th percentiles: saved without a question.
+  none,
+
+  /// Below the 0.1st percentile.
+  low,
+
+  /// Above the 99.9th percentile.
+  high,
+}
+
+/// A plain-language position against babies of the same age and sex, for
+/// parents: no percentile numbers, no diagnosis.
+enum GrowthPosition {
+  /// Below the shaded band (under the 3rd percentile).
+  belowMost,
+
+  /// In the band, in its lower part (3rd to 25th).
+  belowAverage,
+
+  /// In the middle of the band (25th to 75th).
+  aroundAverage,
+
+  /// In the band, in its upper part (75th to 97th).
+  aboveAverage,
+
+  /// Above the shaded band (over the 97th percentile).
+  aboveMost;
+
+  static GrowthPosition of(double percentile) => percentile < 3
+      ? belowMost
+      : percentile < 25
+          ? belowAverage
+          : percentile <= 75
+              ? aroundAverage
+              : percentile <= 97
+                  ? aboveAverage
+                  : aboveMost;
+}
+
 /// One measurement placed on the WHO reference for the baby's age and sex.
 class GrowthReading {
   const GrowthReading({
@@ -144,6 +186,50 @@ class GrowthReference {
     final int rounded = ((pct / 5).round() * 5).clamp(5, 95);
     return GrowthReading(
         z: z, percentile: pct, band: band, roundedPercentile: rounded);
+  }
+
+  /// The percentiles beyond which a value is called "unusual" before it is
+  /// saved: 0.1st and 99.9th, about 3.1 standard deviations from the WHO
+  /// median. Rare enough that a typo or a unit mistake is the likelier
+  /// explanation, so the app asks before saving (and still allows it).
+  static const double unusualLowPercentile = 0.1;
+  static const double unusualHighPercentile = 99.9;
+
+  /// The band the charts shade: "most babies of the same age and sex".
+  static const double bandLowPercentile = 3;
+  static const double bandHighPercentile = 97;
+
+  /// Whether [value] of [metric] at [ageMonths] is far outside the WHO
+  /// range: below the 0.1st or above the 99.9th percentile.
+  ///
+  /// With a known sex the baby's own table is used. Without one, the value
+  /// is unusual only when it is outside the range of *both* sexes, so a
+  /// missing sex never causes a false question. Null when the standards do
+  /// not cover the age (over 5 years) and nothing can be said.
+  static UnusualValue? unusual({
+    required GrowthMetric metric,
+    required String? sex,
+    required double ageMonths,
+    required double value,
+  }) {
+    final List<String> sexes = switch (sex) {
+      'female' || 'male' => <String>[sex!],
+      _ => <String>['female', 'male'],
+    };
+    final double zLo = zFromPercentile(unusualLowPercentile);
+    final double zHi = zFromPercentile(unusualHighPercentile);
+    double? lo, hi;
+    for (final String s in sexes) {
+      final WhoLms? p = lmsAt(metric, s, ageMonths);
+      if (p == null) return null;
+      final double l = valueAt(zLo, p), h = valueAt(zHi, p);
+      lo = lo == null ? l : math.min(lo, l);
+      hi = hi == null ? h : math.max(hi, h);
+    }
+    if (lo == null || hi == null) return null;
+    if (value < lo) return UnusualValue.low;
+    if (value > hi) return UnusualValue.high;
+    return UnusualValue.none;
   }
 
   /// Standard normal CDF via the error function (Abramowitz & Stegun

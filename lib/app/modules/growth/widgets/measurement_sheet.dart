@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:baby_vax/app/core/imports/import_manger.dart';
+import 'package:baby_vax/app/core/service/growth/growth_percentile.dart';
 import 'package:baby_vax/app/core/utils/validators.dart';
 
 import '../model/measurement_model.dart';
@@ -28,6 +31,8 @@ class MeasurementSheet extends StatefulWidget {
     required this.today,
     this.initial,
     this.birthDate,
+    this.sex,
+    this.confirmUnusual = askUnusual,
   });
 
   final DateTime today;
@@ -35,16 +40,66 @@ class MeasurementSheet extends StatefulWidget {
   /// The measurement being edited; null to add one.
   final MeasurementModel? initial;
 
-  /// The earliest date allowed.
+  /// The earliest date allowed, and the age the WHO check is made at.
   final DateTime? birthDate;
+
+  /// 'female' / 'male' / null, for the WHO check.
+  final String? sex;
+
+  /// Asks "Are you sure?" with [message]; true saves anyway.
+  final Future<bool> Function(String message) confirmUnusual;
+
+  /// The app's own question dialog: "Save anyway" / "Check again".
+  static Future<bool> askUnusual(String message) async {
+    final Completer<bool> yes = Completer<bool>();
+    await AppConstant.alertService.showAlert(AlertModel.yesOrNo(
+      title: "Growth_unusual_title".tr,
+      message: message,
+      yesButtonText: "Growth_unusual_save".tr,
+      noButtonText: "Growth_unusual_check".tr,
+      yesAction: () => yes.complete(true),
+      noAction: () => yes.complete(false),
+    ));
+    if (!yes.isCompleted) yes.complete(false);
+    return yes.future;
+  }
+
+  /// The question for the first value far outside the WHO range for the
+  /// baby's age and sex (below the 0.1st or above the 99.9th percentile),
+  /// or null when every value is within it or cannot be checked.
+  static String? unusualMessage({
+    required Map<GrowthMetric, double?> values,
+    required DateTime date,
+    required DateTime? birthDate,
+    required String? sex,
+  }) {
+    if (birthDate == null) return null;
+    final double age = GrowthReference.ageInMonths(birthDate, date);
+    for (final GrowthMetric m in GrowthMetric.values) {
+      final double? v = values[m];
+      if (v == null) continue;
+      final UnusualValue? u = GrowthReference.unusual(
+          metric: m, sex: sex, ageMonths: age, value: v);
+      if (u == null || u == UnusualValue.none) continue;
+      final String unit =
+          m == GrowthMetric.weight ? "unit_kg".tr : "unit_cm".tr;
+      return "Growth_unusual_${u.name}_${m.name}".trParams(<String, String>{
+        'value': v == v.roundToDouble() ? v.toStringAsFixed(0) : '$v',
+        'unit': unit,
+      });
+    }
+    return null;
+  }
 
   static Future<MeasurementSheetResult?> show({
     required DateTime today,
     MeasurementModel? initial,
     DateTime? birthDate,
+    String? sex,
   }) =>
       AppSheet.show<MeasurementSheetResult>(
-        MeasurementSheet(today: today, initial: initial, birthDate: birthDate),
+        MeasurementSheet(
+            today: today, initial: initial, birthDate: birthDate, sex: sex),
       );
 
   @override
@@ -93,7 +148,7 @@ class _MeasurementSheetState extends State<MeasurementSheet> {
     });
   }
 
-  void _save() {
+  Future<void> _save() async {
     final Map<GrowthMetric, double?> parsed = <GrowthMetric, double?>{};
     bool ok = true;
     for (final GrowthMetric m in GrowthMetric.values) {
@@ -108,6 +163,15 @@ class _MeasurementSheetState extends State<MeasurementSheet> {
         : null;
     setState(() {});
     if (!ok || _formError != null) return;
+    final String? unusual = MeasurementSheet.unusualMessage(
+        values: parsed,
+        date: _date,
+        birthDate: widget.birthDate,
+        sex: widget.sex);
+    // Far outside the WHO range is more likely a typo or a unit mistake
+    // than a real value: ask, but never refuse.
+    if (unusual != null && !await widget.confirmUnusual(unusual)) return;
+    if (!mounted) return;
     Navigator.of(context).pop(SaveMeasurement(MeasurementModel(
       id: widget.initial?.id,
       date: _date,

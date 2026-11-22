@@ -412,11 +412,42 @@ Map<String, String> en = {
       "The WHO growth standards used here cover birth to 5 years, so no percentile is shown for this measurement.",
   "Growth_no_sex":
       "Add your baby's sex in the profile to compare with the WHO growth standards.",
-  "Growth_legend":
-      "Lines: WHO 3rd, 15th, 50th, 85th and 97th percentiles. Dots: your measurements.",
   "Growth_attribution":
       "Reference curves: WHO Child Growth Standards (2006). Licence: CC BY-NC-SA 3.0 IGO.",
   "Growth_chart_semantic": "@metric chart, measurements: @count",
+  "Growth_axis_value": "@metric (@unit)",
+  "Growth_legend_band": "Most babies",
+  "Growth_legend_average": "Average",
+  "Growth_legend_baby": "Your baby",
+  "Growth_legend_outside": "Off the chart",
+  "Growth_band_caption":
+      "Shaded area: most babies of the same age and sex are in this area.",
+  "Growth_tap_hint": "Tap a point to see its details.",
+  "Growth_point_outside":
+      "This value is outside the chart, so it is drawn at the edge.",
+  "Growth_position_belowMost": "Below most babies of the same age",
+  "Growth_position_belowAverage": "A little below average",
+  "Growth_position_aroundAverage": "Around average",
+  "Growth_position_aboveAverage": "A little above average",
+  "Growth_position_aboveMost": "Above most babies of the same age",
+  "Growth_chart_none":
+      "@metric: no measurements yet. Add one to see the chart.",
+  "Growth_chart_one": "One measurement so far. Add another to see the line.",
+  "Growth_unusual_title": "Are you sure?",
+  "Growth_unusual_save": "Save anyway",
+  "Growth_unusual_check": "Check again",
+  "Growth_unusual_high_weight":
+      "@value @unit is far above the usual weight for a baby of this age. Check the number and the unit (kg, not grams or pounds).",
+  "Growth_unusual_low_weight":
+      "@value @unit is far below the usual weight for a baby of this age. Check the number and the unit (kg).",
+  "Growth_unusual_high_height":
+      "@value @unit is far above the usual length for a baby of this age. Check the number and the unit (cm).",
+  "Growth_unusual_low_height":
+      "@value @unit is far below the usual length for a baby of this age. Check the number and the unit (cm, not inches).",
+  "Growth_unusual_high_head":
+      "@value @unit is far above the usual head size for a baby of this age. Check the number and the unit (cm).",
+  "Growth_unusual_low_head":
+      "@value @unit is far below the usual head size for a baby of this age. Check the number and the unit (cm, not inches).",
   // v1.1 custom reminders
   "Reminder_custom_default_body": "A reminder you set in Baby Vax.",
   // v1.1 reminders screens
