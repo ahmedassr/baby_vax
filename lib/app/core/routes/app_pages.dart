@@ -9,6 +9,8 @@ import 'package:baby_vax/app/modules/medical_date_details/view/medical_date_deta
 import 'package:baby_vax/app/modules/medical_dates/binding/medical_dates_binding.dart';
 import 'package:baby_vax/app/modules/growth/binding/growth_binding.dart';
 import 'package:baby_vax/app/modules/growth/view/growth_view.dart';
+import 'package:baby_vax/app/modules/milestones/controller/milestones_controller.dart';
+import 'package:baby_vax/app/modules/milestones/view/milestone_details_view.dart';
 import 'package:baby_vax/app/modules/onboarding/binding/onboarding_binding.dart';
 import 'package:baby_vax/app/modules/reminders/binding/reminders_binding.dart';
 import 'package:baby_vax/app/modules/reminders/view/reminders_view.dart';
@@ -96,5 +98,15 @@ class AppPages {
     build(route: AppRoutes.healthGuide, page: () => const HealthGuideView()),
     build(
         route: AppRoutes.notifications, page: () => const NotificationsView()),
+    // Opened from the Growth screen, whose binding already put the
+    // controller; put one only when opened on its own.
+    build(
+        route: AppRoutes.milestoneDetails,
+        page: () => const MilestoneDetailsView(),
+        binding: BindingsBuilder<void>(() {
+          if (!Get.isRegistered<MilestonesController>()) {
+            Get.lazyPut<MilestonesController>(() => MilestonesController());
+          }
+        })),
   ];
 }

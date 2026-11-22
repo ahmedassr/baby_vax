@@ -4,6 +4,8 @@ import 'package:baby_vax/app/core/values/languages/app_translations.dart';
 import '../../../config/themes/app_status_colors.dart';
 import '../../../modules/medical_dates/controller/medical_dates_controller.dart';
 import '../../../modules/medical_dates/model/medical_dates_model.dart';
+import '../../../modules/milestones/model/milestone_record.dart';
+import '../growth/motor_milestones.dart';
 import '../../utils/app_shared_model/emergency_contact.dart';
 import '../../utils/app_shared_model/user_model.dart';
 
@@ -55,6 +57,15 @@ class CardRow {
 /// Dates are `dd/MM/yyyy` with Western digits: a clinic reads that the same
 /// way whatever language the card's owner uses, and it matches v1.0's
 /// Western-digit fix.
+/// An achieved milestone on the card: its name in both languages and the
+/// day.
+class CardMilestone {
+  const CardMilestone(this.name, this.date);
+
+  final Bilingual name;
+  final String date;
+}
+
 class VaccinationCardData {
   VaccinationCardData._({
     required this.childName,
@@ -67,6 +78,7 @@ class VaccinationCardData {
     this.allergies,
     this.conditions,
     this.emergencyContact,
+    this.milestones = const <CardMilestone>[],
   });
 
   /// The card for [user] and [doses] on [now], with text from the app's own
@@ -75,6 +87,7 @@ class VaccinationCardData {
     required UserModel user,
     required Iterable<MedicalDatesModel> doses,
     required DateTime now,
+    Iterable<MilestoneRecord> milestones = const <MilestoneRecord>[],
     Map<String, Map<String, String>>? translations,
   }) {
     final Map<String, Map<String, String>> t =
@@ -129,6 +142,13 @@ class VaccinationCardData {
       bloodType: user.bloodType,
       allergies: user.allergies,
       conditions: user.conditions,
+      milestones: <CardMilestone>[
+        for (final MotorMilestone m in MotorMilestone.values)
+          for (final MilestoneRecord r in milestones)
+            if (r.milestone == m && r.achievedAt != null)
+              CardMilestone(
+                  tr('Milestone_${m.id}_name'), formatDate(r.achievedAt!)),
+      ],
       emergencyContact: switch (user.emergencyContact) {
         null => null,
         final EmergencyContact c => CardContact(
@@ -152,6 +172,10 @@ class VaccinationCardData {
   final String? allergies;
   final String? conditions;
   final CardContact? emergencyContact;
+
+  /// The motor milestones achieved, in the WHO order; none when nothing is
+  /// recorded.
+  final List<CardMilestone> milestones;
 
   bool get hasHealthProfile =>
       bloodType != null ||

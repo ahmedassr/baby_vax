@@ -12,6 +12,9 @@ import '../model/measurement_model.dart';
 /// After every change the newest value of each metric is copied into the
 /// profile's v1.0 fields (weight / height / headSize), so the home tiles,
 /// the profile form and older app builds keep showing current numbers.
+/// The two halves of the Growth screen.
+enum GrowthSection { measurements, milestones }
+
 class GrowthController extends GetxController {
   GrowthController({
     Future<List<MeasurementModel>> Function(String uid)? load,
@@ -38,6 +41,9 @@ class GrowthController extends GetxController {
   /// Newest first.
   final RxList<MeasurementModel> items = <MeasurementModel>[].obs;
   final Rx<GrowthMetric> metric = GrowthMetric.weight.obs;
+
+  /// Measurements or milestones, the switch at the top of the screen.
+  final Rx<GrowthSection> section = GrowthSection.measurements.obs;
   final RxBool isLoading = false.obs;
   final RxnString loadError = RxnString();
   final RxnString actionError = RxnString();
@@ -126,6 +132,12 @@ class GrowthController extends GetxController {
     final Object? arg = Get.arguments;
     if (arg is GrowthMetric) metric.value = arg;
     fetch();
+  }
+
+  void setSection(GrowthSection s) {
+    if (section.value == s) return;
+    section.value = s;
+    AppHaptics.selection();
   }
 
   void setMetric(GrowthMetric m) {

@@ -8,6 +8,7 @@ import '../controller/growth_controller.dart';
 import '../model/measurement_model.dart';
 import '../widgets/growth_chart.dart';
 import '../widgets/measurement_sheet.dart';
+import 'package:baby_vax/app/modules/milestones/view/milestones_panel.dart';
 
 /// The growth tracker: pick weight, height or head; see the measurements on
 /// the WHO band with a plain-language reading; the history
@@ -94,24 +95,70 @@ class GrowthView extends GetView<GrowthController> {
       // button is the one way to add.
       floatingActionButton: Obx(() => AppAddFab(
             key: const Key('growth_add'),
-            visible: !controller.isLoading.value && controller.items.isNotEmpty,
+            visible: controller.section.value == GrowthSection.measurements &&
+                !controller.isLoading.value &&
+                controller.items.isNotEmpty,
             label: "Growth_add".tr,
             icon: Icons.add_rounded,
             onPressed: _add,
           )),
-      body: Obx(() {
-        if (controller.isLoading.value) return const AppLoading(showHero: true);
-        if (controller.loadError.value != null && controller.items.isEmpty) {
-          return AppErrorState(
-              message: controller.loadError.value, onRetry: controller.fetch);
-        }
-        return RefreshIndicator(
-          onRefresh: controller.fetch,
-          child: _content(context),
-        );
-      }),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, AppSpacing.xs),
+            child: Obx(() => _sectionSwitch(controller.section.value)),
+          ),
+          Expanded(
+            child: Obx(() {
+              if (controller.section.value == GrowthSection.milestones) {
+                return const MilestonesPanel();
+              }
+              if (controller.isLoading.value) {
+                return const AppLoading(showHero: true);
+              }
+              if (controller.loadError.value != null &&
+                  controller.items.isEmpty) {
+                return AppErrorState(
+                    message: controller.loadError.value,
+                    onRetry: controller.fetch);
+              }
+              return RefreshIndicator(
+                onRefresh: controller.fetch,
+                child: _content(context),
+              );
+            }),
+          ),
+        ],
+      ),
     );
   }
+
+  /// Measurements | Milestones.
+  Widget _sectionSwitch(GrowthSection selected) =>
+      SegmentedButton<GrowthSection>(
+        key: const Key('growth_section'),
+        showSelectedIcon: false,
+        segments: <ButtonSegment<GrowthSection>>[
+          for (final (GrowthSection s, String label)
+              in <(GrowthSection, String)>[
+            (GrowthSection.measurements, "Growth_section_measurements".tr),
+            (GrowthSection.milestones, "Growth_section_milestones".tr),
+          ])
+            ButtonSegment<GrowthSection>(
+              value: s,
+              label: Text(label,
+                  key: Key('growth_section_${s.name}'),
+                  maxLines: 1,
+                  softWrap: false,
+                  overflow: TextOverflow.fade),
+            ),
+        ],
+        selected: <GrowthSection>{selected},
+        onSelectionChanged: (Set<GrowthSection> s) =>
+            controller.setSection(s.first),
+      );
 
   Widget _content(BuildContext context) {
     final ThemeData theme = Theme.of(context);

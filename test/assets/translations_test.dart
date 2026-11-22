@@ -66,6 +66,13 @@ void main() {
       'Health_chart_days_',
       'Health_chart_empty_',
       'Notifications_section_',
+      'Milestone_status_',
+      'Milestone_sitting_',
+      'Milestone_crawling_',
+      'Milestone_standingAssisted_',
+      'Milestone_walkingAssisted_',
+      'Milestone_standingAlone_',
+      'Milestone_walkingAlone_',
       'Growth_unusual_low_',
       'Growth_unusual_high_',
     ];

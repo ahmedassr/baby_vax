@@ -448,6 +448,65 @@ Map<String, String> ar = {
       "أضف جنس طفلك في الملف للمقارنة مع معايير النمو لمنظمة الصحة العالمية.",
   "Growth_attribution":
       "منحنيات المرجع: معايير نمو الطفل لمنظمة الصحة العالمية (2006). الترخيص: CC BY-NC-SA 3.0 IGO.",
+  "Growth_section_measurements": "القياسات",
+  "Growth_section_milestones": "المهارات الحركية",
+  "Milestone_sitting_name": "الجلوس دون سند",
+  "Milestone_crawling_name": "الحبو على اليدين والركبتين",
+  "Milestone_standingAssisted_name": "الوقوف بمساعدة",
+  "Milestone_walkingAssisted_name": "المشي بمساعدة",
+  "Milestone_standingAlone_name": "الوقوف وحده",
+  "Milestone_walkingAlone_name": "المشي وحده",
+  "Milestone_sitting_criteria":
+      "يجلس مستقيمًا ورأسه مرفوع لمدة 10 ثوانٍ على الأقل، دون أن يستعين بذراعيه أو يديه للتوازن أو الاستناد.",
+  "Milestone_crawling_criteria":
+      "يتحرك للأمام أو للخلف على يديه وركبتيه بالتناوب، وبطنه مرفوع عن الأرض، ثلاث حركات متتالية على الأقل.",
+  "Milestone_standingAssisted_criteria":
+      "يقف منتصبًا على قدميه ممسكًا بكلتا يديه بشيء ثابت مثل قطعة أثاث، دون أن يتكئ عليه، وساقاه تحملان معظم وزنه، لمدة 10 ثوانٍ على الأقل.",
+  "Milestone_walkingAssisted_criteria":
+      "يخطو خمس خطوات على الأقل جانبًا أو للأمام وظهره مستقيم، ممسكًا بشيء ثابت مثل قطعة أثاث بيد واحدة أو بكلتا يديه.",
+  "Milestone_standingAlone_criteria":
+      "يقف منتصبًا على قدميه، لا على أطراف أصابعه، وظهره مستقيم، دون أن يلمس شخصًا أو شيئًا، لمدة 10 ثوانٍ على الأقل.",
+  "Milestone_walkingAlone_criteria":
+      "يخطو خمس خطوات على الأقل وحده وهو منتصب الظهر، دون أن يلمس شخصًا أو شيئًا.",
+  "Milestones_summary_age": "@name · @age",
+  "Milestones_count": "@done من @total مهارات",
+  "Milestones_summary_note":
+      "النطاقات المعتادة من دراسة منظمة الصحة العالمية. كل طفل ينمو بإيقاعه الخاص.",
+  "Milestones_scale_title": "العمر بالأشهر",
+  "Milestone_status_achieved": "تحقّقت",
+  "Milestone_status_dueNow": "وقتها الآن",
+  "Milestone_status_later": "لاحقًا",
+  "Milestone_status_optional": "اختيارية",
+  "Milestone_status_pastWindow": "لم تُسجَّل بعد",
+  "Milestone_achieved_on": "تحقّقت في @date",
+  "Milestone_range": "معظم الأطفال: بين عمر @from و@to شهر",
+  "Milestone_crawling_skip": "بعض الأطفال لا يحبون، وينتقلون إلى المشي مباشرة",
+  "Milestone_done": "تمّت",
+  "Milestone_edit": "تعديل",
+  "Milestones_legend_now": "عمر الطفل الآن",
+  "Milestones_legend_window": "متى يفعلها معظم الأطفال",
+  "Milestones_legend_dot": "تاريخ تحقّقها",
+  "Milestone_bar_semantic":
+      "معظم الأطفال بين عمر @from و@to شهر. عمر طفلك: @age.",
+  "Milestone_bar_semantic_done": "تحقّقت في عمر @done.",
+  "Milestone_date": "تاريخ التحقّق",
+  "Milestone_date_rule": "بين تاريخ الميلاد واليوم.",
+  "Milestone_date_error": "اختر تاريخًا بين تاريخ الميلاد واليوم.",
+  "Milestone_remove": "إزالة",
+  "Milestone_remove_confirm":
+      "هل تريد إزالة التاريخ والملاحظة المسجّلين لمهارة «@name»؟",
+  "Milestone_what_counts": "ما الذي يُحتسب",
+  "Milestone_info_title": "كل طفل ينمو بإيقاعه الخاص",
+  "Milestone_info_body":
+      "إذا كان لديك أي قلق بشأن هذه المهارة، فتحدّث مع طبيب طفلك. قد يصل الأطفال المولودون مبكرًا إلى المهارات متأخرين قليلًا.",
+  "Milestone_record_date": "تمّت، سجّل التاريخ",
+  "Milestone_add_note": "أضف ملاحظة لزيارة الطبيب",
+  "Milestone_note_title": "ملاحظة لزيارة الطبيب",
+  "Milestone_source":
+      "المصدر: دراسة النمو الحركي لمنظمة الصحة العالمية (مجموعة دراسة منظمة الصحة العالمية متعددة المراكز للنمو، مجلة Acta Paediatrica لعام 2006). للمعلومات فقط، ولا تغني عن الطبيب.",
+  "Milestone_save_failed":
+      "تعذّر حفظ المهارة. تحقّق من الاتصال وحاول مرة أخرى.",
+  "Card_milestones": "المهارات الحركية",
   "Growth_chart_semantic": "مخطط @metric، عدد القياسات: @count",
   "Growth_axis_value": "@metric (@unit)",
   "Growth_legend_band": "معظم الأطفال",

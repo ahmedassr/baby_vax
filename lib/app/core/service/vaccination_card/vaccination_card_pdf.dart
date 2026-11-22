@@ -155,6 +155,21 @@ class VaccinationCardPdf {
               ],
               pw.Text('  ${c.phone}', style: style(11)),
             ])),
+      // Achieved motor milestones, one line each, only when recorded.
+      if (data.milestones.isNotEmpty)
+        factWidget(
+            'Card_milestones',
+            pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: <pw.Widget>[
+                for (final CardMilestone m in data.milestones)
+                  pw.Wrap(children: <pw.Widget>[
+                    pw.Text('${m.name.en} / ', style: style(11)),
+                    arText(m.name.ar, 11),
+                    pw.Text('  ${m.date}', style: style(11, color: muted)),
+                  ]),
+              ],
+            )),
       pw.SizedBox(height: 12),
     ];
 

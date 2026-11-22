@@ -16,4 +16,5 @@ class AppRoutes {
   static const String reminders = "/reminders";
   static const String healthGuide = "/health_guide";
   static const String notifications = "/notifications";
+  static const String milestoneDetails = "/milestone_details";
 }

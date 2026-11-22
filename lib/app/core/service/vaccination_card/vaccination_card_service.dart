@@ -4,7 +4,10 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
+import '../../../config/session/session_manager.dart';
 import '../../../modules/medical_dates/model/medical_dates_model.dart';
+import '../../../modules/milestones/controller/milestones_controller.dart';
+import '../../../modules/milestones/model/milestone_record.dart';
 import '../../utils/app_shared_model/user_model.dart';
 import 'vaccination_card_data.dart';
 import 'vaccination_card_pdf.dart';
@@ -18,7 +21,9 @@ class VaccinationCardService {
     Future<void> Function(Uint8List bytes, String fileName)? share,
     Future<void> Function(Uint8List bytes, String fileName)? print,
     DateTime Function()? clock,
-  })  : _loadFont = loadFont ?? _bundledCairo,
+    Future<List<MilestoneRecord>> Function()? loadMilestones,
+  })  : _loadMilestones = loadMilestones ?? _signedInMilestones,
+        _loadFont = loadFont ?? _bundledCairo,
         _share = share ?? _systemShare,
         _print = print ?? _systemPrint,
         _now = clock ?? DateTime.now;
@@ -27,6 +32,19 @@ class VaccinationCardService {
   final Future<void> Function(Uint8List, String) _share;
   final Future<void> Function(Uint8List, String) _print;
   final DateTime Function() _now;
+  final Future<List<MilestoneRecord>> Function() _loadMilestones;
+
+  /// The signed-in parent's milestones. The card is still made without
+  /// them when they cannot be read (offline with nothing cached).
+  static Future<List<MilestoneRecord>> _signedInMilestones() async {
+    final String? uid = SessionManager.signedInUid;
+    if (uid == null) return <MilestoneRecord>[];
+    try {
+      return await MilestonesController.loadFromFirestore(uid);
+    } catch (_) {
+      return <MilestoneRecord>[];
+    }
+  }
 
   /// The same Cairo file the app's UI uses; it covers Latin and Arabic.
   static const String fontAsset = 'assets/google_fonts/Cairo-Regular.ttf';
@@ -45,8 +63,11 @@ class VaccinationCardService {
   /// The card's content and its PDF bytes.
   Future<(VaccinationCardData, Uint8List)> build(
       UserModel user, Iterable<MedicalDatesModel> doses) async {
-    final VaccinationCardData data =
-        VaccinationCardData.build(user: user, doses: doses, now: _now());
+    final VaccinationCardData data = VaccinationCardData.build(
+        user: user,
+        doses: doses,
+        now: _now(),
+        milestones: await _loadMilestones());
     final Uint8List bytes =
         await VaccinationCardPdf.build(data, font: await _loadFont());
     return (data, bytes);

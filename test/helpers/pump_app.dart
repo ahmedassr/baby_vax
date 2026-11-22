@@ -108,6 +108,7 @@ const List<String> stubRoutes = <String>[
   AppRoutes.reminders,
   AppRoutes.healthGuide,
   AppRoutes.notifications,
+  AppRoutes.milestoneDetails,
 ];
 
 /// The stub page a navigation in a test lands on.

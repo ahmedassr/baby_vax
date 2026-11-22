@@ -2,10 +2,12 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:baby_vax/app/core/imports/import_manger.dart';
+import 'package:baby_vax/app/core/service/growth/motor_milestones.dart';
 import 'package:baby_vax/app/core/service/vaccination_card/vaccination_card_data.dart';
 import 'package:baby_vax/app/core/service/vaccination_card/vaccination_card_pdf.dart';
 import 'package:baby_vax/app/core/service/vaccination_card/vaccination_card_service.dart';
 import 'package:baby_vax/app/modules/home/controller/home_controller.dart';
+import 'package:baby_vax/app/modules/milestones/model/milestone_record.dart';
 import 'package:baby_vax/app/modules/vaccination_card/vaccination_card_sheet.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -137,6 +139,53 @@ void main() {
     if (out != null) File(out).writeAsBytesSync(bytes);
   });
 
+  test('achieved milestones go on the card, in the WHO order', () async {
+    final List<MilestoneRecord> recorded = <MilestoneRecord>[
+      MilestoneRecord(
+          milestone: MotorMilestone.standingAssisted,
+          achievedAt: DateTime(2027, 2, 1)),
+      MilestoneRecord(
+          milestone: MotorMilestone.sitting,
+          achievedAt: DateTime(2026, 12, 12)),
+      // A note without a date is not an achievement.
+      const MilestoneRecord(
+          milestone: MotorMilestone.walkingAlone, note: 'Ask the doctor'),
+    ];
+    final data = VaccinationCardData.build(
+        user: sampleUser(),
+        doses: doses(),
+        now: fixedNow,
+        milestones: recorded);
+    expect(data.milestones.map((m) => m.name.en),
+        <String>['Sitting without support', 'Standing with assistance']);
+    expect(data.milestones.first.name.ar, 'الجلوس دون سند');
+    expect(data.milestones.first.date, '12/12/2026');
+    expect(
+        VaccinationCardData.build(
+                user: sampleUser(), doses: doses(), now: fixedNow)
+            .milestones,
+        isEmpty);
+    final Uint8List bytes = await VaccinationCardPdf.build(data, font: cairo());
+    expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
+    final String? out = Platform.environment['CARD_PDF_MILESTONES_OUT'];
+    if (out != null) File(out).writeAsBytesSync(bytes);
+  });
+
+  test('the service reads the milestones for the card', () async {
+    final service = VaccinationCardService(
+      loadFont: () async => cairo(),
+      clock: () => fixedNow,
+      loadMilestones: () async => <MilestoneRecord>[
+        MilestoneRecord(
+            milestone: MotorMilestone.sitting,
+            achievedAt: DateTime(2026, 12, 12)),
+      ],
+    );
+    final (VaccinationCardData data, Uint8List _) =
+        await service.build(sampleUser(), doses());
+    expect(data.milestones, hasLength(1));
+  });
+
   group('VaccinationCardSheet', () {
     late List<String> shared;
     late List<String> printed;
@@ -155,6 +204,7 @@ void main() {
       Get.put<VaccinationCardService>(VaccinationCardService(
         loadFont: () async => cairo(),
         clock: () => fixedNow,
+        loadMilestones: () async => <MilestoneRecord>[],
         share: (b, name) async {
           if (fail) throw Exception('no share target');
           shared.add(name);

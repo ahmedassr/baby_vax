@@ -414,6 +414,65 @@ Map<String, String> en = {
       "Add your baby's sex in the profile to compare with the WHO growth standards.",
   "Growth_attribution":
       "Reference curves: WHO Child Growth Standards (2006). Licence: CC BY-NC-SA 3.0 IGO.",
+  "Growth_section_measurements": "Measurements",
+  "Growth_section_milestones": "Milestones",
+  "Milestone_sitting_name": "Sitting without support",
+  "Milestone_crawling_name": "Hands-and-knees crawling",
+  "Milestone_standingAssisted_name": "Standing with assistance",
+  "Milestone_walkingAssisted_name": "Walking with assistance",
+  "Milestone_standingAlone_name": "Standing alone",
+  "Milestone_walkingAlone_name": "Walking alone",
+  "Milestone_sitting_criteria":
+      "Sits up straight with the head up for at least 10 seconds, without using the arms or hands for balance or support.",
+  "Milestone_crawling_criteria":
+      "Moves forward or backward on hands and knees, one side then the other, with the tummy off the floor, at least three moves in a row.",
+  "Milestone_standingAssisted_criteria":
+      "Stands upright on both feet holding a stable object, like furniture, with both hands, without leaning on it. The legs carry most of the weight, for at least 10 seconds.",
+  "Milestone_walkingAssisted_criteria":
+      "Upright with a straight back, takes at least five steps sideways or forward while holding a stable object, like furniture, with one or both hands.",
+  "Milestone_standingAlone_criteria":
+      "Stands upright on both feet, not on tiptoe, with a straight back, touching no person or object, for at least 10 seconds.",
+  "Milestone_walkingAlone_criteria":
+      "Takes at least five steps on their own, upright with a straight back, touching no person or object.",
+  "Milestones_summary_age": "@name · @age",
+  "Milestones_count": "@done of @total milestones",
+  "Milestones_summary_note":
+      "Usual ranges from the WHO study. Every baby develops at their own pace.",
+  "Milestones_scale_title": "Age in months",
+  "Milestone_status_achieved": "Achieved",
+  "Milestone_status_dueNow": "Due now",
+  "Milestone_status_later": "Later",
+  "Milestone_status_optional": "Optional",
+  "Milestone_status_pastWindow": "Not recorded yet",
+  "Milestone_achieved_on": "Achieved on @date",
+  "Milestone_range": "Most babies: between @from and @to months",
+  "Milestone_crawling_skip":
+      "Some babies skip crawling and go straight to walking",
+  "Milestone_done": "Done",
+  "Milestone_edit": "Edit",
+  "Milestones_legend_now": "Baby's age now",
+  "Milestones_legend_window": "When most babies do it",
+  "Milestones_legend_dot": "Date achieved",
+  "Milestone_bar_semantic":
+      "Most babies between @from and @to months. Your baby: @age.",
+  "Milestone_bar_semantic_done": "Achieved at @done.",
+  "Milestone_date": "Date achieved",
+  "Milestone_date_rule": "Between the birth date and today.",
+  "Milestone_date_error": "Pick a date between the birth date and today.",
+  "Milestone_remove": "Remove",
+  "Milestone_remove_confirm": "Remove the date and note recorded for “@name”?",
+  "Milestone_what_counts": "What counts",
+  "Milestone_info_title": "Every baby develops at their own pace",
+  "Milestone_info_body":
+      "If you have any concerns about this milestone, talk to your child's doctor. Babies born early may reach milestones a little later.",
+  "Milestone_record_date": "Done, record the date",
+  "Milestone_add_note": "Add a note for the doctor visit",
+  "Milestone_note_title": "Note for the doctor visit",
+  "Milestone_source":
+      "Source: WHO Motor Development Study (WHO Multicentre Growth Reference Study Group, Acta Paediatrica 2006). For information only; does not replace your doctor.",
+  "Milestone_save_failed":
+      "Couldn't save the milestone. Check your connection and try again.",
+  "Card_milestones": "Motor milestones",
   "Growth_chart_semantic": "@metric chart, measurements: @count",
   "Growth_axis_value": "@metric (@unit)",
   "Growth_legend_band": "Most babies",
