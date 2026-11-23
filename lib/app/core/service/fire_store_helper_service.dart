@@ -70,6 +70,15 @@ class FireStoreHelperService extends GetxService {
         ack: () => _db.doc(path).update(data),
       );
 
+  /// Deletes one document, returning once the delete is stored on the
+  /// device (see [awaitAck]). Use this from the UI: [deleteDocument] waits
+  /// for the server, which offline can be hours.
+  Future<WriteOutcome> removeData({required String path}) => _write(
+        path: path,
+        operation: "Remove Document: $path",
+        ack: () => _db.doc(path).delete(),
+      );
+
   /// A new document id in [collectionPath], generated on the device so a
   /// record can be written offline.
   String newDocumentId(String collectionPath) =>

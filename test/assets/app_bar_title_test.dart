@@ -16,15 +16,12 @@ void main() {
     addTearDown(tester.view.reset);
     tester.platformDispatcher.textScaleFactorTestValue = textScale;
     addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-    await tester.pumpWidget(ScreenUtilInit(
-      designSize: const Size(390, 844),
-      builder: (_, __) => const MaterialApp(
-        home: Directionality(
-          textDirection: TextDirection.rtl,
-          child: Scaffold(
-            appBar:
-                CustomAppBar(title: longTitle, fontSize: 18, titleMaxLines: 2),
-          ),
+    await tester.pumpWidget(const MaterialApp(
+      home: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          appBar:
+              CustomAppBar(title: longTitle, fontSize: 18, titleMaxLines: 2),
         ),
       ),
     ));

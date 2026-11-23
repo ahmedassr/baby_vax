@@ -4,24 +4,17 @@ Map<String, String> en = {
   // Label:
   "email_label": "Email",
   "password_label": "Password",
-  "name_label": "Name",
   "weight_label": "Weight",
   "height_label": "Height",
   "blood_percentage_label": "Blood Percentage",
   "head_size_label": "Head Size",
-  "full_name_label": "Full Name",
   "date_of_birth_label": "Date of Birth",
   // Messages:
-  "unexpected_error": "An unexpected error occurred.",
   "no_description": "No description available.",
   "empty_email_error_msg": "Email can't be empty.",
   "empty_password_error_msg": "Password can't be empty.",
   "empty_name_error_msg": "Name can't be empty.",
   "empty_date_of_birth_error_msg": "Date of birth can't be empty.",
-  "empty_blood_percentage_error_msg": "Blood percentage can't be empty.",
-  "empty_weight_error_msg": "Weight can't be empty.",
-  "empty_head_size_error_msg": "Head size can't be empty.",
-  "empty_height_error_msg": "Height can't be empty.",
   // Alert Title
   "attention": "Attention",
   "error": "Error",
@@ -33,84 +26,48 @@ Map<String, String> en = {
   // Auth - Login → Controller:
   "LoginController_login_failed_msg": "Failed to login.",
   // View
-  "LoginView_login_title": "Login",
+  "LoginView_login_title": "Log in",
   "LoginView_login_hint": "Log in to continue",
-  "LoginView_create_new_account": "Create New Account",
+  "LoginView_create_new_account": "Create a new account",
 
   // Auth - SignUp → Controller:
   "SignupController_create_user_failed_msg":
       "Failed to create user profile. Please try again.",
-  "SignupController_create_user_success_msg": "User created successfully.",
-  "SignupController_updated_user_success_msg": "User updated successfully.",
   // View
-  "SignupView_sign_up_title": "Sign Up",
-  "SignupView_sign_up_hint": "Create an account for your baby care journey",
-  "SignupView_baby_information_label": "Baby Information",
-  "SignupView_baby_measurements_label": "Baby's Measurements",
-  "SignupView_weight_label": "Weight (kg)",
-  "SignupView_height_label": "Height (cm)",
-  "SignupView_head_size_label": "Head Size (cm)",
-  "SignupView_blood_label": "Blood % (g/dl)",
-
   // Edit User → Controller:
   "EditUserController_update_user_failed": "Failed to update user.",
   // View
-  "EditUserView_edit_user_title": "Edit User",
-  "EditUserView_edit_label": "Edit",
-
+  "EditUserView_edit_user_title": "Edit profile",
   // Home → Controller:
-  "HomeController_id_missing_msg": "The user ID is missing.",
   // Widgets
-  "NextVaccinationCard_next_vaccination_title": "Next Vaccination",
-
   // MainMenu → Controller:
   "MainMenuController_home_title": "Home",
-  "MainMenuController_medical_dates_title": "Medical Dates",
+  "MainMenuController_medical_dates_title": "Schedule",
   "MainMenuController_tips_title": "Tips",
   "MainMenuController_settings_title": "Settings",
 
   // MedicalDateDetails → Controller:
   "MedicalDateDetailsController_missing_medical_dates_msg":
       "The current medical dates is missing",
-  "MedicalDateDetailsController_fetch_failed_msg":
-      "Failed to fetch medical date details",
   "MedicalDateDetailsController_state_update_failed_msg":
       "Failed to update the date state",
   // View
   "MedicalDateDetailsView_title": "Medical Date Details",
-  "MedicalDateDetailsView_details_and_notes": "Vaccination details and notes",
   // Widgets
-  "MedicalDateDetailCard_medical_date_label": "Medical date",
-  "MedicalDateDetailCard_date_fallback_label": "Date not provided",
-  "MedicalDateDetailCard_notes_label": "Notes",
-
   // MedicalDates → Controller:
   "MedicalDatesController_fetch_failed": "Failed to fetch medical dates.",
   // View
-  "SearchOnMedicalDates_title": "Search Medical Dates",
-  "SearchOnMedicalDates_search_field_label":
-      "Which medical dates are you looking for?",
   // Widgets
-  "MedicalDatesHeader_medical_dates_label": "Medical Dates",
-  "MedicalDatesHeader_upcoming_appointments_label":
-      "Track your baby's upcoming and past appointments.",
-  "MedicalDatesHeader_no_upcoming_appointments_label":
-      "No upcoming appointments. Add medical dates to stay on track.",
-
   // Settings → Controller:
   "SettingsController_logout_alert_msg": "Are you sure you want to log out?",
   // View:
   "SettingsView_language_label": "Language",
-  "SettingsView_terms_and_conditions_label": "Terms And Conditions",
-  "SettingsView_about_us_label": "About US",
   "SettingsView_logout_label": "Log Out",
-  "SettingsView_select_language": "Select Language",
   // Widgets
-  "AppSettingDarkModeSwitch_dark_mode_label": "Dark Mode",
-  "AppSettingDarkModeSwitch_light_mode_label": "Light Mode",
+  "AppSettingDarkModeSwitch_dark_mode_label": "Dark",
+  "AppSettingDarkModeSwitch_light_mode_label": "Light",
 
   // Tip Details → Controller:
-  "TipDetailsController_missing_tip_msg": "The current tip is missing",
   // View
   "TipDetailsView_tip_details_title": "Tip Details",
   "TipDetailsView_empty_state_text": "Tip details are not available.",
@@ -118,11 +75,8 @@ Map<String, String> en = {
   // Tips → Controller:
   "TipsController_fetch_failed_msg": "Failed to fetch Tips.",
   // View
-  "SearchOnTips_title": "Search Tips",
-  "SearchOnTips_search_field_label": "Which tips are you looking for?",
   "TipsView_empty_state_text": "No tips available yet. Check back later!",
   //Widgets
-  "TipsHeader_tips_title": "Tips",
   "TipsHeader_tips_hint":
       "Helpful advice to care for your baby’s health and growth.",
 
@@ -204,7 +158,6 @@ Map<String, String> en = {
 
   // Dose state actions:
   "LoginView_welcome_back": "Welcome Back",
-  "MedicalDatesView_add_custom_date": "Add a custom date",
   "SplashView_tagline": "Care • Protection • Growth",
   "AlertModel_field_required_msg": "@field is missing.",
   "VaccinationTimeStatus_hours_left_one": "1 hour left",
@@ -259,5 +212,532 @@ Map<String, String> en = {
   "MedicalDateActions_mark_skipped": "Mark as skipped",
   "MedicalDateActions_undo": "Undo (mark as pending)",
   "MedicalDateDetails_confirm_future_completion_msg":
-      "This dose is scheduled for @date. Mark it as given?"
+      "This dose is scheduled for @date. Mark it as given?",
+  // v1.1 design system
+  "loading_label": "Loading",
+  "optional_suffix": "(optional)",
+  "status_semantic_label": "Status: @status",
+  "state_error_title": "Something went wrong",
+  "retry_label": "Try again",
+  "close_label": "Close",
+  "progress_semantic_label": "@done of @total doses done",
+  "step_counter": "Step @current of @total",
+  "not_recorded_label": "not recorded",
+  // v1.1 onboarding
+  "Onboarding_skip": "Skip",
+  "Onboarding_get_started": "Get started",
+  "next_label": "Next",
+  "back_label": "Back",
+  "Onboarding_schedule_title": "Every dose, in one place",
+  "Onboarding_schedule_body":
+      "Add your baby's date of birth and Baby Vax builds the whole vaccination schedule, grouped by age, so you always know what is next.",
+  "Onboarding_reminders_title": "Gentle reminders",
+  "Onboarding_reminders_body":
+      "A reminder the evening before and the morning of each dose. They are set on this phone, so they work without internet.",
+  "Onboarding_record_title": "A record you can share",
+  "Onboarding_record_body":
+      "Note where and when each dose was given, follow your baby's growth, and share a vaccination card with your clinic.",
+  // v1.1 sign-in and password reset
+  "LoginView_forgot_password": "Forgot password?",
+  "LoginView_no_account": "New to Baby Vax?",
+  "short_password_error_msg": "Use at least @min characters.",
+  "invalid_number_error_msg": "Please enter a number.",
+  "out_of_range_error_msg": "Please enter a value between @min and @max.",
+  "ForgotPassword_title": "Reset your password",
+  "ForgotPassword_hint":
+      "Enter the email you signed up with and we will send you a link to choose a new password.",
+  "ForgotPassword_send": "Send reset link",
+  "ForgotPassword_sent_title": "Check your inbox",
+  "ForgotPassword_sent_body":
+      "If an account exists for @email, a link to reset the password is on its way. It can take a few minutes, so check your spam folder too.",
+  "ForgotPassword_back_to_login": "Back to log in",
+  // v1.1 sign-up stepper
+  "Signup_step_account": "Your account",
+  "Signup_step_baby": "Your baby",
+  "Signup_step_measurements": "Measurements",
+  "Signup_step_reminders": "Reminders",
+  "Signup_step_summary": "Check and create",
+  "Signup_step_account_hint":
+      "You will use this email and password to sign in on any phone.",
+  "Signup_password_helper": "At least @min characters.",
+  "Signup_step_baby_hint":
+      "The vaccination schedule is built from your baby's date of birth.",
+  "Signup_baby_name_label": "Baby's name",
+  "Signup_birthday_hint": "Tap to choose a date",
+  "Signup_birthday_helper": "Used to work out when each dose is due.",
+  "Signup_sex_label": "Sex",
+  "Signup_sex_helper": "Growth charts are different for girls and boys.",
+  "sex_female": "Girl",
+  "sex_male": "Boy",
+  "empty_sex_error_msg": "Please choose one.",
+  "Signup_step_measurements_hint":
+      "If you have them from the birth or a recent check-up, add them here. You can skip this step and add them later.",
+  "unit_kg": "kg",
+  "unit_cm": "cm",
+  "unit_g_dl": "g/dL",
+  "Signup_skip_for_now": "Skip for now",
+  "Signup_reminders_title": "Reminders that work offline",
+  "Signup_reminders_body":
+      "Baby Vax reminds you at @evening the evening before each dose and at @morning on the day. The reminders are set on this phone, so they work without internet.",
+  "Signup_reminders_why":
+      "Your phone will ask whether Baby Vax may send notifications. Without them the reminders cannot appear.",
+  "Signup_reminders_turn_on": "Turn on reminders",
+  "Signup_reminders_not_now": "Not now",
+  "Signup_reminders_granted": "Reminders are on.",
+  "Signup_reminders_denied":
+      "Reminders are off for now. You can turn them on later in your phone's settings.",
+  "Signup_step_summary_hint":
+      "Check the details below. You can change anything before creating the account.",
+  "Signup_create_account": "Create account",
+  "Signup_schedule_note":
+      "Baby Vax will build the vaccination schedule from this date of birth.",
+  "reminders_on_label": "On",
+  "reminders_off_label": "Off",
+  "edit_label": "Edit",
+  "edit_section_label": "Edit @section",
+  // v1.1 schedule age groups
+  "age_at_birth": "At birth",
+  "age_other": "Other dates",
+  "age_months_one": "1 month",
+  "age_months_other": "@count months",
+  "age_years_one": "1 year",
+  "age_years_other": "@count years",
+  // v1.1 home and schedule
+  "HomeView_overline": "Vaccination schedule for",
+  "HomeView_next_dose": "Next dose",
+  "HomeView_overdue_dose": "Overdue dose",
+  "HomeView_open_dose": "View dose",
+  "HomeView_more_overdue": "Also overdue: @count",
+  "HomeView_all_done_title": "Every dose is recorded",
+  "HomeView_all_done_body":
+      "Each dose in the schedule is marked as given or skipped.",
+  "HomeView_no_schedule_title": "No schedule yet",
+  "HomeView_no_schedule_body":
+      "Pull down to refresh. If it stays empty, check your connection.",
+  "HomeView_progress_title": "Schedule progress",
+  "HomeView_progress_body": "@done of @total doses given",
+  "HomeView_measurements_title": "Latest measurements",
+  "HomeView_profile_title": "Profile",
+  "HomeView_no_profile_title": "We could not find your profile",
+  "HomeView_no_profile_body": "Check your connection and try again.",
+  "Schedule_filter_all": "All",
+  "Schedule_empty_filter_title": "No doses here",
+  "Schedule_empty_filter_body": "Try another filter.",
+  "Schedule_empty_title": "No schedule yet",
+  "Schedule_empty_body":
+      "Your baby's schedule appears here once the account is set up.",
+  "Schedule_filter_label": "Show",
+  // v1.1 alerts
+  "ok_label": "OK",
+  // v1.1 dose details
+  "MedicalDateDetails_scheduled_label": "Scheduled",
+  "MedicalDateDetails_age_label": "Age",
+  "MedicalDateDetails_about_title": "About this dose",
+  // v1.1 tips
+  "TipsView_empty_title": "No tips yet",
+  // v1.1 edit profile
+  "EditUser_save": "Save changes",
+  "EditUser_saved_msg": "Profile saved.",
+  "EditUser_email_readonly": "Your sign-in email. It cannot be changed here.",
+  "EditUser_birthday_helper":
+      "Changing it moves every dose in the schedule to match.",
+  "EditUser_birthday_change_confirm":
+      "The date of birth changed, so every dose in the schedule will move to match it. Doses you marked as given or skipped keep their status, and reminders are rebuilt.",
+  "EditUser_birthday_change_yes": "Move the schedule",
+  // v1.1 settings
+  "Settings_appearance": "Appearance",
+  "Settings_theme_system": "System",
+  "Settings_notifications": "Notifications",
+  "Settings_notifications_hint": "Opens your phone's settings for Baby Vax.",
+  "Settings_about": "About",
+  "Settings_about_app": "About Baby Vax",
+  // v1.1 vaccination record
+  "Record_sheet_title": "Record this dose",
+  "Record_sheet_hint":
+      "Everything here is optional, but it makes the vaccination card more useful at the clinic.",
+  "Record_given_date": "Date given",
+  "Record_clinic": "Clinic or place",
+  "Record_lot": "Batch / lot number",
+  "Record_lot_hint": "Printed on the vial or your clinic card",
+  "Record_note": "Note",
+  "Record_save": "Save",
+  "Record_skip_details": "Mark as given without details",
+  "Record_section_title": "Vaccination record",
+  "Record_add_details": "Add details",
+  "Record_edit": "Edit details",
+  "Record_none": "No details recorded yet.",
+  // v1.1 vaccination card
+  "Card_title": "Vaccination card",
+  "Card_col_vaccine": "Vaccine",
+  "Card_col_status": "Status",
+  "Card_col_scheduled": "Scheduled",
+  "Card_col_given": "Given",
+  "Card_col_clinic": "Clinic",
+  "Card_col_lot": "Lot",
+  "Card_generated": "Generated by Baby Vax on this phone on",
+  "Card_export": "Vaccination card",
+  "Card_export_hint":
+      "A PDF in English and Arabic to share with your clinic or print.",
+  "Card_share": "Share",
+  "Card_print": "Print",
+  "Card_failed": "The card could not be created. Please try again.",
+  // v1.1 home quick actions
+  "HomeView_quick_actions": "Quick actions",
+  // v1.1 growth tracker
+  "Home_tip_of_day": "Tip of the day",
+  "Home_see_all_tips": "See all tips",
+  "Growth_title": "Growth",
+  "Growth_add": "Add measurement",
+  "Growth_add_title": "Add a measurement",
+  "Growth_edit_title": "Edit measurement",
+  "Growth_sheet_hint":
+      "Fill in any of the three, from the clinic or your own scale.",
+  "Growth_date": "Date measured",
+  "Growth_need_one_value": "Enter at least one measurement.",
+  "Growth_delete": "Delete measurement",
+  "Growth_delete_confirm": "Delete this measurement?",
+  "Growth_save_failed": "The measurement could not be saved. Please try again.",
+  "Growth_history": "History",
+  "Growth_empty_title": "No measurements yet",
+  "Growth_empty_body":
+      "Add the weight, height or head size from a clinic visit to start the chart.",
+  "Growth_axis_months": "Age (months)",
+  "Growth_no_value_for_metric": "No measurement of this kind yet.",
+  "Growth_reading_around": "Around the @ord percentile",
+  "Growth_reading_below": "Below the 3rd percentile",
+  "Growth_reading_above": "Above the 97th percentile",
+  "Growth_reading_note":
+      "Percentiles compare your baby with WHO reference children of the same age and sex. They are not a diagnosis: one reading means little on its own, so talk to your doctor about any concern.",
+  "Growth_over_five":
+      "The WHO growth standards used here cover birth to 5 years, so no percentile is shown for this measurement.",
+  "Growth_no_sex":
+      "Add your baby's sex in the profile to compare with the WHO growth standards.",
+  "Growth_attribution":
+      "Reference curves: WHO Child Growth Standards (2006). Licence: CC BY-NC-SA 3.0 IGO.",
+  "Growth_section_measurements": "Measurements",
+  "Growth_section_milestones": "Milestones",
+  "Milestone_sitting_name": "Sitting without support",
+  "Milestone_crawling_name": "Hands-and-knees crawling",
+  "Milestone_standingAssisted_name": "Standing with assistance",
+  "Milestone_walkingAssisted_name": "Walking with assistance",
+  "Milestone_standingAlone_name": "Standing alone",
+  "Milestone_walkingAlone_name": "Walking alone",
+  "Milestone_sitting_criteria":
+      "Sits up straight with the head up for at least 10 seconds, without using the arms or hands for balance or support.",
+  "Milestone_crawling_criteria":
+      "Moves forward or backward on hands and knees, one side then the other, with the tummy off the floor, at least three moves in a row.",
+  "Milestone_standingAssisted_criteria":
+      "Stands upright on both feet holding a stable object, like furniture, with both hands, without leaning on it. The legs carry most of the weight, for at least 10 seconds.",
+  "Milestone_walkingAssisted_criteria":
+      "Upright with a straight back, takes at least five steps sideways or forward while holding a stable object, like furniture, with one or both hands.",
+  "Milestone_standingAlone_criteria":
+      "Stands upright on both feet, not on tiptoe, with a straight back, touching no person or object, for at least 10 seconds.",
+  "Milestone_walkingAlone_criteria":
+      "Takes at least five steps on their own, upright with a straight back, touching no person or object.",
+  "Milestones_summary_age": "@name · @age",
+  "Milestones_count": "@done of @total milestones",
+  "Milestones_summary_note":
+      "Usual ranges from the WHO study. Every baby develops at their own pace.",
+  "Milestones_scale_title": "Age in months",
+  "Milestone_status_achieved": "Achieved",
+  "Milestone_status_dueNow": "Due now",
+  "Milestone_status_later": "Later",
+  "Milestone_status_optional": "Optional",
+  "Milestone_status_pastWindow": "Not recorded yet",
+  "Milestone_achieved_on": "Achieved on @date",
+  "Milestone_range": "Most babies: between @from and @to months",
+  "Milestone_crawling_skip":
+      "Some babies skip crawling and go straight to walking",
+  "Milestone_done": "Done",
+  "Milestone_edit": "Edit",
+  "Milestones_legend_now": "Baby's age now",
+  "Milestones_legend_window": "When most babies do it",
+  "Milestones_legend_dot": "Date achieved",
+  "Milestone_bar_semantic":
+      "Most babies between @from and @to months. Your baby: @age.",
+  "Milestone_bar_semantic_done": "Achieved at @done.",
+  "Milestone_date": "Date achieved",
+  "Milestone_date_rule": "Between the birth date and today.",
+  "Milestone_date_error": "Pick a date between the birth date and today.",
+  "Milestone_remove": "Remove",
+  "Milestone_remove_confirm":
+      "Remove the date recorded for “@name”? A note, if any, is kept.",
+  "Milestone_what_counts": "What counts",
+  "Milestone_info_title": "Every baby develops at their own pace",
+  "Milestone_info_body":
+      "If you have any concerns about this milestone, talk to your child's doctor. Babies born early may reach milestones a little later.",
+  "Milestone_record_date": "Done, record the date",
+  "Milestone_add_note": "Add a note for the doctor visit",
+  "Milestone_note_title": "Note for the doctor visit",
+  "Milestone_source":
+      "Source: WHO Motor Development Study (WHO Multicentre Growth Reference Study Group, Acta Paediatrica 2006). For information only; does not replace your doctor.",
+  "Milestone_save_failed":
+      "Couldn't save the milestone. Check your connection and try again.",
+  "Card_milestones": "Motor milestones",
+  "Growth_chart_semantic": "@metric chart, measurements: @count",
+  "Growth_axis_value": "@metric (@unit)",
+  "Growth_legend_band": "Most babies",
+  "Growth_legend_average": "Average",
+  "Growth_legend_baby": "Your baby",
+  "Growth_legend_outside": "Off the chart",
+  "Growth_band_caption":
+      "Shaded area: most babies of the same age and sex are in this area.",
+  "Growth_tap_hint": "Tap a point to see its details.",
+  "Growth_point_outside":
+      "This value is outside the chart, so it is drawn at the edge.",
+  "Growth_position_belowMost": "Below most babies of the same age",
+  "Growth_position_belowAverage": "A little below average",
+  "Growth_position_aroundAverage": "Around average",
+  "Growth_position_aboveAverage": "A little above average",
+  "Growth_position_aboveMost": "Above most babies of the same age",
+  "Growth_chart_none":
+      "@metric: no measurements yet. Add one to see the chart.",
+  "Growth_chart_one": "One measurement so far. Add another to see the line.",
+  "Growth_unusual_title": "Are you sure?",
+  "Growth_unusual_save": "Save anyway",
+  "Growth_unusual_check": "Check again",
+  "Growth_unusual_high_weight":
+      "@value @unit is far above the usual weight for a baby of this age. Check the number and the unit (kg, not grams or pounds).",
+  "Growth_unusual_low_weight":
+      "@value @unit is far below the usual weight for a baby of this age. Check the number and the unit (kg).",
+  "Growth_unusual_high_height":
+      "@value @unit is far above the usual length for a baby of this age. Check the number and the unit (cm).",
+  "Growth_unusual_low_height":
+      "@value @unit is far below the usual length for a baby of this age. Check the number and the unit (cm, not inches).",
+  "Growth_unusual_high_head":
+      "@value @unit is far above the usual head size for a baby of this age. Check the number and the unit (cm).",
+  "Growth_unusual_low_head":
+      "@value @unit is far below the usual head size for a baby of this age. Check the number and the unit (cm, not inches).",
+  "Home_growth_change": "@change @unit since @date",
+  "Home_growth_no_change": "No change since @date",
+  "Home_growth_first": "First measurement",
+  "Home_growth_none": "@metric: no measurement yet. Tap to add one.",
+  "Home_growth_open": "Open growth",
+  "Health_chart_heading": "Temperature",
+  "Health_chart_days_other": "@n days",
+  "Health_chart_semantic":
+      "Temperature chart. Readings shown: @count. Highest: @max °C.",
+  "Health_chart_empty_other": "No temperatures logged in the last @n days.",
+  "Health_chart_add": "Log a temperature",
+  "Health_chart_one": "One reading in this period. Log more to see a line.",
+  "Health_chart_tap_hint": "Tap a reading or a marker to see it.",
+  "Health_chart_source":
+      "Dashed line: fever from @fever °C, armpit (WHO IMCI chart booklet). Rectal readings are about @rectal °C higher.",
+  "Health_axis_temperature": "Temperature (°C)",
+  "Health_axis_date": "Date",
+  "Health_legend_reading": "Temperature",
+  "Health_legend_fever": "Fever line",
+  "Health_legend_dose": "Vaccine given",
+  "Health_legend_medicine": "Medicine",
+  "Health_chart_dose_given": "Vaccine given: @vaccine",
+  "Health_chart_medicine": "Medicine: @name",
+  "Health_chart_open_entry": "Open entry",
+  "Health_chart_open_dose": "Open dose",
+  "Notifications_title": "Notifications",
+  "Notifications_bell_unread": "Notifications, @n unread",
+  "Notifications_section_today": "Today",
+  "Notifications_section_upcoming": "Upcoming",
+  "Notifications_section_earlier": "Earlier",
+  "Notifications_mark_all": "Mark all as read",
+  "Notifications_scheduled": "Scheduled",
+  "Notifications_unread": "Unread",
+  "Notifications_empty_title": "No notifications yet",
+  "Notifications_empty_body":
+      "Vaccine reminders and your own reminders appear here when they are due.",
+  "Notification_child_fallback": "Your baby",
+  // v1.1 custom reminders
+  "Reminder_custom_default_body": "A reminder you set in Baby Vax.",
+  // v1.1 reminders screens
+  "Reminders_title": "Reminders",
+  "Reminders_add": "Add reminder",
+  "Reminders_add_title": "New reminder",
+  "Reminders_edit_title": "Edit reminder",
+  "Reminders_hint":
+      "Your own reminders and appointments, alongside the vaccine reminders. They are set on this phone and work without internet.",
+  "Reminders_title_label": "What to remember",
+  "Reminders_title_required": "Please give the reminder a name.",
+  "Reminders_suggest_doctor": "Doctor visit",
+  "Reminders_suggest_vitamin_d": "Vitamin D drops",
+  "Reminders_suggest_follow_up": "Follow-up",
+  "Reminders_date": "Date",
+  "Reminders_time": "Time",
+  "Reminders_past_error":
+      "This time has passed. Pick a later time, or make it repeat.",
+  "Reminders_repeat": "Repeat",
+  "Reminders_repeat_none": "Once",
+  "Reminders_repeat_daily": "Every day",
+  "Reminders_repeat_weekly": "Every week",
+  "Reminders_repeat_monthly": "Every month",
+  "Reminders_delete": "Delete reminder",
+  "Reminders_delete_confirm": "Delete this reminder? It will not appear again.",
+  "Reminders_save_failed": "The reminder could not be saved. Please try again.",
+  "Reminders_empty_title": "No reminders yet",
+  "Reminders_empty_body":
+      "Add a doctor visit, daily drops or a follow-up, and Baby Vax will remind you.",
+  "Reminders_past": "Was on @date",
+  "Reminders_toggle_label": "Reminder on for @title",
+  "Health_list_separator": ", ",
+  "Health_kind_temperature": "Temperature",
+  "Health_kind_symptoms": "Signs",
+  "Health_kind_medicine": "Medicine",
+  "Health_kind_note": "Note",
+  "Health_add_temperature": "Log a temperature",
+  "Health_add_symptoms": "Log signs",
+  "Health_add_medicine": "Log a medicine given",
+  "Health_add_note": "Add a note",
+  "Health_edit_title": "Edit entry",
+  "Health_delete": "Delete entry",
+  "Health_save_failed": "Couldn't save. Check your connection and try again.",
+  "Health_future_error": "That time is in the future.",
+  "Health_temp_label": "Temperature",
+  "Health_temp_helper": "In °C, for example 37.8",
+  "Health_temp_error": "Enter the reading in °C, between 32 and 44.",
+  "Health_method_label": "How was it taken?",
+  "Health_method_armpit": "Armpit",
+  "Health_method_rectal": "Rectal",
+  "Health_method_other": "Other",
+  "Health_method_hint":
+      "WHO's figure is for the armpit: a fever is 37.5 °C or above. Rectal readings are about 0.5 °C higher.",
+  "Health_method_other_hint":
+      "WHO gives figures for armpit and rectal readings only, so Baby Vax doesn't judge this one.",
+  "Health_fever_label": "Fever by WHO's figure",
+  "Health_symptoms_hint":
+      "Tick what you notice. WHO's danger signs are at the end of the list.",
+  "Health_symptoms_error": "Tick at least one sign.",
+  "Health_medicine_label": "Medicine",
+  "Health_medicine_error": "Write the medicine's name.",
+  "Health_amount_label": "Amount given",
+  "Health_amount_helper": "As on the label or your doctor's note, e.g. 2.5 ml",
+  "Health_medicine_no_advice":
+      "Baby Vax doesn't suggest medicines or doses. Follow your doctor or pharmacist.",
+  "Health_note_error": "Write a note.",
+  "Health_care_urgent":
+      "WHO lists this as a danger sign: get medical help now.",
+  "Health_care_see":
+      "WHO advises seeing a health worker straight away for this.",
+  "Health_guide_open": "When to get help",
+  "Health_symptom_feelsHot": "Feels hot or has a fever",
+  "Health_symptom_feedingPoorly": "Feeding or drinking poorly",
+  "Health_symptom_unableToFeed": "Not able to drink or breastfeed",
+  "Health_symptom_vomiting": "Vomiting",
+  "Health_symptom_vomitsEverything": "Vomits everything",
+  "Health_symptom_diarrhoea": "Diarrhoea",
+  "Health_symptom_bloodInStool": "Blood in stool",
+  "Health_symptom_cough": "Cough",
+  "Health_symptom_runnyNose": "Runny nose",
+  "Health_symptom_fastBreathing": "Fast breathing",
+  "Health_symptom_difficultBreathing": "Difficult breathing",
+  "Health_symptom_convulsions": "Convulsions (fits)",
+  "Health_symptom_lethargic": "Very sleepy, hard to wake, or unconscious",
+  "Health_symptom_lessActive": "Less active than usual",
+  "Health_symptom_feelsCold": "Feels unusually cold",
+  "Health_symptom_yellowSkin": "Palms or soles look yellow",
+  "Health_symptom_rash": "Rash",
+  "Health_symptom_injectionSite": "Sore or swollen where the vaccine was given",
+  "Health_symptom_crying": "Crying more than usual",
+  "Health_profile_title": "Health profile",
+  "Health_profile_hint":
+      "Useful for a clinic or whoever looks after your baby. Printed on the vaccination card.",
+  "Health_allergies": "Allergies",
+  "Health_conditions": "Long-term conditions",
+  "Health_blood_type": "Blood type",
+  "Health_blood_unknown": "Not known",
+  "Health_emergency": "Emergency contact",
+  "Health_profile_medical": "Medical information",
+  "Health_allergies_hint": "For example penicillin, eggs",
+  "Health_conditions_hint": "For example asthma",
+  "Health_contact_name": "Name",
+  "Health_contact_relation": "Relation to the child",
+  "Health_contact_phone": "Phone number",
+  "Health_contact_phone_hint": "For example 0599 123 456",
+  "Health_contact_name_needed": "Add the contact's name.",
+  "Health_contact_phone_needed": "Add a phone number.",
+  "Health_contact_phone_invalid": "Enter 6 to 15 digits; it can start with +.",
+  "Health_contact_with_relation": "@name (@relation)",
+  "Health_contact_add": "Add who to call in an emergency",
+  "Health_relation_mother": "Mother",
+  "Health_relation_father": "Father",
+  "Health_relation_grandparent": "Grandparent",
+  "Health_relation_sibling": "Brother or sister",
+  "Health_relation_relative": "Relative",
+  "Health_relation_guardian": "Guardian",
+  "Health_relation_other": "Other",
+  "Health_call": "Call",
+  "Health_copy_phone": "Copy number",
+  "Health_phone_copied": "Number copied.",
+  "Health_call_failed": "Couldn't open the phone app. Copy the number instead.",
+  "Health_profile_add": "Add health information",
+  "Health_log_show_all": "Show earlier days",
+  "Health_log_show_less": "Show fewer days",
+  "Health_title": "Health",
+  "Health_intro":
+      "Keep a record of temperatures, signs and medicines to show the doctor.",
+  "Health_add_section": "Add to the log",
+  "Health_temperature_section": "Latest temperature",
+  "Health_chart_title": "Last 72 hours",
+  "Health_last_medicine": "Last medicine: @name",
+  "Health_log_section": "Health log",
+  "Health_empty_title": "Nothing logged yet",
+  "Health_empty_body":
+      "Use the buttons above to log a temperature, signs, a medicine or a note.",
+  "Health_delete_confirm": "Delete this entry from the health log?",
+  "Health_profile_empty": "Add allergies, blood type and an emergency contact.",
+  "Health_profile_edit": "Edit",
+  "Health_profile_saved": "Health profile saved.",
+  "Health_after_vaccine_title": "After @vaccine",
+  "Health_after_vaccine_day": "Day @day of @total after the vaccine",
+  "Health_after_vaccine_body":
+      "WHO: side effects of vaccines are usually very minor and of short duration, such as a sore arm or a mild fever.",
+  "Health_flag_urgent": "WHO danger sign",
+  "Health_flag_see": "See a health worker",
+  "Health_today": "Today",
+  "Health_yesterday": "Yesterday",
+  "Health_ago_now": "Just now",
+  "Health_ago_minutes_one": "1 minute ago",
+  "Health_ago_minutes_other": "@count minutes ago",
+  "Health_ago_hours_one": "1 hour ago",
+  "Health_ago_hours_other": "@count hours ago",
+  "Health_ago_days_one": "1 day ago",
+  "Health_ago_days_other": "@count days ago",
+  "Health_guide_title": "When to get medical help",
+  "Health_guide_row_hint":
+      "WHO's danger signs, and what is usual after a vaccine",
+  "Health_guide_intro":
+      "The signs WHO lists for getting help. If you are worried about your baby, don't wait: contact a health worker.",
+  "Health_guide_urgent_title": "Danger signs: get medical help now",
+  "Health_guide_urgent_1": "Not able to drink or breastfeed",
+  "Health_guide_urgent_2": "Vomits everything",
+  "Health_guide_urgent_3": "Has had convulsions (fits), or is convulsing now",
+  "Health_guide_urgent_4":
+      "Lethargic (very sleepy, hard to wake) or unconscious",
+  "Health_guide_young_title": "Babies up to 2 months: get medical help now if",
+  "Health_guide_young_1": "Not feeding well",
+  "Health_guide_young_2": "Convulsions (fits)",
+  "Health_guide_young_3":
+      "Fast breathing (60 breaths a minute or more) or difficult breathing",
+  "Health_guide_young_4":
+      "Fever of 37.5 °C or above (armpit), or feels unusually cold: below 35.5 °C",
+  "Health_guide_young_5":
+      "Moves only when stimulated or not at all, or is less active than usual",
+  "Health_guide_young_6": "Palms and soles look yellow",
+  "Health_guide_see_title":
+      "A sick child: go back to a health worker straight away if the child",
+  "Health_guide_see_1": "Becomes sicker",
+  "Health_guide_see_2": "Develops a fever",
+  "Health_guide_see_3": "Has fast or difficult breathing",
+  "Health_guide_see_4": "Has blood in the stool, or is drinking poorly",
+  "Health_guide_vaccine_title": "After a vaccine",
+  "Health_guide_vaccine_2":
+      "More serious side effects are possible but extremely rare. After an unexpected reaction, talk to a health worker.",
+  "Health_guide_fever_title": "About fever",
+  "Health_guide_fever_1":
+      "WHO counts a temperature of 37.5 °C or above, taken under the arm, as a fever.",
+  "Health_guide_fever_2":
+      "A rectal reading is about 0.5 °C higher. For other thermometers, follow their instructions.",
+  "Health_guide_source":
+      "Sources: World Health Organization — Integrated Management of Childhood Illness, Chart Booklet (2014); Vaccines and immunization: Vaccine safety (questions and answers).",
+  "Settings_licenses": "Open-source licences",
+  "MedicalDateDetails_more_options": "More options",
+  "MedicalDateDetails_confirm_skip_msg":
+      "Skip this dose? Its reminders will be cancelled. Check with your doctor or your national vaccination schedule before skipping a dose. You can undo this later.",
 };

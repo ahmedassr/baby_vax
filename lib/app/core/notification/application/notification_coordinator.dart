@@ -1,5 +1,6 @@
 import 'package:baby_vax/app/config/constant/app_path.dart';
 import 'package:baby_vax/app/core/imports/import_manger.dart';
+import 'package:baby_vax/app/modules/reminders/model/reminder_model.dart';
 
 /// Owns vaccine reminders.
 ///
@@ -16,9 +17,82 @@ import 'package:baby_vax/app/core/imports/import_manger.dart';
 /// re-running [syncFromFirestore] replaces reminders in place instead of
 /// stacking duplicates.
 class NotificationCoordinator extends GetxService {
-  NotificationCoordinator({DateTime Function()? clock})
-      : _notificationService = Get.find<NotificationService>(),
-        _now = clock ?? DateTime.now;
+  NotificationCoordinator({
+    DateTime Function()? clock,
+    Future<List<ReminderModel>> Function(String userId)? loadCustomReminders,
+    Future<List<MedicalDatesModel>> Function(String userId)? loadVaccines,
+  })  : _notificationService = Get.find<NotificationService>(),
+        _now = clock ?? DateTime.now,
+        _loadCustom = loadCustomReminders ?? _firestoreCustomReminders,
+        _loadVaccines = loadVaccines ?? _firestoreVaccines;
+
+  final Future<List<MedicalDatesModel>> Function(String userId) _loadVaccines;
+
+  static Future<List<MedicalDatesModel>> _firestoreVaccines(String userId) =>
+      AppConstant.fireStoreHelper1.getCollection(
+        path: AppPath.userMedicalDates(userId),
+        fromDoc: MedicalDatesModel.fromDocument,
+      );
+
+  final Future<List<ReminderModel>> Function(String userId) _loadCustom;
+
+  static Future<List<ReminderModel>> _firestoreCustomReminders(String userId) =>
+      AppConstant.fireStoreHelper1.getCollection(
+          path: AppPath.userReminders(userId),
+          fromDoc: ReminderModel.fromDocument);
+
+  /// The notification key of a custom reminder. The "custom-" prefix keeps
+  /// it apart from vaccine keys (`<doseId>-main` / `-advance`), so the two
+  /// can never hash to a shared id by sharing a key.
+  static String customKey(String reminderId) => 'custom-$reminderId';
+
+  /// Schedules [reminder] at its next occurrence, repeating if it repeats.
+  ///
+  /// Skips a disabled reminder, one without an id, a one-off already in the
+  /// past, and a one-off beyond the [horizonMonths] window (topped up on a
+  /// later app start, as vaccine reminders are). Returns whether anything
+  /// was scheduled.
+  Future<bool> scheduleCustom(ReminderModel reminder) async {
+    final String? id = reminder.id;
+    if (id == null || id.isEmpty || !reminder.enabled) return false;
+    try {
+      final DateTime now = _now();
+      final DateTime? at = reminder.nextAfter(now);
+      if (at == null) return false;
+      if (reminder.repeat == ReminderRepeat.none &&
+          at.isAfter(_addMonths(now, horizonMonths))) {
+        return false;
+      }
+      final String note = (reminder.note ?? '').trim();
+      await _notificationService.schedule(NotificationPayload(
+        id: customKey(id),
+        title: reminder.title,
+        body: note.isEmpty ? 'Reminder_custom_default_body'.tr : note,
+        scheduledAt: at,
+        repeat: switch (reminder.repeat) {
+          ReminderRepeat.none => NotificationRepeat.none,
+          ReminderRepeat.daily => NotificationRepeat.daily,
+          ReminderRepeat.weekly => NotificationRepeat.weekly,
+          ReminderRepeat.monthly => NotificationRepeat.monthly,
+        },
+      ));
+      return true;
+    } catch (e, s) {
+      logger.e('Failed to schedule custom reminder [$id]',
+          error: e, stackTrace: s);
+      return false;
+    }
+  }
+
+  /// Cancels a custom reminder. Safe when none is scheduled.
+  Future<void> cancelCustom(String reminderId) async {
+    try {
+      await _notificationService.cancel(customKey(reminderId));
+    } catch (e, s) {
+      logger.e('Failed to cancel custom reminder [$reminderId]',
+          error: e, stackTrace: s);
+    }
+  }
 
   NotificationService _notificationService;
 
@@ -197,18 +271,15 @@ class NotificationCoordinator extends GetxService {
     try {
       logger.i('Syncing reminders for [$userId]');
 
-      final List<MedicalDatesModel> vaccines =
-          await AppConstant.fireStoreHelper1.getCollection(
-        path: AppPath.userMedicalDates(userId),
-        fromDoc: MedicalDatesModel.fromDocument,
-      );
+      final List<MedicalDatesModel> vaccines = await _loadVaccines(userId);
 
       // Only cancel once the read succeeded. Cancelling first and then failing
       // to read would leave the user with no reminders at all.
       await _notificationService.cancelAll();
 
       if (vaccines.isEmpty) {
-        logger.i('No vaccines for [$userId]; nothing to schedule');
+        logger.i('No vaccines for [$userId]');
+        await _syncCustom(userId, budget: maxPendingReminders);
         return;
       }
 
@@ -242,9 +313,29 @@ class NotificationCoordinator extends GetxService {
         scheduled += 2;
       }
 
+      await _syncCustom(userId, budget: maxPendingReminders - scheduled);
+
       logger.i('Reminder sync done for [$userId]');
     } catch (e, s) {
       logger.e('Reminder sync failed for [$userId]', error: e, stackTrace: s);
+    }
+  }
+
+  /// Re-schedules the parent's own reminders after [syncFromFirestore]
+  /// cleared everything. This is what brings them back after a reboot or
+  /// an update, like vaccine reminders. A failed read is logged and does
+  /// not affect the vaccine reminders already scheduled.
+  Future<void> _syncCustom(String userId, {required int budget}) async {
+    try {
+      final List<ReminderModel> custom = await _loadCustom(userId);
+      int used = 0;
+      for (final ReminderModel r in custom) {
+        if (used >= budget) break;
+        if (await scheduleCustom(r)) used++;
+      }
+    } catch (e, s) {
+      logger.e('Custom reminder sync failed for [$userId]',
+          error: e, stackTrace: s);
     }
   }
 

@@ -1,17 +1,22 @@
 import 'package:baby_vax/app/core/imports/import_manger.dart';
-import 'package:baby_vax/app/core/widget/back_icon.dart';
 import 'package:flutter/services.dart';
 
+/// The app's top bar: flat, on the scaffold colour, centred title, with a
+/// standard 48dp back button that mirrors in RTL and is labelled for
+/// TalkBack.
+///
+/// v1.0's back button was a `CircleAvatar` of radius `20.r` inside a
+/// `24.w` box — about 24dp, half the minimum touch target — with
+/// `Colors.grey.shade200` hard-coded behind it in dark mode too.
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
-  final double fontSize;
+
+  /// Title size. Defaults to [titleSize], or [wrappedTitleSize] for a title
+  /// that wraps.
+  final double? fontSize;
   final bool showBackButton;
   final List<Widget>? action;
-  final Widget? customLeading;
   final VoidCallback? onBackPressed;
-  final double elevation;
-  final Color? background;
-  final Color? foreground;
 
   /// When set, the title wraps to at most this many lines and ends with an
   /// ellipsis, and the bar grows so every line is fully visible. When null
@@ -22,63 +27,73 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// own line height is almost twice its size.
   static const double wrappedTitleLineHeight = 1.25;
 
+  /// Default size of a one-line title.
+  static const double titleSize = 20;
+
+  /// Default size of a wrapping title, a step down so two lines fit.
+  static const double wrappedTitleSize = 18;
+
   /// Largest text scale a wrapping title follows, so [preferredSize] (which
   /// cannot see the device setting) always leaves room for it.
   static const double wrappedTitleMaxTextScale = 1.3;
 
-  const CustomAppBar(
-      {super.key,
-      this.title,
-      this.showBackButton = true,
-      this.action,
-      this.customLeading,
-      this.onBackPressed,
-      this.background,
-      this.foreground,
-      this.elevation = 0,
-      this.titleMaxLines,
-      this.fontSize = 22});
+  const CustomAppBar({
+    super.key,
+    this.title,
+    this.showBackButton = true,
+    this.action,
+    this.onBackPressed,
+    this.titleMaxLines,
+    this.fontSize,
+  });
+
+  double get _size =>
+      fontSize ?? (titleMaxLines == null ? titleSize : wrappedTitleSize);
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final TextStyle? base = theme.textTheme.titleLarge;
+    final bool canPop =
+        showBackButton && (ModalRoute.of(context)?.canPop ?? false);
+
     return AppBar(
-      systemOverlayStyle: context.theme.brightness == Brightness.dark
+      systemOverlayStyle: theme.brightness == Brightness.dark
           ? SystemUiOverlayStyle.light
           : SystemUiOverlayStyle.dark,
-      surfaceTintColor: context.theme.scaffoldBackgroundColor,
-      elevation: elevation,
       toolbarHeight: preferredSize.height,
+      automaticallyImplyLeading: false,
+      leading: canPop || onBackPressed != null
+          ? IconButton(
+              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+              // arrow_back_rounded has matchTextDirection, so it points the
+              // right way in Arabic.
+              icon: const Icon(Icons.arrow_back_rounded),
+              onPressed: onBackPressed ?? Get.back,
+            )
+          : null,
       title: title == null
           ? null
           : titleMaxLines == null
-              ? AppText(
-                  text: title ?? "",
-                  style:
-                      AppTextStyles.headLineSmall.copyWith(fontSize: fontSize),
-                  maxLines: 3,
+              ? Text(
+                  title!,
+                  style: base?.copyWith(fontSize: _size),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 )
               : MediaQuery.withClampedTextScaling(
                   maxScaleFactor: wrappedTitleMaxTextScale,
-                  child: AppText(
-                    text: title!,
-                    style: AppTextStyles.headLineSmall.copyWith(
-                      fontSize: fontSize,
+                  child: Text(
+                    title!,
+                    style: base?.copyWith(
+                      fontSize: _size,
                       height: wrappedTitleLineHeight,
                     ),
                     maxLines: titleMaxLines,
+                    overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                   ),
                 ),
-      centerTitle: true,
-      automaticallyImplyLeading: showBackButton,
-      backgroundColor: background ?? Colors.transparent,
-      foregroundColor: foreground,
-      leadingWidth: 48.w,
-      leading: _buildLeadingWidget(
-          size: 24.0,
-          showBackButton: showBackButton,
-          customLeading: customLeading,
-          onBackPressed: onBackPressed),
       actions: action,
     );
   }
@@ -90,33 +105,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       return const Size.fromHeight(kToolbarHeight);
     }
     final double text =
-        lines * fontSize * wrappedTitleLineHeight * wrappedTitleMaxTextScale;
+        lines * _size * wrappedTitleLineHeight * wrappedTitleMaxTextScale;
     return Size.fromHeight(
         text + 16 > kToolbarHeight ? text + 16 : kToolbarHeight);
   }
-}
-
-Widget _buildLeadingWidget(
-    {required double size,
-    required bool showBackButton,
-    required VoidCallback? onBackPressed,
-    required Widget? customLeading}) {
-  return Padding(
-    padding: const EdgeInsets.all(10),
-    child: customLeading ??
-        (showBackButton
-            ? _buildDefaultBackButton(onBackPressed, size: size)
-            : null),
-  );
-}
-
-Widget _buildDefaultBackButton(VoidCallback? onBackPressed,
-    {required double size}) {
-  return SizedBox(
-    width: size.w,
-    height: size.h,
-    child: BackIcon(
-      onTap: onBackPressed ?? Get.back,
-    ),
-  );
 }

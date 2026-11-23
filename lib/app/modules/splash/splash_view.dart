@@ -1,53 +1,46 @@
-import 'package:baby_vax/app/config/themes/app_colors.dart';
-import 'package:baby_vax/app/core/imports/import_library.dart';
-import 'package:baby_vax/app/core/values/app_image.dart';
-import 'package:baby_vax/app/core/widget/app_text.dart';
+import 'package:baby_vax/app/core/imports/import_manger.dart';
+import 'package:baby_vax/app/core/widget/app_logo.dart';
 import 'package:baby_vax/app/modules/splash/splash_controller.dart';
 
+/// The Flutter half of the splash: the mark slides up and settles, then the
+/// name and tagline fade in. It starts on the same colour as the native
+/// splash, so the hand-over is invisible.
 class SplashView extends GetView<SplashController> {
   const SplashView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return Scaffold(
-      backgroundColor:
-          context.isDarkMode ? AppColors.cardDark : AppColors.backgroundLight,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             SlideTransition(
               position: controller.logoSlide,
               child: ScaleTransition(
                 scale: controller.logoScale,
-                child: Image.asset(
-                  // 512 px covers 120 dp up to 4x density.
-                  AppImage.appIcon,
-                  width: 120,
-                ),
+                child: const AppLogo(size: 120),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: AppSpacing.xl),
             FadeTransition(
               opacity: controller.textOpacity,
-              child: const AppText(
-                text: 'Baby Vax',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF42A332),
-                ),
-              ),
-            ),
-            const SizedBox(height: 6),
-            FadeTransition(
-              opacity: controller.textOpacity,
-              child: AppText(
-                text: "SplashView_tagline".tr,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
-                ),
+              child: Column(
+                children: <Widget>[
+                  // The brand name is never translated.
+                  Text(
+                    'Baby Vax',
+                    style: theme.textTheme.displaySmall
+                        ?.copyWith(color: theme.colorScheme.primary),
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    "SplashView_tagline".tr,
+                    style: theme.textTheme.bodyMedium
+                        ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                ],
               ),
             ),
           ],

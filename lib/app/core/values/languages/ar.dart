@@ -5,25 +5,18 @@ Map<String, String> ar = {
   // Labels
   "email_label": "البريد الإلكتروني",
   "password_label": "كلمة المرور",
-  "name_label": "الاسم",
   "weight_label": "الوزن",
   "height_label": "الطول",
   "blood_percentage_label": "نسبة الدم",
   "head_size_label": "محيط الرأس",
-  "full_name_label": "الاسم الكامل",
   "date_of_birth_label": "تاريخ الميلاد",
 
   // Messages
-  "unexpected_error": "حدث خطأ غير متوقع.",
   "no_description": "لا يوجد وصف متاح حاليًا.",
   "empty_email_error_msg": "يرجى إدخال البريد الإلكتروني.",
   "empty_password_error_msg": "يرجى إدخال كلمة المرور.",
   "empty_name_error_msg": "يرجى إدخال الاسم.",
   "empty_date_of_birth_error_msg": "يرجى إدخال تاريخ الميلاد.",
-  "empty_blood_percentage_error_msg": "يرجى إدخال نسبة الدم.",
-  "empty_weight_error_msg": "يرجى إدخال الوزن.",
-  "empty_head_size_error_msg": "يرجى إدخال محيط الرأس.",
-  "empty_height_error_msg": "يرجى إدخال الطول.",
   // Alert Title
   "attention": "تحذير",
   "error": "خطأ",
@@ -44,87 +37,45 @@ Map<String, String> ar = {
   // Auth - SignUp → Controller
   "SignupController_create_user_failed_msg":
       "تعذّر إنشاء ملف المستخدم. يرجى المحاولة لاحقًا.",
-  "SignupController_create_user_success_msg": "تم إنشاء الحساب بنجاح.",
-  "SignupController_updated_user_success_msg": "تم تحديث المستخدم بنجاح.",
-
   // View
-  "SignupView_sign_up_title": "إنشاء حساب",
-  "SignupView_sign_up_hint": "أنشئ حسابًا لمتابعة رعاية طفلك بكل سهولة",
-  "SignupView_baby_information_label": "معلومات الطفل",
-  "SignupView_baby_measurements_label": "قياسات الطفل",
-  "SignupView_weight_label": "الوزن (كغ)",
-  "SignupView_height_label": "الطول (سم)",
-  "SignupView_head_size_label": "محيط الرأس (سم)",
-  "SignupView_blood_label": "نسبة الدم (غم/دل)",
-
   // Edit User → Controller
   "EditUserController_update_user_failed": "فشل تحديث بيانات المستخدم.",
 
   // View
-  "EditUserView_edit_user_title": "تعديل البيانات",
-  "EditUserView_edit_label": "تعديل",
-
+  "EditUserView_edit_user_title": "تعديل الملف",
   // Home → Controller
-  "HomeController_id_missing_msg": "تعذّر العثور على معرّف المستخدم.",
-
   // Widgets
-  "NextVaccinationCard_next_vaccination_title": "التطعيم القادم",
-
   // MainMenu → Controller
   "MainMenuController_home_title": "الرئيسية",
-  "MainMenuController_medical_dates_title": "المواعيد الطبية",
+  "MainMenuController_medical_dates_title": "الجدول",
   "MainMenuController_tips_title": "النصائح",
   "MainMenuController_settings_title": "الإعدادات",
 
   // MedicalDateDetails → Controller
   "MedicalDateDetailsController_missing_medical_dates_msg":
       "بيانات الموعد الطبي غير متوفرة.",
-  "MedicalDateDetailsController_fetch_failed_msg":
-      "تعذّر جلب تفاصيل الموعد الطبي.",
   "MedicalDateDetailsController_state_update_failed_msg":
       "تعذّر تحديث حالة الموعد الطبي.",
 
   // View
   "MedicalDateDetailsView_title": "تفاصيل الموعد الطبي",
-  "MedicalDateDetailsView_details_and_notes": "تفاصيل التطعيم والملاحظات",
-
   // Widgets
-  "MedicalDateDetailCard_medical_date_label": "الموعد الطبي",
-  "MedicalDateDetailCard_date_fallback_label": "التاريخ غير متوفر",
-  "MedicalDateDetailCard_notes_label": "ملاحظات",
-
   // MedicalDates → Controller
   "MedicalDatesController_fetch_failed": "تعذّر جلب المواعيد الطبية.",
 
   // View
-  "SearchOnMedicalDates_title": "البحث في المواعيد الطبية",
-  "SearchOnMedicalDates_search_field_label":
-      "ما المواعيد الطبية التي تبحث عنها؟",
-
   // Widgets
-  "MedicalDatesHeader_medical_dates_label": "المواعيد الطبية",
-  "MedicalDatesHeader_upcoming_appointments_label":
-      "تابع مواعيد طفلك القادمة والسابقة بسهولة.",
-  "MedicalDatesHeader_no_upcoming_appointments_label":
-      "لا توجد مواعيد قادمة حاليًا. أضف مواعيد طبية للمتابعة.",
-
   // Settings → Controller
   "SettingsController_logout_alert_msg": "هل أنت متأكد من تسجيل الخروج؟",
 
   // View
   "SettingsView_language_label": "اللغة",
-  "SettingsView_terms_and_conditions_label": "الشروط والأحكام",
-  "SettingsView_about_us_label": "من نحن",
   "SettingsView_logout_label": "تسجيل الخروج",
-  "SettingsView_select_language": "اختر اللغة",
-
   // Widgets
-  "AppSettingDarkModeSwitch_dark_mode_label": "الوضع الداكن",
-  "AppSettingDarkModeSwitch_light_mode_label": "الوضع الفاتح",
+  "AppSettingDarkModeSwitch_dark_mode_label": "داكن",
+  "AppSettingDarkModeSwitch_light_mode_label": "فاتح",
 
   // Tip Details → Controller
-  "TipDetailsController_missing_tip_msg": "النصيحة المطلوبة غير متوفرة.",
-
   // View
   "TipDetailsView_tip_details_title": "تفاصيل النصيحة",
   "TipDetailsView_empty_state_text": "لا تتوفر تفاصيل لهذه النصيحة.",
@@ -133,12 +84,9 @@ Map<String, String> ar = {
   "TipsController_fetch_failed_msg": "تعذّر جلب النصائح.",
 
   // View
-  "SearchOnTips_title": "البحث في النصائح",
-  "SearchOnTips_search_field_label": "ما النصائح التي تبحث عنها؟",
   "TipsView_empty_state_text": "لا توجد نصائح حاليًا. يرجى المحاولة لاحقًا.",
 
   // Widgets
-  "TipsHeader_tips_title": "النصائح",
   "TipsHeader_tips_hint": "إرشادات مفيدة للعناية بصحة طفلك ونموه.",
 
   // Enum → → →
@@ -215,7 +163,6 @@ Map<String, String> ar = {
 
   // Dose state actions:
   "LoginView_welcome_back": "مرحباً بعودتك",
-  "MedicalDatesView_add_custom_date": "إضافة موعد خاص",
   "SplashView_tagline": "رعاية • حماية • نمو",
   "AlertModel_field_required_msg": "حقل @field مطلوب.",
   // Countdown badge: one key per CLDR plural category (zero, one, two, few,
@@ -294,5 +241,544 @@ Map<String, String> ar = {
   "MedicalDateActions_mark_skipped": "تحديد كمتجاوزة",
   "MedicalDateActions_undo": "تراجع (إرجاع إلى قيد الانتظار)",
   "MedicalDateDetails_confirm_future_completion_msg":
-      "موعد هذه الجرعة @date. هل تريد تحديدها كمُعطاة؟"
+      "موعد هذه الجرعة @date. هل تريد تحديدها كمُعطاة؟",
+  // v1.1 design system
+  "loading_label": "جارٍ التحميل",
+  "optional_suffix": "(اختياري)",
+  "status_semantic_label": "الحالة: @status",
+  "state_error_title": "حدث خطأ ما",
+  "retry_label": "حاول مرة أخرى",
+  "close_label": "إغلاق",
+  "progress_semantic_label": "الجرعات المُعطاة: @done من @total",
+  "step_counter": "الخطوة @current من @total",
+  "not_recorded_label": "غير مسجّل",
+  // v1.1 onboarding
+  "Onboarding_skip": "تخطٍّ",
+  "Onboarding_get_started": "ابدأ الآن",
+  "next_label": "التالي",
+  "back_label": "رجوع",
+  "Onboarding_schedule_title": "كل الجرعات في مكان واحد",
+  "Onboarding_schedule_body":
+      "أدخل تاريخ ميلاد طفلك ويُنشئ بيبي فاكس جدول التطعيمات كاملاً مرتّباً حسب العمر، لتعرف دائماً ما هو الموعد القادم.",
+  "Onboarding_reminders_title": "تذكيرات لطيفة",
+  "Onboarding_reminders_body":
+      "تذكير مساء اليوم السابق وصباح يوم كل جرعة. تُضبط التذكيرات على هذا الهاتف، فتعمل دون إنترنت.",
+  "Onboarding_record_title": "سجلّ يمكنك مشاركته",
+  "Onboarding_record_body":
+      "سجّل متى وأين أُعطيت كل جرعة، وتابع نمو طفلك، وشارك بطاقة التطعيم مع عيادتك.",
+  // v1.1 sign-in and password reset
+  "LoginView_forgot_password": "نسيت كلمة المرور؟",
+  "LoginView_no_account": "جديد في بيبي فاكس؟",
+  "short_password_error_msg": "استخدم @min أحرف على الأقل.",
+  "invalid_number_error_msg": "الرجاء إدخال رقم.",
+  "out_of_range_error_msg": "الرجاء إدخال قيمة بين @min و@max.",
+  "ForgotPassword_title": "إعادة تعيين كلمة المرور",
+  "ForgotPassword_hint":
+      "أدخل البريد الإلكتروني الذي سجّلت به وسنرسل لك رابطاً لاختيار كلمة مرور جديدة.",
+  "ForgotPassword_send": "إرسال رابط إعادة التعيين",
+  "ForgotPassword_sent_title": "تحقّق من بريدك الإلكتروني",
+  "ForgotPassword_sent_body":
+      "إذا كان هناك حساب مرتبط بـ @email فسيصلك رابط لإعادة تعيين كلمة المرور. قد يستغرق ذلك بضع دقائق، لذا تحقّق من مجلد الرسائل غير المرغوب فيها أيضاً.",
+  "ForgotPassword_back_to_login": "العودة لتسجيل الدخول",
+  // v1.1 sign-up stepper
+  "Signup_step_account": "حسابك",
+  "Signup_step_baby": "طفلك",
+  "Signup_step_measurements": "القياسات",
+  "Signup_step_reminders": "التذكيرات",
+  "Signup_step_summary": "المراجعة والإنشاء",
+  "Signup_step_account_hint":
+      "ستستخدم هذا البريد الإلكتروني وكلمة المرور لتسجيل الدخول من أي هاتف.",
+  "Signup_password_helper": "@min أحرف على الأقل.",
+  "Signup_step_baby_hint": "يُبنى جدول التطعيمات من تاريخ ميلاد طفلك.",
+  "Signup_baby_name_label": "اسم الطفل",
+  "Signup_birthday_hint": "اضغط لاختيار التاريخ",
+  "Signup_birthday_helper": "يُستخدم لحساب موعد كل جرعة.",
+  "Signup_sex_label": "الجنس",
+  "Signup_sex_helper": "تختلف منحنيات النمو بين البنات والأولاد.",
+  "sex_female": "بنت",
+  "sex_male": "ولد",
+  "empty_sex_error_msg": "الرجاء اختيار أحد الخيارين.",
+  "Signup_step_measurements_hint":
+      "إذا كانت لديك من الولادة أو من فحص حديث فأضفها هنا. يمكنك تخطي هذه الخطوة وإضافتها لاحقاً.",
+  "unit_kg": "كغ",
+  "unit_cm": "سم",
+  "unit_g_dl": "غم/دل",
+  "Signup_skip_for_now": "تخطٍّ الآن",
+  "Signup_reminders_title": "تذكيرات تعمل دون إنترنت",
+  "Signup_reminders_body":
+      "يذكّرك بيبي فاكس الساعة @evening مساء اليوم السابق لكل جرعة، والساعة @morning صباح يومها. تُضبط التذكيرات على هذا الهاتف، فتعمل دون إنترنت.",
+  "Signup_reminders_why":
+      "سيسألك هاتفك إن كان مسموحاً لبيبي فاكس بإرسال الإشعارات. من دونها لا يمكن أن تظهر التذكيرات.",
+  "Signup_reminders_turn_on": "تفعيل التذكيرات",
+  "Signup_reminders_not_now": "ليس الآن",
+  "Signup_reminders_granted": "التذكيرات مفعّلة.",
+  "Signup_reminders_denied":
+      "التذكيرات متوقفة حالياً. يمكنك تفعيلها لاحقاً من إعدادات هاتفك.",
+  "Signup_step_summary_hint":
+      "راجع التفاصيل أدناه. يمكنك تعديل أي شيء قبل إنشاء الحساب.",
+  "Signup_create_account": "إنشاء الحساب",
+  "Signup_schedule_note":
+      "سيُنشئ بيبي فاكس جدول التطعيمات من تاريخ الميلاد هذا.",
+  "reminders_on_label": "مفعّلة",
+  "reminders_off_label": "متوقفة",
+  "edit_label": "تعديل",
+  "edit_section_label": "تعديل @section",
+  // v1.1 schedule age groups
+  "age_at_birth": "عند الولادة",
+  "age_other": "مواعيد أخرى",
+  "age_months_one": "شهر واحد",
+  "age_months_other": "@count شهر",
+  "age_years_one": "سنة واحدة",
+  "age_years_other": "@count سنة",
+  // Age headings: one key per CLDR plural category, picked by ageLabel().
+  "age_months_zero": "@count شهر",
+  "age_months_two": "شهران",
+  "age_months_few": "@count أشهر",
+  "age_months_many": "@count شهرًا",
+  "age_years_zero": "@count سنة",
+  "age_years_two": "سنتان",
+  "age_years_few": "@count سنوات",
+  "age_years_many": "@count سنةً",
+  // v1.1 home and schedule
+  "HomeView_overline": "جدول تطعيمات",
+  "HomeView_next_dose": "الجرعة القادمة",
+  "HomeView_overdue_dose": "جرعة متأخرة",
+  "HomeView_open_dose": "عرض الجرعة",
+  "HomeView_more_overdue": "متأخرة أيضاً: @count",
+  "HomeView_all_done_title": "تم تسجيل كل الجرعات",
+  "HomeView_all_done_body": "كل جرعة في الجدول محددة كمُعطاة أو متجاوزة.",
+  "HomeView_no_schedule_title": "لا يوجد جدول بعد",
+  "HomeView_no_schedule_body":
+      "اسحب للأسفل للتحديث. إذا بقي فارغاً فتحقّق من الاتصال.",
+  "HomeView_progress_title": "التقدّم في الجدول",
+  "HomeView_progress_body": "الجرعات المُعطاة: @done من @total",
+  "HomeView_measurements_title": "آخر القياسات",
+  "HomeView_profile_title": "الملف الشخصي",
+  "HomeView_no_profile_title": "لم نعثر على ملفك",
+  "HomeView_no_profile_body": "تحقّق من الاتصال وحاول مرة أخرى.",
+  "Schedule_filter_all": "الكل",
+  "Schedule_empty_filter_title": "لا توجد جرعات هنا",
+  "Schedule_empty_filter_body": "جرّب تصفية أخرى.",
+  "Schedule_empty_title": "لا يوجد جدول بعد",
+  "Schedule_empty_body": "سيظهر جدول طفلك هنا بعد إعداد الحساب.",
+  "Schedule_filter_label": "عرض",
+  // v1.1 alerts
+  "ok_label": "حسناً",
+  // v1.1 dose details
+  "MedicalDateDetails_scheduled_label": "الموعد",
+  "MedicalDateDetails_age_label": "العمر",
+  "MedicalDateDetails_about_title": "عن هذه الجرعة",
+  // v1.1 tips
+  "TipsView_empty_title": "لا توجد نصائح بعد",
+  // v1.1 edit profile
+  "EditUser_save": "حفظ التغييرات",
+  "EditUser_saved_msg": "تم حفظ الملف.",
+  "EditUser_email_readonly": "بريد تسجيل الدخول. لا يمكن تغييره من هنا.",
+  "EditUser_birthday_helper": "تغييره ينقل كل جرعات الجدول لتتوافق معه.",
+  "EditUser_birthday_change_confirm":
+      "تغيّر تاريخ الميلاد، لذلك ستنتقل كل جرعات الجدول لتتوافق معه. تحتفظ الجرعات التي حددتها كمُعطاة أو متجاوزة بحالتها، وتُعاد جدولة التذكيرات.",
+  "EditUser_birthday_change_yes": "نقل الجدول",
+  // v1.1 settings
+  "Settings_appearance": "المظهر",
+  "Settings_theme_system": "النظام",
+  "Settings_notifications": "الإشعارات",
+  "Settings_notifications_hint": "يفتح إعدادات هاتفك الخاصة ببيبي فاكس.",
+  "Settings_about": "حول التطبيق",
+  "Settings_about_app": "عن بيبي فاكس",
+  // v1.1 vaccination record
+  "Record_sheet_title": "تسجيل هذه الجرعة",
+  "Record_sheet_hint":
+      "كل ما هنا اختياري، لكنه يجعل بطاقة التطعيم أكثر فائدة في العيادة.",
+  "Record_given_date": "تاريخ الإعطاء",
+  "Record_clinic": "العيادة أو المكان",
+  "Record_lot": "رقم التشغيلة",
+  "Record_lot_hint": "مطبوع على العبوة أو على بطاقة العيادة",
+  "Record_note": "ملاحظة",
+  "Record_save": "حفظ",
+  "Record_skip_details": "تحديد كمُعطاة دون تفاصيل",
+  "Record_section_title": "سجل التطعيم",
+  "Record_add_details": "إضافة تفاصيل",
+  "Record_edit": "تعديل التفاصيل",
+  "Record_none": "لا توجد تفاصيل مسجّلة بعد.",
+  // v1.1 vaccination card
+  "Card_title": "بطاقة التطعيم",
+  "Card_col_vaccine": "اللقاح",
+  "Card_col_status": "الحالة",
+  "Card_col_scheduled": "الموعد",
+  "Card_col_given": "تاريخ الإعطاء",
+  "Card_col_clinic": "العيادة",
+  "Card_col_lot": "التشغيلة",
+  "Card_generated": "أُنشئت بواسطة بيبي فاكس على هذا الهاتف بتاريخ",
+  "Card_export": "بطاقة التطعيم",
+  "Card_export_hint":
+      "ملف PDF بالعربية والإنجليزية لمشاركته مع عيادتك أو طباعته.",
+  "Card_share": "مشاركة",
+  "Card_print": "طباعة",
+  "Card_failed": "تعذّر إنشاء البطاقة. الرجاء المحاولة مرة أخرى.",
+  // v1.1 home quick actions
+  "HomeView_quick_actions": "اختصارات",
+  // v1.1 growth tracker
+  "Home_tip_of_day": "نصيحة اليوم",
+  "Home_see_all_tips": "عرض كل النصائح",
+  "Growth_title": "النمو",
+  "Growth_add": "إضافة قياس",
+  "Growth_add_title": "إضافة قياس",
+  "Growth_edit_title": "تعديل القياس",
+  "Growth_sheet_hint":
+      "أدخل أيّاً من القياسات الثلاثة، من العيادة أو من ميزانك الخاص.",
+  "Growth_date": "تاريخ القياس",
+  "Growth_need_one_value": "أدخل قياساً واحداً على الأقل.",
+  "Growth_delete": "حذف القياس",
+  "Growth_delete_confirm": "هل تريد حذف هذا القياس؟",
+  "Growth_save_failed": "تعذّر حفظ القياس. الرجاء المحاولة مرة أخرى.",
+  "Growth_history": "السجل",
+  "Growth_empty_title": "لا توجد قياسات بعد",
+  "Growth_empty_body":
+      "أضف الوزن أو الطول أو محيط الرأس من زيارة العيادة لبدء المخطط.",
+  "Growth_axis_months": "العمر (أشهر)",
+  "Growth_no_value_for_metric": "لا يوجد قياس من هذا النوع بعد.",
+  "Growth_reading_around": "حول المئين @ord",
+  "Growth_reading_below": "أقل من المئين 3",
+  "Growth_reading_above": "أعلى من المئين 97",
+  "Growth_reading_note":
+      "المئينات تقارن طفلك بأطفال مرجعيين من منظمة الصحة العالمية بنفس العمر والجنس. وهي ليست تشخيصاً: قراءة واحدة لا تعني الكثير وحدها، لذا تحدّث مع طبيبك عن أي قلق.",
+  "Growth_over_five":
+      "معايير النمو المستخدمة هنا من منظمة الصحة العالمية تغطي من الولادة حتى 5 سنوات، لذلك لا يظهر مئين لهذا القياس.",
+  "Growth_no_sex":
+      "أضف جنس طفلك في الملف للمقارنة مع معايير النمو لمنظمة الصحة العالمية.",
+  "Growth_attribution":
+      "منحنيات المرجع: معايير نمو الطفل لمنظمة الصحة العالمية (2006). الترخيص: CC BY-NC-SA 3.0 IGO.",
+  "Growth_section_measurements": "القياسات",
+  "Growth_section_milestones": "المهارات الحركية",
+  "Milestone_sitting_name": "الجلوس دون سند",
+  "Milestone_crawling_name": "الحبو على اليدين والركبتين",
+  "Milestone_standingAssisted_name": "الوقوف بمساعدة",
+  "Milestone_walkingAssisted_name": "المشي بمساعدة",
+  "Milestone_standingAlone_name": "الوقوف وحده",
+  "Milestone_walkingAlone_name": "المشي وحده",
+  "Milestone_sitting_criteria":
+      "يجلس مستقيمًا ورأسه مرفوع لمدة 10 ثوانٍ على الأقل، دون أن يستعين بذراعيه أو يديه للتوازن أو الاستناد.",
+  "Milestone_crawling_criteria":
+      "يتحرك للأمام أو للخلف على يديه وركبتيه بالتناوب، وبطنه مرفوع عن الأرض، ثلاث حركات متتالية على الأقل.",
+  "Milestone_standingAssisted_criteria":
+      "يقف منتصبًا على قدميه ممسكًا بكلتا يديه بشيء ثابت مثل قطعة أثاث، دون أن يتكئ عليه، وساقاه تحملان معظم وزنه، لمدة 10 ثوانٍ على الأقل.",
+  "Milestone_walkingAssisted_criteria":
+      "يخطو خمس خطوات على الأقل جانبًا أو للأمام وظهره مستقيم، ممسكًا بشيء ثابت مثل قطعة أثاث بيد واحدة أو بكلتا يديه.",
+  "Milestone_standingAlone_criteria":
+      "يقف منتصبًا على قدميه، لا على أطراف أصابعه، وظهره مستقيم، دون أن يلمس شخصًا أو شيئًا، لمدة 10 ثوانٍ على الأقل.",
+  "Milestone_walkingAlone_criteria":
+      "يخطو خمس خطوات على الأقل وحده وهو منتصب الظهر، دون أن يلمس شخصًا أو شيئًا.",
+  "Milestones_summary_age": "@name · @age",
+  "Milestones_count": "@done من @total مهارات",
+  "Milestones_summary_note":
+      "النطاقات المعتادة من دراسة منظمة الصحة العالمية. كل طفل ينمو بإيقاعه الخاص.",
+  "Milestones_scale_title": "العمر بالأشهر",
+  "Milestone_status_achieved": "تحقّقت",
+  "Milestone_status_dueNow": "وقتها الآن",
+  "Milestone_status_later": "لاحقًا",
+  "Milestone_status_optional": "اختيارية",
+  "Milestone_status_pastWindow": "لم تُسجَّل بعد",
+  "Milestone_achieved_on": "تحقّقت في @date",
+  "Milestone_range": "معظم الأطفال: بين عمر @from و@to شهر",
+  "Milestone_crawling_skip": "بعض الأطفال لا يحبون، وينتقلون إلى المشي مباشرة",
+  "Milestone_done": "تمّت",
+  "Milestone_edit": "تعديل",
+  "Milestones_legend_now": "عمر الطفل الآن",
+  "Milestones_legend_window": "متى يفعلها معظم الأطفال",
+  "Milestones_legend_dot": "تاريخ تحقّقها",
+  "Milestone_bar_semantic":
+      "معظم الأطفال بين عمر @from و@to شهر. عمر طفلك: @age.",
+  "Milestone_bar_semantic_done": "تحقّقت في عمر @done.",
+  "Milestone_date": "تاريخ التحقّق",
+  "Milestone_date_rule": "بين تاريخ الميلاد واليوم.",
+  "Milestone_date_error": "اختر تاريخًا بين تاريخ الميلاد واليوم.",
+  "Milestone_remove": "إزالة",
+  "Milestone_remove_confirm":
+      "هل تريد إزالة تاريخ تحقّق مهارة «@name»؟ تبقى الملاحظة إن وُجدت.",
+  "Milestone_what_counts": "ما الذي يُحتسب",
+  "Milestone_info_title": "كل طفل ينمو بإيقاعه الخاص",
+  "Milestone_info_body":
+      "إذا كان لديك أي قلق بشأن هذه المهارة، فتحدّث مع طبيب طفلك. قد يصل الأطفال المولودون مبكرًا إلى المهارات متأخرين قليلًا.",
+  "Milestone_record_date": "تمّت، سجّل التاريخ",
+  "Milestone_add_note": "أضف ملاحظة لزيارة الطبيب",
+  "Milestone_note_title": "ملاحظة لزيارة الطبيب",
+  "Milestone_source":
+      "المصدر: دراسة النمو الحركي لمنظمة الصحة العالمية (مجموعة دراسة منظمة الصحة العالمية متعددة المراكز للنمو، مجلة Acta Paediatrica لعام 2006). للمعلومات فقط، ولا تغني عن الطبيب.",
+  "Milestone_save_failed":
+      "تعذّر حفظ المهارة. تحقّق من الاتصال وحاول مرة أخرى.",
+  "Card_milestones": "المهارات الحركية",
+  "Growth_chart_semantic": "مخطط @metric، عدد القياسات: @count",
+  "Growth_axis_value": "@metric (@unit)",
+  "Growth_legend_band": "معظم الأطفال",
+  "Growth_legend_average": "المتوسط",
+  "Growth_legend_baby": "طفلك",
+  "Growth_legend_outside": "خارج الرسم",
+  "Growth_band_caption":
+      "المنطقة المظللة: معظم الأطفال من العمر والجنس نفسيهما يقعون في هذه المنطقة.",
+  "Growth_tap_hint": "اضغط على نقطة لعرض تفاصيلها.",
+  "Growth_point_outside": "هذه القيمة خارج حدود الرسم، لذلك تظهر عند حافته.",
+  "Growth_position_belowMost": "أقل من معظم الأطفال في العمر نفسه",
+  "Growth_position_belowAverage": "أقل من المتوسط قليلًا",
+  "Growth_position_aroundAverage": "قريب من المتوسط",
+  "Growth_position_aboveAverage": "أعلى من المتوسط قليلًا",
+  "Growth_position_aboveMost": "أعلى من معظم الأطفال في العمر نفسه",
+  "Growth_chart_none": "@metric: لا توجد قياسات بعد. أضف قياسًا لعرض الرسم.",
+  "Growth_chart_one": "قياس واحد حتى الآن. أضف قياسًا آخر لترى الخط.",
+  "Growth_unusual_title": "هل أنت متأكد؟",
+  "Growth_unusual_save": "احفظ على أي حال",
+  "Growth_unusual_check": "راجع القيمة",
+  "Growth_unusual_high_weight":
+      "القيمة @value @unit أعلى بكثير من الوزن المعتاد لطفل في هذا العمر. تحقّق من الرقم ومن الوحدة (كغ، وليس غرامًا أو رطلًا).",
+  "Growth_unusual_low_weight":
+      "القيمة @value @unit أقل بكثير من الوزن المعتاد لطفل في هذا العمر. تحقّق من الرقم ومن الوحدة (كغ).",
+  "Growth_unusual_high_height":
+      "القيمة @value @unit أعلى بكثير من الطول المعتاد لطفل في هذا العمر. تحقّق من الرقم ومن الوحدة (سم).",
+  "Growth_unusual_low_height":
+      "القيمة @value @unit أقل بكثير من الطول المعتاد لطفل في هذا العمر. تحقّق من الرقم ومن الوحدة (سم، وليس بوصة).",
+  "Growth_unusual_high_head":
+      "القيمة @value @unit أعلى بكثير من محيط الرأس المعتاد لطفل في هذا العمر. تحقّق من الرقم ومن الوحدة (سم).",
+  "Growth_unusual_low_head":
+      "القيمة @value @unit أقل بكثير من محيط الرأس المعتاد لطفل في هذا العمر. تحقّق من الرقم ومن الوحدة (سم، وليس بوصة).",
+  "Home_growth_change": "@change @unit منذ @date",
+  "Home_growth_no_change": "لا تغيير منذ @date",
+  "Home_growth_first": "أول قياس",
+  "Home_growth_none": "@metric: لا يوجد قياس بعد. اضغط لإضافة قياس.",
+  "Home_growth_open": "عرض النمو",
+  "Health_chart_heading": "الحرارة",
+  "Health_chart_days_few": "@n أيام",
+  "Health_chart_days_many": "@n يومًا",
+  "Health_chart_days_other": "@n يوم",
+  "Health_chart_semantic":
+      "مخطط الحرارة. عدد القراءات المعروضة: @count. أعلى قراءة: @max درجة مئوية.",
+  "Health_chart_empty_few": "لم تُسجَّل أي درجة حرارة في آخر @n أيام.",
+  "Health_chart_empty_many": "لم تُسجَّل أي درجة حرارة في آخر @n يومًا.",
+  "Health_chart_empty_other": "لم تُسجَّل أي درجة حرارة في آخر @n يوم.",
+  "Health_chart_add": "سجّل درجة الحرارة",
+  "Health_chart_one": "قراءة واحدة في هذه المدة. سجّل المزيد لترى الخط.",
+  "Health_chart_tap_hint": "اضغط على قراءة أو علامة لعرضها.",
+  "Health_chart_source":
+      "الخط المتقطع: الحمّى من @fever درجة مئوية تحت الإبط (كتيّب مخططات IMCI لمنظمة الصحة العالمية). قراءات الشرج أعلى بنحو @rectal درجة مئوية.",
+  "Health_axis_temperature": "الحرارة (درجة مئوية)",
+  "Health_axis_date": "التاريخ",
+  "Health_legend_reading": "الحرارة",
+  "Health_legend_fever": "خط الحمّى",
+  "Health_legend_dose": "لقاح أُعطي",
+  "Health_legend_medicine": "دواء",
+  "Health_chart_dose_given": "لقاح أُعطي: @vaccine",
+  "Health_chart_medicine": "دواء: @name",
+  "Health_chart_open_entry": "فتح السجل",
+  "Health_chart_open_dose": "فتح الجرعة",
+  "Notifications_title": "الإشعارات",
+  "Notifications_bell_unread": "الإشعارات، غير المقروءة: @n",
+  "Notifications_section_today": "اليوم",
+  "Notifications_section_upcoming": "القادمة",
+  "Notifications_section_earlier": "السابقة",
+  "Notifications_mark_all": "تعليم الكل كمقروء",
+  "Notifications_scheduled": "مجدول",
+  "Notifications_unread": "غير مقروء",
+  "Notifications_empty_title": "لا توجد إشعارات بعد",
+  "Notifications_empty_body":
+      "تظهر هنا تذكيرات اللقاحات وتذكيراتك الخاصة عندما يحين موعدها.",
+  "Notification_child_fallback": "طفلك",
+  // v1.1 custom reminders
+  "Reminder_custom_default_body": "تذكير ضبطته في بيبي فاكس.",
+  // v1.1 reminders screens
+  "Reminders_title": "التذكيرات",
+  "Reminders_add": "إضافة تذكير",
+  "Reminders_add_title": "تذكير جديد",
+  "Reminders_edit_title": "تعديل التذكير",
+  "Reminders_hint":
+      "تذكيراتك ومواعيدك الخاصة، إلى جانب تذكيرات التطعيم. تُضبط على هذا الهاتف وتعمل دون إنترنت.",
+  "Reminders_title_label": "ماذا تريد أن تتذكر",
+  "Reminders_title_required": "الرجاء إعطاء التذكير اسماً.",
+  "Reminders_suggest_doctor": "زيارة الطبيب",
+  "Reminders_suggest_vitamin_d": "قطرات فيتامين د",
+  "Reminders_suggest_follow_up": "مراجعة",
+  "Reminders_date": "التاريخ",
+  "Reminders_time": "الوقت",
+  "Reminders_past_error": "هذا الوقت مضى. اختر وقتاً لاحقاً أو اجعله متكرراً.",
+  "Reminders_repeat": "التكرار",
+  "Reminders_repeat_none": "مرة واحدة",
+  "Reminders_repeat_daily": "كل يوم",
+  "Reminders_repeat_weekly": "كل أسبوع",
+  "Reminders_repeat_monthly": "كل شهر",
+  "Reminders_delete": "حذف التذكير",
+  "Reminders_delete_confirm": "هل تريد حذف هذا التذكير؟ لن يظهر مجدداً.",
+  "Reminders_save_failed": "تعذّر حفظ التذكير. الرجاء المحاولة مرة أخرى.",
+  "Reminders_empty_title": "لا توجد تذكيرات بعد",
+  "Reminders_empty_body":
+      "أضف زيارة طبيب أو قطرات يومية أو مراجعة، وسيذكّرك بيبي فاكس.",
+  "Reminders_past": "كان في @date",
+  "Reminders_toggle_label": "التذكير مفعّل لـ @title",
+  "Health_list_separator": "، ",
+  "Health_kind_temperature": "الحرارة",
+  "Health_kind_symptoms": "الأعراض",
+  "Health_kind_medicine": "دواء",
+  "Health_kind_note": "ملاحظة",
+  "Health_add_temperature": "تسجيل الحرارة",
+  "Health_add_symptoms": "تسجيل الأعراض",
+  "Health_add_medicine": "تسجيل دواء أُعطي",
+  "Health_add_note": "إضافة ملاحظة",
+  "Health_edit_title": "تعديل التسجيل",
+  "Health_delete": "حذف التسجيل",
+  "Health_save_failed": "تعذّر الحفظ. تحقّق من الاتصال وحاول مرة أخرى.",
+  "Health_future_error": "هذا الوقت في المستقبل.",
+  "Health_temp_label": "درجة الحرارة",
+  "Health_temp_helper": "بالدرجة المئوية، مثلًا 37.8",
+  "Health_temp_error": "أدخل القراءة بالدرجة المئوية، بين 32 و44.",
+  "Health_method_label": "كيف قِيست؟",
+  "Health_method_armpit": "تحت الإبط",
+  "Health_method_rectal": "شرجية",
+  "Health_method_other": "طريقة أخرى",
+  "Health_method_hint":
+      "رقم منظمة الصحة العالمية لقياس الإبط: الحمى 37.5 درجة مئوية فأكثر. القراءة الشرجية أعلى بنحو 0.5 درجة.",
+  "Health_method_other_hint":
+      "تعطي منظمة الصحة العالمية أرقامًا لقياس الإبط والقياس الشرجي فقط، لذا لا يحكم Baby Vax على هذه القراءة.",
+  "Health_fever_label": "حمى حسب رقم منظمة الصحة العالمية",
+  "Health_symptoms_hint":
+      "اختر ما تلاحظه. علامات الخطر حسب منظمة الصحة العالمية في آخر القائمة.",
+  "Health_symptoms_error": "اختر عرضًا واحدًا على الأقل.",
+  "Health_medicine_label": "الدواء",
+  "Health_medicine_error": "اكتب اسم الدواء.",
+  "Health_amount_label": "الكمية المُعطاة",
+  "Health_amount_helper": "كما في النشرة أو وصفة الطبيب، مثلًا 2.5 مل",
+  "Health_medicine_no_advice":
+      "لا يقترح Baby Vax أدوية أو جرعات. اتّبع إرشادات الطبيب أو الصيدلي.",
+  "Health_note_error": "اكتب ملاحظة.",
+  "Health_care_urgent":
+      "تصنّف منظمة الصحة العالمية هذه علامة خطر: اطلب المساعدة الطبية الآن.",
+  "Health_care_see":
+      "تنصح منظمة الصحة العالمية بمراجعة عامل صحي على الفور في هذه الحالة.",
+  "Health_guide_open": "متى تطلب المساعدة",
+  "Health_symptom_feelsHot": "سخونة أو حمى",
+  "Health_symptom_feedingPoorly": "يرضع أو يشرب بشكل ضعيف",
+  "Health_symptom_unableToFeed": "لا يستطيع الشرب أو الرضاعة",
+  "Health_symptom_vomiting": "تقيؤ",
+  "Health_symptom_vomitsEverything": "يتقيأ كل شيء",
+  "Health_symptom_diarrhoea": "إسهال",
+  "Health_symptom_bloodInStool": "دم في البراز",
+  "Health_symptom_cough": "سعال",
+  "Health_symptom_runnyNose": "سيلان الأنف",
+  "Health_symptom_fastBreathing": "تنفس سريع",
+  "Health_symptom_difficultBreathing": "صعوبة في التنفس",
+  "Health_symptom_convulsions": "تشنجات",
+  "Health_symptom_lethargic": "نعاس شديد أو صعوبة في الإيقاظ أو فقدان الوعي",
+  "Health_symptom_lessActive": "أقل نشاطًا من المعتاد",
+  "Health_symptom_feelsCold": "برودة غير معتادة في الجسم",
+  "Health_symptom_yellowSkin": "اصفرار الكفين أو باطن القدمين",
+  "Health_symptom_rash": "طفح جلدي",
+  "Health_symptom_injectionSite": "ألم أو تورم مكان الحقنة",
+  "Health_symptom_crying": "بكاء أكثر من المعتاد",
+  "Health_profile_title": "الملف الصحي",
+  "Health_profile_hint":
+      "مفيد للعيادة أو لمن يرعى طفلك. يُطبع في بطاقة التطعيم.",
+  "Health_allergies": "الحساسية",
+  "Health_conditions": "حالات صحية مزمنة",
+  "Health_blood_type": "فصيلة الدم",
+  "Health_blood_unknown": "غير معروفة",
+  "Health_emergency": "جهة اتصال للطوارئ",
+  "Health_profile_medical": "المعلومات الطبية",
+  "Health_allergies_hint": "مثلًا البنسلين، البيض",
+  "Health_conditions_hint": "مثلًا الربو",
+  "Health_contact_name": "الاسم",
+  "Health_contact_relation": "صلة القرابة بالطفل",
+  "Health_contact_phone": "رقم الهاتف",
+  "Health_contact_phone_hint": "مثلًا 0599 123 456",
+  "Health_contact_name_needed": "اكتب اسم جهة الاتصال.",
+  "Health_contact_phone_needed": "اكتب رقم الهاتف.",
+  "Health_contact_phone_invalid": "أدخل من 6 إلى 15 رقمًا، ويمكن أن يبدأ بـ +.",
+  "Health_contact_with_relation": "@name (@relation)",
+  "Health_contact_add": "أضف من نتصل به في حالة الطوارئ",
+  "Health_relation_mother": "الأم",
+  "Health_relation_father": "الأب",
+  "Health_relation_grandparent": "الجد أو الجدة",
+  "Health_relation_sibling": "الأخ أو الأخت",
+  "Health_relation_relative": "قريب",
+  "Health_relation_guardian": "الوصي",
+  "Health_relation_other": "أخرى",
+  "Health_call": "اتصال",
+  "Health_copy_phone": "نسخ الرقم",
+  "Health_phone_copied": "تم نسخ الرقم.",
+  "Health_call_failed": "تعذّر فتح تطبيق الهاتف. انسخ الرقم بدلًا من ذلك.",
+  "Health_profile_add": "أضف المعلومات الصحية",
+  "Health_log_show_all": "عرض الأيام السابقة",
+  "Health_log_show_less": "عرض أيام أقل",
+  "Health_title": "الصحة",
+  "Health_intro": "سجّل الحرارة والأعراض والأدوية لتعرضها على الطبيب.",
+  "Health_add_section": "أضف إلى السجل",
+  "Health_temperature_section": "آخر قراءة حرارة",
+  "Health_chart_title": "آخر 72 ساعة",
+  "Health_last_medicine": "آخر دواء: @name",
+  "Health_log_section": "السجل الصحي",
+  "Health_empty_title": "لا توجد تسجيلات بعد",
+  "Health_empty_body":
+      "استخدم الأزرار في الأعلى لتسجيل الحرارة أو الأعراض أو دواء أو ملاحظة.",
+  "Health_delete_confirm": "حذف هذا التسجيل من السجل الصحي؟",
+  "Health_profile_empty": "أضف الحساسية وفصيلة الدم وجهة اتصال للطوارئ.",
+  "Health_profile_edit": "تعديل",
+  "Health_profile_saved": "تم حفظ الملف الصحي.",
+  "Health_after_vaccine_title": "بعد @vaccine",
+  "Health_after_vaccine_day": "اليوم @day من @total بعد التطعيم",
+  "Health_after_vaccine_body":
+      "منظمة الصحة العالمية: عادة ما تكون الآثار الجانبية للقاحات طفيفة جداً وقصيرة الأمد، مثل الألم في الذراع أو الحمى الخفيفة.",
+  "Health_flag_urgent": "علامة خطر حسب منظمة الصحة العالمية",
+  "Health_flag_see": "راجِع عاملًا صحيًا",
+  "Health_today": "اليوم",
+  "Health_yesterday": "أمس",
+  "Health_ago_now": "الآن",
+  "Health_ago_minutes_one": "منذ دقيقة",
+  "Health_ago_minutes_two": "منذ دقيقتين",
+  "Health_ago_minutes_few": "منذ @count دقائق",
+  "Health_ago_minutes_many": "منذ @count دقيقة",
+  "Health_ago_minutes_other": "منذ @count دقيقة",
+  "Health_ago_hours_one": "منذ ساعة",
+  "Health_ago_hours_two": "منذ ساعتين",
+  "Health_ago_hours_few": "منذ @count ساعات",
+  "Health_ago_hours_many": "منذ @count ساعة",
+  "Health_ago_hours_other": "منذ @count ساعة",
+  "Health_ago_days_one": "منذ يوم",
+  "Health_ago_days_two": "منذ يومين",
+  "Health_ago_days_few": "منذ @count أيام",
+  "Health_ago_days_many": "منذ @count يومًا",
+  "Health_ago_days_other": "منذ @count يوم",
+  "Health_guide_title": "متى تطلب المساعدة الطبية",
+  "Health_guide_row_hint":
+      "علامات الخطر حسب منظمة الصحة العالمية، وما هو معتاد بعد التطعيم",
+  "Health_guide_intro":
+      "العلامات التي تذكرها منظمة الصحة العالمية لطلب المساعدة. إذا كنت قلقًا على طفلك فلا تنتظر: تواصل مع عامل صحي.",
+  "Health_guide_urgent_title": "علامات الخطر: اطلب المساعدة الطبية الآن",
+  "Health_guide_urgent_1": "لا يستطيع الشرب أو الرضاعة",
+  "Health_guide_urgent_2": "يتقيأ كل شيء",
+  "Health_guide_urgent_3": "أصيب بتشنجات، أو يتشنج الآن",
+  "Health_guide_urgent_4": "خامل (نعاس شديد وصعوبة في الإيقاظ) أو فاقد للوعي",
+  "Health_guide_young_title":
+      "الرضّع حتى عمر شهرين: اطلب المساعدة الطبية الآن إذا",
+  "Health_guide_young_1": "لا يرضع جيدًا",
+  "Health_guide_young_2": "أصيب بتشنجات",
+  "Health_guide_young_3":
+      "تنفس سريع (60 نفسًا في الدقيقة أو أكثر) أو صعوبة في التنفس",
+  "Health_guide_young_4":
+      "حمى 37.5 درجة مئوية فأكثر (تحت الإبط)، أو برودة غير معتادة: أقل من 35.5 درجة مئوية",
+  "Health_guide_young_5":
+      "لا يتحرك إلا عند تنبيهه أو لا يتحرك أبدًا، أو أقل نشاطًا من المعتاد",
+  "Health_guide_young_6": "اصفرار الكفين وباطن القدمين",
+  "Health_guide_see_title": "طفل مريض: راجِع عاملًا صحيًا على الفور إذا",
+  "Health_guide_see_1": "ازداد مرضه",
+  "Health_guide_see_2": "أصيب بالحمى",
+  "Health_guide_see_3": "تنفّس بسرعة أو بصعوبة",
+  "Health_guide_see_4": "ظهر دم في البراز، أو صار يشرب بشكل ضعيف",
+  "Health_guide_vaccine_title": "بعد التطعيم",
+  "Health_guide_vaccine_2":
+      "وقد تحدث آثار جانبية أشد خطورة ولكنها نادرة للغاية. إذا ظهرت على طفلك أعراض غير متوقعة بعد التطعيم، فاستشر أخصائيًا في الرعاية الصحية.",
+  "Health_guide_fever_title": "عن الحمى",
+  "Health_guide_fever_1":
+      "تعدّ منظمة الصحة العالمية الحرارة 37.5 درجة مئوية فأكثر تحت الإبط حمّى.",
+  "Health_guide_fever_2":
+      "القراءة الشرجية أعلى بنحو 0.5 درجة. لموازين الحرارة الأخرى اتّبع تعليماتها.",
+  "Health_guide_source":
+      "المصادر: منظمة الصحة العالمية — التدبير المتكامل لأمراض الطفولة، كتيّب المخططات (2014)؛ اللقاحات والتمنيع: مأمونية اللقاحات (أسئلة وأجوبة). ترجمة علامات الخطر إلى العربية من إعداد Baby Vax.",
+  "Settings_licenses": "تراخيص البرمجيات مفتوحة المصدر",
+  "MedicalDateDetails_more_options": "خيارات أخرى",
+  "MedicalDateDetails_confirm_skip_msg":
+      "تخطّي هذه الجرعة؟ ستُلغى تذكيراتها. راجِع طبيبك أو جدول التطعيم الوطني قبل تخطّي أي جرعة. يمكنك التراجع عن ذلك لاحقًا.",
 };

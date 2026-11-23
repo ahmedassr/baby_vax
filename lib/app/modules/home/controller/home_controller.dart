@@ -1,20 +1,49 @@
+import 'dart:async';
+
 import 'package:baby_vax/app/config/constant/app_path.dart';
 import 'package:baby_vax/app/core/imports/import_manger.dart';
 import 'package:baby_vax/app/core/notification/data/notification_settings_opener.dart';
+import 'package:baby_vax/app/core/service/schedule_summary.dart';
+import 'package:baby_vax/app/modules/growth/model/measurement_model.dart';
+import 'package:baby_vax/app/modules/tips/controller/tips_controller.dart';
+import 'package:baby_vax/app/modules/vaccination_card/vaccination_card_sheet.dart';
 
+/// The home screen: who the schedule is for, the next dose, overall
+/// progress and the latest measurements.
 class HomeController extends GetxController with StateMixin, StateMixinHelper {
   HomeController({
     Future<bool> Function()? notificationsEnabled,
     NotificationSettingsOpener settingsOpener =
         const NotificationSettingsOpener(),
+    Future<UserModel?> Function(String uid)? loadUser,
+    Future<List<MedicalDatesModel>> Function(String uid)? loadDoses,
+    Future<List<MeasurementModel>> Function(String uid)? loadMeasurements,
+    DateTime Function()? clock,
   })  : _notificationsEnabled =
             notificationsEnabled ?? _coordinatorNotificationsEnabled,
-        _settingsOpener = settingsOpener;
+        _settingsOpener = settingsOpener,
+        _loadUser = loadUser ?? _firestoreUser,
+        _loadDoses = loadDoses ?? _firestoreDoses,
+        _loadMeasurements = loadMeasurements ?? _firestoreMeasurements,
+        _now = clock ?? DateTime.now;
 
   final Future<bool> Function() _notificationsEnabled;
   final NotificationSettingsOpener _settingsOpener;
+  final Future<UserModel?> Function(String uid) _loadUser;
+  final Future<List<MedicalDatesModel>> Function(String uid) _loadDoses;
+  final Future<List<MeasurementModel>> Function(String uid) _loadMeasurements;
+  final DateTime Function() _now;
 
   final Rxn<UserModel> userDetails = Rxn<UserModel>();
+
+  /// The whole schedule, in date order.
+  final RxList<MedicalDatesModel> doses = <MedicalDatesModel>[].obs;
+
+  /// The growth measurements, newest first, for Home's growth card.
+  final RxList<MeasurementModel> measurements = <MeasurementModel>[].obs;
+
+  /// The dose the hero card shows. Kept as its own observable for callers
+  /// from v1.0 (the details screen refreshes it after a change).
   final Rxn<MedicalDatesModel> nextVaccination = Rxn<MedicalDatesModel>();
 
   /// True while this app's notifications are off in system settings, so
@@ -23,10 +52,34 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
 
   AppLifecycleListener? _lifecycle;
 
+  /// Counts and the hero dose for today.
+  ScheduleSummary get summary => ScheduleSummary(doses, _now());
+
+  /// Now, by the controller's clock (picks the tip of the day).
+  DateTime get now => _now();
+
   static Future<bool> _coordinatorNotificationsEnabled() async {
     if (!Get.isRegistered<NotificationCoordinator>()) return true;
     return Get.find<NotificationCoordinator>().notificationsEnabled();
   }
+
+  static Future<UserModel?> _firestoreUser(String uid) => AppConstant
+      .fireStoreHelper1
+      .getDocument(path: AppPath.userDoc(uid), fromDoc: UserModel.fromDocument);
+
+  /// The whole schedule (ten documents for a generated one). Read in full
+  /// rather than with a `date >= today` query, so overdue doses are seen
+  /// and no composite index is needed; offline it comes from the cache.
+  static Future<List<MedicalDatesModel>> _firestoreDoses(String uid) async =>
+      MedicalDatesController.inScheduleOrder(await AppConstant.fireStoreHelper1
+          .getCollection(
+              path: AppPath.userMedicalDates(uid),
+              fromDoc: MedicalDatesModel.fromDocument));
+
+  static Future<List<MeasurementModel>> _firestoreMeasurements(String uid) =>
+      AppConstant.fireStoreHelper1.getCollection(
+          path: AppPath.userMeasurements(uid),
+          fromDoc: MeasurementModel.fromDocument);
 
   @override
   void onInit() {
@@ -54,34 +107,8 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
   Future<void> openNotificationSettings() async {
     final bool opened = await _settingsOpener.open();
     if (!opened) {
-      AppConstant.alertService
-          .showError(message: "Notification_permission_denied_msg".tr);
+      AppSnackbar.error("Notification_permission_denied_msg".tr);
     }
-  }
-
-  Future<void> getNextVaccination(String uid) async {
-    final now = DateTime.now();
-    final todayStart = DateTime(now.year, now.month, now.day);
-    // final vaccinations =
-    //     await AppConstant.fireStoreHelper.fetchData<MedicalDatesModel>(
-    //   path: ["users", SessionManager.uId, "medical_dates"],
-    //   queryBuilder: (q) => q
-    //       .where('state', isEqualTo: MedicalDateStateEnum.pending.label)
-    //       .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart))
-    //       .orderBy('date')
-    //       .limit(1),
-    //   fromDocument: MedicalDatesModel.fromDocument,
-    // );
-    final vaccinations = await AppConstant.fireStoreHelper1.getCollection(
-      path: AppPath.userMedicalDates(uid),
-      fromDoc: MedicalDatesModel.fromDocument,
-      queryBuilder: (q) => q
-          .where('state', isEqualTo: MedicalDateStateEnum.pending.label)
-          .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart))
-          .orderBy('date')
-          .limit(1),
-    );
-    nextVaccination.value = vaccinations.firstOrNull;
   }
 
   Future fetchUserData() async {
@@ -90,28 +117,85 @@ class HomeController extends GetxController with StateMixin, StateMixinHelper {
     // nothing to read; login and sign-up call this again afterwards.
     final String? uid = SessionManager.signedInUid;
     if (uid == null) return;
-    setLoading();
+    // Only show the skeleton on the first load; a refresh keeps the content
+    // on screen.
+    if (userDetails.value == null) setLoading();
     try {
-      // final data = await AppConstant.fireStoreHelper
-      //     .getUser(uid: uid, fromDocument: (e) => UserModel.fromDocument(e));
-      final data = await AppConstant.fireStoreHelper1.getDocument(
-          path: AppPath.userDoc(uid), fromDoc: UserModel.fromDocument);
+      final UserModel? data = await _loadUser(uid);
       if (data == null) {
         setEmpty();
-      } else {
-        userDetails.value = data;
-        await getNextVaccination(uid);
-        setSuccess();
-        await refreshNotificationStatus();
+        return;
       }
-    } catch (_) {
-      setError("unexpected_error".tr);
+      userDetails.value = data;
+      doses.assignAll(await _loadDoses(uid));
+      nextVaccination.value = summary.hero;
+      await refreshMeasurements();
+      setSuccess();
+      // Home shows a tip of the day; refresh the tips with the rest.
+      if (Get.isRegistered<TipsController>()) {
+        unawaited(Get.find<TipsController>().fetchTips());
+      }
+      await refreshNotificationStatus();
+    } catch (e, s) {
+      logger.w('Loading the home screen failed', error: e, stackTrace: s);
+      setError(friendlyFirebaseError(e));
     }
   }
 
-  void onNextVaccinationPressed() {
-    Get.toNamed(AppRoutes.medicalDateDetails);
+  /// Re-reads the measurements for the growth card. A failure leaves the
+  /// card as it was: the rest of Home does not depend on it.
+  Future<void> refreshMeasurements() async {
+    final String? uid = SessionManager.signedInUid;
+    if (uid == null) return;
+    try {
+      measurements.assignAll(
+          MeasurementModel.newestFirst(await _loadMeasurements(uid)));
+    } catch (e, s) {
+      logger.w('Loading measurements for Home failed', error: e, stackTrace: s);
+    }
+  }
+
+  /// Forgets the signed-out parent's data.
+  void clearSession() {
+    userDetails.value = null;
+    doses.clear();
+    measurements.clear();
+    nextVaccination.value = null;
+    notificationsOff.value = false;
+  }
+
+  void openDose(MedicalDatesModel dose) {
     AppConstant.argumentService
-        .setArgument(InternalScreenArgs(medicalDate: nextVaccination.value));
+        .setArgument(InternalScreenArgs(medicalDate: dose));
+    Get.toNamed(AppRoutes.medicalDateDetails);
+  }
+
+  void onNextVaccinationPressed() {
+    final MedicalDatesModel? dose = nextVaccination.value;
+    if (dose != null) openDose(dose);
+  }
+
+  /// Opens the parent's own reminders.
+  void openReminders() => Get.toNamed(AppRoutes.reminders);
+
+  /// Opens the growth tracker, on [metric] when given.
+  void openGrowth([GrowthMetric? metric]) =>
+      Get.toNamed(AppRoutes.growth, arguments: metric);
+
+  /// Opens the profile, where the haemoglobin figure is edited.
+  void openEditProfile() {
+    AppConstant.argumentService
+        .setArgument(InternalScreenArgs(user: userDetails.value));
+    Get.toNamed(AppRoutes.editUser);
+  }
+
+  /// Opens the vaccination card sheet (share or print the PDF).
+  void openVaccinationCard() => VaccinationCardSheet.show();
+
+  /// Switches the bottom navigation to the schedule tab.
+  void openSchedule() {
+    if (Get.isRegistered<MainMenuController>()) {
+      Get.find<MainMenuController>().changeValue(1);
+    }
   }
 }

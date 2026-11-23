@@ -6,15 +6,31 @@ import 'package:flutter_test/flutter_test.dart';
 
 class FakeWriter implements DoseStateWriter {
   final List<(String, MedicalDateStateEnum)> writes = [];
+  final List<DoseRecord?> records = [];
+  final List<bool> clears = [];
+  final List<(String, DoseRecord)> recordWrites = [];
   Object? failWith;
 
   WriteOutcome outcome = WriteOutcome.synced;
 
   @override
   Future<WriteOutcome> writeState(
-      String doseId, MedicalDateStateEnum state) async {
+    String doseId,
+    MedicalDateStateEnum state, {
+    DoseRecord? record,
+    bool clearRecord = false,
+  }) async {
     if (failWith != null) throw failWith!;
     writes.add((doseId, state));
+    records.add(record);
+    clears.add(clearRecord);
+    return outcome;
+  }
+
+  @override
+  Future<WriteOutcome> writeRecord(String doseId, DoseRecord record) async {
+    if (failWith != null) throw failWith!;
+    recordWrites.add((doseId, record));
     return outcome;
   }
 }
