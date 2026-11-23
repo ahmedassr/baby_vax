@@ -637,9 +637,10 @@ class _FlagPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme scheme = theme.colorScheme;
-    final Color bg = urgent ? scheme.errorContainer : scheme.secondaryContainer;
-    final Color fg =
-        urgent ? scheme.onErrorContainer : scheme.onSecondaryContainer;
+    final AppStatusColors status = AppStatusColors.of(context);
+    final Color bg =
+        urgent ? scheme.errorContainer : status.warningBackground;
+    final Color fg = urgent ? scheme.onErrorContainer : status.warningForeground;
     return Container(
       padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.sm, vertical: AppSpacing.xxs),

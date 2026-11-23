@@ -5,6 +5,7 @@ export 'package:baby_vax/app/config/themes/app_typography.dart';
 export 'package:baby_vax/app/config/themes/app_color_schemes.dart';
 export 'package:baby_vax/app/config/themes/app_status_colors.dart';
 export 'package:baby_vax/app/config/themes/app_elevation.dart';
+export 'package:baby_vax/app/config/themes/app_chart_colors.dart';
 export 'package:baby_vax/app/config/themes/app_palette.dart';
 //constant
 export 'package:baby_vax/app/config/constant/app_constant.dart';

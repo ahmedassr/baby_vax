@@ -79,6 +79,7 @@ class AppTheme {
       dividerColor: scheme.outlineVariant,
       extensions: <ThemeExtension<dynamic>>[
         isDark ? AppStatusColors.dark : AppStatusColors.light,
+        isDark ? AppChartColors.dark : AppChartColors.light,
         elevation,
       ],
 

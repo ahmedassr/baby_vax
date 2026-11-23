@@ -3,118 +3,116 @@ import 'dart:ui' show Color;
 /// The raw colour values of the Baby Vax design system.
 ///
 /// Nothing in the app reads these directly: they are assembled into the two
-/// [ColorScheme]s in `app_color_schemes.dart` and into the
-/// `AppStatusColors` / `AppElevation` theme extensions. Screens read
+/// [ColorScheme]s in `app_color_schemes.dart` and into the `AppStatusColors`,
+/// `AppChartColors` and `AppElevation` theme extensions. Screens read
 /// `Theme.of(context).colorScheme` and those extensions instead, so a colour
 /// never has to be chosen twice (once for light, once for dark) inside a
 /// widget.
 ///
-/// Every pair that carries text was measured with the WCAG 2.1 relative
-/// luminance formula; the ratios are in `docs/design/v1.1-plan.md` §2.1.
-/// The short version: text pairs are at least 4.5:1, boundary pairs at least
-/// 3:1.
+/// Every value is a tone of a Material 3 tonal palette (HCT colour space)
+/// built around the brand green's hue, 141.9; `tool/palette/tones.dart`
+/// regenerates them and `docs/design/v1.1-polish.md` §1 explains each
+/// choice. Contrast of every text pair is checked by
+/// `test/theme/contrast_test.dart` (at least 4.5:1, both modes).
 class AppPalette {
   const AppPalette._();
 
   // ---- brand ------------------------------------------------------------
 
-  /// The Baby Vax green, unchanged from v1.0.
+  /// The Baby Vax green, unchanged from v1.0 (HCT 141.9 / 67 / 60).
   ///
-  /// Illustrative only — logo, splash, adaptive-icon foreground. It is
+  /// Illustrative only: logo, splash, adaptive-icon foreground. It is
   /// 3.22:1 on white, so it must never carry text or be used as text.
   static const Color brand = Color(0xFF42A332);
 
-  /// The brand green darkened to the same hue for light-mode interaction
-  /// (5.84:1 on white, both as a fill under white text and as text).
-  static const Color brandDark = Color(0xFF2E7324);
+  /// Light-mode primary: primary palette tone 40.
+  static const Color brandDark = p40;
 
-  /// The brand green lightened for dark-mode interaction (10.87:1 on the
-  /// dark surface).
-  static const Color brandLight = Color(0xFF8ED97C);
+  /// Dark-mode primary: the softer dark palette's tone 80.
+  static const Color brandLight = pd80;
 
-  // ---- light ------------------------------------------------------------
+  // ---- tonal palettes -----------------------------------------------------
 
-  static const Color lightOnPrimary = Color(0xFFFFFFFF);
-  static const Color lightPrimaryContainer = Color(0xFFD7EFD0);
-  static const Color lightOnPrimaryContainer = Color(0xFF0E2C0A);
+  // Primary: hue 141.9, chroma 48.
+  static const Color p10 = Color(0xFF012200);
+  static const Color p30 = Color(0xFF17520E);
+  static const Color p40 = Color(0xFF306B25);
 
-  static const Color lightSecondary = Color(0xFF7A4F01);
-  static const Color lightSecondaryContainer = Color(0xFFFCEBC8);
-  static const Color lightOnSecondaryContainer = Color(0xFF2A1B00);
+  // Primary for dark mode and containers: hue 141.9, chroma 36. Lighter and
+  // less saturated, so a filled button does not glare on a dark page.
+  static const Color pd20 = Color(0xFF12380B);
+  static const Color pd30 = Color(0xFF295020);
+  static const Color pd80 = Color(0xFFA5D395);
+  static const Color pd90 = Color(0xFFC1EFAF);
 
-  static const Color lightTertiary = Color(0xFF1F5F8B);
-  static const Color lightTertiaryContainer = Color(0xFFD8ECF8);
-  static const Color lightOnTertiaryContainer = Color(0xFF082337);
+  // Secondary: hue 141.9, chroma 16 (a muted sage).
+  static const Color s10 = Color(0xFF121F0E);
+  static const Color s20 = Color(0xFF263422);
+  static const Color s30 = Color(0xFF3C4B37);
+  static const Color s40 = Color(0xFF54634D);
+  static const Color s80 = Color(0xFFBBCBB1);
+  static const Color s90 = Color(0xFFD7E8CD);
 
-  static const Color lightError = Color(0xFFB3261E);
-  static const Color lightErrorContainer = Color(0xFFF9DEDC);
-  static const Color lightOnErrorContainer = Color(0xFF410E0B);
+  // Neutral: hue 141.9, chroma 4 (green-tinted, never flat grey).
+  static const Color n6 = Color(0xFF121410);
+  static const Color n10 = Color(0xFF1A1C18);
+  static const Color n12 = Color(0xFF1E201C);
+  static const Color n17 = Color(0xFF282B27);
+  static const Color n20 = Color(0xFF2F312D);
+  static const Color n22 = Color(0xFF333531);
+  static const Color n24 = Color(0xFF383A35);
+  static const Color n90 = Color(0xFFE2E3DC);
+  static const Color n92 = Color(0xFFE8E9E2);
+  static const Color n94 = Color(0xFFEEEEE8);
+  static const Color n95 = Color(0xFFF1F1EB);
+  static const Color n96 = Color(0xFFF4F4ED);
+  static const Color n100 = Color(0xFFFFFFFF);
 
-  static const Color lightSurface = Color(0xFFFFFFFF);
-  static const Color lightSurfaceContainerLow = Color(0xFFF7F9F7);
-  static const Color lightSurfaceContainer = Color(0xFFF1F5F1);
-  static const Color lightSurfaceContainerHigh = Color(0xFFE9EFE9);
-  static const Color lightSurfaceContainerHighest = Color(0xFFE2E9E3);
-  static const Color lightOnSurface = Color(0xFF17201B);
-  static const Color lightOnSurfaceVariant = Color(0xFF4C5A50);
-  static const Color lightOutline = Color(0xFF79867C);
-  static const Color lightOutlineVariant = Color(0xFFCBD6CD);
+  // Neutral variant: hue 141.9, chroma 8.
+  static const Color nv30 = Color(0xFF43483F);
+  static const Color nv50 = Color(0xFF73796E);
+  static const Color nv60 = Color(0xFF8D9387);
+  static const Color nv80 = Color(0xFFC3C8BC);
+  static const Color nv90 = Color(0xFFDFE4D7);
+  static const Color nv92 = Color(0xFFE5EADD);
 
-  // ---- dark -------------------------------------------------------------
+  // Error: hue 30, chroma 70.
+  static const Color e10 = Color(0xFF3E0400);
+  static const Color e20 = Color(0xFF650B00);
+  static const Color e30 = Color(0xFF8C1703);
+  static const Color e40 = Color(0xFFAE3019);
+  static const Color e80 = Color(0xFFFFB4A5);
+  static const Color e90 = Color(0xFFFFDAD3);
 
-  static const Color darkOnPrimary = Color(0xFF0A2A12);
-  static const Color darkPrimaryContainer = Color(0xFF2A5A20);
-  static const Color darkOnPrimaryContainer = Color(0xFFD7EFD0);
+  // Warning (amber, harmonised toward the green): hue 80, chroma 50.
+  static const Color w30 = Color(0xFF5F4100);
+  static const Color w40 = Color(0xFF7D5700);
+  static const Color w80 = Color(0xFFFBBB42);
+  static const Color w90 = Color(0xFFFFDEAB);
 
-  static const Color darkSecondary = Color(0xFFF5C26B);
-  static const Color darkSecondaryContainer = Color(0xFF3D2C06);
-  static const Color darkOnSecondaryContainer = Color(0xFFFCEBC8);
+  // Info (v1.1's blue, harmonised): hue 233.4, chroma 42.
+  static const Color i10 = Color(0xFF001E2C);
+  static const Color i20 = Color(0xFF003549);
+  static const Color i30 = Color(0xFF004D68);
+  static const Color i40 = Color(0xFF006689);
+  static const Color i80 = Color(0xFF7ED0FC);
+  static const Color i90 = Color(0xFFC2E8FF);
 
-  static const Color darkTertiary = Color(0xFF8ECDF2);
-  static const Color darkTertiaryContainer = Color(0xFF0E364F);
-  static const Color darkOnTertiaryContainer = Color(0xFFD8ECF8);
+  // ---- names other code reads (the PDF card, tests) ------------------------
 
-  static const Color darkError = Color(0xFFFFB4AB);
-  static const Color darkOnError = Color(0xFF5F1411);
-  static const Color darkErrorContainer = Color(0xFF8C1D18);
-  static const Color darkOnErrorContainer = Color(0xFFFFDAD6);
+  /// Light page colour, and the native splash's light background.
+  static const Color lightPage = n96;
 
-  static const Color darkSurface = Color(0xFF121417);
-  static const Color darkSurfaceContainerLow = Color(0xFF171B1D);
-  static const Color darkSurfaceContainer = Color(0xFF1B1F22);
-  static const Color darkSurfaceContainerHigh = Color(0xFF232829);
-  static const Color darkSurfaceContainerHighest = Color(0xFF2D3233);
-  static const Color darkOnSurface = Color(0xFFE7EDE8);
-  static const Color darkOnSurfaceVariant = Color(0xFFAFBDB3);
-  static const Color darkOutline = Color(0xFF8B978D);
-  static const Color darkOutlineVariant = Color(0xFF3A4440);
+  /// Dark page colour, and the native splash's dark background.
+  static const Color darkPage = n6;
 
-  // ---- dose status ------------------------------------------------------
-  //
-  // Pending is deliberately neutral slate rather than green: green now means
-  // "done", and a schedule where nine of ten rows are green is unreadable.
-
-  static const Color lightPendingFg = Color(0xFF4A5560);
-  static const Color lightPendingBg = Color(0xFFEDEFF1);
-  static const Color lightCompletedFg = brandDark;
-  static const Color lightCompletedBg = lightPrimaryContainer;
-  static const Color lightOverdueFg = lightError;
-  static const Color lightOverdueBg = lightErrorContainer;
-  static const Color lightSkippedFg = lightSecondary;
-  static const Color lightSkippedBg = lightSecondaryContainer;
-
-  static const Color darkPendingFg = Color(0xFFC3CCD4);
-  static const Color darkPendingBg = Color(0xFF2A3036);
-  static const Color darkCompletedFg = brandLight;
-  static const Color darkCompletedBg = Color(0xFF24401C);
-  static const Color darkOverdueFg = darkError;
-  static const Color darkOverdueBg = Color(0xFF4A1512);
-  static const Color darkSkippedFg = darkSecondary;
-  static const Color darkSkippedBg = Color(0xFF3D2C06);
+  static const Color lightOnSurface = n10;
+  static const Color lightOnSurfaceVariant = nv30;
+  static const Color lightOutlineVariant = nv90;
+  static const Color lightPrimaryContainer = pd90;
 
   // ---- shadows ----------------------------------------------------------
 
-  /// Shadow tint for light-mode elevation. Dark mode draws a border instead,
-  /// because a black shadow is invisible on a near-black surface.
-  static const Color shadow = Color(0xFF17201B);
+  /// Shadow tint for light-mode elevation: the surface ink, not black.
+  static const Color shadow = n10;
 }
