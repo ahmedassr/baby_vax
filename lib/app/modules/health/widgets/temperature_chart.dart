@@ -133,13 +133,14 @@ class TemperatureChartState extends State<TemperatureChart> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme scheme = theme.colorScheme;
+    final AppChartColors palette = AppChartColors.of(context);
     final _TempStyle style = _TempStyle(
-      line: scheme.primary,
-      fever: scheme.error,
-      dose: scheme.tertiary,
-      medicine: scheme.secondary,
-      grid: scheme.outlineVariant,
-      ink: scheme.onSurfaceVariant,
+      line: palette.series,
+      fever: palette.alert,
+      dose: palette.event,
+      medicine: palette.marker,
+      grid: palette.grid,
+      ink: palette.ink,
       surface: scheme.surface,
       label:
           theme.textTheme.labelSmall!.copyWith(color: scheme.onSurfaceVariant),
@@ -171,14 +172,16 @@ class TemperatureChartState extends State<TemperatureChart> {
             final TemperatureChartPick? hit = _hit(g, d.localPosition);
             setState(() => _picked = hit);
           },
-          child: CustomPaint(
-            size: size,
-            painter: _TemperaturePainter(
-              geometry: g,
-              readings: widget.readings,
-              medicines: widget.medicines,
-              doses: widget.doses,
-              picked: _picked,
+          child: AppChartReveal(
+            child: CustomPaint(
+              size: size,
+              painter: _TemperaturePainter(
+                geometry: g,
+                readings: widget.readings,
+                medicines: widget.medicines,
+                doses: widget.doses,
+                picked: _picked,
+              ),
             ),
           ),
         );

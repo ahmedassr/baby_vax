@@ -33,18 +33,21 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
     final List<AgeGroup> groups = controller.groups;
     final DateTime now = controller.now;
 
-    return CustomScrollView(
+    int entering = 0;
+    return AppEntranceScope(
+        child: CustomScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         SliverPadding(
           padding: const EdgeInsets.fromLTRB(
               AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, 0),
-          sliver: SliverList.list(children: <Widget>[
+          sliver: SliverList.list(
+              children: staggeredEntrance(<Widget>[
             _Summary(summary: summary),
             const SizedBox(height: AppSpacing.md),
             const MedicalDisclaimer(compact: true),
             const SizedBox(height: AppSpacing.md),
-          ]),
+          ])),
         ),
         SliverToBoxAdapter(
           child: _Filters(
@@ -78,10 +81,14 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
                     const SizedBox(height: AppSpacing.sm),
                 itemBuilder: (_, int i) {
                   final MedicalDatesModel dose = group.doses[i];
-                  return AppDoseTile(
-                    dose: dose,
-                    now: now,
-                    onTap: () => controller.onMedicalDatePressed(dose),
+                  return AppEntrance(
+                    // Rows after the first screenful appear without delay.
+                    index: 2 + entering++,
+                    child: AppDoseTile(
+                      dose: dose,
+                      now: now,
+                      onTap: () => controller.onMedicalDatePressed(dose),
+                    ),
                   );
                 },
               ),
@@ -89,7 +96,7 @@ class MedicalDatesView extends GetView<MedicalDatesController> {
           ]),
         const SliverToBoxAdapter(child: SizedBox(height: 96)),
       ],
-    );
+    ));
   }
 }
 

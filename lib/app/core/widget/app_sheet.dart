@@ -26,6 +26,14 @@ class AppSheet {
       useRootNavigator: true,
       isScrollControlled: true,
       useSafeArea: true,
+      // 300 ms up, 200 ms down (polish §2.2); none with "Remove animations".
+      sheetAnimationStyle: AppMotion.reduced(ctx)
+          ? AnimationStyle.noAnimation
+          : const AnimationStyle(
+              duration: AppMotion.long,
+              reverseDuration: AppMotion.medium,
+              curve: AppMotion.enter,
+              reverseCurve: AppMotion.exit),
       builder: (_) => sheet,
     );
   }

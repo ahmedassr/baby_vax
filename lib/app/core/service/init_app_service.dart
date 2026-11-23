@@ -19,6 +19,10 @@ import 'package:flutter/foundation.dart';
 ///   4. GetStorage, then the services that read it
 ///   5. session restore
 ///   6. notifications, which need all of the above
+///
+/// Steps 1–5 run before the first frame (the theme, language and session
+/// come from them). Step 6 is [initDeferredServices], which runs while the
+/// splash animation plays; the splash waits for it before routing.
 Future<void> initAppService() async {
   await Firebase.initializeApp();
 
@@ -39,9 +43,21 @@ Future<void> initAppService() async {
 
   SessionManager.uId = AppConstant.getStorage.read(StorageKey.uidKey) ?? "";
 
-  await NotificationInitializer.init();
-
   logger.i('App services initialized');
+}
+
+/// Start-up work that does not have to finish before the first frame:
+/// notifications. Started right after [initAppService] and awaited by the
+/// splash, so it runs in parallel with the splash animation (polish §3).
+///
+/// Never throws: a failure is logged and the app still opens, as before.
+Future<void> initDeferredServices() async {
+  try {
+    await NotificationInitializer.init();
+    logger.i('Deferred services initialized');
+  } catch (e, s) {
+    logger.e('Deferred start-up failed', error: e, stackTrace: s);
+  }
 }
 
 /// Routes uncaught Dart and platform errors to Crashlytics.

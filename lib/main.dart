@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 
 import 'app/config/themes/app_fonts.dart';
 import 'app/core/imports/import_manger.dart';
+import 'app/core/service/app_startup.dart';
 import 'app/core/service/init_app_service.dart';
 
 /// App-wide logger.
@@ -43,6 +44,8 @@ void main() async {
   // the Material localizations create their date formats.
   AppDateFormat.useWesternDigits();
   await initAppService();
+  // Runs while the splash animates; the splash waits for it (polish §3).
+  AppStartup.ready = initDeferredServices();
   // Null until the user picks a theme in settings: follow the system.
   final bool? isDarkMode =
       AppConstant.getStorage.read(StorageKey.isDarkModeKey);
@@ -72,6 +75,10 @@ class MyApp extends StatelessWidget {
       themeMode: AppTheme.themeModeFor(isDarkMode),
       initialRoute: AppRoutes.splash,
       getPages: AppPages.routes,
+      // One page transition everywhere (polish §2.2); GetX does not read the
+      // theme's pageTransitionsTheme.
+      customTransition: AppPageTransition(),
+      transitionDuration: AppMotion.page,
       locale: Locale(currentLanguage),
       fallbackLocale: Locale(currentLanguage),
       supportedLocales: const [

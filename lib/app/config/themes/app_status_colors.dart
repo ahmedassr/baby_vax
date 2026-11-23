@@ -27,30 +27,40 @@ class AppStatusColors extends ThemeExtension<AppStatusColors> {
     required this.overdueBackground,
     required this.skippedForeground,
     required this.skippedBackground,
+    required this.infoForeground,
+    required this.infoBackground,
   });
 
-  /// Light pairs, all at least 4.5:1 (plan §2.1).
+  /// Light pairs: tone 30 on tone 90 of each palette (polish §1.5). All at
+  /// least 4.5:1, checked by `test/theme/contrast_test.dart`.
+  ///
+  /// Pending ("due") is the neutral variant rather than green: green means
+  /// "done", and a schedule where nine of ten rows are green is unreadable.
   static const AppStatusColors light = AppStatusColors(
-    pendingForeground: AppPalette.lightPendingFg,
-    pendingBackground: AppPalette.lightPendingBg,
-    completedForeground: AppPalette.lightCompletedFg,
-    completedBackground: AppPalette.lightCompletedBg,
-    overdueForeground: AppPalette.lightOverdueFg,
-    overdueBackground: AppPalette.lightOverdueBg,
-    skippedForeground: AppPalette.lightSkippedFg,
-    skippedBackground: AppPalette.lightSkippedBg,
+    pendingForeground: AppPalette.nv30,
+    pendingBackground: AppPalette.nv92,
+    completedForeground: AppPalette.p30,
+    completedBackground: AppPalette.pd90,
+    overdueForeground: AppPalette.e30,
+    overdueBackground: AppPalette.e90,
+    skippedForeground: AppPalette.w30,
+    skippedBackground: AppPalette.w90,
+    infoForeground: AppPalette.i30,
+    infoBackground: AppPalette.i90,
   );
 
-  /// Dark pairs, all at least 6.7:1 (plan §2.1).
+  /// Dark pairs: tone 90 on tone 30, the light pairs inverted.
   static const AppStatusColors dark = AppStatusColors(
-    pendingForeground: AppPalette.darkPendingFg,
-    pendingBackground: AppPalette.darkPendingBg,
-    completedForeground: AppPalette.darkCompletedFg,
-    completedBackground: AppPalette.darkCompletedBg,
-    overdueForeground: AppPalette.darkOverdueFg,
-    overdueBackground: AppPalette.darkOverdueBg,
-    skippedForeground: AppPalette.darkSkippedFg,
-    skippedBackground: AppPalette.darkSkippedBg,
+    pendingForeground: AppPalette.nv90,
+    pendingBackground: AppPalette.nv30,
+    completedForeground: AppPalette.pd90,
+    completedBackground: AppPalette.pd30,
+    overdueForeground: AppPalette.e90,
+    overdueBackground: AppPalette.e30,
+    skippedForeground: AppPalette.w90,
+    skippedBackground: AppPalette.w30,
+    infoForeground: AppPalette.i90,
+    infoBackground: AppPalette.i30,
   );
 
   final Color pendingForeground;
@@ -61,6 +71,15 @@ class AppStatusColors extends ThemeExtension<AppStatusColors> {
   final Color overdueBackground;
   final Color skippedForeground;
   final Color skippedBackground;
+
+  /// Information (banners, "for your information" notes).
+  final Color infoForeground;
+  final Color infoBackground;
+
+  /// Caution (warning banners, the health caution card): the amber of
+  /// [skippedForeground] / [skippedBackground], one meaning, one colour.
+  Color get warningForeground => skippedForeground;
+  Color get warningBackground => skippedBackground;
 
   /// The extension from [context], falling back to [light] if the theme does
   /// not carry one (a bare `MaterialApp` in a widget test).
@@ -95,6 +114,8 @@ class AppStatusColors extends ThemeExtension<AppStatusColors> {
     Color? overdueBackground,
     Color? skippedForeground,
     Color? skippedBackground,
+    Color? infoForeground,
+    Color? infoBackground,
   }) {
     return AppStatusColors(
       pendingForeground: pendingForeground ?? this.pendingForeground,
@@ -105,6 +126,8 @@ class AppStatusColors extends ThemeExtension<AppStatusColors> {
       overdueBackground: overdueBackground ?? this.overdueBackground,
       skippedForeground: skippedForeground ?? this.skippedForeground,
       skippedBackground: skippedBackground ?? this.skippedBackground,
+      infoForeground: infoForeground ?? this.infoForeground,
+      infoBackground: infoBackground ?? this.infoBackground,
     );
   }
 
@@ -121,6 +144,8 @@ class AppStatusColors extends ThemeExtension<AppStatusColors> {
       overdueBackground: mix(overdueBackground, other.overdueBackground),
       skippedForeground: mix(skippedForeground, other.skippedForeground),
       skippedBackground: mix(skippedBackground, other.skippedBackground),
+      infoForeground: mix(infoForeground, other.infoForeground),
+      infoBackground: mix(infoBackground, other.infoBackground),
     );
   }
 }

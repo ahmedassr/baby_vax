@@ -28,7 +28,7 @@ class AppCard extends StatefulWidget {
   final EdgeInsetsGeometry padding;
   final AppCardLevel level;
 
-  /// Fill. Defaults to the scheme's `surface`.
+  /// Fill. Defaults to the level's fill, else the scheme's `surface`.
   final Color? color;
 
   final BorderRadius borderRadius;
@@ -83,7 +83,7 @@ class _AppCardState extends State<AppCard> {
         boxShadow: l.shadows,
       ),
       child: Material(
-        color: widget.color ?? scheme.surface,
+        color: widget.color ?? l.fill ?? scheme.surface,
         shape: RoundedRectangleBorder(
           borderRadius: widget.borderRadius,
           side:

@@ -243,15 +243,16 @@ class GrowthChartState extends State<GrowthChart> {
   _ChartStyle _style(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme scheme = theme.colorScheme;
+    final AppChartColors chart = AppChartColors.of(context);
     return _ChartStyle(
-      ink: scheme.onSurfaceVariant,
-      grid: scheme.outlineVariant,
-      band: scheme.tertiary.withValues(alpha: 0.22),
-      bandEdge: scheme.tertiary.withValues(alpha: 0.35),
-      average: scheme.tertiary,
-      point: scheme.primary,
+      ink: chart.ink,
+      grid: chart.grid,
+      band: chart.referenceBand,
+      bandEdge: chart.reference.withValues(alpha: 0.35),
+      average: chart.reference,
+      point: chart.series,
       pointFill: scheme.surface,
-      outside: scheme.error,
+      outside: chart.alert,
       label:
           theme.textTheme.labelSmall!.copyWith(color: scheme.onSurfaceVariant),
       title: theme.textTheme.labelMedium!.copyWith(color: scheme.onSurface),
@@ -287,12 +288,15 @@ class GrowthChartState extends State<GrowthChart> {
           compact: widget.compact,
         );
         _geometry = g;
-        final Widget paint = CustomPaint(
-          size: Size(width, height),
-          painter: _GrowthPainter(
-            geometry: g,
-            points: widget.points,
-            selected: _selected,
+        final Widget paint = AppChartReveal(
+          revealKey: widget.metric,
+          child: CustomPaint(
+            size: Size(width, height),
+            painter: _GrowthPainter(
+              geometry: g,
+              points: widget.points,
+              selected: _selected,
+            ),
           ),
         );
         if (widget.compact) return paint;

@@ -19,7 +19,7 @@ class OnboardingView extends GetView<OnboardingController> {
                   horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
               child: Row(
                 children: <Widget>[
-                  const AppLogo(size: 36),
+                  const AppLogo(size: 36, hero: true),
                   const SizedBox(width: AppSpacing.sm),
                   Text('Baby Vax',
                       style: theme.textTheme.titleMedium
@@ -27,7 +27,7 @@ class OnboardingView extends GetView<OnboardingController> {
                   const Spacer(),
                   Obx(() => AnimatedOpacity(
                         opacity: controller.isLast ? 0 : 1,
-                        duration: const Duration(milliseconds: 150),
+                        duration: AppMotion.of(context, AppMotion.short),
                         child: TextButton(
                           key: const Key('onboarding_skip'),
                           onPressed:
@@ -130,7 +130,8 @@ class _Dots extends StatelessWidget {
         children: <Widget>[
           for (int i = 0; i < count; i++)
             AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
+              duration: AppMotion.of(context, AppMotion.medium),
+              curve: AppMotion.standard,
               margin: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
               width: i == current ? 24 : 8,
               height: 8,

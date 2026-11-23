@@ -40,10 +40,11 @@ class AppBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme s = theme.colorScheme;
+    final AppStatusColors status = AppStatusColors.of(context);
     final (Color bg, Color fg, IconData defaultIcon) = switch (tone) {
       AppBannerTone.info => (
-          s.tertiaryContainer,
-          s.onTertiaryContainer,
+          status.infoBackground,
+          status.infoForeground,
           Icons.info_outline_rounded
         ),
       AppBannerTone.success => (
@@ -52,8 +53,8 @@ class AppBanner extends StatelessWidget {
           Icons.check_circle_outline_rounded
         ),
       AppBannerTone.warning => (
-          s.secondaryContainer,
-          s.onSecondaryContainer,
+          status.warningBackground,
+          status.warningForeground,
           Icons.warning_amber_rounded
         ),
       AppBannerTone.error => (

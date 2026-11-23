@@ -38,7 +38,7 @@ class TipDetailsView extends GetView<TipDetailsController> {
                               (_, Widget child, int? frame, bool sync) =>
                                   AnimatedOpacity(
                             opacity: sync || frame != null ? 1 : 0,
-                            duration: const Duration(milliseconds: 250),
+                            duration: AppMotion.of(context, AppMotion.medium),
                             child: child,
                           ),
                           errorBuilder: (_, __, ___) => Center(

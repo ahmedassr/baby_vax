@@ -36,7 +36,11 @@ class AppStatusChip extends StatelessWidget {
     return Semantics(
       label: "status_semantic_label".trParams({'status': label}),
       excludeSemantics: true,
-      child: Container(
+      // A status change (marked given, skipped, undone) cross-fades the
+      // colour and the label instead of jumping (polish §2.2).
+      child: AnimatedContainer(
+        duration: AppMotion.of(context, AppMotion.medium),
+        curve: AppMotion.standard,
         padding: EdgeInsets.symmetric(
           horizontal: dense ? AppSpacing.sm : AppSpacing.md,
           vertical: dense ? AppSpacing.xxs : AppSpacing.xs,
@@ -45,20 +49,26 @@ class AppStatusChip extends StatelessWidget {
           color: pair.background,
           borderRadius: AppRadius.pillAll,
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(iconFor(status), size: 14, color: pair.foreground),
-            const SizedBox(width: AppSpacing.xs),
-            Flexible(
-              child: Text(
-                label,
-                style: style,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+        child: AnimatedSwitcher(
+          duration: AppMotion.of(context, AppMotion.medium),
+          switchInCurve: AppMotion.enter,
+          switchOutCurve: AppMotion.exit,
+          child: Row(
+            key: ValueKey<DoseDisplayStatus>(status),
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(iconFor(status), size: 14, color: pair.foreground),
+              const SizedBox(width: AppSpacing.xs),
+              Flexible(
+                child: Text(
+                  label,
+                  style: style,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

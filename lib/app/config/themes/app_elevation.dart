@@ -4,15 +4,11 @@ import 'app_palette.dart';
 
 /// The app's three elevation levels, as a [ThemeExtension].
 ///
-/// v1.0 hand-rolled a shadow in every card, always wrapped in
-/// `if (!context.isDarkMode)` — eight widgets, six different
-/// blur/offset/alpha combinations. The `if` was right (a black shadow is
-/// invisible on a near-black surface) but it meant dark mode had no
-/// separation between a card and the scaffold at all.
-///
-/// Here each level knows both halves: a shadow in light mode, a hairline
-/// border in dark mode. [AppElevationLevel.border] is null in light mode and
-/// the widget simply does not draw one.
+/// Depth comes from surface levels first (polish §1.4): white cards on a
+/// tinted page in light mode, cards one tone lighter than the page in dark
+/// mode. Shadows only soften that in light mode, and are kept faint; dark
+/// mode never draws a shadow or a border, and lifts a raised card by one
+/// more surface step ([AppElevationLevel.fill]) instead.
 @immutable
 class AppElevation extends ThemeExtension<AppElevation> {
   const AppElevation({
@@ -21,40 +17,32 @@ class AppElevation extends ThemeExtension<AppElevation> {
     required this.level2,
   });
 
-  /// Light: real shadows, no borders.
+  /// Light: faint shadows, no borders.
   static const AppElevation light = AppElevation(
     level0: AppElevationLevel(shadows: <BoxShadow>[]),
     level1: AppElevationLevel(shadows: <BoxShadow>[
       BoxShadow(
-        color: Color(0x0F17201B), // ~6% of the surface ink
-        blurRadius: 3,
-        offset: Offset(0, 1),
-      ),
-      BoxShadow(
-        color: Color(0x0A17201B), // ~4%
+        color: Color(0x0A181D18), // ~4% of the surface ink
         blurRadius: 2,
         offset: Offset(0, 1),
       ),
     ]),
     level2: AppElevationLevel(shadows: <BoxShadow>[
       BoxShadow(
-        color: Color(0x1417201B), // ~8%
-        blurRadius: 12,
+        color: Color(0x0F181D18), // ~6%
+        blurRadius: 16,
         offset: Offset(0, 4),
       ),
     ]),
   );
 
-  /// Dark: hairline borders, no shadows.
+  /// Dark: no shadows, no borders; a raised card is one surface step up.
   static const AppElevation dark = AppElevation(
     level0: AppElevationLevel(shadows: <BoxShadow>[]),
-    level1: AppElevationLevel(
-      shadows: <BoxShadow>[],
-      border: AppPalette.darkOutlineVariant,
-    ),
+    level1: AppElevationLevel(shadows: <BoxShadow>[]),
     level2: AppElevationLevel(
       shadows: <BoxShadow>[],
-      border: AppPalette.darkOutline,
+      fill: AppPalette.n17,
     ),
   );
 
@@ -95,13 +83,16 @@ class AppElevation extends ThemeExtension<AppElevation> {
   }
 }
 
-/// One elevation level: the shadows to paint, and in dark mode the border
-/// colour to draw instead.
+/// One elevation level: the shadows to paint, an optional border and an
+/// optional fill that replaces the card colour.
 @immutable
 class AppElevationLevel {
-  const AppElevationLevel({required this.shadows, this.border});
+  const AppElevationLevel({required this.shadows, this.border, this.fill});
 
   final List<BoxShadow> shadows;
+
+  /// Card colour at this level, or null for the scheme's `surface`.
+  final Color? fill;
 
   /// Hairline border colour, or null when this level uses shadows only.
   final Color? border;

@@ -43,7 +43,12 @@ class SignupView extends GetView<SignupController> {
               ),
               Expanded(
                 child: Obx(() => AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 200),
+                      duration: AppMotion.of(context, AppMotion.medium),
+                      switchInCurve: AppMotion.enter,
+                      switchOutCurve: AppMotion.exit,
+                      // Top-aligned: the default layout centred each step
+                      // vertically, leaving a gap above short steps.
+                      layoutBuilder: AppMotion.topLayout,
                       child: SingleChildScrollView(
                         key: ValueKey<SignupStep>(controller.step.value),
                         keyboardDismissBehavior:

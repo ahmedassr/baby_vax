@@ -12,7 +12,10 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
       appBar: const CustomAppBar(),
       body: SafeArea(
         child: Obx(() => AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
+              duration: AppMotion.of(context, AppMotion.medium),
+              switchInCurve: AppMotion.enter,
+              switchOutCurve: AppMotion.exit,
+              layoutBuilder: AppMotion.topLayout,
               child: controller.sentTo.value == null
                   ? _form(theme)
                   : _sent(theme, controller.sentTo.value!),

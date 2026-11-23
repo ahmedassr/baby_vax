@@ -165,11 +165,12 @@ class GrowthView extends GetView<GrowthController> {
     final GrowthMetric metric = controller.metric.value;
     final bool hasItems = controller.items.isNotEmpty;
 
-    return ListView(
+    return AppEntranceScope(
+        child: ListView(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.fromLTRB(
           AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, 112),
-      children: <Widget>[
+      children: staggeredEntrance(<Widget>[
         if (controller.actionError.value != null) ...<Widget>[
           AppBanner(
               tone: AppBannerTone.error,
@@ -220,7 +221,7 @@ class GrowthView extends GetView<GrowthController> {
           AppEmptyState(
             key: const Key('growth_empty'),
             scrollable: false,
-            icon: Icons.show_chart_rounded,
+            icon: AppIcons.growth,
             title: "Growth_empty_title".tr,
             message: "Growth_empty_body".tr,
             actionLabel: "Growth_add".tr,
@@ -242,8 +243,8 @@ class GrowthView extends GetView<GrowthController> {
         const MedicalDisclaimer(compact: true),
         const SizedBox(height: AppSpacing.sm),
         Text("Growth_attribution".tr, style: theme.textTheme.bodySmall),
-      ],
-    );
+      ]),
+    ));
   }
 
   Widget _readingCard(ThemeData theme, GrowthMetric metric) {
@@ -298,7 +299,7 @@ class GrowthView extends GetView<GrowthController> {
         key: const Key('growth_chart_empty'),
         child: Row(
           children: <Widget>[
-            const AppIconBadge(icon: Icons.show_chart_rounded, size: 36),
+            const AppIconBadge(icon: AppIcons.growth, size: 36),
             const SizedBox(width: AppSpacing.md),
             Expanded(
               child: Text(
