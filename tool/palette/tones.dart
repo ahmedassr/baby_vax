@@ -19,8 +19,8 @@ void main() {
     'primary (light)': TonalPalette.of(hue, 48),
     'primary (dark, containers)': TonalPalette.of(hue, 36),
     'secondary': TonalPalette.of(hue, 16),
-    'neutral': TonalPalette.of(hue, 4),
-    'neutral variant': TonalPalette.of(hue, 8),
+    'neutral': TonalPalette.of(155, 6),
+    'neutral variant': TonalPalette.of(155, 10),
     'error': TonalPalette.of(30, 70),
     'warning': TonalPalette.of(80, 50),
     // v1.1's info blue #1F6FA8, harmonised toward the brand (hue 233.4).

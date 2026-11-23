@@ -172,14 +172,16 @@ class TemperatureChartState extends State<TemperatureChart> {
             final TemperatureChartPick? hit = _hit(g, d.localPosition);
             setState(() => _picked = hit);
           },
-          child: CustomPaint(
-            size: size,
-            painter: _TemperaturePainter(
-              geometry: g,
-              readings: widget.readings,
-              medicines: widget.medicines,
-              doses: widget.doses,
-              picked: _picked,
+          child: AppChartReveal(
+            child: CustomPaint(
+              size: size,
+              painter: _TemperaturePainter(
+                geometry: g,
+                readings: widget.readings,
+                medicines: widget.medicines,
+                doses: widget.doses,
+                picked: _picked,
+              ),
             ),
           ),
         );

@@ -33,17 +33,18 @@ class MedicalDisclaimer extends StatelessWidget {
       child: ExcludeSemantics(
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(AppSpacing.md),
+          // A quiet tonal panel, no outline: it is a footnote, not a card
+          // (polish §2.3).
           decoration: BoxDecoration(
-            color: colors.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: colors.outlineVariant),
+            color: colors.surfaceContainer,
+            borderRadius: AppRadius.mdAll,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Icon(
-                Icons.info_outline,
+                Icons.info_outline_rounded,
                 size: 20,
                 color: colors.onSurfaceVariant,
               ),

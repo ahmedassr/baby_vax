@@ -35,12 +35,21 @@ class AppProgressRing extends StatelessWidget {
       excludeSemantics: true,
       child: SizedBox.square(
         dimension: size,
-        child: CustomPaint(
-          painter: _RingPainter(
-            fraction: fraction,
-            track: scheme.surfaceContainerHigh,
-            fill: scheme.primary,
-            strokeWidth: strokeWidth,
+        // The arc sweeps to its value when it appears and when a dose is
+        // marked (polish §2.2).
+        child: TweenAnimationBuilder<double>(
+          tween: Tween<double>(begin: 0, end: fraction),
+          duration: AppMotion.of(context, AppMotion.long),
+          curve: AppMotion.standard,
+          builder: (BuildContext context, double f, Widget? child) =>
+              CustomPaint(
+            painter: _RingPainter(
+              fraction: f,
+              track: scheme.surfaceContainerHigh,
+              fill: scheme.primary,
+              strokeWidth: strokeWidth,
+            ),
+            child: child,
           ),
           child: Center(
             child: FittedBox(

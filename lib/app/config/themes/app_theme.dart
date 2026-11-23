@@ -327,11 +327,12 @@ class AppTheme {
         backgroundColor: scheme.surface,
       ),
 
-      // GetX's default is a fade; cupertino matches the back gesture users
-      // expect from a push.
+      // Routes Flutter builds itself (the licence page). GetX routes use the
+      // same transition through GetMaterialApp.customTransition, because
+      // GetX ignores this theme. iOS keeps its swipe-back transition.
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: <TargetPlatform, PageTransitionsBuilder>{
-          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.android: AppPageTransitionsBuilder(),
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         },
       ),

@@ -72,6 +72,10 @@ class MyApp extends StatelessWidget {
       themeMode: AppTheme.themeModeFor(isDarkMode),
       initialRoute: AppRoutes.splash,
       getPages: AppPages.routes,
+      // One page transition everywhere (polish §2.2); GetX does not read the
+      // theme's pageTransitionsTheme.
+      customTransition: AppPageTransition(),
+      transitionDuration: AppMotion.page,
       locale: Locale(currentLanguage),
       fallbackLocale: Locale(currentLanguage),
       supportedLocales: const [

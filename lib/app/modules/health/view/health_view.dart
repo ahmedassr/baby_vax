@@ -118,11 +118,12 @@ class HealthView extends GetView<HealthController> {
     final HealthEntry? medicine = controller.lastMedicine;
     final UserModel? profile = controller.profile;
 
-    return ListView(
+    return AppEntranceScope(
+        child: ListView(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.fromLTRB(
           AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, AppSpacing.xxxl),
-      children: <Widget>[
+      children: staggeredEntrance(<Widget>[
         if (controller.actionError.value != null) ...<Widget>[
           AppBanner(
               tone: AppBannerTone.error,
@@ -226,8 +227,8 @@ class HealthView extends GetView<HealthController> {
         ]),
         const SizedBox(height: AppSpacing.xxl),
         const MedicalDisclaimer(compact: true),
-      ],
-    );
+      ]),
+    ));
   }
 }
 
@@ -638,9 +639,9 @@ class _FlagPill extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final ColorScheme scheme = theme.colorScheme;
     final AppStatusColors status = AppStatusColors.of(context);
-    final Color bg =
-        urgent ? scheme.errorContainer : status.warningBackground;
-    final Color fg = urgent ? scheme.onErrorContainer : status.warningForeground;
+    final Color bg = urgent ? scheme.errorContainer : status.warningBackground;
+    final Color fg =
+        urgent ? scheme.onErrorContainer : status.warningForeground;
     return Container(
       padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.sm, vertical: AppSpacing.xxs),

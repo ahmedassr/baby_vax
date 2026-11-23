@@ -60,9 +60,14 @@ class OnboardingController extends GetxController {
   /// Next page, or finish on the last one.
   Future<void> next() async {
     if (isLast) return finish();
+    final BuildContext? context = Get.context;
+    if (context != null && AppMotion.reduced(context)) {
+      pageController.jumpToPage(page.value + 1);
+      return;
+    }
     await pageController.nextPage(
-      duration: const Duration(milliseconds: 280),
-      curve: Curves.easeOutCubic,
+      duration: AppMotion.long,
+      curve: AppMotion.standard,
     );
   }
 

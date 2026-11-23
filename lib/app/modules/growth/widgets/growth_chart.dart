@@ -288,12 +288,15 @@ class GrowthChartState extends State<GrowthChart> {
           compact: widget.compact,
         );
         _geometry = g;
-        final Widget paint = CustomPaint(
-          size: Size(width, height),
-          painter: _GrowthPainter(
-            geometry: g,
-            points: widget.points,
-            selected: _selected,
+        final Widget paint = AppChartReveal(
+          revealKey: widget.metric,
+          child: CustomPaint(
+            size: Size(width, height),
+            painter: _GrowthPainter(
+              geometry: g,
+              points: widget.points,
+              selected: _selected,
+            ),
           ),
         );
         if (widget.compact) return paint;

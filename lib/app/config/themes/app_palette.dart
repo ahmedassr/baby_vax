@@ -53,28 +53,29 @@ class AppPalette {
   static const Color s80 = Color(0xFFBBCBB1);
   static const Color s90 = Color(0xFFD7E8CD);
 
-  // Neutral: hue 141.9, chroma 4 (green-tinted, never flat grey).
-  static const Color n6 = Color(0xFF121410);
-  static const Color n10 = Color(0xFF1A1C18);
-  static const Color n12 = Color(0xFF1E201C);
-  static const Color n17 = Color(0xFF282B27);
-  static const Color n20 = Color(0xFF2F312D);
-  static const Color n22 = Color(0xFF333531);
-  static const Color n24 = Color(0xFF383A35);
-  static const Color n90 = Color(0xFFE2E3DC);
-  static const Color n92 = Color(0xFFE8E9E2);
-  static const Color n94 = Color(0xFFEEEEE8);
-  static const Color n95 = Color(0xFFF1F1EB);
-  static const Color n96 = Color(0xFFF4F4ED);
+  // Neutral: hue 155, chroma 6. Green-tinted, never flat grey; a little
+  // cooler than the brand hue, which at low chroma reads as cream.
+  static const Color n6 = Color(0xFF101510);
+  static const Color n10 = Color(0xFF181D18);
+  static const Color n12 = Color(0xFF1C211C);
+  static const Color n17 = Color(0xFF262B26);
+  static const Color n20 = Color(0xFF2D322D);
+  static const Color n22 = Color(0xFF313631);
+  static const Color n24 = Color(0xFF353A35);
+  static const Color n90 = Color(0xFFDFE4DC);
+  static const Color n92 = Color(0xFFE5EAE2);
+  static const Color n94 = Color(0xFFEBEFE7);
+  static const Color n95 = Color(0xFFEEF2EA);
+  static const Color n96 = Color(0xFFF0F5ED);
   static const Color n100 = Color(0xFFFFFFFF);
 
-  // Neutral variant: hue 141.9, chroma 8.
-  static const Color nv30 = Color(0xFF43483F);
-  static const Color nv50 = Color(0xFF73796E);
-  static const Color nv60 = Color(0xFF8D9387);
-  static const Color nv80 = Color(0xFFC3C8BC);
-  static const Color nv90 = Color(0xFFDFE4D7);
-  static const Color nv92 = Color(0xFFE5EADD);
+  // Neutral variant: hue 155, chroma 10.
+  static const Color nv30 = Color(0xFF3F4940);
+  static const Color nv50 = Color(0xFF6F7A6F);
+  static const Color nv60 = Color(0xFF899488);
+  static const Color nv80 = Color(0xFFBECABD);
+  static const Color nv90 = Color(0xFFDAE6D9);
+  static const Color nv92 = Color(0xFFE0EBDE);
 
   // Error: hue 30, chroma 70.
   static const Color e10 = Color(0xFF3E0400);

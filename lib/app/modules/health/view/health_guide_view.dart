@@ -104,8 +104,8 @@ class HealthGuideView extends StatelessWidget {
                                 color: switch (tone) {
                                   AppBannerTone.error => scheme.error,
                                   AppBannerTone.warning =>
-                                      AppStatusColors.of(context)
-                                          .warningForeground,
+                                    AppStatusColors.of(context)
+                                        .warningForeground,
                                   _ => scheme.primary,
                                 }),
                           ),

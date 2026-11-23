@@ -22,14 +22,14 @@ class AppElevation extends ThemeExtension<AppElevation> {
     level0: AppElevationLevel(shadows: <BoxShadow>[]),
     level1: AppElevationLevel(shadows: <BoxShadow>[
       BoxShadow(
-        color: Color(0x0A1A1C18), // ~4% of the surface ink
+        color: Color(0x0A181D18), // ~4% of the surface ink
         blurRadius: 2,
         offset: Offset(0, 1),
       ),
     ]),
     level2: AppElevationLevel(shadows: <BoxShadow>[
       BoxShadow(
-        color: Color(0x0F1A1C18), // ~6%
+        color: Color(0x0F181D18), // ~6%
         blurRadius: 16,
         offset: Offset(0, 4),
       ),

@@ -89,14 +89,14 @@ flutter_launcher_icons:
 flutter_native_splash:
   # The palette's scaffold colours (AppPalette), so the native splash hands
   # over to the Flutter splash without a flash of a different colour.
-  color: "#F4F4ED"
-  color_dark: "#121410"
+  color: "#F0F5ED"
+  color_dark: "#101510"
   image: assets/branding/png/splash-legacy.png
 
   android_12:
     image: assets/branding/png/splash-android12.png
-    color: "#F4F4ED"
-    color_dark: "#121410"
+    color: "#F0F5ED"
+    color_dark: "#101510"
 
   android: true
   ios: true

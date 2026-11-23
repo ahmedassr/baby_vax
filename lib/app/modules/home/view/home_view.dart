@@ -44,11 +44,12 @@ class HomeView extends GetView<HomeController> {
     final UserModel? user = controller.userDetails.value;
     final String name = (user?.name ?? '').trim();
 
-    return ListView(
+    return AppEntranceScope(
+        child: ListView(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.fromLTRB(
           AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, AppSpacing.xxxl),
-      children: <Widget>[
+      children: staggeredEntrance(<Widget>[
         Text("HomeView_overline".tr,
             style: theme.textTheme.bodyMedium
                 ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
@@ -84,7 +85,7 @@ class HomeView extends GetView<HomeController> {
           ),
           QuickAction(
             key: const Key('home_action_growth'),
-            icon: Icons.show_chart_rounded,
+            icon: AppIcons.growth,
             label: "Growth_title".tr,
             onTap: controller.openGrowth,
           ),
@@ -112,8 +113,8 @@ class HomeView extends GetView<HomeController> {
         _Haemoglobin(user: user, onTap: controller.openEditProfile),
         const SizedBox(height: AppSpacing.xxl),
         const MedicalDisclaimer(compact: true),
-      ],
-    );
+      ]),
+    ));
   }
 }
 
