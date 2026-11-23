@@ -99,6 +99,28 @@ class AppPalette {
   static const Color i80 = Color(0xFF7ED0FC);
   static const Color i90 = Color(0xFFC2E8FF);
 
+  // ---- splash --------------------------------------------------------------
+
+  /// Splash background, light: the brand green at tone 40. The system splash
+  /// and the Flutter splash both use it, so the hand-over is invisible.
+  static const Color splashLight = p40;
+
+  /// Splash background, dark: a deep green (tone 20), not a bright fill in
+  /// a dark room.
+  static const Color splashDark = pd20;
+
+  /// The mark drawn on the splash green: a light shield with the green leaf
+  /// inside it (the standard mark's green shield would vanish on green).
+  static const Color markShieldOnLight = n100;
+  static const Color markShieldOnDark = n95;
+  static const Color markLeaf = brand;
+  static const Color markLeafHighlight = pd90;
+  static const Color markVein = p30;
+
+  /// The mark's own colours (assets/branding/logo.svg).
+  static const Color markShield = Color(0xFF2E7324);
+  static const Color markLeafLight = Color(0xFF8ED97C);
+
   // ---- names other code reads (the PDF card, tests) ------------------------
 
   /// Light page colour, and the native splash's light background.

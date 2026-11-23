@@ -4,6 +4,7 @@ export 'package:baby_vax/app/core/widget/app_field.dart';
 export 'package:baby_vax/app/core/widget/app_card.dart';
 export 'package:baby_vax/app/core/widget/app_entrance.dart';
 export 'package:baby_vax/app/core/widget/app_chart_reveal.dart';
+export 'package:baby_vax/app/core/widget/brand_mark.dart';
 export 'package:baby_vax/app/core/widget/app_choice_tile.dart';
 export 'package:baby_vax/app/core/widget/app_icon_badge.dart';
 export 'package:baby_vax/app/core/widget/app_section_header.dart';

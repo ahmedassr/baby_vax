@@ -19,7 +19,7 @@ class OnboardingView extends GetView<OnboardingController> {
                   horizontal: AppSpacing.lg, vertical: AppSpacing.sm),
               child: Row(
                 children: <Widget>[
-                  const AppLogo(size: 36),
+                  const AppLogo(size: 36, hero: true),
                   const SizedBox(width: AppSpacing.sm),
                   Text('Baby Vax',
                       style: theme.textTheme.titleMedium

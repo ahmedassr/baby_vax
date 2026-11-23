@@ -27,7 +27,7 @@ class LoginView extends GetView<LoginController> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   const SizedBox(height: AppSpacing.lg),
-                  const Center(child: AppLogo(size: 72)),
+                  const Center(child: AppLogo(size: 72, hero: true)),
                   const SizedBox(height: AppSpacing.xl),
                   Semantics(
                     header: true,

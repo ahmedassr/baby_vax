@@ -11,6 +11,10 @@ class StorageKey {
   /// Set once the first-launch introduction has been seen or skipped.
   static const String hasSeenOnboardingKey = "hasSeenOnboarding";
 
+  /// Set once the full splash animation has played, so later launches get
+  /// the short version.
+  static const String hasSeenSplashKey = "hasSeenSplash";
+
   /// Preferences that belong to the device, not to whoever is signed in.
   /// They survive logout and account deletion: a parent who signs out
   /// should not see the introduction again or lose their language.
@@ -18,5 +22,6 @@ class StorageKey {
     isDarkModeKey,
     languageKey,
     hasSeenOnboardingKey,
+    hasSeenSplashKey,
   };
 }

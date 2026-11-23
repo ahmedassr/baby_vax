@@ -87,16 +87,20 @@ flutter_launcher_icons:
   remove_alpha_ios: true
 
 flutter_native_splash:
-  # The palette's scaffold colours (AppPalette), so the native splash hands
-  # over to the Flutter splash without a flash of a different colour.
-  color: "#F0F5ED"
-  color_dark: "#101510"
+  # The brand green (AppPalette.splashLight / splashDark) with the mark drawn
+  # light-on-green. The PNGs are rendered from the same vector paths as the
+  # Flutter splash (test/splash/native_splash_images_test.dart), at the same
+  # size and centre, so the hand-over to the animated splash is invisible.
+  color: "#306B25"
+  color_dark: "#12380B"
   image: assets/branding/png/splash-legacy.png
+  image_dark: assets/branding/png/splash-legacy-dark.png
 
   android_12:
     image: assets/branding/png/splash-android12.png
-    color: "#F0F5ED"
-    color_dark: "#101510"
+    image_dark: assets/branding/png/splash-android12-dark.png
+    color: "#306B25"
+    color_dark: "#12380B"
 
   android: true
   ios: true
