@@ -24,7 +24,7 @@ KEY_PROPERTIES_OUT="${KEY_PROPERTIES_OUT:-android/key.properties}"
 # key.properties is read from android/app, so storeFile is relative to it.
 STORE_FILE_IN_PROPS="${STORE_FILE_IN_PROPS:-baby-vax-release-key.jks}"
 
-HOW_TO_FIX="Fix: run scripts/rotate-upload-key.sh (or .ps1) on your own machine. It sets all four secrets. See 'Key rotation' in RELEASE_NOTES_FOR_AHMED.md."
+HOW_TO_FIX="Fix: run scripts/rotate-upload-key.sh (or .ps1) on your own machine. It sets all four secrets."
 
 fail() {
   # ::error:: makes GitHub show the message on the run summary page.

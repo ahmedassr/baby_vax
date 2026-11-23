@@ -8,7 +8,7 @@ plugins {
 }
 
 // Release signing is driven by android/key.properties, which is gitignored and
-// never committed. Ahmed creates it himself (see RELEASE_NOTES_FOR_AHMED.md).
+// never committed. scripts/rotate-upload-key.sh (or .ps1) creates it locally.
 // Escape hatch for CI and sandbox verification: debug-sign a release build to
 // prove it compiles, without a real upload key. Never use for a Play upload.
 //   flutter build appbundle --release -PdebugSignRelease=true
@@ -31,7 +31,7 @@ if (hasKeystore) {
         throw new GradleException(
             'android/key.properties is missing required entries: ' +
             missingKeys.join(', ') + '.\n' +
-            "See 'Commands for Ahmed' in RELEASE_NOTES_FOR_AHMED.md.")
+            'Run scripts/rotate-upload-key.sh (or .ps1) to create it.')
     }
 }
 
@@ -122,7 +122,7 @@ gradle.taskGraph.whenReady { graph ->
             '',
             'Either:',
             '  1. Create the upload keystore and android/key.properties.',
-            "     Exact commands: 'Commands for Ahmed' in RELEASE_NOTES_FOR_AHMED.md",
+            '     scripts/rotate-upload-key.sh (or .ps1) creates both.',
             '  2. For a compile check only, debug-sign it:',
             '     flutter build appbundle --release -PdebugSignRelease=true',
             '     (debug-signed artifacts cannot be uploaded to Play)',

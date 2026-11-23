@@ -3,7 +3,7 @@ name: CI
 # Merged from two versions during the release/play-v1 merge:
 #  - the strict analyze/test/rules gates added on release/play-v1
 #  - the signed release build that already existed on main
-# Both are kept. See RELEASE_NOTES_FOR_AHMED.md, Decision 11.
+# Both are kept.
 
 on:
   pull_request:
@@ -18,7 +18,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # Keep in step with the version recorded in RELEASE_NOTES_FOR_AHMED.md.
+  # Keep local Flutter on the same version, or local and CI builds will disagree.
   # Pinned so CI cannot start failing because the stable channel moved.
   # 3.47.9 is required: Gradle 8.14 and the current Firebase plugins do not
   # build on the 3.35.x this workflow used before.

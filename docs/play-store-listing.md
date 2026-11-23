@@ -283,7 +283,8 @@ Do not use a personal account for this.
 
 ## Release checklist for the first upload
 
-1. Build the signed AAB (commands in `RELEASE_NOTES_FOR_AHMED.md`).
+1. Build the signed AAB: push to `main` or run the CI workflow manually, and
+   download the `app-release-aab` artifact.
 2. Create the app in Play Console with the package name above.
 3. Fill in this listing, upload the icon, feature graphic and screenshots.
 4. Complete Data safety, Content rating, Target audience, Health declaration,

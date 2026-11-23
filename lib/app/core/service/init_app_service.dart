@@ -74,8 +74,8 @@ Future<void> _initCrashlytics() async {
 /// Integrity cannot attest a locally-built debug APK.
 ///
 /// Enforcement is switched on per-service in the Firebase console, which only
-/// Ahmed can do — see RELEASE_NOTES_FOR_AHMED.md. Until he does, this is
-/// inert, so turning it on here cannot lock anyone out.
+/// the project owner can do. Until then this is inert, so turning it on here
+/// cannot lock anyone out.
 Future<void> _initAppCheck() async {
   try {
     await FirebaseAppCheck.instance.activate(
