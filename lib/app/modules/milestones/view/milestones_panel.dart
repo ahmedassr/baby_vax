@@ -29,7 +29,7 @@ class MilestoneActions {
         final bool yes = await controller.confirmRemove(
             "Milestone_remove_confirm"
                 .trParams(<String, String>{'name': MilestoneText.name(m)}));
-        if (yes) await controller.removeRecord(m);
+        if (yes) await controller.removeAchievement(m);
       case null:
         break;
     }

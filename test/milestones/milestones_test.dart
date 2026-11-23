@@ -223,6 +223,20 @@ void main() {
       expect(store[MotorMilestone.sitting]!.achievedAt, DateTime(2026, 12, 12));
     });
 
+    test('removing the date keeps the note; no note left deletes it', () async {
+      final MilestonesController c = put();
+      await c.fetch();
+      await c.removeAchievement(MotorMilestone.standingAssisted);
+      final MilestoneRecord kept = store[MotorMilestone.standingAssisted]!;
+      expect(kept.toMap(), <String, dynamic>{'note': 'Holds the sofa'});
+      expect(
+          c.statusOf(MotorMilestone.standingAssisted), MilestoneStatus.dueNow,
+          reason: 'a note alone is never achieved');
+      expect(c.achievedCount, 1);
+      await c.removeAchievement(MotorMilestone.sitting);
+      expect(store.containsKey(MotorMilestone.sitting), isFalse);
+    });
+
     test('a failed save says so', () async {
       final MilestonesController c = MilestonesController(
         load: (_) async => <MilestoneRecord>[],

@@ -494,7 +494,7 @@ Map<String, String> ar = {
   "Milestone_date_error": "اختر تاريخًا بين تاريخ الميلاد واليوم.",
   "Milestone_remove": "إزالة",
   "Milestone_remove_confirm":
-      "هل تريد إزالة التاريخ والملاحظة المسجّلين لمهارة «@name»؟",
+      "هل تريد إزالة تاريخ تحقّق مهارة «@name»؟ تبقى الملاحظة إن وُجدت.",
   "Milestone_what_counts": "ما الذي يُحتسب",
   "Milestone_info_title": "كل طفل ينمو بإيقاعه الخاص",
   "Milestone_info_body":

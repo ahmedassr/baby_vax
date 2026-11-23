@@ -460,7 +460,8 @@ Map<String, String> en = {
   "Milestone_date_rule": "Between the birth date and today.",
   "Milestone_date_error": "Pick a date between the birth date and today.",
   "Milestone_remove": "Remove",
-  "Milestone_remove_confirm": "Remove the date and note recorded for “@name”?",
+  "Milestone_remove_confirm":
+      "Remove the date recorded for “@name”? A note, if any, is kept.",
   "Milestone_what_counts": "What counts",
   "Milestone_info_title": "Every baby develops at their own pace",
   "Milestone_info_body":

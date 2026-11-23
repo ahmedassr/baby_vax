@@ -168,7 +168,16 @@ class MilestonesController extends GetxController {
     return saveRecord(next);
   }
 
-  /// Removes everything recorded for [m].
+  /// Clears the achievement date of [m]. A note stays (the document keeps
+  /// only the note); with no note left the document is deleted.
+  Future<bool> removeAchievement(MotorMilestone m) {
+    final MilestoneRecord? r = records[m];
+    final String note = (r?.note ?? '').trim();
+    if (note.isEmpty) return removeRecord(m);
+    return saveRecord(MilestoneRecord(milestone: m, note: note));
+  }
+
+  /// Deletes the document for [m].
   Future<bool> removeRecord(MotorMilestone m) async {
     final String? uid = SessionManager.signedInUid;
     if (uid == null) return false;

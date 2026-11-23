@@ -580,6 +580,36 @@ describe('users/{userId}/milestones/{id} — v1.1 motor milestones', () => {
     });
   }
 
+  it('accepts a date alone, a note alone, and both', async () => {
+    const db = asUser(ALICE);
+    await assertSucceeds(setDoc(doc(db, `${path(ALICE)}/sitting`), { achievedAt: valid().achievedAt }));
+    await assertSucceeds(setDoc(doc(db, `${path(ALICE)}/crawling`), { note: 'x' }));
+    await assertSucceeds(setDoc(doc(db, `${path(ALICE)}/standingAlone`), valid()));
+  });
+
+  it('keeps the note when the date is removed (only achievedAt cleared)', async () => {
+    const db = asUser(ALICE);
+    await assertSucceeds(setDoc(doc(db, `${path(ALICE)}/sitting`), valid()));
+    await assertSucceeds(
+      updateDoc(doc(db, `${path(ALICE)}/sitting`), { achievedAt: deleteField() }),
+    );
+    await assertSucceeds(setDoc(doc(db, `${path(ALICE)}/sitting`), { note: valid().note }));
+  });
+
+  it('denies removing both fields with an update', async () => {
+    const db = asUser(ALICE);
+    await assertSucceeds(setDoc(doc(db, `${path(ALICE)}/sitting`), { note: 'only' }));
+    await assertFails(
+      updateDoc(doc(db, `${path(ALICE)}/sitting`), { note: deleteField() }),
+    );
+  });
+
+  it('denies an empty or null note next to a date', async () => {
+    const db = asUser(ALICE);
+    await assertFails(setDoc(doc(db, `${path(ALICE)}/sitting`), valid({ note: '' })));
+    await assertFails(setDoc(doc(db, `${path(ALICE)}/sitting`), valid({ note: null })));
+  });
+
   it('accepts a note for the doctor visit without a date', async () => {
     await assertSucceeds(
       setDoc(doc(asUser(ALICE), `${path(ALICE)}/walkingAlone`), { note: 'Ask at the 18-month visit' }),

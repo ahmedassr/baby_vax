@@ -268,19 +268,20 @@ service cloud.firestore {
     //
     // users/{userId}/milestones/{milestoneId}: one document per WHO motor
     // milestone, named by its id (MotorMilestone in the app). achievedAt is
-    // the day the baby did it and cannot be in the future. A document
-    // without achievedAt holds only a note for the doctor visit.
+    // the day the baby did it and cannot be in the future. Either field
+    // may be missing, not both: a document without achievedAt holds only a
+    // note for the doctor visit (Ahmed, 23 Nov) and is not an achievement.
 
     function isValidMilestone(data) {
       return data.keys().hasOnly(['achievedAt', 'note'])
-             && (data.keys().hasAny(['achievedAt'])
-                 || (data.keys().hasAny(['note'])
-                     && data.note is string
-                     && data.note.size() > 0))
+             && data.keys().hasAny(['achievedAt', 'note'])
              && (!data.keys().hasAny(['achievedAt'])
                  || (data.achievedAt is timestamp
                      && data.achievedAt <= request.time))
-             && isOptionalShortString(data, 'note', 300);
+             && (!data.keys().hasAny(['note'])
+                 || (data.note is string
+                     && data.note.size() >= 1
+                     && data.note.size() <= 300));
     }
 
     match /users/{userId}/milestones/{milestoneId} {
